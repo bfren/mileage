@@ -10,7 +10,7 @@
 
 	<!-- Common Packages -->
 	<ItemGroup>
-		<PackageReference Include="MaybeF" Version="8.1.0" />
+		<PackageReference Include="MaybeF" Version="8.1.0"/>
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="MaybeF"/>
@@ -46,20 +46,17 @@
 
 	<!-- Get Version -->
 	<PropertyGroup Label="Version">
-		<JeebsVersion>$([System.IO.File]::ReadAllText('$(VersionPath)'))</JeebsVersion>
+		<MileageVersion>$([System.IO.File]::ReadAllText('$(VersionPath)'))</MileageVersion>
 	</PropertyGroup>
 
 	<!-- Package Configuration -->
 	<PropertyGroup Label="Package">
 		<Authors>bfren</Authors>
 		<Company>bfren.dev</Company>
-		<Copyright>Copyright © bfren.dev 2013-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
-		<Version>$(JeebsVersion)</Version>
+		<Copyright>Copyright © bfren.dev $([System.DateTime]::Now.ToString(yyyy))</Copyright>
+		<Version>$(MileageVersion)</Version>
 		<Description>$(MSBuildProjectName) library</Description>
-		<PackageLicenseFile>$(LicenceFile)</PackageLicenseFile>
-		<PackageProjectUrl>https://github.com/bfren/jeebs</PackageProjectUrl>
-		<PackageReadmeFile>$(ReadmeFile)</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/bfren/jeebs</RepositoryUrl>
+		<RepositoryUrl>https://github.com/bfren/mileage</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
@@ -67,21 +64,5 @@
 	<PropertyGroup Label="Documentation" Condition="'$(Configuration)'=='Release'">
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
-
-	<!--
-		[Optional]
-		Create Local Packages
-		Use 'DispatchToInnerBuilds' target to run after builds are completed for all frameworks
-			1. Import local repo
-			2. Create package
-			3. Publish package to local repository
-			4. Cleanup
-	-->
-	<Import Project="$(LocalPackPath)" Condition="Exists('$(LocalPackPath)')"/>
-	<Target Name="PackAndPushToLocalNuget" AfterTargets="DispatchToInnerBuilds" Condition="Exists('$(LocalPackPath)') and '$(Configuration)'=='Release'">
-		<Exec Command="dotnet pack &quot;$(ProjectFileName)&quot; -p:PackageVersion=$(JeebsVersion) --no-build --configuration Release"/>
-		<Exec Command="nuget init &quot;$(ProjectDir)bin\Release&quot; &quot;$(LocalNugetRepository)&quot;"/>
-		<Exec Command="del &quot;$(ProjectDir)bin\Release\*.nupkg&quot;"/>
-	</Target>
 
 </Project>
