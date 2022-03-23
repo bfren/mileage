@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Description>Mileage: command queries.</Description>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220323.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Persistence\Persistence.csproj" />
+	</ItemGroup>
+</Project>
