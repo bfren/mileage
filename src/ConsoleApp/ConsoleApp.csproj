@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<Description>Console test app.</Description>
+		<Description>Mileage: Console test app.</Description>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220322.1" />
+		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220323.2" />
 	</ItemGroup>
 </Project>

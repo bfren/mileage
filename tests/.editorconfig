@@ -3,3 +3,9 @@
 file_header_template = Mileage Tracker: Unit Tests\nCopyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 insert_final_newline = true
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
