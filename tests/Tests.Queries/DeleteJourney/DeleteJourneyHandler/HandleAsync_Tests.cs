@@ -28,8 +28,8 @@ public class HandleAsync_Tests
 	{
 		// Arrange
 		var (repo, log, handler) = Setup();
-		repo.QuerySingleAsync<DeleteJourneyHandler.JourneyToDelete>(default!).ReturnsForAnyArgs(
-			new DeleteJourneyHandler.JourneyToDelete(new(Rnd.Lng))
+		repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
+			new JourneyToDelete(new(Rnd.Lng))
 		);
 		var query = new DeleteJourneyQuery(new(), new());
 
@@ -45,8 +45,8 @@ public class HandleAsync_Tests
 	{
 		// Arrange
 		var (repo, log, handler) = Setup();
-		repo.QuerySingleAsync<DeleteJourneyHandler.JourneyToDelete>(default!).ReturnsForAnyArgs(
-			new DeleteJourneyHandler.JourneyToDelete(new(Rnd.Lng))
+		repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
+			new JourneyToDelete(new(Rnd.Lng))
 		);
 		var journeyId = new JourneyId(Rnd.Lng);
 		var userId = new AuthUserId(Rnd.Lng);
@@ -58,7 +58,7 @@ public class HandleAsync_Tests
 		// Assert
 		var calls = repo.ReceivedCalls();
 		Assert.Collection(calls,
-			c => Helpers.AssertQuery<JourneyEntity, DeleteJourneyHandler.JourneyToDelete>(c,
+			c => Helpers.AssertQuery<JourneyEntity, JourneyToDelete>(c,
 				nameof(JourneyRepository.QuerySingleAsync),
 				(x => x.Id, Compare.Equal, journeyId),
 				(x => x.UserId, Compare.Equal, userId)
@@ -73,8 +73,8 @@ public class HandleAsync_Tests
 		// Arrange
 		var (repo, log, handler) = Setup();
 		var msg = new TestMsg();
-		repo.QuerySingleAsync<DeleteJourneyHandler.JourneyToDelete>(default!).ReturnsForAnyArgs(
-			F.None<DeleteJourneyHandler.JourneyToDelete>(msg)
+		repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
+			F.None<JourneyToDelete>(msg)
 		);
 		var query = new DeleteJourneyQuery(new(), new());
 

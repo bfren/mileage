@@ -39,8 +39,6 @@ public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, boo
 			);
 	}
 
-	internal sealed record class JourneyToDelete(JourneyId Id);
-
 	/// <summary>Messages</summary>
 	public static class M
 	{
