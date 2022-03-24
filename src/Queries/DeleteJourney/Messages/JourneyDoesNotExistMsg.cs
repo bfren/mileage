@@ -3,9 +3,9 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Messages;
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Queries.DeleteJourney.Messages;
+namespace Mileage.Queries.DeleteJourney.Messages;
 
 /// <summary>
 /// The Journey does not exist, or does not belong to the specified User

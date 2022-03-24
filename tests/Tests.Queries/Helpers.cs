@@ -1,4 +1,4 @@
-﻿// Mileage Tracker: Unit Tests
+// Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
@@ -6,7 +6,7 @@ using Jeebs.Data.Enums;
 using Jeebs.Reflection;
 using NSubstitute.Core;
 
-namespace Queries;
+namespace Mileage.Queries;
 
 internal static class Helpers
 {

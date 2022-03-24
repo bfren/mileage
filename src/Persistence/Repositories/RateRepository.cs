@@ -3,10 +3,10 @@
 
 using Jeebs.Data;
 using Jeebs.Logging;
-using Persistence.Entities;
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Persistence.Repositories;
+namespace Mileage.Persistence.Repositories;
 
 /// <summary>
 /// Rate repository

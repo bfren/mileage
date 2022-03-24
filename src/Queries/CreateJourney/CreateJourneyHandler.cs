@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Persistence.Entities.StrongIds;
-using Persistence.Repositories;
+using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Repositories;
 
-namespace Queries.CreateJourney;
+namespace Mileage.Queries.CreateJourney;
 
 /// <summary>
 /// Create a new mileage entity

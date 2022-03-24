@@ -3,9 +3,9 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Id;
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Persistence.Entities;
+namespace Mileage.Persistence.Entities;
 
 /// <summary>
 /// Car entity

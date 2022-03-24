@@ -6,12 +6,12 @@ using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Jeebs.Messages;
 using MaybeF;
-using Persistence.Entities;
-using Persistence.Entities.StrongIds;
-using Persistence.Repositories;
-using Queries.DeleteJourney.Messages;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Repositories;
+using Mileage.Queries.DeleteJourney.Messages;
 
-namespace Queries.DeleteJourney.DeleteJourneyHandler_Tests;
+namespace Mileage.Queries.DeleteJourney.DeleteJourneyHandler_Tests;
 
 public class HandleAsync_Tests
 {

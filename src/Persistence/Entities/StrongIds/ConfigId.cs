@@ -3,7 +3,7 @@
 
 using Jeebs.Id;
 
-namespace Persistence.Entities.StrongIds;
+namespace Mileage.Persistence.Entities.StrongIds;
 
 /// <summary>
 /// Config ID

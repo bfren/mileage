@@ -1,9 +1,9 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Queries.DeleteJourney;
+namespace Mileage.Queries.DeleteJourney;
 
 /// <summary>
 /// Used to return a Journey that is ready to be deleted

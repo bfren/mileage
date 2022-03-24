@@ -2,9 +2,9 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Queries.DeleteJourney;
+namespace Mileage.Queries.DeleteJourney;
 
 /// <summary>
 /// Delete a journey
