@@ -4,12 +4,10 @@
 using System;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
-using Jeebs.Auth.Data.Clients.PostgreSql;
-using Jeebs.Config.Db;
 using Jeebs.Cqrs;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Mileage.Persistence.Common.StrongIds;
+using Mileage.Queries;
 using RndF;
 using Q = Mileage.Queries;
 
@@ -17,11 +15,7 @@ using Q = Mileage.Queries;
 //  CONFIGURE
 // ==========================================
 
-var (app, log) = Jeebs.Apps.Host.Create(args, (ctx, services) =>
-{
-	services.AddAuthData<PostgreSqlDbClient>(true);
-	services.AddCqrs();
-});
+var (app, log) = Jeebs.Apps.Host.Create(args, (ctx, services) => services.AddData());
 
 // ==========================================
 //  BEGIN
@@ -33,16 +27,8 @@ log.Inf("Mileage Console app.");
 //  SETUP
 // ==========================================
 
-// Create client
-var authDb = app.Services.GetRequiredService<AuthDb>();
-var authDbClient = app.Services.GetRequiredService<PostgreSqlDbClient>();
-
-// Get config
-var config = app.Services.GetRequiredService<IOptions<DbConfig>>().Value;
-var dbConnection = config.GetConnection("rpi").ConnectionString;
-log.Dbg(dbConnection);
-
-// Get query dispatcher
+// Get dispatchers
+var command = app.Services.GetRequiredService<ICommandDispatcher>();
 var query = app.Services.GetRequiredService<IQueryDispatcher>();
 
 // ==========================================
@@ -50,8 +36,10 @@ var query = app.Services.GetRequiredService<IQueryDispatcher>();
 // ==========================================
 
 // Authentication
-log.Inf("Migrate to latest version.");
-authDbClient.MigrateToLatest(dbConnection);
+log.Inf("Migrate to latest database version.");
+await command.DispatchAsync<Q.MigrateToLatest.MigrateToLatestCommand>(
+	new()
+);
 
 // ==========================================
 //  INSERT TEST USER
@@ -82,6 +70,8 @@ var journeyId = await query.DispatchAsync<Q.CreateJourney.CreateJourneyQuery, Jo
 // ==========================================
 //  TRUNCATE TABLES
 // ==========================================
+
+var authDb = app.Services.GetRequiredService<AuthDb>();
 
 var truncate = Task (string table) =>
 	authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text);
