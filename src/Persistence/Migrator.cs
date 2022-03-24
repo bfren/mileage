@@ -16,12 +16,21 @@ namespace Mileage.Persistence;
 /// </summary>
 public abstract class Migrator
 {
-	/// <inheritdoc cref="MigrateTo(ClientType, DbConnection, Assembly, long?)"/>
-	public abstract bool MigrateTo(DbConnection dbConnection, long? version);
+	/// <summary>
+	/// Migrate to the latest database schema
+	/// </summary>
+	/// <param name="connectionString">Use this to create a <see cref="DbConnection"/> object</param>
+	public bool MigrateToLatest(string connectionString) =>
+		MigrateTo(connectionString, null);
 
 	/// <summary>
 	/// Migrate to the specified <paramref name="version"/> (or the latest if it's null)
 	/// </summary>
+	/// <param name="connectionString">Use this to create a <see cref="DbConnection"/> object</param>
+	/// <param name="version">The version to migrate to (or null for 'latest')</param>
+	public abstract bool MigrateTo(string connectionString, long? version);
+
+	/// <inheritdoc cref="MigrateTo(string, long?)"/>
 	/// <param name="dbType">DbType</param>
 	/// <param name="dbConnection">DbConnection</param>
 	/// <param name="migrationsAssembly">The assembly from which to load migrations</param>
