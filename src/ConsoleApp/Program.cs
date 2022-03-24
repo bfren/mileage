@@ -68,6 +68,17 @@ var journeyId = await query.DispatchAsync<Q.CreateJourney.CreateJourneyQuery, Jo
 );
 
 // ==========================================
+//  DELETE TEST JOURNEY
+// ==========================================
+
+await query.DispatchAsync<Q.DeleteJourney.DeleteJourneyQuery, bool>(
+	new(journeyId, userId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
+	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
+);
+
+// ==========================================
 //  TRUNCATE TABLES
 // ==========================================
 
@@ -77,3 +88,4 @@ var truncate = Task (string table) =>
 	authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text);
 
 await truncate("\"auth\".\"User\"");
+await truncate("\"mileage\".\"Journey\"");

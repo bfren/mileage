@@ -6,8 +6,8 @@ using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Jeebs.Messages;
 using MaybeF;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
-using Mileage.Persistence.Entities.StrongIds;
 using Mileage.Persistence.Repositories;
 using Mileage.Queries.DeleteJourney.Messages;
 
@@ -31,7 +31,7 @@ public class HandleAsync_Tests
 		{
 			// Arrange
 			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(default!)
+			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 			var query = new DeleteJourneyQuery(new(), new());
 
@@ -50,7 +50,7 @@ public class HandleAsync_Tests
 		{
 			// Arrange
 			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(default!)
+			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 			var journeyId = new JourneyId(Rnd.Lng);
 			var userId = new AuthUserId(Rnd.Lng);
@@ -79,7 +79,7 @@ public class HandleAsync_Tests
 				// Arrange
 				var (repo, log, handler) = Setup();
 				var msg = new TestMsg();
-				repo.QuerySingleAsync<JourneyToDelete>(default!)
+				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 					.ReturnsForAnyArgs(F.None<JourneyToDelete>(msg));
 				var query = new DeleteJourneyQuery(new(), new());
 
@@ -95,7 +95,7 @@ public class HandleAsync_Tests
 			{
 				// Arrange
 				var (repo, _, handler) = Setup();
-				repo.QuerySingleAsync<JourneyToDelete>(default!)
+				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 					.ReturnsForAnyArgs(Create.None<JourneyToDelete>());
 				var journeyId = new JourneyId(Rnd.Lng);
 				var userId = new AuthUserId(Rnd.Lng);
@@ -124,7 +124,7 @@ public class HandleAsync_Tests
 					var userId = new AuthUserId(Rnd.Lng);
 					var query = new DeleteJourneyQuery(journeyId, userId);
 					var (repo, _, handler) = Setup();
-					repo.QuerySingleAsync<JourneyToDelete>(default!)
+					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 						.ReturnsForAnyArgs(new JourneyToDelete(journeyId));
 
 					// Act
@@ -139,7 +139,7 @@ public class HandleAsync_Tests
 				{
 					// Arrange
 					var (repo, _, handler) = Setup();
-					repo.QuerySingleAsync<JourneyToDelete>(default!)
+					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
 						.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 					var expected = Rnd.Flip;
 					repo.DeleteAsync(default).ReturnsForAnyArgs(
