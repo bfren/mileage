@@ -45,7 +45,7 @@ public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, boo
 				none: Log.Msg
 			)
 			.SwitchAsync(
-				some: x => Journey.DeleteAsync(x.Id),
+				some: x => Journey.DeleteAsync(x),
 				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(query.JourneyId, query.UserId))
 			);
 	}
