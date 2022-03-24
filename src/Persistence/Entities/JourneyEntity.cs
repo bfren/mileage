@@ -4,6 +4,7 @@
 using System;
 using Jeebs.Auth.Data;
 using Jeebs.Collections;
+using Jeebs.Data.Attributes;
 using Jeebs.Id;
 using Mileage.Persistence.Common.StrongIds;
 
@@ -12,12 +13,19 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Journey entity
 /// </summary>
-public sealed class JourneyEntity : IWithId<JourneyId>
+public sealed class JourneyEntity : IWithVersion<JourneyId>
 {
 	/// <summary>
 	/// Journey ID
 	/// </summary>
+	[Id]
 	public JourneyId Id { get; init; }
+
+	/// <summary>
+	/// Version
+	/// </summary>
+	[Version]
+	public long Version { get; set; }
 
 	/// <summary>
 	/// User ID
@@ -27,7 +35,7 @@ public sealed class JourneyEntity : IWithId<JourneyId>
 	/// <summary>
 	/// Journey Date
 	/// </summary>
-	public DateOnly Date { get; init; }
+	public DateTime Date { get; init; }
 
 	/// <summary>
 	/// The car used for the journey
@@ -37,12 +45,12 @@ public sealed class JourneyEntity : IWithId<JourneyId>
 	/// <summary>
 	/// Start (miles)
 	/// </summary>
-	public uint StartMiles { get; init; }
+	public int StartMiles { get; init; }
 
 	/// <summary>
 	/// [Optional] End (miles)
 	/// </summary>
-	public uint? EndMiles { get; init; }
+	public int? EndMiles { get; init; }
 
 	/// <summary>
 	/// From (start) place
