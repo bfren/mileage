@@ -2,8 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Logging;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
-using Mileage.Persistence.Entities.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Queries.CreateJourney.CreateJourneyHandler_Tests;
@@ -56,7 +56,7 @@ public class HandleAsync_Tests
 			// Assert
 			await repo.Received().CreateAsync(Arg.Is<JourneyEntity>(j =>
 				j.UserId.Value == userId
-				&& j.Date == date
+				&& j.Date == date.ToDateTime(TimeOnly.MinValue)
 				&& j.CarId.Value == carId
 				&& j.StartMiles == startMiles
 				&& j.FromPlaceId.Value == placeId

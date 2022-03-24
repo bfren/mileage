@@ -1,7 +1,6 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth;
 using Jeebs.Auth.Data;
 using Jeebs.Logging;
 
@@ -60,7 +59,7 @@ public class HandleAsync_Tests
 			// Arrange
 			var (repo, _, handler) = Setup();
 			var expected = new AuthUserId(Rnd.Lng);
-			repo.CreateAsync(default!, default!, default)
+			repo.CreateAsync(email: default!, plainTextPassword: default!, friendlyName: default)
 				.ReturnsForAnyArgs(expected);
 			var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
 

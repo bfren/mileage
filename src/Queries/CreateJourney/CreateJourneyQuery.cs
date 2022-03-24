@@ -3,13 +3,12 @@
 
 using System;
 using Jeebs.Auth.Data;
-using Mileage.Persistence.Entities.StrongIds;
+using Jeebs.Cqrs;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.CreateJourney;
 
-/// <summary>
-/// Create a new journey
-/// </summary>
+/// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>
 /// <param name="Date">The date of the new journey</param>
 /// <param name="CarId">CarId to associate with the new journey</param>
@@ -21,4 +20,4 @@ public sealed record class CreateJourneyQuery(
 	CarId CarId,
 	uint StartMiles,
 	PlaceId FromPlaceId
-);
+) : IQuery<JourneyId>;

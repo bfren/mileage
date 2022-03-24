@@ -3,10 +3,10 @@
 
 using Jeebs.Id;
 
-namespace Mileage.Persistence.Entities.StrongIds;
+namespace Mileage.Persistence.Common.StrongIds;
 
 /// <summary>
-/// Car ID
+/// Place ID
 /// </summary>
 /// <param name="Value">ID value</param>
-public readonly record struct CarId(long Value) : IStrongId;
+public readonly record struct PlaceId(long Value) : IStrongId;

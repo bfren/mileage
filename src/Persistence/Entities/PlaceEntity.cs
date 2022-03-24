@@ -2,20 +2,28 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
+using Jeebs.Data.Attributes;
 using Jeebs.Id;
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
 
 /// <summary>
 /// Place entity
 /// </summary>
-public sealed class PlaceEntity : IWithId<PlaceId>
+public sealed class PlaceEntity : IWithVersion<PlaceId>
 {
 	/// <summary>
 	/// Place ID
 	/// </summary>
+	[Id]
 	public PlaceId Id { get; init; }
+
+	/// <summary>
+	/// Version
+	/// </summary>
+	[Version]
+	public long Version { get; set; }
 
 	/// <summary>
 	/// User ID
