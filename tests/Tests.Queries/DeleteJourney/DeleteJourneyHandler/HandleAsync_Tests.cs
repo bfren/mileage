@@ -31,9 +31,8 @@ public class HandleAsync_Tests
 		{
 			// Arrange
 			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-				new JourneyToDelete(new(Rnd.Lng))
-			);
+			repo.QuerySingleAsync<JourneyToDelete>(default!)
+				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 			var query = new DeleteJourneyQuery(new(), new());
 
 			// Act
@@ -51,9 +50,8 @@ public class HandleAsync_Tests
 		{
 			// Arrange
 			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-				new JourneyToDelete(new(Rnd.Lng))
-			);
+			repo.QuerySingleAsync<JourneyToDelete>(default!)
+				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 			var journeyId = new JourneyId(Rnd.Lng);
 			var userId = new AuthUserId(Rnd.Lng);
 			var query = new DeleteJourneyQuery(journeyId, userId);
@@ -81,9 +79,8 @@ public class HandleAsync_Tests
 				// Arrange
 				var (repo, log, handler) = Setup();
 				var msg = new TestMsg();
-				repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-					F.None<JourneyToDelete>(msg)
-				);
+				repo.QuerySingleAsync<JourneyToDelete>(default!)
+					.ReturnsForAnyArgs(F.None<JourneyToDelete>(msg));
 				var query = new DeleteJourneyQuery(new(), new());
 
 				// Act
@@ -98,9 +95,8 @@ public class HandleAsync_Tests
 			{
 				// Arrange
 				var (repo, _, handler) = Setup();
-				repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-					Create.None<JourneyToDelete>()
-				);
+				repo.QuerySingleAsync<JourneyToDelete>(default!)
+					.ReturnsForAnyArgs(Create.None<JourneyToDelete>());
 				var journeyId = new JourneyId(Rnd.Lng);
 				var userId = new AuthUserId(Rnd.Lng);
 				var query = new DeleteJourneyQuery(journeyId, userId);
@@ -128,9 +124,8 @@ public class HandleAsync_Tests
 					var userId = new AuthUserId(Rnd.Lng);
 					var query = new DeleteJourneyQuery(journeyId, userId);
 					var (repo, _, handler) = Setup();
-					repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-						new JourneyToDelete(journeyId)
-					);
+					repo.QuerySingleAsync<JourneyToDelete>(default!)
+						.ReturnsForAnyArgs(new JourneyToDelete(journeyId));
 
 					// Act
 					await handler.HandleAsync(query, CancellationToken.None);
@@ -144,9 +139,8 @@ public class HandleAsync_Tests
 				{
 					// Arrange
 					var (repo, _, handler) = Setup();
-					repo.QuerySingleAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-						new JourneyToDelete(new(Rnd.Lng))
-					);
+					repo.QuerySingleAsync<JourneyToDelete>(default!)
+						.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng)));
 					var expected = Rnd.Flip;
 					repo.DeleteAsync(default).ReturnsForAnyArgs(
 						expected
