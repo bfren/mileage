@@ -3,9 +3,9 @@
 
 using System;
 using Jeebs.Auth.Data;
-using Persistence.Entities.StrongIds;
+using Mileage.Persistence.Entities.StrongIds;
 
-namespace Queries.CreateJourney;
+namespace Mileage.Queries.CreateJourney;
 
 /// <summary>
 /// Create a new journey

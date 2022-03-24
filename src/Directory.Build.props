@@ -6,6 +6,8 @@
 		<TargetFrameworks>net7.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
+		<AssemblyName>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
+		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 
 	<!-- Common Packages -->
@@ -20,7 +22,7 @@
 	<!-- Enable Internal Testing -->
 	<ItemGroup Label="Test Internals">
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>Tests.$(AssemblyName)</_Parameter1>
+			<_Parameter1>Tests.$(MSBuildProjectName.Replace(" ", "_"))</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 

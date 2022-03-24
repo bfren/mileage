@@ -2,10 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Logging;
-using Persistence.Entities;
-using Persistence.Repositories;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Repositories;
 
-namespace Queries.CreateJourney.CreateJourneyHandler_Tests;
+namespace Mileage.Queries.CreateJourney.CreateJourneyHandler_Tests;
 
 public class HandleAsync_Tests
 {

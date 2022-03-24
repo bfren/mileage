@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Persistence.Repositories;
-using Queries.DeleteJourney.Messages;
+using Mileage.Persistence.Repositories;
+using Mileage.Queries.DeleteJourney.Messages;
 
-namespace Queries.DeleteJourney;
+namespace Mileage.Queries.DeleteJourney;
 
 public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, bool>
 {

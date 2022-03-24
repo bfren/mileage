@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Description>Mileage: command queries.</Description>
+		<AssemblyName>Mileage.Queries</AssemblyName>
+		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220323.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Persistence\Persistence.csproj" />
+		<ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
 	</ItemGroup>
 </Project>
