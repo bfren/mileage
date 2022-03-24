@@ -1,7 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.DeleteJourney;
 

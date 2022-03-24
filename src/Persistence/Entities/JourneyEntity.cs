@@ -5,7 +5,7 @@ using System;
 using Jeebs.Auth.Data;
 using Jeebs.Collections;
 using Jeebs.Id;
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
 

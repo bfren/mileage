@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Description>Mileage: Common Persistence types.</Description>
+	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="Jeebs" Version="8.0.0-beta.220324.11" />
+	</ItemGroup>
+</Project>

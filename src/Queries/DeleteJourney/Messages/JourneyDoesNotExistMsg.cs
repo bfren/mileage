@@ -3,7 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Messages;
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.DeleteJourney.Messages;
 

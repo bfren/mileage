@@ -3,7 +3,7 @@
 
 using Jeebs.Data;
 using Mileage.Persistence.Entities;
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Repositories;
 

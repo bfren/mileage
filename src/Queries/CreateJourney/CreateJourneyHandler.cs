@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Entities.StrongIds;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Queries.CreateJourney;

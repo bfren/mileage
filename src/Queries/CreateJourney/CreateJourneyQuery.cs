@@ -3,7 +3,8 @@
 
 using System;
 using Jeebs.Auth.Data;
-using Mileage.Persistence.Entities.StrongIds;
+using Jeebs.Cqrs;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.CreateJourney;
 
@@ -21,4 +22,4 @@ public sealed record class CreateJourneyQuery(
 	CarId CarId,
 	uint StartMiles,
 	PlaceId FromPlaceId
-);
+) : IQuery<JourneyId>;

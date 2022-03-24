@@ -2,7 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Mileage.Persistence.Entities.StrongIds;
+using Jeebs.Cqrs;
+using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.DeleteJourney;
 
@@ -14,4 +15,4 @@ namespace Mileage.Queries.DeleteJourney;
 public sealed record class DeleteJourneyQuery(
 	JourneyId JourneyId,
 	AuthUserId UserId
-);
+) : IQuery<bool>;

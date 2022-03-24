@@ -3,7 +3,7 @@
 
 using Jeebs.Id;
 
-namespace Mileage.Persistence.Entities.StrongIds;
+namespace Mileage.Persistence.Common.StrongIds;
 
 /// <summary>
 /// Rate ID
