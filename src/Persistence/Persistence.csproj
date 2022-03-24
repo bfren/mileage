@@ -3,7 +3,7 @@
 		<Description>Mileage: Persistence library.</Description>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220323.2" />
-		<PackageReference Include="Jeebs.Data" Version="8.0.0-beta.220323.2" />
+		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220324.1" />
+		<PackageReference Include="Jeebs.Data" Version="8.0.0-beta.220324.1" />
 	</ItemGroup>
 </Project>

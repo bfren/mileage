@@ -4,6 +4,9 @@
 		<Description>Mileage: Console test app.</Description>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220323.2" />
+		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220324.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Queries\Queries.csproj" />
 	</ItemGroup>
 </Project>

@@ -5,7 +5,7 @@
 		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220323.2" />
+		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220324.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
