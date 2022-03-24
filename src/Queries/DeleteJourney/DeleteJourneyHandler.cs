@@ -3,13 +3,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
-using Persistence.Entities.StrongIds;
 using Persistence.Repositories;
+using Queries.DeleteJourney.Messages;
 
 namespace Queries.DeleteJourney;
 
@@ -35,13 +33,7 @@ public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, boo
 			)
 			.SwitchAsync(
 				some: x => Journey.DeleteAsync(x.Id),
-				none: _ => F.None<bool>(new M.JourneyDoesNotExist(query.JourneyId, query.UserId))
+				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(query.JourneyId, query.UserId))
 			);
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		public sealed record class JourneyDoesNotExist(JourneyId Id, AuthUserId UserId) : Msg;
 	}
 }
