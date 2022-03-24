@@ -1,7 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Data.Common;
+using Npgsql;
 
 namespace Mileage.Persistence.Clients.PostgreSql;
 
@@ -11,6 +11,9 @@ namespace Mileage.Persistence.Clients.PostgreSql;
 public sealed class PostgreSqlMigrator : Migrator
 {
 	/// <inheritdoc/>
-	public override bool MigrateTo(DbConnection dbConnection, long? version) =>
-		MigrateTo(ClientType.PostgreSql, dbConnection, typeof(PostgreSqlMigrator).Assembly, version);
+	public override bool MigrateTo(string connectionString, long? version)
+	{
+		using var dbConnection = new NpgsqlConnection(connectionString);
+		return MigrateTo(ClientType.PostgreSql, dbConnection, typeof(PostgreSqlMigrator).Assembly, version);
+	}
 }
