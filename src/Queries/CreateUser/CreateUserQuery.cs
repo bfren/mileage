@@ -6,9 +6,7 @@ using Jeebs.Cqrs;
 
 namespace Mileage.Queries.CreateUser;
 
-/// <summary>
-/// Create a user
-/// </summary>
+/// <inheritdoc cref="CreateUserHandler"/>
 /// <param name="Name">User's name</param>
 /// <param name="EmailAddress">Email address (for login)</param>
 /// <param name="Password">Password (will be hashed)</param>

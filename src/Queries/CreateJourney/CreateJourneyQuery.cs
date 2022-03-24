@@ -8,9 +8,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.CreateJourney;
 
-/// <summary>
-/// Create a new journey
-/// </summary>
+/// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>
 /// <param name="Date">The date of the new journey</param>
 /// <param name="CarId">CarId to associate with the new journey</param>

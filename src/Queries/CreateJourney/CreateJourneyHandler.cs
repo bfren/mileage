@@ -1,6 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
@@ -38,9 +39,9 @@ public sealed class CreateJourneyHandler : IQueryHandler<CreateJourneyQuery, Jou
 		return Journey.CreateAsync(new()
 		{
 			UserId = query.UserId,
-			Date = query.Date,
+			Date = query.Date.ToDateTime(TimeOnly.MinValue),
 			CarId = query.CarId,
-			StartMiles = query.StartMiles,
+			StartMiles = (int)query.StartMiles,
 			FromPlaceId = query.FromPlaceId
 		});
 	}

@@ -7,9 +7,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Queries.DeleteJourney;
 
-/// <summary>
-/// Delete a journey
-/// </summary>
+/// <inheritdoc cref="DeleteJourneyHandler"/>
 /// <param name="JourneyId">Journey ID</param>
 /// <param name="UserId">User ID</param>
 public sealed record class DeleteJourneyQuery(
