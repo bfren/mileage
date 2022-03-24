@@ -23,7 +23,7 @@ public sealed class AddRateTable : Migration
 			""{Col(r => r.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 			""{Col(r => r.Version)}"" integer NOT NULL DEFAULT 0,
 			""{Col(r => r.UserId)}"" integer NOT NULL,
-			""{Col(r => r.AmountPerMileGBP)}"" money NOT NULL,
+			""{Col(r => r.AmountPerMileGBP)}"" numeric(4,2) NOT NULL CHECK (""{Col(r => r.AmountPerMileGBP)}"" > 0),
 			CONSTRAINT ""{Col(r => r.Id)}_Key"" PRIMARY KEY(""{Col(r => r.Id)}"")
 		)
 		TABLESPACE pg_default
