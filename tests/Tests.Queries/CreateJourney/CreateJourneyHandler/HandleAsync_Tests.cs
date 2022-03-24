@@ -3,21 +3,29 @@
 
 using Jeebs.Logging;
 using Mileage.Persistence.Entities;
+using Mileage.Persistence.Entities.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Queries.CreateJourney.CreateJourneyHandler_Tests;
 
 public class HandleAsync_Tests
 {
+	private static (IJourneyRepository, ILog<CreateJourneyHandler>, CreateJourneyHandler) Setup()
+	{
+		var repo = Substitute.For<IJourneyRepository>();
+		var log = Substitute.For<ILog<CreateJourneyHandler>>();
+		var handler = new CreateJourneyHandler(repo, log);
+
+		return (repo, log, handler);
+	}
+
 	public class Calls_Log_Dbg
 	{
 		[Fact]
 		public async Task With_Query()
 		{
 			// Arrange
-			var repo = Substitute.For<IJourneyRepository>();
-			var log = Substitute.For<ILog<CreateJourneyHandler>>();
-			var handler = new CreateJourneyHandler(repo, log);
+			var (_, log, handler) = Setup();
 			var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
 
 			// Act
@@ -34,9 +42,7 @@ public class HandleAsync_Tests
 		public async Task With_Correct_Values()
 		{
 			// Arrange
-			var repo = Substitute.For<IJourneyRepository>();
-			var log = Substitute.For<ILog<CreateJourneyHandler>>();
-			var handler = new CreateJourneyHandler(repo, log);
+			var (repo, _, handler) = Setup();
 			var userId = Rnd.Lng;
 			var date = Rnd.DateF.Get();
 			var carId = Rnd.Lng;
@@ -55,6 +61,24 @@ public class HandleAsync_Tests
 				&& j.StartMiles == startMiles
 				&& j.FromPlaceId.Value == placeId
 			));
+		}
+
+		[Fact]
+		public async void Returns_Result()
+		{
+			// Arrange
+			var (repo, _, handler) = Setup();
+			var expected = new JourneyId(Rnd.Lng);
+			repo.CreateAsync(default!)
+				.ReturnsForAnyArgs(expected);
+			var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
+
+			// Act
+			var result = await handler.HandleAsync(query, CancellationToken.None);
+
+			// Assert
+			var some = result.AssertSome();
+			Assert.Equal(expected, some);
 		}
 	}
 }
