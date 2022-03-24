@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
+		Test.csproj = Test.csproj
+		.github\workflows\test.yml = .github\workflows\test.yml
 		Version = Version
 	EndProjectSection
 EndProject
@@ -32,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "src\Queries\Quer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{AE5D97E8-7A24-438B-B825-1996CE2C942B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Queries", "tests\Tests.Queries\Tests.Queries.csproj", "{9E705DF8-D0DB-4EB9-AB86-739571B06CEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Queries", "tests\Tests.Queries\Tests.Queries.csproj", "{9E705DF8-D0DB-4EB9-AB86-739571B06CEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
