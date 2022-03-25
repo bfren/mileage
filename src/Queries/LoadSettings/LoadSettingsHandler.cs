@@ -36,12 +36,16 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 	/// <param name="cancellationToken"></param>
 	public override Task<Maybe<Settings>> HandleAsync(LoadSettingsQuery query, CancellationToken cancellationToken)
 	{
-		Log.Dbg("Load Settings for User {UserId}", query.Id.Value);
-		return Settings.QuerySingleAsync<Settings>(
-			(s => s.UserId, Compare.Equal, query.Id)
-		).SwitchAsync(
-			x => F.Some(x).AsTask,
-			_ => F.Some(new Settings()).AsTask
-		);
+		Log.Vrb("Load settings for User {UserId}", query.Id.Value);
+		return Settings
+			.StartFluentQuery()
+			.Where(
+				s => s.UserId, Compare.Equal, query.Id
+			)
+			.QuerySingleAsync<Settings>()
+			.SwitchAsync(
+				x => F.Some(x).AsTask,
+				_ => F.Some(new Settings()).AsTask
+			);
 	}
 }

@@ -35,12 +35,16 @@ public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool
 	/// <param name="cancellationToken"></param>
 	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query, CancellationToken cancellationToken)
 	{
-		Log.Dbg("Delete Journey: {Query}", query);
+		Log.Vrb("Delete Journey: {Query}", query);
 		return Journey
-			.QuerySingleAsync<JourneyToDelete>(
-				(x => x.Id, Compare.Equal, query.JourneyId),
-				(x => x.UserId, Compare.Equal, query.UserId)
+			.StartFluentQuery()
+			.Where(
+				x => x.Id, Compare.Equal, query.JourneyId
 			)
+			.Where(
+				x => x.UserId, Compare.Equal, query.UserId
+			)
+			.QuerySingleAsync<JourneyToDelete>()
 			.AuditAsync(
 				none: Log.Msg
 			)

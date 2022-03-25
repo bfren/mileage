@@ -33,7 +33,10 @@ public sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId
 	/// <param name="cancellationToken"></param>
 	public override Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query, CancellationToken cancellationToken)
 	{
-		Log.Dbg("Create User: {Query}", query with { Password = "** REDACTED **" });
-		return User.CreateAsync(query.EmailAddress, query.Password, query.Name);
+		Log.Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
+		return User
+			.CreateAsync(
+				query.EmailAddress, query.Password, query.Name
+			);
 	}
 }

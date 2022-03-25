@@ -35,14 +35,15 @@ public sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jour
 	/// <param name="cancellationToken"></param>
 	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query, CancellationToken cancellationToken)
 	{
-		Log.Dbg("Create Journey: {Query}", query);
-		return Journey.CreateAsync(new()
-		{
-			UserId = query.UserId,
-			Date = query.Date.ToDateTime(TimeOnly.MinValue),
-			CarId = query.CarId,
-			StartMiles = (int)query.StartMiles,
-			FromPlaceId = query.FromPlaceId
-		});
+		Log.Vrb("Create Journey: {Query}", query);
+		return Journey
+			.CreateAsync(new()
+			{
+				UserId = query.UserId,
+				Date = query.Date.ToDateTime(TimeOnly.MinValue),
+				CarId = query.CarId,
+				StartMiles = (int)query.StartMiles,
+				FromPlaceId = query.FromPlaceId
+			});
 	}
 }
