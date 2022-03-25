@@ -14,7 +14,7 @@ namespace Mileage.Queries.CreateJourney;
 /// <summary>
 /// Create a new mileage entity
 /// </summary>
-public sealed class CreateJourneyHandler : IQueryHandler<CreateJourneyQuery, JourneyId>
+public sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, JourneyId>
 {
 	private IJourneyRepository Journey { get; init; }
 
@@ -33,7 +33,7 @@ public sealed class CreateJourneyHandler : IQueryHandler<CreateJourneyQuery, Jou
 	/// </summary>
 	/// <param name="query"></param>
 	/// <param name="cancellationToken"></param>
-	public Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query, CancellationToken cancellationToken)
 	{
 		Log.Dbg("Create Journey: {Query}", query);
 		return Journey.CreateAsync(new()

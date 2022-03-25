@@ -5,11 +5,14 @@
 		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0-beta.220324.14" />
-		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220324.14" />
+		<PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0-beta.220325.1" />
+		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220325.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
 		<ProjectReference Include="..\Persistence.Clients.PostgreSql\Persistence.Clients.PostgreSql.csproj" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="SaveConfig\" />
 	</ItemGroup>
 </Project>

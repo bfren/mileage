@@ -3,7 +3,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Jeebs.Auth;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -13,7 +12,7 @@ namespace Mileage.Queries.CreateUser;
 /// <summary>
 /// Create a new user
 /// </summary>
-public sealed class CreateUserHandler : IQueryHandler<CreateUserQuery, AuthUserId>
+public sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId>
 {
 	private ILog<CreateUserHandler> Log { get; init; }
 
@@ -32,7 +31,7 @@ public sealed class CreateUserHandler : IQueryHandler<CreateUserQuery, AuthUserI
 	/// </summary>
 	/// <param name="query"></param>
 	/// <param name="cancellationToken"></param>
-	public Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query, CancellationToken cancellationToken)
 	{
 		Log.Dbg("Create User: {Query}", query with { Password = "** REDACTED **" });
 		return User.CreateAsync(query.EmailAddress, query.Password, query.Name);

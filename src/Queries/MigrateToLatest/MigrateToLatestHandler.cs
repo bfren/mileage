@@ -11,7 +11,7 @@ using Mileage.Persistence;
 
 namespace Mileage.Queries.MigrateToLatest;
 
-public sealed class MigrateToLatestHandler : ICommandHandler<MigrateToLatestCommand>
+public sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCommand>
 {
 	private IDb Db { get; init; }
 
@@ -24,7 +24,7 @@ public sealed class MigrateToLatestHandler : ICommandHandler<MigrateToLatestComm
 	public MigrateToLatestHandler(IDb db, Migrator migrator, IAuthDb authDb, ILog<MigrateToLatestHandler> log) =>
 		(Db, Migrator, AuthDb, Log) = (db, migrator, authDb, log);
 
-	public Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand query, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand query, CancellationToken cancellationToken)
 	{
 		Log.Dbg("Migrating Authentication database to the latest version.");
 		AuthDb.MigrateToLatest();

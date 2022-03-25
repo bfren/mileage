@@ -30,7 +30,7 @@ public static class ServiceCollectionExtensions
 
 		// Add repositories
 		_ = services.AddTransient<ICarRepository, CarRepository>();
-		_ = services.AddTransient<IConfigRepository, ConfigRepository>();
+		_ = services.AddTransient<ISettingsRepository, SettingsRepository>();
 		_ = services.AddTransient<IJourneyRepository, JourneyRepository>();
 		_ = services.AddTransient<IPlaceRepository, PlaceRepository>();
 		_ = services.AddTransient<IRateRepository, RateRepository>();

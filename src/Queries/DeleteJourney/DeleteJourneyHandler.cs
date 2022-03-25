@@ -14,7 +14,7 @@ namespace Mileage.Queries.DeleteJourney;
 /// <summary>
 /// Delete a journey that belongs to a user
 /// </summary>
-public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, bool>
+public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool>
 {
 	private ILog<DeleteJourneyHandler> Log { get; init; }
 
@@ -33,7 +33,7 @@ public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, boo
 	/// </summary>
 	/// <param name="query"></param>
 	/// <param name="cancellationToken"></param>
-	public Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query, CancellationToken cancellationToken)
 	{
 		Log.Dbg("Delete Journey: {Query}", query);
 		return Journey
