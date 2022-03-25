@@ -3,8 +3,10 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Query;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -12,43 +14,42 @@ namespace Mileage.Queries.LoadSettings.LoadSettingsHandler_Tests;
 
 public class HandleAsync_Tests
 {
-	private static (ISettingsRepository, ILog<LoadSettingsHandler>, LoadSettingsHandler) Setup()
+	private static (IQueryFluent<SettingsEntity, SettingsId>, ILog<LoadSettingsHandler>, LoadSettingsHandler) Setup()
 	{
-		var repo = Substitute.For<ISettingsRepository>();
-		var log = Substitute.For<ILog<LoadSettingsHandler>>();
+		var (repo, fluent, log) = Helpers.Setup<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler, LoadSettingsQuery, Settings>();
 		var handler = new LoadSettingsHandler(repo, log);
 
-		return (repo, log, handler);
+		return (fluent, log, handler);
 	}
 
-	public class Calls_Log_Dbg
+	public class Calls_Log_Vrb
 	{
 		[Fact]
 		public async Task With_Query()
 		{
 			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<Settings>(predicates: default!)
-				.ReturnsForAnyArgs(new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
+			var (fluent, log, handler) = Setup();
+			fluent.QuerySingleAsync<Settings>()
+				.Returns(new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
 			var query = new LoadSettingsQuery(new(Rnd.Lng));
 
 			// Act
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			log.Received().Dbg("Load Settings for User {UserId}", query.Id.Value);
+			log.Received().Vrb("Load settings for User {UserId}", query.Id.Value);
 		}
 	}
 
-	public class Calls_Repo_QuerySingleAsync
+	public class Calls_FluentQuery_Where
 	{
 		[Fact]
 		public async Task With_Correct_Values()
 		{
 			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<Settings>(predicates: default!)
-				.ReturnsForAnyArgs(new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
+			var (fluent, _, handler) = Setup();
+			fluent.QuerySingleAsync<Settings>()
+				.Returns(new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
 			var userId = new AuthUserId(Rnd.Lng);
 			var query = new LoadSettingsQuery(userId);
 
@@ -56,31 +57,55 @@ public class HandleAsync_Tests
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			var calls = repo.ReceivedCalls();
+			var calls = fluent.ReceivedCalls();
 			Assert.Collection(calls,
-				c => Helpers.AssertQuery<SettingsEntity, Settings>(c,
-					nameof(SettingsRepository.QuerySingleAsync),
-					(x => x.UserId, Compare.Equal, userId)
-				)
+				c => Helpers.AssertWhere<SettingsEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+				_ => { }
 			);
 		}
+	}
 
-		[Fact]
-		public async Task Returns_Result()
+	public class Calls_FluentQuery_QuerySingleAsync
+	{
+		public class Receives_Some
 		{
-			// Arrange
-			var (repo, _, handler) = Setup();
-			var model = new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng));
-			repo.QuerySingleAsync<Settings>(predicates: default!)
-				.ReturnsForAnyArgs(model);
-			var query = new LoadSettingsQuery(new(Rnd.Lng));
+			[Fact]
+			public async Task Returns_Result()
+			{
+				// Arrange
+				var (fluent, _, handler) = Setup();
+				var model = new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng));
+				fluent.QuerySingleAsync<Settings>()
+					.Returns(model);
+				var query = new LoadSettingsQuery(new(Rnd.Lng));
 
-			// Act
-			var result = await handler.HandleAsync(query, CancellationToken.None);
+				// Act
+				var result = await handler.HandleAsync(query, CancellationToken.None);
 
-			// Assert
-			var some = result.AssertSome();
-			Assert.Same(model, some);
+				// Assert
+				var some = result.AssertSome();
+				Assert.Same(model, some);
+			}
+		}
+
+		public class Receives_None
+		{
+			[Fact]
+			public async Task Returns_Default_Settings()
+			{
+				// Arrange
+				var (fluent, _, handler) = Setup();
+				fluent.QuerySingleAsync<Settings>()
+					.Returns(Create.None<Settings>());
+				var query = new LoadSettingsQuery(new(Rnd.Lng));
+
+				// Act
+				var result = await handler.HandleAsync(query, CancellationToken.None);
+
+				// Assert
+				var some = result.AssertSome();
+				Assert.Equal(new(), some);
+			}
 		}
 	}
 }

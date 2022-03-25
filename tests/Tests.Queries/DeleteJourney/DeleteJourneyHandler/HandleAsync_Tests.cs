@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Query;
 using Jeebs.Logging;
 using Jeebs.Messages;
 using MaybeF;
@@ -15,43 +16,42 @@ namespace Mileage.Queries.DeleteJourney.DeleteJourneyHandler_Tests;
 
 public class HandleAsync_Tests
 {
-	private static (IJourneyRepository, ILog<DeleteJourneyHandler>, DeleteJourneyHandler) Setup()
+	private static (IJourneyRepository, IQueryFluent<JourneyEntity, JourneyId>, ILog<DeleteJourneyHandler>, DeleteJourneyHandler) Setup()
 	{
-		var repo = Substitute.For<IJourneyRepository>();
-		var log = Substitute.For<ILog<DeleteJourneyHandler>>();
+		var (repo, fluent, log) = Helpers.Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler, DeleteJourneyQuery, bool>();
 		var handler = new DeleteJourneyHandler(repo, log);
 
-		return (repo, log, handler);
+		return (repo, fluent, log, handler);
 	}
 
-	public class Calls_Log_Dbg
+	public class Calls_Log_Vrb
 	{
 		[Fact]
 		public async Task With_Query()
 		{
 			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
+			var (_, repo, log, handler) = Setup();
+			repo.QuerySingleAsync<JourneyToDelete>()
+				.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
 			var query = new DeleteJourneyQuery(new(), new());
 
 			// Act
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			log.Received().Dbg("Delete Journey: {Query}", query);
+			log.Received().Vrb("Delete Journey: {Query}", query);
 		}
 	}
 
-	public class Calls_Repo_QuerySingleAsync
+	public class Calls_FluentQuery_Where
 	{
 		[Fact]
 		public async Task With_Correct_Values()
 		{
 			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
+			var (_, fluent, _, handler) = Setup();
+			fluent.QuerySingleAsync<JourneyToDelete>()
+				.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
 			var journeyId = new JourneyId(Rnd.Lng);
 			var userId = new AuthUserId(Rnd.Lng);
 			var query = new DeleteJourneyQuery(journeyId, userId);
@@ -60,27 +60,27 @@ public class HandleAsync_Tests
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			var calls = repo.ReceivedCalls();
+			var calls = fluent.ReceivedCalls();
 			Assert.Collection(calls,
-				c => Helpers.AssertQuery<JourneyEntity, JourneyToDelete>(c,
-					nameof(JourneyRepository.QuerySingleAsync),
-					(x => x.Id, Compare.Equal, journeyId),
-					(x => x.UserId, Compare.Equal, userId)
-				),
+				c => Helpers.AssertWhere<JourneyEntity, JourneyId>(c, x => x.Id, Compare.Equal, journeyId),
+				c => Helpers.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 				_ => { }
 			);
 		}
+	}
 
+	public class Calls_FluentQuery_WhereSingleAsync
+	{
 		public class Receives_None
 		{
 			[Fact]
 			public async Task Audits_Msg()
 			{
 				// Arrange
-				var (repo, log, handler) = Setup();
+				var (_, fluent, log, handler) = Setup();
 				var msg = new TestMsg();
-				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-					.ReturnsForAnyArgs(F.None<JourneyToDelete>(msg));
+				fluent.QuerySingleAsync<JourneyToDelete>()
+					.Returns(F.None<JourneyToDelete>(msg));
 				var query = new DeleteJourneyQuery(new(), new());
 
 				// Act
@@ -94,9 +94,9 @@ public class HandleAsync_Tests
 			public async Task Returns_None_With_JourneyDoesNotExistMsg()
 			{
 				// Arrange
-				var (repo, _, handler) = Setup();
-				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-					.ReturnsForAnyArgs(Create.None<JourneyToDelete>());
+				var (_, fluent, _, handler) = Setup();
+				fluent.QuerySingleAsync<JourneyToDelete>()
+					.Returns(Create.None<JourneyToDelete>());
 				var journeyId = new JourneyId(Rnd.Lng);
 				var userId = new AuthUserId(Rnd.Lng);
 				var query = new DeleteJourneyQuery(journeyId, userId);
@@ -120,13 +120,13 @@ public class HandleAsync_Tests
 				public async Task With_Correct_Value()
 				{
 					// Arrange
+					var (repo, fluent, _, handler) = Setup();
 					var journeyId = new JourneyId(Rnd.Lng);
 					var userId = new AuthUserId(Rnd.Lng);
 					var query = new DeleteJourneyQuery(journeyId, userId);
-					var (repo, _, handler) = Setup();
 					var model = new JourneyToDelete(journeyId, Rnd.Lng);
-					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-						.ReturnsForAnyArgs(model);
+					fluent.QuerySingleAsync<JourneyToDelete>()
+						.Returns(model);
 
 					// Act
 					await handler.HandleAsync(query, CancellationToken.None);
@@ -139,10 +139,10 @@ public class HandleAsync_Tests
 				public async Task Returns_Result()
 				{
 					// Arrange
-					var (repo, _, handler) = Setup();
+					var (repo, fluent, _, handler) = Setup();
 					var model = new JourneyToDelete(new(Rnd.Lng), Rnd.Lng);
-					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-						.ReturnsForAnyArgs(model);
+					fluent.QuerySingleAsync<JourneyToDelete>()
+						.Returns(model);
 					var expected = Rnd.Flip;
 					repo.DeleteAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
 						expected

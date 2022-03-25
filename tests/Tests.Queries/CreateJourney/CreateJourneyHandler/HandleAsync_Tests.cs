@@ -19,7 +19,7 @@ public class HandleAsync_Tests
 		return (repo, log, handler);
 	}
 
-	public class Calls_Log_Dbg
+	public class Calls_Log_Vrb
 	{
 		[Fact]
 		public async Task With_Query()
@@ -32,7 +32,7 @@ public class HandleAsync_Tests
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			log.Received().Dbg("Create Journey: {Query}", query);
+			log.Received().Vrb("Create Journey: {Query}", query);
 		}
 	}
 

@@ -17,7 +17,7 @@ public class HandleAsync_Tests
 		return (repo, log, handler);
 	}
 
-	public class Logs_To_Dbg
+	public class Logs_To_Vrb
 	{
 		[Fact]
 		public async Task With_Query_Using_Redacted_Password()
@@ -30,7 +30,7 @@ public class HandleAsync_Tests
 			await handler.HandleAsync(query, CancellationToken.None);
 
 			// Assert
-			log.Received().Dbg("Create User: {Query}", query with { Password = "** REDACTED **" });
+			log.Received().Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
 		}
 	}
 
