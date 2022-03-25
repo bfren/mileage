@@ -11,7 +11,7 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Rate entity
 /// </summary>
-public sealed class RateEntity : IWithVersion<RateId>
+public sealed record class RateEntity : IWithVersion<RateId>
 {
 	/// <summary>
 	/// Rate ID

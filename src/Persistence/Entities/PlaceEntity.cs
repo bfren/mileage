@@ -11,7 +11,7 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Place entity
 /// </summary>
-public sealed class PlaceEntity : IWithVersion<PlaceId>
+public sealed record class PlaceEntity : IWithVersion<PlaceId>
 {
 	/// <summary>
 	/// Place ID
