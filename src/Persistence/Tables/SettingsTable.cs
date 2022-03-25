@@ -7,14 +7,14 @@ using Mileage.Persistence.Common;
 namespace Mileage.Persistence.Tables;
 
 /// <summary>
-/// Config Table definition
+/// Settings Table definition
 /// </summary>
-public sealed record class ConfigTable() : Table(Constants.Schema, TableName)
+public sealed record class SettingsTable() : Table(Constants.Schema, TableName)
 {
 	/// <summary>
 	/// Table name - used as a prefix for each column
 	/// </summary>
-	public static readonly string TableName = "Config";
+	public static readonly string TableName = "Settings";
 
 	public string Id =>
 		TableName + nameof(Id);

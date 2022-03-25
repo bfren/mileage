@@ -8,8 +8,8 @@ using Mileage.Persistence.Entities;
 namespace Mileage.Persistence.Repositories;
 
 /// <summary>
-/// Config repository
+/// Settings repository
 /// </summary>
-public interface IConfigRepository : IRepository<ConfigEntity, ConfigId>
+public interface ISettingsRepository : IRepository<SettingsEntity, SettingsId>
 {
 }

@@ -9,14 +9,14 @@ using Mileage.Persistence.Entities;
 namespace Mileage.Persistence.Repositories;
 
 /// <summary>
-/// Config repository
+/// Settings repository
 /// </summary>
-public sealed class ConfigRepository : Repository<ConfigEntity, ConfigId>, IConfigRepository
+public sealed class SettingsRepository : Repository<SettingsEntity, SettingsId>, ISettingsRepository
 {
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="db">IDb</param>
 	/// <param name="log">ILog</param>
-	public ConfigRepository(IDb db, ILog<ConfigRepository> log) : base(db, log) { }
+	public SettingsRepository(IDb db, ILog<SettingsRepository> log) : base(db, log) { }
 }
