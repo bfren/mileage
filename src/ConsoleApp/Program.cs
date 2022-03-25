@@ -27,8 +27,7 @@ log.Inf("Mileage Console app.");
 // ==========================================
 
 // Get dispatchers
-var command = app.Services.GetRequiredService<ICommandDispatcher>();
-var query = app.Services.GetRequiredService<IQueryDispatcher>();
+var dispatcher = app.Services.GetRequiredService<IDispatcher>();
 
 // ==========================================
 //  RUN MIGRATIONS
@@ -36,7 +35,7 @@ var query = app.Services.GetRequiredService<IQueryDispatcher>();
 
 // Authentication
 log.Inf("Migrate to latest database version.");
-await command.DispatchAsync(
+await dispatcher.DispatchAsync(
 	new Q.MigrateToLatest.MigrateToLatestCommand()
 );
 
@@ -44,7 +43,7 @@ await command.DispatchAsync(
 //  INSERT TEST USER
 // ==========================================
 
-var userId = await query.DispatchAsync(
+var userId = await dispatcher.DispatchAsync(
 	new Q.CreateUser.CreateUserQuery("Ben", "ben@bcgdesign.com", "fred")
 ).AuditAsync(
 	some: x => log.Dbg("New User: {UserId}.", x),
@@ -57,7 +56,7 @@ var userId = await query.DispatchAsync(
 //  INSERT TEST JOURNEY
 // ==========================================
 
-var journeyId = await query.DispatchAsync(
+var journeyId = await dispatcher.DispatchAsync(
 	new Q.CreateJourney.CreateJourneyQuery(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.Uint, new())
 ).AuditAsync(
 	some: x => log.Dbg("New Journey: {JourneyId}.", x),
@@ -70,12 +69,27 @@ var journeyId = await query.DispatchAsync(
 //  DELETE TEST JOURNEY
 // ==========================================
 
-await query.DispatchAsync(
+await dispatcher.DispatchAsync(
 	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
 ).AuditAsync(
 	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
 	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
 );
+
+// ==========================================
+//  LOAD SETTINGS
+// ==========================================
+
+var settings = await dispatcher.DispatchAsync(
+	new Q.LoadSettings.LoadSettingsQuery(userId)
+).UnwrapAsync(
+	x => x.Value(() => throw new Exception())
+);
+log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
+
+// ==========================================
+//  SAVE SETTINGS
+// ==========================================
 
 // ==========================================
 //  TRUNCATE TABLES
