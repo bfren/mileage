@@ -29,7 +29,8 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 		(Settings, Log) = (settings, log);
 
 	/// <summary>
-	/// Retrieve the settings for user specified in <paramref name="query"/>
+	/// Retrieve the settings for user specified in <paramref name="query"/> - if none have been
+	/// saved yet, returns a default object
 	/// </summary>
 	/// <param name="query"></param>
 	/// <param name="cancellationToken"></param>
@@ -38,6 +39,9 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 		Log.Dbg("Load Settings for User {UserId}", query.Id.Value);
 		return Settings.QuerySingleAsync<Settings>(
 			(s => s.UserId, Compare.Equal, query.Id)
+		).SwitchAsync(
+			x => F.Some(x).AsTask,
+			_ => F.Some(new Settings()).AsTask
 		);
 	}
 }

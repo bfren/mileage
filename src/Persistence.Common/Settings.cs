@@ -15,4 +15,10 @@ public sealed record class Settings(
 	long Version,
 	CarId? DefaultCarId,
 	PlaceId? DefaultFromPlaceId
-);
+)
+{
+	/// <summary>
+	/// Create default settings object
+	/// </summary>
+	public Settings() : this(0, null, null) { }
+}
