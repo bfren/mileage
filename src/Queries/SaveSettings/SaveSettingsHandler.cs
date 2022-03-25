@@ -96,45 +96,47 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 			);
 	}
 
-	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId, CancellationToken cancellationToken)
-	{
-		var carBelongsToUser = true;
-		if (carId is CarId id)
+	/// <summary>
+	/// Returns true if <paramref name="carId"/> is null or belongs to <paramref name="userId"/>
+	/// </summary>
+	/// <param name="carId"></param>
+	/// <param name="userId"></param>
+	/// <param name="cancellationToken"></param>
+	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId, CancellationToken cancellationToken) =>
+		carId switch
 		{
-			carBelongsToUser = await Dispatcher
-				.DispatchAsync(
-					new CheckCarBelongsToUserQuery(userId, id), cancellationToken
-				)
-				.AuditAsync(
-					none: Log.Msg
-				)
-				.SwitchAsync(
-					some: x => x,
-					none: _ => false
-				);
-		}
+			CarId x =>
+				await Dispatcher
+					.DispatchAsync(
+						new CheckCarBelongsToUserQuery(userId, x), cancellationToken
+					)
+					.UnwrapAsync(
+						x => x.Value(false)
+					),
 
-		return carBelongsToUser;
-	}
+			_ =>
+				true
+		};
 
-	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId, CancellationToken cancellationToken)
-	{
-		var placeBelongsToUser = true;
-		if (placeId is PlaceId id)
+	/// <summary>
+	/// Returns true if <paramref name="placeId"/> is null or belongs to <paramref name="userId"/>
+	/// </summary>
+	/// <param name="placeId"></param>
+	/// <param name="userId"></param>
+	/// <param name="cancellationToken"></param>
+	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId, CancellationToken cancellationToken) =>
+		placeId switch
 		{
-			placeBelongsToUser = await Dispatcher
-				.DispatchAsync(
-					new CheckPlaceBelongsToUserQuery(userId, id), cancellationToken
-				)
-				.AuditAsync(
-					none: Log.Msg
-				)
-				.SwitchAsync(
-					some: x => x,
-					none: _ => false
-				);
-		}
+			PlaceId x =>
+				await Dispatcher
+					.DispatchAsync(
+						new CheckPlaceBelongsToUserQuery(userId, x), cancellationToken
+					)
+					.UnwrapAsync(
+						x => x.Value(false)
+					),
 
-		return placeBelongsToUser;
-	}
+			_ =>
+				true
+		};
 }
