@@ -144,9 +144,8 @@ public class HandleAsync_Tests
 					fluent.QuerySingleAsync<JourneyToDelete>()
 						.Returns(model);
 					var expected = Rnd.Flip;
-					repo.DeleteAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-						expected
-					);
+					repo.DeleteAsync<JourneyToDelete>(default!)
+						.ReturnsForAnyArgs(expected);
 					var journeyId = new JourneyId(Rnd.Lng);
 					var userId = new AuthUserId(Rnd.Lng);
 					var query = new DeleteJourneyQuery(journeyId, userId);
