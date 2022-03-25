@@ -18,14 +18,14 @@ public sealed class CheckPlaceBelongsToUserHandler : QueryHandler<CheckPlaceBelo
 {
 	private IPlaceRepository Place { get; init; }
 
-	private ILog<CheckPlaceBelongsToUserQuery> Log { get; init; }
+	private ILog<CheckPlaceBelongsToUserHandler> Log { get; init; }
 
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="place"></param>
 	/// <param name="log"></param>
-	public CheckPlaceBelongsToUserHandler(IPlaceRepository place, ILog<CheckPlaceBelongsToUserQuery> log) =>
+	public CheckPlaceBelongsToUserHandler(IPlaceRepository place, ILog<CheckPlaceBelongsToUserHandler> log) =>
 		(Place, Log) = (place, log);
 
 	/// <summary>
@@ -44,7 +44,10 @@ public sealed class CheckPlaceBelongsToUserHandler : QueryHandler<CheckPlaceBelo
 			.Where(
 				c => c.UserId, Compare.Equal, query.UserId
 			)
-			.QuerySingleAsync<CarEntity>()
+			.QuerySingleAsync<PlaceEntity>()
+			.AuditAsync(
+				none: Log.Msg
+			)
 			.SwitchAsync(
 				some: _ => F.True,
 				none: _ => F.False

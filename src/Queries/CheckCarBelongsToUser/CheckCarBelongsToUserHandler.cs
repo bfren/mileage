@@ -45,6 +45,9 @@ public sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelongsT
 				c => c.UserId, Compare.Equal, query.UserId
 			)
 			.QuerySingleAsync<CarEntity>()
+			.AuditAsync(
+				none: Log.Msg
+			)
 			.SwitchAsync(
 				some: _ => F.True,
 				none: _ => F.False
