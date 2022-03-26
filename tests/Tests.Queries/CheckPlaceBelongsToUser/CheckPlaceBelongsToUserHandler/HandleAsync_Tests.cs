@@ -56,7 +56,7 @@ public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, Plac
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_Where__Receives_None__Audits_Msg()
+	public async Task Calls_FluentQuery_Where__Receives_None__Calls_Log_Msg()
 	{
 		// Arrange
 		var (handler, v) = GetVars();

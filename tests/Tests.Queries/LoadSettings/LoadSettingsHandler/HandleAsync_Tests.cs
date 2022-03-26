@@ -21,7 +21,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
+			.Returns(new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
 		var query = new LoadSettingsQuery(new(Rnd.Lng));
 
 		// Act
@@ -37,7 +37,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
+			.Returns(new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng)));
 		var userId = new AuthUserId(Rnd.Lng);
 		var query = new LoadSettingsQuery(userId);
 
@@ -57,7 +57,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new Settings(new(Rnd.Lng), Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng));
+		var model = new Settings(Rnd.Lng, new(Rnd.Lng), new(Rnd.Lng));
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(model);
 		var query = new LoadSettingsQuery(new(Rnd.Lng));

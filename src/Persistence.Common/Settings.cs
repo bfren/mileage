@@ -8,12 +8,10 @@ namespace Mileage.Persistence.Common;
 /// <summary>
 /// Represents a user's settings
 /// </summary>
-/// <param name="SettingsId">Settings ID</param>
 /// <param name="Version">Version (for concurrency)</param>
 /// <param name="DefaultCarId">Default Car ID</param>
 /// <param name="DefaultFromPlaceId">Default 'From' Place ID</param>
 public sealed record class Settings(
-	SettingsId? SettingsId,
 	long Version,
 	CarId? DefaultCarId,
 	PlaceId? DefaultFromPlaceId
@@ -22,5 +20,5 @@ public sealed record class Settings(
 	/// <summary>
 	/// Create default settings object
 	/// </summary>
-	public Settings() : this(null, 0, null, null) { }
+	public Settings() : this(0, null, null) { }
 }
