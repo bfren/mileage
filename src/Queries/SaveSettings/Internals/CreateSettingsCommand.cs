@@ -5,14 +5,14 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common;
 
-namespace Mileage.Queries.SaveSettings.Create;
+namespace Mileage.Queries.SaveSettings.Internals;
 
 /// <summary>
 /// Create a settings entity
 /// </summary>
 /// <param name="UserId"></param>
 /// <param name="Settings"></param>
-internal sealed record class CreateSettingsCommand(
+public sealed record class CreateSettingsCommand(
 	AuthUserId UserId,
 	Settings Settings
 ) : ICommand;

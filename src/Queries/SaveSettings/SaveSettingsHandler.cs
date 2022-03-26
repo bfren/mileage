@@ -66,10 +66,10 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 			.QuerySingleAsync<SettingsEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher.DispatchAsync(
-					new Update.UpdateSettingsCommand(x, command.Settings)
+					new Internals.UpdateSettingsCommand(x, command.Settings)
 				),
 				none: () => Dispatcher.DispatchAsync(
-					new Create.CreateSettingsCommand(command.UserId, command.Settings)
+					new Internals.CreateSettingsCommand(command.UserId, command.Settings)
 				)
 			);
 	}

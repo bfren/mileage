@@ -6,14 +6,14 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.SaveSettings.Update;
+namespace Mileage.Queries.SaveSettings.Internals;
 
 /// <summary>
 /// Update settings for user
 /// </summary>
-internal class UpdateSettingsHandler : CommandHandler<UpdateSettingsCommand>
+public class UpdateSettingsHandler : CommandHandler<UpdateSettingsCommand>
 {
-	private ILog<UpdateSettingsCommand> Log { get; init; }
+	private ILog<UpdateSettingsHandler> Log { get; init; }
 
 	private ISettingsRepository Settings { get; init; }
 
@@ -22,7 +22,7 @@ internal class UpdateSettingsHandler : CommandHandler<UpdateSettingsCommand>
 	/// </summary>
 	/// <param name="settings"></param>
 	/// <param name="log"></param>
-	public UpdateSettingsHandler(ISettingsRepository settings, ILog<UpdateSettingsCommand> log) =>
+	public UpdateSettingsHandler(ISettingsRepository settings, ILog<UpdateSettingsHandler> log) =>
 		(Settings, Log) = (settings, log);
 
 	/// <summary>
