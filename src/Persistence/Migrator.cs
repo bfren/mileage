@@ -42,7 +42,7 @@ public abstract class Migrator
 		var provider = dbType switch
 		{
 			ClientType.PostgreSql =>
-				new PostgresqlDatabaseProvider(dbConnection) { SchemaName = Constants.Schema },
+				new PostgresqlDatabaseProvider(dbConnection) { SchemaName = Constants.Schema, TableName = @"""VersionInfo""" },
 
 			_ =>
 				throw new ArgumentOutOfRangeException(nameof(dbType), dbType, "Unknown database client type.")

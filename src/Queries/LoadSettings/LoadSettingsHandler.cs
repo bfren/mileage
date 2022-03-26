@@ -42,8 +42,8 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 			)
 			.QuerySingleAsync<Settings>()
 			.SwitchAsync(
-				x => F.Some(x).AsTask,
-				_ => F.Some(new Settings()).AsTask
+				some: x => F.Some(x).AsTask,
+				none: _ => F.Some(new Settings()).AsTask
 			);
 	}
 }
