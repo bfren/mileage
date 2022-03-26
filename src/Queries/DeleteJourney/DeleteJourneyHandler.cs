@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
@@ -32,8 +31,7 @@ public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool
 	/// Delete the journey specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query)
 	{
 		Log.Vrb("Delete Journey: {Query}", query);
 		return Journey

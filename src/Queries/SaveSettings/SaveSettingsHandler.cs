@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
@@ -40,17 +39,16 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// Save the settings for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	/// <param name="cancellationToken"></param>
-	public override async Task<Maybe<bool>> HandleAsync(SaveSettingsCommand command, CancellationToken cancellationToken)
+	public override async Task<Maybe<bool>> HandleAsync(SaveSettingsCommand command)
 	{
 		// Ensure the car belongs to the user (or is null)
 		var carBelongsToUser = await CheckCarBelongsToUser(
-			command.Settings.DefaultCarId, command.UserId, cancellationToken
+			command.Settings.DefaultCarId, command.UserId
 		);
 
 		// Ensure the place belongs to the user (or is null)
 		var placeBelongsToUser = await CheckPlaceBelongsToUser(
-			command.Settings.DefaultFromPlaceId, command.UserId, cancellationToken
+			command.Settings.DefaultFromPlaceId, command.UserId
 		);
 
 		// If checks have failed, return with failure message
@@ -101,14 +99,13 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="carId"></param>
 	/// <param name="userId"></param>
-	/// <param name="cancellationToken"></param>
-	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId, CancellationToken cancellationToken) =>
+	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId) =>
 		carId switch
 		{
 			CarId x =>
 				await Dispatcher
 					.DispatchAsync(
-						new CheckCarBelongsToUserQuery(userId, x), cancellationToken
+						new CheckCarBelongsToUserQuery(userId, x)
 					)
 					.UnwrapAsync(
 						x => x.Value(false)
@@ -123,14 +120,13 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="placeId"></param>
 	/// <param name="userId"></param>
-	/// <param name="cancellationToken"></param>
-	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId, CancellationToken cancellationToken) =>
+	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId) =>
 		placeId switch
 		{
 			PlaceId x =>
 				await Dispatcher
 					.DispatchAsync(
-						new CheckPlaceBelongsToUserQuery(userId, x), cancellationToken
+						new CheckPlaceBelongsToUserQuery(userId, x)
 					)
 					.UnwrapAsync(
 						x => x.Value(false)

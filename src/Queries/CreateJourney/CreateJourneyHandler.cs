@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -32,8 +31,7 @@ public sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jour
 	/// Create a new journey from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query)
 	{
 		Log.Vrb("Create Journey: {Query}", query);
 		return Journey

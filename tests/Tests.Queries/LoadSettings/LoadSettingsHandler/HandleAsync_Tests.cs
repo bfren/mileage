@@ -25,7 +25,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var query = new LoadSettingsQuery(new(Rnd.Lng));
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Vrb("Load settings for User {UserId}", query.Id.Value);
@@ -42,7 +42,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var query = new LoadSettingsQuery(userId);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		var calls = v.Fluent.ReceivedCalls();
@@ -63,7 +63,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var query = new LoadSettingsQuery(new(Rnd.Lng));
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var some = result.AssertSome();
@@ -79,7 +79,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var query = new LoadSettingsQuery(new(Rnd.Lng));
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var some = result.AssertSome();

@@ -20,7 +20,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Vrb("Create Journey: {Query}", query);
@@ -39,7 +39,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new CreateJourneyQuery(new(userId), date, new(carId), startMiles, new(placeId));
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		await v.Repo.Received().CreateAsync(Arg.Is<JourneyEntity>(j =>
@@ -62,7 +62,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var some = result.AssertSome();

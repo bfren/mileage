@@ -27,7 +27,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new DeleteJourneyQuery(new(), new());
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Vrb("Delete Journey: {Query}", query);
@@ -45,7 +45,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		var calls = v.Fluent.ReceivedCalls();
@@ -67,7 +67,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new DeleteJourneyQuery(new(), new());
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Msg(msg);
@@ -85,7 +85,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var none = result.AssertNone();
@@ -107,7 +107,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 			.Returns(model);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		await v.Repo.Received().DeleteAsync(model);
@@ -129,7 +129,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var some = result.AssertSome();

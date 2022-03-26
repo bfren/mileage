@@ -26,7 +26,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var query = new CheckCarBelongsToUserQuery(new(), new());
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Vrb("Checking car {CarId} belongs to user {UserId}.", query.CarId.Value, query.UserId.Value);
@@ -44,7 +44,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var query = new CheckCarBelongsToUserQuery(userId, carId);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		var calls = v.Fluent.ReceivedCalls();
@@ -66,7 +66,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var query = new CheckCarBelongsToUserQuery(new(), new());
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Msg(msg);
@@ -82,7 +82,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var query = new CheckCarBelongsToUserQuery(new(), new());
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		result.AssertFalse();
@@ -99,7 +99,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var query = new CheckCarBelongsToUserQuery(new(), new());
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		result.AssertTrue();

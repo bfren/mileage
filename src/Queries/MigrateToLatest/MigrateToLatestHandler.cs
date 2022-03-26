@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
@@ -38,8 +37,7 @@ public sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestComma
 	/// Migrate databases to the latest version
 	/// </summary>
 	/// <param name="command"></param>
-	/// <param name="cancellationToken"></param>
-	public override Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand command, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand command)
 	{
 		Log.Dbg("Migrating Authentication database to the latest version.");
 		AuthDb.MigrateToLatest();

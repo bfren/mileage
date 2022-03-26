@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
@@ -33,8 +32,7 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 	/// saved yet, returns a default object
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public override Task<Maybe<Settings>> HandleAsync(LoadSettingsQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<Settings>> HandleAsync(LoadSettingsQuery query)
 	{
 		Log.Vrb("Load settings for User {UserId}", query.Id.Value);
 		return Settings

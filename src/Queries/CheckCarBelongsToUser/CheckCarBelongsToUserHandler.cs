@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
@@ -32,8 +31,7 @@ public sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelongsT
 	/// Returns true if the car belongs to the user defined by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public override Task<Maybe<bool>> HandleAsync(CheckCarBelongsToUserQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(CheckCarBelongsToUserQuery query)
 	{
 		Log.Vrb("Checking car {CarId} belongs to user {UserId}.", query.CarId.Value, query.UserId.Value);
 		return Car

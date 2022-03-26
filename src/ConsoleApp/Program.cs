@@ -83,7 +83,7 @@ await dispatcher.DispatchAsync(
 var settings = await dispatcher.DispatchAsync(
 	new Q.LoadSettings.LoadSettingsQuery(userId)
 ).UnwrapAsync(
-	x => x.Value(() => throw new Exception())
+	x => x.Value(() => throw new InvalidOperationException())
 );
 log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
 

@@ -19,7 +19,7 @@ public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity
 		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		v.Log.Received().Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
@@ -36,7 +36,7 @@ public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity
 		var query = new CreateUserQuery(name, email, password);
 
 		// Act
-		await handler.HandleAsync(query, CancellationToken.None);
+		await handler.HandleAsync(query);
 
 		// Assert
 		await v.Repo.Received().CreateAsync(email, password, name);
@@ -53,7 +53,7 @@ public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity
 		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
 
 		// Act
-		var result = await handler.HandleAsync(query, CancellationToken.None);
+		var result = await handler.HandleAsync(query);
 
 		// Assert
 		var some = result.AssertSome();

@@ -25,7 +25,7 @@ public abstract class TestHandler<TRepo, TEntity, TId, THandler>
 		var log = Substitute.For<ILog<THandler>>();
 		var repo = Substitute.For<TRepo>();
 
-		// Setup fluent query
+		// Setup substitutes
 		fluent.ReturnsForAll(fluent);
 		repo.StartFluentQuery().Returns(fluent);
 
