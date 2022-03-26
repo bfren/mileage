@@ -82,6 +82,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		result.AssertTrue();
+		var some = result.AssertSome();
+		Assert.Equal(value, some);
 	}
 }
