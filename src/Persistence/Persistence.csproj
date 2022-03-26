@@ -10,4 +10,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="MaybeF" Version="8.1.1" />
+	</ItemGroup>
 </Project>

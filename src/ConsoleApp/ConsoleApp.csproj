@@ -23,5 +23,8 @@
 		<ProjectReference Include="..\Domain\Domain.csproj" />
 		<ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="MaybeF" Version="8.1.1" />
+	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" /></VisualStudio></ProjectExtensions>
 </Project>

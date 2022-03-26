@@ -8,4 +8,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="MaybeF" Version="8.1.1" />
+	</ItemGroup>
 </Project>

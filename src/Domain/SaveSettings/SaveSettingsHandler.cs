@@ -6,12 +6,12 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
-using Mileage.Persistence.Entities;
-using Mileage.Persistence.Repositories;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlaceBelongsToUser;
 using Mileage.Domain.SaveSettings.Messages;
+using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings;
 
@@ -87,9 +87,7 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 					.DispatchAsync(
 						new CheckCarBelongsToUserQuery(userId, x)
 					)
-					.UnwrapAsync(
-						x => x.Value(false)
-					),
+					.IsTrueAsync(),
 
 			_ =>
 				true
@@ -108,9 +106,7 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 					.DispatchAsync(
 						new CheckPlaceBelongsToUserQuery(userId, x)
 					)
-					.UnwrapAsync(
-						x => x.Value(false)
-					),
+					.IsTrueAsync(),
 
 			_ =>
 				true
