@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Microsoft.Extensions.DependencyInjection;
-using Mileage.Persistence.Common.StrongIds;
 using Mileage.Queries;
 using RndF;
 using Q = Mileage.Queries;
@@ -28,8 +27,7 @@ log.Inf("Mileage Console app.");
 // ==========================================
 
 // Get dispatchers
-var command = app.Services.GetRequiredService<ICommandDispatcher>();
-var query = app.Services.GetRequiredService<IQueryDispatcher>();
+var dispatcher = app.Services.GetRequiredService<IDispatcher>();
 
 // ==========================================
 //  RUN MIGRATIONS
@@ -37,16 +35,16 @@ var query = app.Services.GetRequiredService<IQueryDispatcher>();
 
 // Authentication
 log.Inf("Migrate to latest database version.");
-await command.DispatchAsync<Q.MigrateToLatest.MigrateToLatestCommand>(
-	new()
+await dispatcher.DispatchAsync(
+	new Q.MigrateToLatest.MigrateToLatestCommand()
 );
 
 // ==========================================
 //  INSERT TEST USER
 // ==========================================
 
-var userId = await query.DispatchAsync<Q.CreateUser.CreateUserQuery, AuthUserId>(
-	new("Ben", "ben@bcgdesign.com", "fred")
+var userId = await dispatcher.DispatchAsync(
+	new Q.CreateUser.CreateUserQuery("Ben", "ben@bcgdesign.com", "fred")
 ).AuditAsync(
 	some: x => log.Dbg("New User: {UserId}.", x),
 	none: r => log.Err("Failed to add User: {Reason}.", r)
@@ -58,8 +56,8 @@ var userId = await query.DispatchAsync<Q.CreateUser.CreateUserQuery, AuthUserId>
 //  INSERT TEST JOURNEY
 // ==========================================
 
-var journeyId = await query.DispatchAsync<Q.CreateJourney.CreateJourneyQuery, JourneyId>(
-	new(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.Uint, new())
+var journeyId = await dispatcher.DispatchAsync(
+	new Q.CreateJourney.CreateJourneyQuery(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.Uint, new())
 ).AuditAsync(
 	some: x => log.Dbg("New Journey: {JourneyId}.", x),
 	none: r => log.Err("Failed to add Journey: {Reason}.", r)
@@ -71,12 +69,27 @@ var journeyId = await query.DispatchAsync<Q.CreateJourney.CreateJourneyQuery, Jo
 //  DELETE TEST JOURNEY
 // ==========================================
 
-await query.DispatchAsync<Q.DeleteJourney.DeleteJourneyQuery, bool>(
-	new(journeyId, userId)
+await dispatcher.DispatchAsync(
+	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
 ).AuditAsync(
 	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
 	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
 );
+
+// ==========================================
+//  LOAD SETTINGS
+// ==========================================
+
+var settings = await dispatcher.DispatchAsync(
+	new Q.LoadSettings.LoadSettingsQuery(userId)
+).UnwrapAsync(
+	x => x.Value(() => throw new InvalidOperationException())
+);
+log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
+
+// ==========================================
+//  SAVE SETTINGS
+// ==========================================
 
 // ==========================================
 //  TRUNCATE TABLES

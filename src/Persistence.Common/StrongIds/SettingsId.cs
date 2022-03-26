@@ -6,7 +6,7 @@ using Jeebs.Id;
 namespace Mileage.Persistence.Common.StrongIds;
 
 /// <summary>
-/// Config ID
+/// Settings ID
 /// </summary>
 /// <param name="Value">ID value</param>
-public readonly record struct ConfigId(long Value) : IStrongId;
+public readonly record struct SettingsId(long Value) : IStrongId;

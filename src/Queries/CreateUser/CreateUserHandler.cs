@@ -1,9 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
-using Jeebs.Auth;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -13,7 +11,7 @@ namespace Mileage.Queries.CreateUser;
 /// <summary>
 /// Create a new user
 /// </summary>
-public sealed class CreateUserHandler : IQueryHandler<CreateUserQuery, AuthUserId>
+public sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId>
 {
 	private ILog<CreateUserHandler> Log { get; init; }
 
@@ -31,10 +29,12 @@ public sealed class CreateUserHandler : IQueryHandler<CreateUserQuery, AuthUserI
 	/// Create a new user from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query)
 	{
-		Log.Dbg("Create User: {Query}", query with { Password = "** REDACTED **" });
-		return User.CreateAsync(query.EmailAddress, query.Password, query.Name);
+		Log.Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
+		return User
+			.CreateAsync(
+				query.EmailAddress, query.Password, query.Name
+			);
 	}
 }

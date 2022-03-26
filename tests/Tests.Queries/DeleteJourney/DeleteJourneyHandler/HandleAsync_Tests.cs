@@ -3,7 +3,6 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
-using Jeebs.Logging;
 using Jeebs.Messages;
 using MaybeF;
 using Mileage.Persistence.Common.StrongIds;
@@ -13,153 +12,128 @@ using Mileage.Queries.DeleteJourney.Messages;
 
 namespace Mileage.Queries.DeleteJourney.DeleteJourneyHandler_Tests;
 
-public class HandleAsync_Tests
+public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
 {
-	private static (IJourneyRepository, ILog<DeleteJourneyHandler>, DeleteJourneyHandler) Setup()
-	{
-		var repo = Substitute.For<IJourneyRepository>();
-		var log = Substitute.For<ILog<DeleteJourneyHandler>>();
-		var handler = new DeleteJourneyHandler(repo, log);
+	public override DeleteJourneyHandler GetHandler(Vars v) =>
+		new(v.Repo, v.Log);
 
-		return (repo, log, handler);
+	[Fact]
+	public async Task Calls_Log_Vrb__With_Query()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
+		var query = new DeleteJourneyQuery(new(), new());
+
+		// Act
+		await handler.HandleAsync(query);
+
+		// Assert
+		v.Log.Received().Vrb("Delete Journey: {Query}", query);
 	}
 
-	public class Calls_Log_Dbg
+	[Fact]
+	public async Task Calls_FluentQuery_Where__With_Correct_Values()
 	{
-		[Fact]
-		public async Task With_Query()
-		{
-			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
-			var query = new DeleteJourneyQuery(new(), new());
+		// Arrange
+		var (handler, v) = GetVars();
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
+		var journeyId = new JourneyId(Rnd.Lng);
+		var userId = new AuthUserId(Rnd.Lng);
+		var query = new DeleteJourneyQuery(journeyId, userId);
 
-			// Act
-			await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		await handler.HandleAsync(query);
 
-			// Assert
-			log.Received().Dbg("Delete Journey: {Query}", query);
-		}
+		// Assert
+		var calls = v.Fluent.ReceivedCalls();
+		Assert.Collection(calls,
+			c => Helpers.AssertWhere<JourneyEntity, JourneyId>(c, x => x.Id, Compare.Equal, journeyId),
+			c => Helpers.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+			_ => { }
+		);
 	}
 
-	public class Calls_Repo_QuerySingleAsync
+	[Fact]
+	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_None__Audits_Msg()
 	{
-		[Fact]
-		public async Task With_Correct_Values()
-		{
-			// Arrange
-			var (repo, log, handler) = Setup();
-			repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-				.ReturnsForAnyArgs(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
-			var journeyId = new JourneyId(Rnd.Lng);
-			var userId = new AuthUserId(Rnd.Lng);
-			var query = new DeleteJourneyQuery(journeyId, userId);
+		// Arrange
+		var (handler, v) = GetVars();
+		var msg = new TestMsg();
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(F.None<JourneyToDelete>(msg));
+		var query = new DeleteJourneyQuery(new(), new());
 
-			// Act
-			await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		await handler.HandleAsync(query);
 
-			// Assert
-			var calls = repo.ReceivedCalls();
-			Assert.Collection(calls,
-				c => Helpers.AssertQuery<JourneyEntity, JourneyToDelete>(c,
-					nameof(JourneyRepository.QuerySingleAsync),
-					(x => x.Id, Compare.Equal, journeyId),
-					(x => x.UserId, Compare.Equal, userId)
-				),
-				_ => { }
-			);
-		}
+		// Assert
+		v.Log.Received().Msg(msg);
+	}
 
-		public class Receives_None
-		{
-			[Fact]
-			public async Task Audits_Msg()
-			{
-				// Arrange
-				var (repo, log, handler) = Setup();
-				var msg = new TestMsg();
-				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-					.ReturnsForAnyArgs(F.None<JourneyToDelete>(msg));
-				var query = new DeleteJourneyQuery(new(), new());
+	[Fact]
+	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_JourneyDoesNotExistMsg()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(Create.None<JourneyToDelete>());
+		var journeyId = new JourneyId(Rnd.Lng);
+		var userId = new AuthUserId(Rnd.Lng);
+		var query = new DeleteJourneyQuery(journeyId, userId);
 
-				// Act
-				await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		var result = await handler.HandleAsync(query);
 
-				// Assert
-				log.Received().Msg(msg);
-			}
+		// Assert
+		var none = result.AssertNone();
+		var msg = Assert.IsType<JourneyDoesNotExistMsg>(none);
+		Assert.Equal(journeyId, msg.JourneyId);
+		Assert.Equal(userId, msg.UserId);
+	}
 
-			[Fact]
-			public async Task Returns_None_With_JourneyDoesNotExistMsg()
-			{
-				// Arrange
-				var (repo, _, handler) = Setup();
-				repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-					.ReturnsForAnyArgs(Create.None<JourneyToDelete>());
-				var journeyId = new JourneyId(Rnd.Lng);
-				var userId = new AuthUserId(Rnd.Lng);
-				var query = new DeleteJourneyQuery(journeyId, userId);
+	[Fact]
+	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__With_Correct_Value()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var journeyId = new JourneyId(Rnd.Lng);
+		var userId = new AuthUserId(Rnd.Lng);
+		var query = new DeleteJourneyQuery(journeyId, userId);
+		var model = new JourneyToDelete(journeyId, Rnd.Lng);
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(model);
 
-				// Act
-				var result = await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		await handler.HandleAsync(query);
 
-				// Assert
-				var none = result.AssertNone();
-				var msg = Assert.IsType<JourneyDoesNotExistMsg>(none);
-				Assert.Equal(journeyId, msg.JourneyId);
-				Assert.Equal(userId, msg.UserId);
-			}
-		}
+		// Assert
+		await v.Repo.Received().DeleteAsync(model);
+	}
 
-		public class Receives_Some
-		{
-			public class Calls_Repo_DeleteAsync
-			{
-				[Fact]
-				public async Task With_Correct_Value()
-				{
-					// Arrange
-					var journeyId = new JourneyId(Rnd.Lng);
-					var userId = new AuthUserId(Rnd.Lng);
-					var query = new DeleteJourneyQuery(journeyId, userId);
-					var (repo, _, handler) = Setup();
-					var model = new JourneyToDelete(journeyId, Rnd.Lng);
-					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-						.ReturnsForAnyArgs(model);
+	[Fact]
+	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__Returns_Result()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var model = new JourneyToDelete(new(Rnd.Lng), Rnd.Lng);
+		v.Fluent.QuerySingleAsync<JourneyToDelete>()
+			.Returns(model);
+		var expected = Rnd.Flip;
+		v.Repo.DeleteAsync<JourneyToDelete>(default!)
+			.ReturnsForAnyArgs(expected);
+		var journeyId = new JourneyId(Rnd.Lng);
+		var userId = new AuthUserId(Rnd.Lng);
+		var query = new DeleteJourneyQuery(journeyId, userId);
 
-					// Act
-					await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		var result = await handler.HandleAsync(query);
 
-					// Assert
-					await repo.Received().DeleteAsync(model);
-				}
-
-				[Fact]
-				public async Task Returns_Result()
-				{
-					// Arrange
-					var (repo, _, handler) = Setup();
-					var model = new JourneyToDelete(new(Rnd.Lng), Rnd.Lng);
-					repo.QuerySingleAsync<JourneyToDelete>(predicates: default!)
-						.ReturnsForAnyArgs(model);
-					var expected = Rnd.Flip;
-					repo.DeleteAsync<JourneyToDelete>(default!).ReturnsForAnyArgs(
-						expected
-					);
-					var journeyId = new JourneyId(Rnd.Lng);
-					var userId = new AuthUserId(Rnd.Lng);
-					var query = new DeleteJourneyQuery(journeyId, userId);
-
-					// Act
-					var result = await handler.HandleAsync(query, CancellationToken.None);
-
-					// Assert
-					var some = result.AssertSome();
-					Assert.Equal(expected, some);
-				}
-			}
-		}
+		// Assert
+		var some = result.AssertSome();
+		Assert.Equal(expected, some);
 	}
 
 	public sealed record class TestMsg : Msg;

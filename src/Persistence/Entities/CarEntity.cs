@@ -11,7 +11,7 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Car entity
 /// </summary>
-public sealed class CarEntity : IWithVersion<CarId>
+public sealed record class CarEntity : IWithVersion<CarId>
 {
 	/// <summary>
 	/// ID
@@ -33,5 +33,5 @@ public sealed class CarEntity : IWithVersion<CarId>
 	/// <summary>
 	/// Description
 	/// </summary>
-	public string Description { get; set; } = string.Empty;
+	public string Description { get; init; } = string.Empty;
 }

@@ -13,7 +13,7 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Journey entity
 /// </summary>
-public sealed class JourneyEntity : IWithVersion<JourneyId>
+public sealed record class JourneyEntity : IWithVersion<JourneyId>
 {
 	/// <summary>
 	/// Journey ID

@@ -11,13 +11,13 @@ namespace Mileage.Persistence.Entities;
 /// <summary>
 /// Config entity
 /// </summary>
-public sealed class ConfigEntity : IWithVersion<ConfigId>
+public sealed record class SettingsEntity : IWithVersion<SettingsId>
 {
 	/// <summary>
 	/// Config ID
 	/// </summary>
 	[Id]
-	public ConfigId Id { get; init; }
+	public SettingsId Id { get; init; }
 
 	/// <summary>
 	/// Version

@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
@@ -14,7 +13,7 @@ namespace Mileage.Queries.DeleteJourney;
 /// <summary>
 /// Delete a journey that belongs to a user
 /// </summary>
-public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, bool>
+public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool>
 {
 	private ILog<DeleteJourneyHandler> Log { get; init; }
 
@@ -32,15 +31,18 @@ public sealed class DeleteJourneyHandler : IQueryHandler<DeleteJourneyQuery, boo
 	/// Delete the journey specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyQuery query)
 	{
-		Log.Dbg("Delete Journey: {Query}", query);
+		Log.Vrb("Delete Journey: {Query}", query);
 		return Journey
-			.QuerySingleAsync<JourneyToDelete>(
-				(x => x.Id, Compare.Equal, query.JourneyId),
-				(x => x.UserId, Compare.Equal, query.UserId)
+			.StartFluentQuery()
+			.Where(
+				x => x.Id, Compare.Equal, query.JourneyId
 			)
+			.Where(
+				x => x.UserId, Compare.Equal, query.UserId
+			)
+			.QuerySingleAsync<JourneyToDelete>()
 			.AuditAsync(
 				none: Log.Msg
 			)

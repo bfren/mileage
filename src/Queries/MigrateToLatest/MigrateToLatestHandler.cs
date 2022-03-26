@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
@@ -11,7 +10,10 @@ using Mileage.Persistence;
 
 namespace Mileage.Queries.MigrateToLatest;
 
-public sealed class MigrateToLatestHandler : ICommandHandler<MigrateToLatestCommand>
+/// <summary>
+/// Migrate databases
+/// </summary>
+public sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCommand>
 {
 	private IDb Db { get; init; }
 
@@ -21,10 +23,21 @@ public sealed class MigrateToLatestHandler : ICommandHandler<MigrateToLatestComm
 
 	private ILog<MigrateToLatestHandler> Log { get; init; }
 
+	/// <summary>
+	/// Inject dependencies
+	/// </summary>
+	/// <param name="db"></param>
+	/// <param name="migrator"></param>
+	/// <param name="authDb"></param>
+	/// <param name="log"></param>
 	public MigrateToLatestHandler(IDb db, Migrator migrator, IAuthDb authDb, ILog<MigrateToLatestHandler> log) =>
 		(Db, Migrator, AuthDb, Log) = (db, migrator, authDb, log);
 
-	public Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand query, CancellationToken cancellationToken)
+	/// <summary>
+	/// Migrate databases to the latest version
+	/// </summary>
+	/// <param name="command"></param>
+	public override Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand command)
 	{
 		Log.Dbg("Migrating Authentication database to the latest version.");
 		AuthDb.MigrateToLatest();

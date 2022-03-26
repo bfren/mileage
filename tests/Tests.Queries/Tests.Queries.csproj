@@ -3,7 +3,7 @@
 		<RootNamespace>Mileage.Queries</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Persistence\Persistence.csproj" />
-	  <ProjectReference Include="..\..\src\Queries\Queries.csproj" />
+		<ProjectReference Include="..\..\src\Persistence\Persistence.csproj" />
+		<ProjectReference Include="..\..\src\Queries\Queries.csproj" />
 	</ItemGroup>
 </Project>

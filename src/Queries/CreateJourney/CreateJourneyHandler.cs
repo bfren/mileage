@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -14,7 +13,7 @@ namespace Mileage.Queries.CreateJourney;
 /// <summary>
 /// Create a new mileage entity
 /// </summary>
-public sealed class CreateJourneyHandler : IQueryHandler<CreateJourneyQuery, JourneyId>
+public sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, JourneyId>
 {
 	private IJourneyRepository Journey { get; init; }
 
@@ -32,17 +31,17 @@ public sealed class CreateJourneyHandler : IQueryHandler<CreateJourneyQuery, Jou
 	/// Create a new journey from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	/// <param name="cancellationToken"></param>
-	public Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query, CancellationToken cancellationToken)
+	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query)
 	{
-		Log.Dbg("Create Journey: {Query}", query);
-		return Journey.CreateAsync(new()
-		{
-			UserId = query.UserId,
-			Date = query.Date.ToDateTime(TimeOnly.MinValue),
-			CarId = query.CarId,
-			StartMiles = (int)query.StartMiles,
-			FromPlaceId = query.FromPlaceId
-		});
+		Log.Vrb("Create Journey: {Query}", query);
+		return Journey
+			.CreateAsync(new()
+			{
+				UserId = query.UserId,
+				Date = query.Date.ToDateTime(TimeOnly.MinValue),
+				CarId = query.CarId,
+				StartMiles = (int)query.StartMiles,
+				FromPlaceId = query.FromPlaceId
+			});
 	}
 }

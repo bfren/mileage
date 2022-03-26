@@ -25,7 +25,7 @@ public sealed class MileageDb : Db
 	/// <summary>
 	/// Config table
 	/// </summary>
-	public ConfigTable Configuration { get; init; } = new();
+	public SettingsTable Configuration { get; init; } = new();
 
 	/// <summary>
 	/// Journey table
@@ -53,7 +53,7 @@ public sealed class MileageDb : Db
 	{
 		// Map entities
 		_ = Map<CarEntity>.To(Car);
-		_ = Map<ConfigEntity>.To(Configuration);
+		_ = Map<SettingsEntity>.To(Configuration);
 		_ = Map<JourneyEntity>.To(Journey);
 		_ = Map<PlaceEntity>.To(Place);
 		_ = Map<RateEntity>.To(Rate);
