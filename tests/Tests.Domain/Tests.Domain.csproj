@@ -3,7 +3,7 @@
 		<RootNamespace>Mileage.Domain</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\Domain\Domain.csproj" />
 		<ProjectReference Include="..\..\src\Persistence\Persistence.csproj" />
-		<ProjectReference Include="..\..\src\Queries\Domain.csproj" />
 	</ItemGroup>
 </Project>
