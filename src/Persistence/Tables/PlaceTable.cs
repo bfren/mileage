@@ -16,18 +16,33 @@ public sealed record class PlaceTable() : Table(Constants.Schema, TableName)
 	/// </summary>
 	public static readonly string TableName = "Place";
 
+	/// <summary>
+	/// Place ID
+	/// </summary>
 	public string Id =>
 		TableName + nameof(Id);
 
+	/// <summary>
+	/// Place Version
+	/// </summary>
 	public string Version =>
 		TableName + nameof(Version);
 
+	/// <summary>
+	/// Place User ID
+	/// </summary>
 	public string UserId =>
 		TableName + nameof(UserId);
 
+	/// <summary>
+	/// Place Description
+	/// </summary>
 	public string Description =>
 		TableName + nameof(Description);
 
+	/// <summary>
+	/// Place Postcode
+	/// </summary>
 	public string Postcode =>
 		TableName + nameof(Postcode);
 }

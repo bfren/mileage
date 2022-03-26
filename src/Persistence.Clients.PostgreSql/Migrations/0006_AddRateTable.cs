@@ -17,6 +17,9 @@ public sealed class AddRateTable : Migration
 	private string Col(Func<RateTable, string> selector) =>
 		selector(new());
 
+	/// <summary>
+	/// 6: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{RateTable.TableName}""
 		(
@@ -30,6 +33,9 @@ public sealed class AddRateTable : Migration
 		;
 	");
 
+	/// <summary>
+	/// 6: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{RateTable.TableName}""
 		;

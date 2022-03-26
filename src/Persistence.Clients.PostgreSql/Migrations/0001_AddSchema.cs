@@ -12,13 +12,16 @@ namespace Mileage.Persistence.Clients.PostgreSql.Migrations;
 [Migration(1, "Add Mileage schema")]
 public sealed class AddSchema : Migration
 {
+	/// <summary>
+	/// 1: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE SCHEMA IF NOT EXISTS ""{Constants.Schema}""
 		;
 	");
 
-	protected override void Down() => Execute($@"
-		DROP SCHEMA IF EXISTS ""{Constants.Schema}""
-		;
-	");
+	/// <summary>
+	/// 1: Down
+	/// </summary>
+	protected override void Down() { }
 }

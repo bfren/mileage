@@ -17,6 +17,9 @@ public sealed class AddCarTable : Migration
 	private string Col(Func<CarTable, string> selector) =>
 		selector(new());
 
+	/// <summary>
+	/// 2: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{CarTable.TableName}""
 		(
@@ -30,6 +33,9 @@ public sealed class AddCarTable : Migration
 		;
 	");
 
+	/// <summary>
+	/// 2: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{CarTable.TableName}""
 		;

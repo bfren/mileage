@@ -16,18 +16,33 @@ public sealed record class SettingsTable() : Table(Constants.Schema, TableName)
 	/// </summary>
 	public static readonly string TableName = "Settings";
 
+	/// <summary>
+	/// Settings ID
+	/// </summary>
 	public string Id =>
 		TableName + nameof(Id);
 
+	/// <summary>
+	/// Settings Version
+	/// </summary>
 	public string Version =>
 		TableName + nameof(Version);
 
+	/// <summary>
+	/// Settings User ID
+	/// </summary>
 	public string UserId =>
 		TableName + nameof(UserId);
 
+	/// <summary>
+	/// Settings Default Car ID
+	/// </summary>
 	public string DefaultCarId =>
 		TableName + nameof(DefaultCarId);
 
+	/// <summary>
+	/// Settings Default Place ID
+	/// </summary>
 	public string DefaultFromPlaceId =>
 		TableName + nameof(DefaultFromPlaceId);
 }

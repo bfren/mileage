@@ -17,6 +17,9 @@ public sealed class AddSettingsTable : Migration
 	private string Col(Func<SettingsTable, string> selector) =>
 		selector(new());
 
+	/// <summary>
+	/// 3: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{SettingsTable.TableName}""
 		(
@@ -31,6 +34,9 @@ public sealed class AddSettingsTable : Migration
 		;
 	");
 
+	/// <summary>
+	/// 3: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{SettingsTable.TableName}""
 		;
