@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
-using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
@@ -16,12 +15,10 @@ namespace Mileage.Queries;
 
 internal static class Helpers
 {
-	public static (TRepo repo, IQueryFluent<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler, TQuery, TResult>()
+	public static (TRepo repo, IQueryFluent<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : IStrongId
-		where THandler : QueryHandler<TQuery, TResult>
-		where TQuery : IQuery<TResult>
 	{
 		// Create substitutes
 		var repo = Substitute.For<TRepo>();

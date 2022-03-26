@@ -2,73 +2,61 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Jeebs.Logging;
+using Jeebs.Auth.Data.Entities;
 
 namespace Mileage.Queries.CreateUser.CreateUserHandler_Tests;
 
-public class HandleAsync_Tests
+public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity, AuthUserId, CreateUserHandler>
 {
-	private static (IAuthUserRepository, ILog<CreateUserHandler>, CreateUserHandler) Setup()
-	{
-		var repo = Substitute.For<IAuthUserRepository>();
-		var log = Substitute.For<ILog<CreateUserHandler>>();
-		var handler = new CreateUserHandler(repo, log);
+	public override CreateUserHandler GetHandler(Vars v) =>
+		new(v.Repo, v.Log);
 
-		return (repo, log, handler);
+	[Fact]
+	public async Task Logs_To_Vrb__With_Query_Using_Redacted_Password()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
+
+		// Act
+		await handler.HandleAsync(query, CancellationToken.None);
+
+		// Assert
+		v.Log.Received().Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
 	}
 
-	public class Logs_To_Vrb
+	[Fact]
+	public async void Calls_Repo_CreateAsync__With_Correct_Values()
 	{
-		[Fact]
-		public async Task With_Query_Using_Redacted_Password()
-		{
-			// Arrange
-			var (_, log, handler) = Setup();
-			var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
+		// Arrange
+		var (handler, v) = GetVars();
+		var name = Rnd.Str;
+		var email = Rnd.Str;
+		var password = Rnd.Str;
+		var query = new CreateUserQuery(name, email, password);
 
-			// Act
-			await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		await handler.HandleAsync(query, CancellationToken.None);
 
-			// Assert
-			log.Received().Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
-		}
+		// Assert
+		await v.Repo.Received().CreateAsync(email, password, name);
 	}
 
-	public class Calls_Repo_CreateAsync
+	[Fact]
+	public async void Calls_Repo_CreateAsync__Returns_Result()
 	{
-		[Fact]
-		public async void With_Correct_Values()
-		{
-			// Arrange
-			var (repo, _, handler) = Setup();
-			var name = Rnd.Str;
-			var email = Rnd.Str;
-			var password = Rnd.Str;
-			var query = new CreateUserQuery(name, email, password);
+		// Arrange
+		var (handler, v) = GetVars();
+		var expected = new AuthUserId(Rnd.Lng);
+		v.Repo.CreateAsync(email: default!, plainTextPassword: default!, friendlyName: default)
+			.ReturnsForAnyArgs(expected);
+		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
 
-			// Act
-			await handler.HandleAsync(query, CancellationToken.None);
+		// Act
+		var result = await handler.HandleAsync(query, CancellationToken.None);
 
-			// Assert
-			await repo.Received().CreateAsync(email, password, name);
-		}
-
-		[Fact]
-		public async void Returns_Result()
-		{
-			// Arrange
-			var (repo, _, handler) = Setup();
-			var expected = new AuthUserId(Rnd.Lng);
-			repo.CreateAsync(email: default!, plainTextPassword: default!, friendlyName: default)
-				.ReturnsForAnyArgs(expected);
-			var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
-
-			// Act
-			var result = await handler.HandleAsync(query, CancellationToken.None);
-
-			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(expected, some);
-		}
+		// Assert
+		var some = result.AssertSome();
+		Assert.Equal(expected, some);
 	}
 }
