@@ -5,7 +5,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.CreateJourney.CreateJourneyHandler_Tests;
+namespace Mileage.Domain.SaveJourney.Internals.CreateJourney.CreateJourneyHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, JourneyId, CreateJourneyHandler>
 {
