@@ -58,39 +58,19 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		}
 
 		// Add or update user settings
-		var settings = await Settings
+		return await Settings
 			.StartFluentQuery()
 			.Where(
 				s => s.UserId, Compare.Equal, command.UserId
 			)
-			.QuerySingleAsync<SettingsEntity>();
-
-		// Update settings
-		if (settings.IsSome(out var s))
-		{
-			Log.Vrb("Updating settings {SettingsId} for user {UserId}.", s.Id.Value, command.UserId.Value);
-			return await Settings
-				.UpdateAsync(s with
-				{
-					DefaultCarId = command.Settings.DefaultCarId,
-					DefaultFromPlaceId = command.Settings.DefaultFromPlaceId
-				});
-		}
-
-		// Add settings
-		Log.Vrb("Creating new settings for user {UserId}.", command.UserId.Value);
-		return await Settings
-			.CreateAsync(new()
-			{
-				UserId = command.UserId,
-				DefaultCarId = command.Settings.DefaultCarId,
-				DefaultFromPlaceId = command.Settings.DefaultFromPlaceId
-			})
-			.AuditAsync(
-				some: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value)
-			)
-			.BindAsync(
-				_ => F.True
+			.QuerySingleAsync<SettingsEntity>()
+			.SwitchAsync(
+				some: x => Dispatcher.DispatchAsync(
+					new Update.UpdateSettingsCommand(x, command.Settings)
+				),
+				none: () => Dispatcher.DispatchAsync(
+					new Create.CreateSettingsCommand(command.UserId, command.Settings)
+				)
 			);
 	}
 
