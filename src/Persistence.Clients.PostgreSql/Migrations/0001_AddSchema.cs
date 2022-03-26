@@ -23,8 +23,5 @@ public sealed class AddSchema : Migration
 	/// <summary>
 	/// 1: Down
 	/// </summary>
-	protected override void Down() => Execute($@"
-		DROP SCHEMA IF EXISTS ""{Constants.Schema}""
-		;
-	");
+	protected override void Down() { }
 }
