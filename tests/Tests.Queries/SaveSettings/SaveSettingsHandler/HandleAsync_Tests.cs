@@ -7,12 +7,12 @@ using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using Mileage.Queries.CheckCarBelongsToUser;
-using Mileage.Queries.CheckPlaceBelongsToUser;
-using Mileage.Queries.SaveSettings.Internals;
-using Mileage.Queries.SaveSettings.Messages;
+using Mileage.Domain.CheckCarBelongsToUser;
+using Mileage.Domain.CheckPlaceBelongsToUser;
+using Mileage.Domain.SaveSettings.Internals;
+using Mileage.Domain.SaveSettings.Messages;
 
-namespace Mileage.Queries.SaveSettings.SaveSettingsHandler_Tests;
+namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
 {

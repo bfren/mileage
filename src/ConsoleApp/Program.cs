@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Microsoft.Extensions.DependencyInjection;
-using Mileage.Queries;
+using Mileage.Domain;
 using RndF;
-using Q = Mileage.Queries;
+using Q = Mileage.Domain;
 
 // ==========================================
 //  CONFIGURE

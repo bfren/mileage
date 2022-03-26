@@ -30,15 +30,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B4E30490
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Persistence\Persistence.csproj", "{8FEBDA06-52C2-44D1-A5DB-55C5DD86B49D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "src\Queries\Queries.csproj", "{90C6BC6F-59FE-4403-84BF-61771F4509B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Queries\Domain.csproj", "{90C6BC6F-59FE-4403-84BF-61771F4509B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{AE5D97E8-7A24-438B-B825-1996CE2C942B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Queries", "tests\Tests.Queries\Tests.Queries.csproj", "{9E705DF8-D0DB-4EB9-AB86-739571B06CEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Domain", "tests\Tests.Queries\Tests.Domain.csproj", "{9E705DF8-D0DB-4EB9-AB86-739571B06CEC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Clients.PostgreSql", "src\Persistence.Clients.PostgreSql\Persistence.Clients.PostgreSql.csproj", "{22B5C07F-71A1-4150-B7F5-031E9C1CBB5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Common", "src\Persistence.Common\Persistence.Common.csproj", "{7B018E80-2E82-4E5F-99E5-0521DC0B883A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Common", "src\Persistence.Common\Persistence.Common.csproj", "{7B018E80-2E82-4E5F-99E5-0521DC0B883A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

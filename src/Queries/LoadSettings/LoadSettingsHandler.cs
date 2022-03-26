@@ -8,7 +8,7 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.LoadSettings;
+namespace Mileage.Domain.LoadSettings;
 
 /// <summary>
 /// Load a user's settings

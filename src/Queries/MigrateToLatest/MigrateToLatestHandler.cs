@@ -8,7 +8,7 @@ using Jeebs.Data;
 using Jeebs.Logging;
 using Mileage.Persistence;
 
-namespace Mileage.Queries.MigrateToLatest;
+namespace Mileage.Domain.MigrateToLatest;
 
 /// <summary>
 /// Migrate databases

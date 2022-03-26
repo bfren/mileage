@@ -8,7 +8,7 @@ using Jeebs.Logging;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.CheckPlaceBelongsToUser;
+namespace Mileage.Domain.CheckPlaceBelongsToUser;
 
 /// <summary>
 /// Check a place belongs to a user

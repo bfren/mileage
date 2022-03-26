@@ -4,7 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Auth.Data.Entities;
 
-namespace Mileage.Queries.CreateUser.CreateUserHandler_Tests;
+namespace Mileage.Domain.CreateUser.CreateUserHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity, AuthUserId, CreateUserHandler>
 {

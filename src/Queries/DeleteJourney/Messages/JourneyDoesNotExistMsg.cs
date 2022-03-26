@@ -5,7 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Queries.DeleteJourney.Messages;
+namespace Mileage.Domain.DeleteJourney.Messages;
 
 /// <summary>
 /// The Journey does not exist, or does not belong to the specified User

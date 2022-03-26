@@ -7,7 +7,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.SaveSettings.Internals.UpdateSettingsHandler_Tests;
+namespace Mileage.Domain.SaveSettings.Internals.UpdateSettingsHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
 {

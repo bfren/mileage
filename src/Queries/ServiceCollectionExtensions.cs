@@ -10,7 +10,7 @@ using Mileage.Persistence;
 using Mileage.Persistence.Clients.PostgreSql;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries;
+namespace Mileage.Domain;
 
 /// <summary>
 /// <see cref="IServiceCollection"/> extensions

@@ -5,7 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Queries.CheckPlaceBelongsToUser;
+namespace Mileage.Domain.CheckPlaceBelongsToUser;
 
 /// <summary>
 /// Returns true if <paramref name="PlaceId"/> belongs to <paramref name="UserId"/>

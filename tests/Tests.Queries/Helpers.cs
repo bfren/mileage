@@ -11,7 +11,7 @@ using Jeebs.Reflection;
 using NSubstitute.Core;
 using NSubstitute.Extensions;
 
-namespace Mileage.Queries;
+namespace Mileage.Domain;
 
 internal static class Helpers
 {

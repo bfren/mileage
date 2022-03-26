@@ -9,11 +9,11 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using Mileage.Queries.CheckCarBelongsToUser;
-using Mileage.Queries.CheckPlaceBelongsToUser;
-using Mileage.Queries.SaveSettings.Messages;
+using Mileage.Domain.CheckCarBelongsToUser;
+using Mileage.Domain.CheckPlaceBelongsToUser;
+using Mileage.Domain.SaveSettings.Messages;
 
-namespace Mileage.Queries.SaveSettings;
+namespace Mileage.Domain.SaveSettings;
 
 /// <summary>
 /// Save settings for a user

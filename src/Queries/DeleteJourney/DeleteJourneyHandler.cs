@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using Mileage.Domain.DeleteJourney.Messages;
 using Mileage.Persistence.Repositories;
-using Mileage.Queries.DeleteJourney.Messages;
 
-namespace Mileage.Queries.DeleteJourney;
+namespace Mileage.Domain.DeleteJourney;
 
 /// <summary>
 /// Delete a journey that belongs to a user

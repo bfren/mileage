@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Description>Mileage: command queries.</Description>
-		<AssemblyName>Mileage.Queries</AssemblyName>
+		<Description>Mileage: domain actions.</Description>
+		<AssemblyName>Mileage.Domain</AssemblyName>
 		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>

@@ -6,7 +6,7 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.SaveSettings.Internals;
+namespace Mileage.Domain.SaveSettings.Internals;
 
 /// <summary>
 /// Create settings for user

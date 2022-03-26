@@ -9,7 +9,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.CheckPlaceBelongsToUser.CheckPlaceBelongsToUserHandler_Tests;
+namespace Mileage.Domain.CheckPlaceBelongsToUser.CheckPlaceBelongsToUserHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, PlaceId, CheckPlaceBelongsToUserHandler>
 {

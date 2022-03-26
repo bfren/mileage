@@ -5,7 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Queries.CheckCarBelongsToUser;
+namespace Mileage.Domain.CheckCarBelongsToUser;
 
 /// <summary>
 /// Returns true if <paramref name="CarId"/> belongs to <paramref name="UserId"/>

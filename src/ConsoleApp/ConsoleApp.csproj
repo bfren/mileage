@@ -21,7 +21,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
-		<ProjectReference Include="..\Queries\Queries.csproj" />
+		<ProjectReference Include="..\Queries\Domain.csproj" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" /></VisualStudio></ProjectExtensions>
 </Project>

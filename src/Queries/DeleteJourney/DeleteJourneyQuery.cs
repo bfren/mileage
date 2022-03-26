@@ -5,7 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Queries.DeleteJourney;
+namespace Mileage.Domain.DeleteJourney;
 
 /// <inheritdoc cref="DeleteJourneyHandler"/>
 /// <param name="JourneyId">Journey ID</param>

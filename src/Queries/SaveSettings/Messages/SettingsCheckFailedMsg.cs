@@ -3,7 +3,7 @@
 
 using Jeebs.Messages;
 
-namespace Mileage.Queries.SaveSettings.Messages;
+namespace Mileage.Domain.SaveSettings.Messages;
 
 /// <summary>Pre-save settings checks have failed</summary>
 public sealed record class SettingsCheckFailedMsg : Msg;

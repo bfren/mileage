@@ -8,9 +8,9 @@ using MaybeF;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using Mileage.Queries.DeleteJourney.Messages;
+using Mileage.Domain.DeleteJourney.Messages;
 
-namespace Mileage.Queries.DeleteJourney.DeleteJourneyHandler_Tests;
+namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
 {

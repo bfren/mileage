@@ -6,7 +6,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 
-namespace Mileage.Queries.CreateUser;
+namespace Mileage.Domain.CreateUser;
 
 /// <summary>
 /// Create a new user

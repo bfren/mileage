@@ -8,7 +8,7 @@ using Jeebs.Logging;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.CheckCarBelongsToUser;
+namespace Mileage.Domain.CheckCarBelongsToUser;
 
 /// <summary>
 /// Check a car belongs to a user

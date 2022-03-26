@@ -8,7 +8,7 @@ using Jeebs.Id;
 using Jeebs.Logging;
 using NSubstitute.Extensions;
 
-namespace Mileage.Queries;
+namespace Mileage.Domain;
 
 public abstract class TestHandler<TRepo, TEntity, TId, THandler>
 	where TRepo : class, IRepository<TEntity, TId>

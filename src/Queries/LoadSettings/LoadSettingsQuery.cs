@@ -5,7 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common;
 
-namespace Mileage.Queries.LoadSettings;
+namespace Mileage.Domain.LoadSettings;
 
 /// <inheritdoc cref="LoadSettingsHandler"/>
 /// <param name="Id"></param>

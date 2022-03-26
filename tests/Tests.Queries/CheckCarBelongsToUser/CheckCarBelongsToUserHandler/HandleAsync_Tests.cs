@@ -9,7 +9,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.CheckCarBelongsToUser.CheckCarBelongsToUserHandler_Tests;
+namespace Mileage.Domain.CheckCarBelongsToUser.CheckCarBelongsToUserHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, CheckCarBelongsToUserHandler>
 {

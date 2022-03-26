@@ -5,7 +5,7 @@ using Jeebs.Cqrs;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Entities;
 
-namespace Mileage.Queries.SaveSettings.Internals;
+namespace Mileage.Domain.SaveSettings.Internals;
 
 /// <summary>
 /// Update a settings entity

@@ -4,7 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 
-namespace Mileage.Queries.CreateUser;
+namespace Mileage.Domain.CreateUser;
 
 /// <inheritdoc cref="CreateUserHandler"/>
 /// <param name="Name">User's name</param>

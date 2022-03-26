@@ -3,7 +3,7 @@
 
 using Jeebs.Cqrs;
 
-namespace Mileage.Queries.MigrateToLatest;
+namespace Mileage.Domain.MigrateToLatest;
 
 /// <summary>
 /// Migrate to latest database version

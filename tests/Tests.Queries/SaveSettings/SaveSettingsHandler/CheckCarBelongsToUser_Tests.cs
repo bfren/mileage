@@ -6,7 +6,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Queries.SaveSettings.SaveSettingsHandler_Tests;
+namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
 public class CheckCarBelongsToUser_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
 {

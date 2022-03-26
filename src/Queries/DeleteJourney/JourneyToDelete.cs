@@ -4,7 +4,7 @@
 using Jeebs.Id;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Queries.DeleteJourney;
+namespace Mileage.Domain.DeleteJourney;
 
 /// <summary>
 /// Used to return a Journey that is ready to be deleted
