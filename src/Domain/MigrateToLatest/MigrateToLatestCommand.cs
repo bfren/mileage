@@ -5,7 +5,5 @@ using Jeebs.Cqrs;
 
 namespace Mileage.Domain.MigrateToLatest;
 
-/// <summary>
-/// Migrate to latest database version
-/// </summary>
+/// <inheritdoc cref="MigrateToLatestHandler"/>
 public sealed record class MigrateToLatestCommand : ICommand;
