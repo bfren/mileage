@@ -17,6 +17,9 @@ public sealed class AddPlaceTable : Migration
 	private string Col(Func<PlaceTable, string> selector) =>
 		selector(new());
 
+	/// <summary>
+	/// 5: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{PlaceTable.TableName}""
 		(
@@ -31,6 +34,9 @@ public sealed class AddPlaceTable : Migration
 		;
 	");
 
+	/// <summary>
+	/// 5: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{PlaceTable.TableName}""
 		;

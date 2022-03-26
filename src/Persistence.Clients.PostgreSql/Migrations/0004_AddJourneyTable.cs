@@ -17,6 +17,9 @@ public sealed class AddJourneyTable : Migration
 	private string Col(Func<JourneyTable, string> selector) =>
 		selector(new());
 
+	/// <summary>
+	/// 4: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{JourneyTable.TableName}""
 		(
@@ -36,6 +39,9 @@ public sealed class AddJourneyTable : Migration
 		;
 	");
 
+	/// <summary>
+	/// 4: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{JourneyTable.TableName}""
 		;
