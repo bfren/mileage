@@ -32,7 +32,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
 		var description = Rnd.Str;
 		var query = new CreateCarQuery(userId, description);
 
@@ -51,7 +51,7 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = new CarId(Rnd.Lng);
+		var expected = RndId<CarId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateCarQuery(new(), Rnd.Str);

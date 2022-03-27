@@ -1,7 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using MaybeF;
+using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -23,7 +23,7 @@ public class CheckCarBelongsToUser_Tests : TestHandler<ISettingsRepository, Sett
 			.ReturnsForAnyArgs(F.Some(value).AsTask);
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(new(Rnd.Lng), new(Rnd.Lng));
+		var result = await handler.CheckCarBelongsToUser(RndId<CarId>(), RndId<AuthUserId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -38,7 +38,7 @@ public class CheckCarBelongsToUser_Tests : TestHandler<ISettingsRepository, Sett
 			.ReturnsForAnyArgs(Create.None<bool>());
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(new(Rnd.Lng), new(Rnd.Lng));
+		var result = await handler.CheckCarBelongsToUser(RndId<CarId>(), RndId<AuthUserId>());
 
 		// Assert
 		Assert.False(result);
@@ -48,7 +48,7 @@ public class CheckCarBelongsToUser_Tests : TestHandler<ISettingsRepository, Sett
 	public async Task Without_CarId__Returns_True()
 	{
 		// Arrange
-		var (handler, v) = GetVars();
+		var (handler, _) = GetVars();
 
 		// Act
 		var result = await handler.CheckCarBelongsToUser(null, new());

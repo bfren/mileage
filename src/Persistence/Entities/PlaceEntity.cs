@@ -17,7 +17,7 @@ public sealed record class PlaceEntity : IWithVersion<PlaceId>
 	/// Place ID
 	/// </summary>
 	[Id]
-	public PlaceId Id { get; init; }
+	public PlaceId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -28,7 +28,7 @@ public sealed record class PlaceEntity : IWithVersion<PlaceId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Description

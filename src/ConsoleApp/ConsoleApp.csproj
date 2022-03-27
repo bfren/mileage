@@ -16,15 +16,16 @@
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220326.3" />
-		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220326.3" />
+		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220327.5" />
+		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220327.5" />
+		<PackageReference Include="Rnd" Version="8.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Domain\Domain.csproj" />
 		<ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Update="MaybeF" Version="8.1.1" />
+	  <PackageReference Update="MaybeF" Version="8.1.2" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" /></VisualStudio></ProjectExtensions>
 </Project>

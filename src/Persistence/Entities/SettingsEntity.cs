@@ -17,7 +17,7 @@ public sealed record class SettingsEntity : IWithVersion<SettingsId>
 	/// Config ID
 	/// </summary>
 	[Id]
-	public SettingsId Id { get; init; }
+	public SettingsId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -28,7 +28,7 @@ public sealed record class SettingsEntity : IWithVersion<SettingsId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Default Car to be used for new journeys

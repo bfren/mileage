@@ -47,7 +47,7 @@ public class HandleAsync_Tests : TestHandler<IAuthUserRepository, AuthUserEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = new AuthUserId(Rnd.Lng);
+		var expected = RndId<AuthUserId>();
 		v.Repo.CreateAsync(email: default!, plainTextPassword: default!, friendlyName: default)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);

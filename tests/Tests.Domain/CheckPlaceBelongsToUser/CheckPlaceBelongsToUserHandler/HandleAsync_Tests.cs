@@ -4,7 +4,6 @@
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Messages;
-using MaybeF;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -23,7 +22,7 @@ public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, Plac
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity());
-		var query = new CheckPlaceBelongsToUserQuery(new(), new());
+		var query = new CheckPlaceBelongsToUserQuery(RndId<AuthUserId>(), RndId<PlaceId>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -39,8 +38,8 @@ public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, Plac
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity());
-		var carId = new PlaceId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var carId = RndId<PlaceId>();
+		var userId = RndId<AuthUserId>();
 		var query = new CheckPlaceBelongsToUserQuery(userId, carId);
 
 		// Act

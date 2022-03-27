@@ -17,7 +17,7 @@ public sealed record class CarEntity : IWithVersion<CarId>
 	/// ID
 	/// </summary>
 	[Id]
-	public CarId Id { get; init; }
+	public CarId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -28,7 +28,7 @@ public sealed record class CarEntity : IWithVersion<CarId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Description
