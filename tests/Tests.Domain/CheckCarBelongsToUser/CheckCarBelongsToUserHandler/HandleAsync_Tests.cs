@@ -4,7 +4,6 @@
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Messages;
-using MaybeF;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -39,8 +38,8 @@ public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, C
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity());
-		var carId = new CarId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var carId = RndId<CarId>();
+		var userId = RndId<AuthUserId>();
 		var query = new CheckCarBelongsToUserQuery(userId, carId);
 
 		// Act

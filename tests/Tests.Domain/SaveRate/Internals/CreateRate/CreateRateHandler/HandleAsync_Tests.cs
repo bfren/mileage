@@ -32,7 +32,7 @@ public class HandleAsync_Tests : TestHandler<IRateRepository, RateEntity, RateId
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
 		var amount = (float)Rnd.Int / 100;
 		var query = new CreateRateQuery(userId, amount);
 
@@ -51,7 +51,7 @@ public class HandleAsync_Tests : TestHandler<IRateRepository, RateEntity, RateId
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = new RateId(Rnd.Lng);
+		var expected = RndId<RateId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateRateQuery(new(), (float)Rnd.Int / 100);

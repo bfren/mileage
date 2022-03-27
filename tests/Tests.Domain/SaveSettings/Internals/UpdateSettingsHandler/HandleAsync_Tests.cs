@@ -19,8 +19,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = new SettingsId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var settingsId = RndId<SettingsId>();
+		var userId = RndId<AuthUserId>();
 		var command = new UpdateSettingsCommand(new() { Id = settingsId, UserId = userId }, new());
 		v.Repo.UpdateAsync<SettingsEntity>(default!)
 			.ReturnsForAnyArgs(false);
@@ -37,18 +37,18 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = new SettingsId(Rnd.Lng);
+		var settingsId = RndId<SettingsId>();
 		var version = Rnd.Lng;
-		var userId = new AuthUserId(Rnd.Lng);
-		var carId = new CarId(Rnd.Lng);
-		var placeId = new PlaceId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
+		var carId = RndId<CarId>();
+		var placeId = RndId<PlaceId>();
 		var existingSettings = new SettingsEntity
 		{
 			Id = settingsId,
 			Version = version,
 			UserId = userId,
-			DefaultCarId = new(Rnd.Lng),
-			DefaultFromPlaceId = new(Rnd.Lng)
+			DefaultCarId = RndId<CarId>(),
+			DefaultFromPlaceId = RndId<PlaceId>()
 		};
 		var updatedSettings = new Settings
 		{

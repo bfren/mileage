@@ -13,7 +13,7 @@ namespace Mileage.Domain;
 public abstract class TestHandler<TRepo, TEntity, TId, THandler>
 	where TRepo : class, IRepository<TEntity, TId>
 	where TEntity : IWithId<TId>
-	where TId : IStrongId
+	where TId : class, IStrongId, new()
 {
 	public abstract THandler GetHandler(Vars v);
 

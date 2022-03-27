@@ -17,7 +17,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
+		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.UInt, new());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -34,9 +34,9 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var userId = Rnd.Lng;
 		var date = Rnd.DateF.Get();
 		var carId = Rnd.Lng;
-		var startMiles = Rnd.Uint;
-		var placeId = Rnd.Uint;
-		var query = new CreateJourneyQuery(new(userId), date, new(carId), startMiles, new(placeId));
+		var startMiles = Rnd.UInt;
+		var placeId = Rnd.UInt;
+		var query = new CreateJourneyQuery(new() { Value = userId }, date, new() { Value = carId }, startMiles, new() { Value = placeId });
 
 		// Act
 		await handler.HandleAsync(query);
@@ -56,10 +56,10 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = new JourneyId(Rnd.Lng);
+		var expected = RndId<JourneyId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
-		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.Uint, new());
+		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.UInt, new());
 
 		// Act
 		var result = await handler.HandleAsync(query);

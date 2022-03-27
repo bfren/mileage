@@ -32,7 +32,7 @@ public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, Plac
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
 		var description = Rnd.Str;
 		var postcode = Rnd.Str;
 		var query = new CreatePlaceQuery(userId, description, postcode);
@@ -53,7 +53,7 @@ public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, Plac
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = new PlaceId(Rnd.Lng);
+		var expected = RndId<PlaceId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreatePlaceQuery(new(), Rnd.Str, Rnd.Str);
