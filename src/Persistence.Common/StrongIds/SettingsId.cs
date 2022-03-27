@@ -8,5 +8,4 @@ namespace Mileage.Persistence.Common.StrongIds;
 /// <summary>
 /// Settings ID
 /// </summary>
-/// <param name="Value">ID value</param>
-public readonly record struct SettingsId(long Value) : IStrongId;
+public sealed record class SettingsId : StrongId;

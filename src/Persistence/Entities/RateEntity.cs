@@ -17,7 +17,7 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// Rate ID
 	/// </summary>
 	[Id]
-	public RateId Id { get; init; }
+	public RateId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -28,7 +28,7 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Mileate rate amount per mile (GBP)

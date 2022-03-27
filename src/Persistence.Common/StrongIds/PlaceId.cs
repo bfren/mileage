@@ -8,5 +8,4 @@ namespace Mileage.Persistence.Common.StrongIds;
 /// <summary>
 /// Place ID
 /// </summary>
-/// <param name="Value">ID value</param>
-public readonly record struct PlaceId(long Value) : IStrongId;
+public sealed record class PlaceId : StrongId;
