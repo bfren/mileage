@@ -20,5 +20,5 @@ public sealed record class Settings(
 	/// <summary>
 	/// Create default settings object
 	/// </summary>
-	public Settings() : this(0, null, null) { }
+	public Settings() : this(0L, null, null) { }
 }

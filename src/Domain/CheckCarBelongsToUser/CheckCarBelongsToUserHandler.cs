@@ -13,7 +13,7 @@ namespace Mileage.Domain.CheckCarBelongsToUser;
 /// <summary>
 /// Check a car belongs to a user
 /// </summary>
-public sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelongsToUserQuery, bool>
+internal sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelongsToUserQuery, bool>
 {
 	private ICarRepository Car { get; init; }
 
@@ -36,16 +36,10 @@ public sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelongsT
 		Log.Vrb("Checking car {CarId} belongs to user {UserId}.", query.CarId.Value, query.UserId.Value);
 		return Car
 			.StartFluentQuery()
-			.Where(
-				c => c.Id, Compare.Equal, query.CarId
-			)
-			.Where(
-				c => c.UserId, Compare.Equal, query.UserId
-			)
+			.Where(c => c.Id, Compare.Equal, query.CarId)
+			.Where(c => c.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<CarEntity>()
-			.AuditAsync(
-				none: Log.Msg
-			)
+			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: _ => F.True,
 				none: _ => F.False

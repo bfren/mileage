@@ -11,7 +11,7 @@ namespace Mileage.Domain.SaveSettings.Internals;
 /// <summary>
 /// Update settings for user
 /// </summary>
-public class UpdateSettingsHandler : CommandHandler<UpdateSettingsCommand>
+internal sealed class UpdateSettingsHandler : CommandHandler<UpdateSettingsCommand>
 {
 	private ILog<UpdateSettingsHandler> Log { get; init; }
 

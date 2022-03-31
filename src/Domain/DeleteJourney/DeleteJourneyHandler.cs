@@ -13,7 +13,7 @@ namespace Mileage.Domain.DeleteJourney;
 /// <summary>
 /// Delete a journey that belongs to a user
 /// </summary>
-public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool>
+internal sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool>
 {
 	private ILog<DeleteJourneyHandler> Log { get; init; }
 
@@ -36,16 +36,10 @@ public sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bool
 		Log.Vrb("Delete Journey: {Query}", query);
 		return Journey
 			.StartFluentQuery()
-			.Where(
-				x => x.Id, Compare.Equal, query.JourneyId
-			)
-			.Where(
-				x => x.UserId, Compare.Equal, query.UserId
-			)
+			.Where(x => x.Id, Compare.Equal, query.JourneyId)
+			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<JourneyToDelete>()
-			.AuditAsync(
-				none: Log.Msg
-			)
+			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Journey.DeleteAsync(x),
 				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(query.JourneyId, query.UserId))

@@ -60,10 +60,10 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// To (visited) places
 	/// </summary>
-	public ImmutableList<PlaceId> ToPlaceIds { get; init; } = new();
+	public IImmutableList<PlaceId> ToPlaceIds { get; init; } = new ImmutableList<PlaceId>();
 
 	/// <summary>
 	/// The rate used for the journey
 	/// </summary>
-	public RateId RateId { get; init; } = new();
+	public RateId? RateId { get; init; } = new();
 }

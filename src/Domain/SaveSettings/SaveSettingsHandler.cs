@@ -16,7 +16,7 @@ using Mileage.Persistence.Repositories;
 namespace Mileage.Domain.SaveSettings;
 
 /// <summary>
-/// Save settings for a user
+/// Save settings for a user - create if they don't exist, or update if they do
 /// </summary>
 public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 {
@@ -65,12 +65,10 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 			)
 			.QuerySingleAsync<SettingsEntity>()
 			.SwitchAsync(
-				some: x => Dispatcher.DispatchAsync(
-					new Internals.UpdateSettingsCommand(x, command.Settings)
-				),
-				none: () => Dispatcher.DispatchAsync(
-					new Internals.CreateSettingsCommand(command.UserId, command.Settings)
-				)
+				some: x => Dispatcher
+					.DispatchAsync(new Internals.UpdateSettingsCommand(x, command.Settings)),
+				none: () => Dispatcher
+					.DispatchAsync(new Internals.CreateSettingsCommand(command.UserId, command.Settings))
 			);
 	}
 
@@ -79,18 +77,16 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="carId"></param>
 	/// <param name="userId"></param>
-	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId) =>
+	internal Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId) =>
 		carId switch
 		{
 			CarId x =>
-				await Dispatcher
-					.DispatchAsync(
-						new CheckCarBelongsToUserQuery(userId, x)
-					)
+				Dispatcher
+					.DispatchAsync(new CheckCarBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
-				true
+				Task.FromResult(true)
 		};
 
 	/// <summary>
@@ -98,17 +94,15 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="placeId"></param>
 	/// <param name="userId"></param>
-	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId) =>
+	internal Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId) =>
 		placeId switch
 		{
 			PlaceId x =>
-				await Dispatcher
-					.DispatchAsync(
-						new CheckPlaceBelongsToUserQuery(userId, x)
-					)
+				Dispatcher
+					.DispatchAsync(new CheckPlaceBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
-				true
+				Task.FromResult(true)
 		};
 }

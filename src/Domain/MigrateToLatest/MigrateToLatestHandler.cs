@@ -13,7 +13,7 @@ namespace Mileage.Domain.MigrateToLatest;
 /// <summary>
 /// Migrate databases to the latest version
 /// </summary>
-public sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCommand>
+internal sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCommand>
 {
 	private IDb Db { get; init; }
 

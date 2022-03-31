@@ -13,7 +13,7 @@ namespace Mileage.Domain.CheckPlaceBelongsToUser;
 /// <summary>
 /// Check a place belongs to a user
 /// </summary>
-public sealed class CheckPlaceBelongsToUserHandler : QueryHandler<CheckPlaceBelongsToUserQuery, bool>
+internal sealed class CheckPlaceBelongsToUserHandler : QueryHandler<CheckPlaceBelongsToUserQuery, bool>
 {
 	private IPlaceRepository Place { get; init; }
 
@@ -36,16 +36,10 @@ public sealed class CheckPlaceBelongsToUserHandler : QueryHandler<CheckPlaceBelo
 		Log.Vrb("Checking place {PlaceId} belongs to user {UserId}.", query.PlaceId.Value, query.UserId.Value);
 		return Place
 			.StartFluentQuery()
-			.Where(
-				c => c.Id, Compare.Equal, query.PlaceId
-			)
-			.Where(
-				c => c.UserId, Compare.Equal, query.UserId
-			)
+			.Where(c => c.Id, Compare.Equal, query.PlaceId)
+			.Where(c => c.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<PlaceEntity>()
-			.AuditAsync(
-				none: Log.Msg
-			)
+			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: _ => F.True,
 				none: _ => F.False
