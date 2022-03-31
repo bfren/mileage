@@ -7,12 +7,12 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SaveCar.Internals.CreateCar;
+namespace Mileage.Domain.SaveCar.Internals;
 
 /// <summary>
 /// Create a new car entity
 /// </summary>
-public sealed class CreateCarHandler : QueryHandler<CreateCarQuery, CarId>
+internal sealed class CreateCarHandler : QueryHandler<CreateCarQuery, CarId>
 {
 	private ICarRepository Car { get; init; }
 

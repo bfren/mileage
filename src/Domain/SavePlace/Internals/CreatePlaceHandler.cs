@@ -7,12 +7,12 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SavePlace.Internals.CreatePlace;
+namespace Mileage.Domain.SavePlace.Internals;
 
 /// <summary>
 /// Create a new place entity
 /// </summary>
-public sealed class CreatePlaceHandler : QueryHandler<CreatePlaceQuery, PlaceId>
+internal sealed class CreatePlaceHandler : QueryHandler<CreatePlaceQuery, PlaceId>
 {
 	private IPlaceRepository Place { get; init; }
 

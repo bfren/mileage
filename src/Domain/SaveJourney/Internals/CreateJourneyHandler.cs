@@ -8,12 +8,12 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SaveJourney.Internals.CreateJourney;
+namespace Mileage.Domain.SaveJourney.Internals;
 
 /// <summary>
 /// Create a new mileage entity
 /// </summary>
-public sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, JourneyId>
+internal sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, JourneyId>
 {
 	private IJourneyRepository Journey { get; init; }
 

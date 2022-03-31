@@ -7,12 +7,12 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SaveRate.Internals.CreateRate;
+namespace Mileage.Domain.SaveRate.Internals;
 
 /// <summary>
 /// Create a new rate entity
 /// </summary>
-public sealed class CreateRateHandler : QueryHandler<CreateRateQuery, RateId>
+internal sealed class CreateRateHandler : QueryHandler<CreateRateQuery, RateId>
 {
 	private IRateRepository Rate { get; init; }
 

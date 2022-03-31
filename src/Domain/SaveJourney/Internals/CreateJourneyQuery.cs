@@ -6,7 +6,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.SaveJourney.Internals.CreateJourney;
+namespace Mileage.Domain.SaveJourney.Internals;
 
 /// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>
@@ -14,7 +14,7 @@ namespace Mileage.Domain.SaveJourney.Internals.CreateJourney;
 /// <param name="CarId">CarId to associate with the new journey</param>
 /// <param name="StartMiles">Starting miles</param>
 /// <param name="FromPlaceId">Starting place</param>
-public sealed record class CreateJourneyQuery(
+internal sealed record class CreateJourneyQuery(
 	AuthUserId UserId,
 	DateOnly Date,
 	CarId CarId,
