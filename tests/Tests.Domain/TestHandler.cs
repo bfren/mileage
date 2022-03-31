@@ -4,7 +4,7 @@
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Query;
-using Jeebs.Id;
+using StrongId;
 using Jeebs.Logging;
 using NSubstitute.Extensions;
 

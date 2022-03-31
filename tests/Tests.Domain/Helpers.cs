@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
-using Jeebs.Id;
+using StrongId;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using NSubstitute.Core;
