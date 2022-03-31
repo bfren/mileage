@@ -4,8 +4,8 @@
 using System;
 using Jeebs.Auth.Data;
 using Jeebs.Collections;
+using Jeebs.Data;
 using Jeebs.Data.Attributes;
-using Jeebs.Id;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
@@ -19,7 +19,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// Journey ID
 	/// </summary>
 	[Id]
-	public JourneyId Id { get; init; }
+	public JourneyId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -30,7 +30,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Journey Date
@@ -40,7 +40,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// The car used for the journey
 	/// </summary>
-	public CarId CarId { get; init; }
+	public CarId CarId { get; init; } = new();
 
 	/// <summary>
 	/// Start (miles)
@@ -55,7 +55,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// From (start) place
 	/// </summary>
-	public PlaceId FromPlaceId { get; init; }
+	public PlaceId FromPlaceId { get; init; } = new();
 
 	/// <summary>
 	/// To (visited) places
@@ -65,5 +65,5 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// The rate used for the journey
 	/// </summary>
-	public RateId RateId { get; init; }
+	public RateId RateId { get; init; } = new();
 }

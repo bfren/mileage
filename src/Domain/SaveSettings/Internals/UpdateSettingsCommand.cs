@@ -7,9 +7,7 @@ using Mileage.Persistence.Entities;
 
 namespace Mileage.Domain.SaveSettings.Internals;
 
-/// <summary>
-/// Update a settings entity
-/// </summary>
+/// <inheritdoc cref="UpdateSettingsHandler"/>
 /// <param name="ExistingSettings"></param>
 /// <param name="UpdatedSettings"></param>
 public sealed record class UpdateSettingsCommand(

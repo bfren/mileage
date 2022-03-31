@@ -8,7 +8,7 @@ using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.CreateJourney;
+namespace Mileage.Domain.SaveJourney.Internals.CreateJourney;
 
 /// <summary>
 /// Create a new mileage entity

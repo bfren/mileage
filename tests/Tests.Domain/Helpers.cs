@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
-using Jeebs.Id;
+using StrongId;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using NSubstitute.Core;
@@ -18,7 +18,7 @@ internal static class Helpers
 	public static (TRepo repo, IQueryFluent<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
-		where TId : IStrongId
+		where TId : class, IStrongId, new()
 	{
 		// Create substitutes
 		var repo = Substitute.For<TRepo>();

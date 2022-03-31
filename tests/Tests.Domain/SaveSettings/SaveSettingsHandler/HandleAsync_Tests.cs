@@ -3,14 +3,14 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
-using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
-using Mileage.Persistence.Entities;
-using Mileage.Persistence.Repositories;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlaceBelongsToUser;
 using Mileage.Domain.SaveSettings.Internals;
 using Mileage.Domain.SaveSettings.Messages;
+using Mileage.Persistence.Common;
+using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
@@ -24,8 +24,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
-		var carId = new CarId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
+		var carId = RndId<CarId>();
 		var settings = new Settings(Rnd.Lng, carId, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
@@ -48,8 +48,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
-		var placeId = new PlaceId(Rnd.Lng);
+		var userId = RndId<AuthUserId>();
+		var placeId = RndId<PlaceId>();
 		var settings = new Settings(Rnd.Lng, null, placeId);
 		var query = new SaveSettingsCommand(userId, settings);
 
@@ -72,8 +72,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, new(Rnd.Lng), null);
-		var query = new SaveSettingsCommand(new(Rnd.Lng), settings);
+		var settings = new Settings(Rnd.Lng, RndId<CarId>(), null);
+		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
@@ -91,8 +91,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
-		var query = new SaveSettingsCommand(new(Rnd.Lng), settings);
+		var settings = new Settings(Rnd.Lng, null, RndId<PlaceId>());
+		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
@@ -110,8 +110,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
+		var userId = RndId<AuthUserId>();
+		var settings = new Settings(Rnd.Lng, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -135,9 +135,9 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
+		var settings = new Settings(Rnd.Lng, null, null);
 		var existingSettings = new SettingsEntity();
-		var query = new SaveSettingsCommand(new(Rnd.Lng), settings);
+		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -160,8 +160,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
-		var query = new SaveSettingsCommand(new(Rnd.Lng), settings);
+		var settings = new Settings(Rnd.Lng, null, null);
+		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -185,8 +185,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = new AuthUserId(Rnd.Lng);
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
+		var userId = RndId<AuthUserId>();
+		var settings = new Settings(Rnd.Lng, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 		var updated = Rnd.Flip;
 
@@ -211,8 +211,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, new(Rnd.Lng));
-		var query = new SaveSettingsCommand(new(Rnd.Lng), settings);
+		var settings = new Settings(Rnd.Lng, null, null);
+		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)

@@ -11,7 +11,7 @@ using Mileage.Persistence;
 namespace Mileage.Domain.MigrateToLatest;
 
 /// <summary>
-/// Migrate databases
+/// Migrate databases to the latest version
 /// </summary>
 public sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCommand>
 {

@@ -2,8 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
+using Jeebs.Data;
 using Jeebs.Data.Attributes;
-using Jeebs.Id;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
@@ -17,7 +17,7 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// Rate ID
 	/// </summary>
 	[Id]
-	public RateId Id { get; init; }
+	public RateId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
@@ -28,7 +28,7 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// <summary>
 	/// User ID
 	/// </summary>
-	public AuthUserId UserId { get; init; }
+	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
 	/// Mileate rate amount per mile (GBP)

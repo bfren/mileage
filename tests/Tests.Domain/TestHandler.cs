@@ -4,7 +4,7 @@
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Query;
-using Jeebs.Id;
+using StrongId;
 using Jeebs.Logging;
 using NSubstitute.Extensions;
 
@@ -13,7 +13,7 @@ namespace Mileage.Domain;
 public abstract class TestHandler<TRepo, TEntity, TId, THandler>
 	where TRepo : class, IRepository<TEntity, TId>
 	where TEntity : IWithId<TId>
-	where TId : IStrongId
+	where TId : class, IStrongId, new()
 {
 	public abstract THandler GetHandler(Vars v);
 

@@ -57,7 +57,7 @@ var userId = await dispatcher.DispatchAsync(
 // ==========================================
 
 var journeyId = await dispatcher.DispatchAsync(
-	new Q.CreateJourney.CreateJourneyQuery(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.Uint, new())
+	new Q.SaveJourney.Internals.CreateJourney.CreateJourneyQuery(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.UInt, new())
 ).AuditAsync(
 	some: x => log.Dbg("New Journey: {JourneyId}.", x),
 	none: r => log.Err("Failed to add Journey: {Reason}.", r)

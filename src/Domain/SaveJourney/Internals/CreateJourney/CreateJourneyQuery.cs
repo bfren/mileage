@@ -6,7 +6,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.CreateJourney;
+namespace Mileage.Domain.SaveJourney.Internals.CreateJourney;
 
 /// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>

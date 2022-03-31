@@ -4,11 +4,10 @@
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Messages;
-using MaybeF;
+using Mileage.Domain.DeleteJourney.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using Mileage.Domain.DeleteJourney.Messages;
 
 namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
@@ -23,7 +22,7 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
+			.Returns(new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng));
 		var query = new DeleteJourneyQuery(new(), new());
 
 		// Act
@@ -39,9 +38,9 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(new(Rnd.Lng), Rnd.Lng));
-		var journeyId = new JourneyId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+			.Returns(new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng));
+		var journeyId = RndId<JourneyId>();
+		var userId = RndId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
@@ -80,8 +79,8 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(Create.None<JourneyToDelete>());
-		var journeyId = new JourneyId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var journeyId = RndId<JourneyId>();
+		var userId = RndId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
@@ -99,8 +98,8 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = new JourneyId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var journeyId = RndId<JourneyId>();
+		var userId = RndId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 		var model = new JourneyToDelete(journeyId, Rnd.Lng);
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
@@ -118,14 +117,14 @@ public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, 
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new JourneyToDelete(new(Rnd.Lng), Rnd.Lng);
+		var model = new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng);
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(model);
 		var expected = Rnd.Flip;
 		v.Repo.DeleteAsync<JourneyToDelete>(default!)
 			.ReturnsForAnyArgs(expected);
-		var journeyId = new JourneyId(Rnd.Lng);
-		var userId = new AuthUserId(Rnd.Lng);
+		var journeyId = RndId<JourneyId>();
+		var userId = RndId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act

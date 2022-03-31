@@ -7,9 +7,7 @@ using Mileage.Persistence.Common;
 
 namespace Mileage.Domain.SaveSettings.Internals;
 
-/// <summary>
-/// Create a settings entity
-/// </summary>
+/// <inheritdoc cref="CreateSettingsHandler"/>
 /// <param name="UserId"></param>
 /// <param name="Settings"></param>
 public sealed record class CreateSettingsCommand(

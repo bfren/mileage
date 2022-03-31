@@ -7,9 +7,7 @@ using Mileage.Persistence.Common;
 
 namespace Mileage.Domain.SaveSettings;
 
-/// <summary>
-/// Save a user's settings
-/// </summary>
+/// <inheritdoc cref="SaveSettingsHandler"/>
 /// <param name="UserId"></param>
 /// <param name="Settings"></param>
 public sealed record class SaveSettingsCommand(
