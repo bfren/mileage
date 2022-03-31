@@ -10,10 +10,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.LoadSettings.LoadSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override LoadSettingsHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler>
+	{
+		internal override LoadSettingsHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (LoadSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

@@ -6,12 +6,18 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SavePlace.Internals.CreatePlace.CreatePlaceHandler_Tests;
+namespace Mileage.Domain.SavePlace.Internals.CreatePlaceHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, PlaceId, CreatePlaceHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override CreatePlaceHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CreatePlaceHandler>
+	{
+		internal override CreatePlaceHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (CreatePlaceHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

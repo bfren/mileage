@@ -11,10 +11,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override DeleteJourneyHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
+	{
+		internal override DeleteJourneyHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (DeleteJourneyHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

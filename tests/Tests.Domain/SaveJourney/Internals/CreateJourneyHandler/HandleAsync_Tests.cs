@@ -5,12 +5,18 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SaveJourney.Internals.CreateJourney.CreateJourneyHandler_Tests;
+namespace Mileage.Domain.SaveJourney.Internals.CreateJourneyHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<IJourneyRepository, JourneyEntity, JourneyId, CreateJourneyHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override CreateJourneyHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, CreateJourneyHandler>
+	{
+		internal override CreateJourneyHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (CreateJourneyHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

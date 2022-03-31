@@ -4,43 +4,46 @@
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Query;
-using StrongId;
 using Jeebs.Logging;
 using NSubstitute.Extensions;
+using StrongId;
 
 namespace Mileage.Domain;
 
-public abstract class TestHandler<TRepo, TEntity, TId, THandler>
-	where TRepo : class, IRepository<TEntity, TId>
-	where TEntity : IWithId<TId>
-	where TId : class, IStrongId, new()
+public abstract class TestHandler
 {
-	public abstract THandler GetHandler(Vars v);
-
-	public (THandler handler, Vars v) GetVars()
+	internal abstract class Setup<TRepo, TEntity, TId, THandler>
+		where TRepo : class, IRepository<TEntity, TId>
+		where TEntity : IWithId<TId>
+		where TId : class, IStrongId, new()
 	{
-		// Create substitutes
-		var dispatcher = Substitute.For<IDispatcher>();
-		var fluent = Substitute.For<IQueryFluent<TEntity, TId>>();
-		var log = Substitute.For<ILog<THandler>>();
-		var repo = Substitute.For<TRepo>();
+		internal abstract THandler GetHandler(Vars v);
 
-		// Setup substitutes
-		fluent.ReturnsForAll(fluent);
-		repo.StartFluentQuery().Returns(fluent);
+		internal (THandler handler, Vars v) GetVars()
+		{
+			// Create substitutes
+			var dispatcher = Substitute.For<IDispatcher>();
+			var fluent = Substitute.For<IQueryFluent<TEntity, TId>>();
+			var log = Substitute.For<ILog<THandler>>();
+			var repo = Substitute.For<TRepo>();
 
-		// Build handler
-		var v = new Vars(dispatcher, fluent, log, repo);
-		var handler = GetHandler(v);
+			// Setup substitutes
+			fluent.ReturnsForAll(fluent);
+			repo.StartFluentQuery().Returns(fluent);
 
-		// Return vars
-		return (handler, v);
+			// Build handler
+			var v = new Vars(dispatcher, fluent, log, repo);
+			var handler = GetHandler(v);
+
+			// Return vars
+			return (handler, v);
+		}
+
+		internal sealed record class Vars(
+			IDispatcher Dispatcher,
+			IQueryFluent<TEntity, TId> Fluent,
+			ILog<THandler> Log,
+			TRepo Repo
+		);
 	}
-
-	public sealed record class Vars(
-		IDispatcher Dispatcher,
-		IQueryFluent<TEntity, TId> Fluent,
-		ILog<THandler> Log,
-		TRepo Repo
-	);
 }

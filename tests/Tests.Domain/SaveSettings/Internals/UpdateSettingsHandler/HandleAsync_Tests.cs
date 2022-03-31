@@ -9,10 +9,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.Internals.UpdateSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override UpdateSettingsHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
+	{
+		internal override UpdateSettingsHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (UpdateSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Logs_Vrb__With_UserId()

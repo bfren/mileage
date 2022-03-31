@@ -10,10 +10,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckPlaceBelongsToUser.CheckPlaceBelongsToUserHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<IPlaceRepository, PlaceEntity, PlaceId, CheckPlaceBelongsToUserHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override CheckPlaceBelongsToUserHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlaceBelongsToUserHandler>
+	{
+		internal override CheckPlaceBelongsToUserHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (CheckPlaceBelongsToUserHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

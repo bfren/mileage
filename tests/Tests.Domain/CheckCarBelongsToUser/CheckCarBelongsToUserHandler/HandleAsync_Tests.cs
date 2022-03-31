@@ -10,10 +10,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckCarBelongsToUser.CheckCarBelongsToUserHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ICarRepository, CarEntity, CarId, CheckCarBelongsToUserHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override CheckCarBelongsToUserHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ICarRepository, CarEntity, CarId, CheckCarBelongsToUserHandler>
+	{
+		internal override CheckCarBelongsToUserHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (CheckCarBelongsToUserHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()

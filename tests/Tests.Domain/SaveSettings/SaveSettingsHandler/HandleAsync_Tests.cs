@@ -14,10 +14,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
+public class HandleAsync_Tests : TestHandler
 {
-	public override SaveSettingsHandler GetHandler(Vars v) =>
-		new(v.Dispatcher, v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
+	{
+		internal override SaveSettingsHandler GetHandler(Vars v) =>
+			new(v.Dispatcher, v.Repo, v.Log);
+	}
+
+	private (SaveSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Checks_Car_Belongs_To_User_With_Correct_Values()
