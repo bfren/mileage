@@ -7,7 +7,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.SaveCar;
 
-/// <see cref="SaveCarHandler"/>
+/// <inheritdoc cref="SaveCarHandler"/>
 /// <param name="UserId">User ID</param>
 /// <param name="CarId">Car ID</param>
 /// <param name="Version">Entity Verion</param>
