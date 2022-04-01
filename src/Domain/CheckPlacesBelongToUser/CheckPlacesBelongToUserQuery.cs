@@ -5,14 +5,14 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.CheckPlaceBelongsToUser;
+namespace Mileage.Domain.CheckPlacesBelongToUser;
 
 /// <summary>
-/// Returns true if <paramref name="PlaceId"/> belongs to <paramref name="UserId"/>
+/// Returns true if <paramref name="PlaceIds"/> belong to <paramref name="UserId"/>
 /// </summary>
 /// <param name="UserId">User ID</param>
-/// <param name="PlaceId">Place ID</param>
-public sealed record class CheckPlaceBelongsToUserQuery(
+/// <param name="PlaceIds">Place IDs</param>
+public sealed record class CheckPlacesBelongToUserQuery(
 	AuthUserId UserId,
-	PlaceId PlaceId
+	params PlaceId[] PlaceIds
 ) : IQuery<bool>;
