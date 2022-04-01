@@ -1,6 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -23,7 +24,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.UInt, new());
+		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.UInt, null, new(), null, null);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -37,23 +38,29 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = Rnd.Lng;
+		var userId = LongId<AuthUserId>();
 		var date = Rnd.DateF.Get();
-		var carId = Rnd.Lng;
+		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
-		var placeId = Rnd.UInt;
-		var query = new CreateJourneyQuery(new() { Value = userId }, date, new() { Value = carId }, startMiles, new() { Value = placeId });
+		var endMiles = startMiles + Rnd.UInt;
+		var fromPlaceId = LongId<PlaceId>();
+		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var rateId = LongId<RateId>();
+		var query = new CreateJourneyQuery(userId, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
 		await handler.HandleAsync(query);
 
 		// Assert
 		await v.Repo.Received().CreateAsync(Arg.Is<JourneyEntity>(j =>
-			j.UserId.Value == userId
+			j.UserId == userId
 			&& j.Date == date.ToDateTime(TimeOnly.MinValue)
-			&& j.CarId.Value == carId
+			&& j.CarId == carId
 			&& j.StartMiles == startMiles
-			&& j.FromPlaceId.Value == placeId
+			&& j.EndMiles == endMiles
+			&& j.FromPlaceId == fromPlaceId
+			&& j.ToPlaceIds.SequenceEqual(toPlaceIds)
+			&& j.RateId == rateId
 		));
 	}
 
@@ -62,10 +69,10 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = RndId<JourneyId>();
+		var expected = LongId<JourneyId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
-		var query = new CreateJourneyQuery(new(), Rnd.DateF.Get(), new(), Rnd.UInt, new());
+		var query = new CreateJourneyQuery(new(), Rnd.Date, new(), Rnd.UInt, null, new(), null, null);
 
 		// Act
 		var result = await handler.HandleAsync(query);

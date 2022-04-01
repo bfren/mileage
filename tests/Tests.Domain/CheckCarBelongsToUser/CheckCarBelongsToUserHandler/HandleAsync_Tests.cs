@@ -44,8 +44,8 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity());
-		var carId = RndId<CarId>();
-		var userId = RndId<AuthUserId>();
+		var carId = LongId<CarId>();
+		var userId = LongId<AuthUserId>();
 		var query = new CheckCarBelongsToUserQuery(userId, carId);
 
 		// Act

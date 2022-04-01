@@ -27,8 +27,8 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>()));
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+			.Returns(new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>()));
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -43,8 +43,8 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>()));
-		var userId = RndId<AuthUserId>();
+			.Returns(new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>()));
+		var userId = LongId<AuthUserId>();
 		var query = new LoadSettingsQuery(userId);
 
 		// Act
@@ -63,10 +63,10 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>());
+		var model = new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>());
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(model);
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -82,7 +82,7 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(Create.None<Settings>());
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);

@@ -29,7 +29,7 @@ public class CheckPlaceBelongsToUser_Tests : TestHandler
 			.ReturnsForAnyArgs(F.Some(value).AsTask);
 
 		// Act
-		var result = await handler.CheckPlaceBelongsToUser(RndId<PlaceId>(), RndId<AuthUserId>());
+		var result = await handler.CheckPlaceBelongsToUser(LongId<PlaceId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -44,7 +44,7 @@ public class CheckPlaceBelongsToUser_Tests : TestHandler
 			.ReturnsForAnyArgs(Create.None<bool>());
 
 		// Act
-		var result = await handler.CheckPlaceBelongsToUser(RndId<PlaceId>(), RndId<AuthUserId>());
+		var result = await handler.CheckPlaceBelongsToUser(LongId<PlaceId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.False(result);

@@ -8,17 +8,17 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.CheckPlaceBelongsToUser.CheckPlaceBelongsToUserHandler_Tests;
+namespace Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlaceBelongsToUserHandler>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlacesBelongToUserHandler>
 	{
-		internal override CheckPlaceBelongsToUserHandler GetHandler(Vars v) =>
+		internal override CheckPlacesBelongToUserHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
 	}
 
-	private (CheckPlaceBelongsToUserHandler, Setup.Vars) GetVars() =>
+	private (CheckPlacesBelongToUserHandler, Setup.Vars) GetVars() =>
 		new Setup().GetVars();
 
 	[Fact]
@@ -26,15 +26,21 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<PlaceEntity>()
-			.Returns(new PlaceEntity());
-		var query = new CheckPlaceBelongsToUserQuery(RndId<AuthUserId>(), RndId<PlaceId>());
+		v.Fluent.QueryAsync<PlaceEntity>()
+			.Returns(Array.Empty<PlaceEntity>());
+		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var placeIdsValues = placeIds.Select(p => p.Value);
+		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), placeIds);
 
 		// Act
 		await handler.HandleAsync(query);
 
 		// Assert
-		v.Log.Received().Vrb("Checking place {PlaceId} belongs to user {UserId}.", query.PlaceId.Value, query.UserId.Value);
+		v.Log.Received().Vrb(
+			"Checking places {PlaceIds} belong to user {UserId}.",
+			Arg.Is<IEnumerable<long>>(x => x.SequenceEqual(placeIdsValues)),
+			query.UserId.Value
+		);
 	}
 
 	[Fact]
@@ -42,11 +48,11 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<PlaceEntity>()
-			.Returns(new PlaceEntity());
-		var carId = RndId<PlaceId>();
-		var userId = RndId<AuthUserId>();
-		var query = new CheckPlaceBelongsToUserQuery(userId, carId);
+		v.Fluent.QueryAsync<PlaceEntity>()
+			.Returns(Array.Empty<PlaceEntity>());
+		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var userId = LongId<AuthUserId>();
+		var query = new CheckPlacesBelongToUserQuery(userId, placeIds);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -54,7 +60,7 @@ public class HandleAsync_Tests : TestHandler
 		// Assert
 		var calls = v.Fluent.ReceivedCalls();
 		Assert.Collection(calls,
-			c => Helpers.AssertWhere<PlaceEntity, PlaceId>(c, x => x.Id, Compare.Equal, carId),
+			c => Helpers.AssertWhereIn<PlaceEntity, PlaceId>(c, x => x.Id, placeIds),
 			c => Helpers.AssertWhere<PlaceEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 			_ => { }
 		);
@@ -66,9 +72,9 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var msg = new TestMsg();
-		v.Fluent.QuerySingleAsync<PlaceEntity>()
-			.Returns(F.None<PlaceEntity>(msg));
-		var query = new CheckPlaceBelongsToUserQuery(new(), new());
+		v.Fluent.QueryAsync<PlaceEntity>()
+			.Returns(F.None<IEnumerable<PlaceEntity>>(msg));
+		var query = new CheckPlacesBelongToUserQuery(new(), Array.Empty<PlaceId>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -82,9 +88,9 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<PlaceEntity>()
-				.Returns(Create.None<PlaceEntity>());
-		var query = new CheckPlaceBelongsToUserQuery(new(), new());
+		v.Fluent.QueryAsync<PlaceEntity>()
+				.Returns(Create.None<IEnumerable<PlaceEntity>>());
+		var query = new CheckPlacesBelongToUserQuery(new(), Array.Empty<PlaceId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -98,10 +104,9 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var entity = new PlaceEntity();
-		v.Fluent.QuerySingleAsync<PlaceEntity>()
-			.Returns(entity);
-		var query = new CheckPlaceBelongsToUserQuery(new(), new());
+		v.Fluent.QueryAsync<PlaceEntity>()
+			.Returns(new PlaceEntity[] { new(), new() });
+		var query = new CheckPlacesBelongToUserQuery(new(), LongId<PlaceId>(), LongId<PlaceId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);

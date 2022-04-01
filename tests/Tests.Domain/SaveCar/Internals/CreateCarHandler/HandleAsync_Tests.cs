@@ -38,7 +38,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
+		var userId = LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var query = new CreateCarQuery(userId, description);
 
@@ -57,7 +57,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = RndId<CarId>();
+		var expected = LongId<CarId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateCarQuery(new(), Rnd.Str);

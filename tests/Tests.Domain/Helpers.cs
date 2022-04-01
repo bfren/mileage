@@ -5,11 +5,11 @@ using System.Linq.Expressions;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
-using StrongId;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using NSubstitute.Core;
 using NSubstitute.Extensions;
+using StrongId;
 
 namespace Mileage.Domain;
 
@@ -136,6 +136,51 @@ internal static class Helpers
 			{
 				var actual = Assert.IsType<TValue>(arg);
 				Assert.Equal(value, actual);
+			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query where method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="compare"></param>
+	/// <param name="values"></param>
+	public static void AssertWhereIn<TEntity, TValue>(
+		ICall call,
+		Expression<Func<TEntity, TValue>> property,
+		TValue[] values
+	)
+	{
+		// Check the method
+		Assert.Equal("WhereIn", call.GetMethodInfo().Name);
+
+		// Check the value generic type
+		Assert.Collection(call.GetMethodInfo().GetGenericArguments(),
+			type => Assert.Equal(typeof(TValue), type)
+		);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the correct property is being used
+			arg =>
+			{
+				var actual = Assert.IsAssignableFrom<Expression<Func<TEntity, TValue>>>(arg);
+				Assert.Equal(
+					property.GetPropertyInfo().UnsafeUnwrap().Name,
+					actual.GetPropertyInfo().UnsafeUnwrap().Name
+				);
+			},
+
+			// Check that the correct values are being used
+			arg =>
+			{
+				var actual = Assert.IsType<TValue[]>(arg);
+				Assert.Equal(values, actual);
 			}
 		);
 	}

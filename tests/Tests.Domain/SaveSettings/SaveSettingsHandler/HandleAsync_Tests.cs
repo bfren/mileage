@@ -4,7 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
 using Mileage.Domain.CheckCarBelongsToUser;
-using Mileage.Domain.CheckPlaceBelongsToUser;
+using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.SaveSettings.Internals;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
@@ -30,8 +30,8 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
-		var carId = RndId<CarId>();
+		var userId = LongId<AuthUserId>();
+		var carId = LongId<CarId>();
 		var settings = new Settings(Rnd.Lng, carId, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
@@ -54,8 +54,8 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
-		var placeId = RndId<PlaceId>();
+		var userId = LongId<AuthUserId>();
+		var placeId = LongId<PlaceId>();
 		var settings = new Settings(Rnd.Lng, null, placeId);
 		var query = new SaveSettingsCommand(userId, settings);
 
@@ -69,7 +69,7 @@ public class HandleAsync_Tests : TestHandler
 
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
-			Arg.Is<CheckPlaceBelongsToUserQuery>(q => q.UserId == userId && q.PlaceId == placeId)
+			Arg.Is<CheckPlacesBelongToUserQuery>(q => q.UserId == userId && q.PlaceIds[0] == placeId)
 		);
 	}
 
@@ -78,8 +78,8 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, RndId<CarId>(), null);
-		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
+		var settings = new Settings(Rnd.Lng, LongId<CarId>(), null);
+		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
@@ -89,7 +89,7 @@ public class HandleAsync_Tests : TestHandler
 
 		// Assert
 		var msg = result.AssertNone();
-		Assert.IsType<SettingsCheckFailedMsg>(msg);
+		Assert.IsType<SaveSettingsCheckFailedMsg>(msg);
 	}
 
 	[Fact]
@@ -97,8 +97,8 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, RndId<PlaceId>());
-		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
+		var settings = new Settings(Rnd.Lng, null, LongId<PlaceId>());
+		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
@@ -108,7 +108,7 @@ public class HandleAsync_Tests : TestHandler
 
 		// Assert
 		var msg = result.AssertNone();
-		Assert.IsType<SettingsCheckFailedMsg>(msg);
+		Assert.IsType<SaveSettingsCheckFailedMsg>(msg);
 	}
 
 	[Fact]
@@ -116,7 +116,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
+		var userId = LongId<AuthUserId>();
 		var settings = new Settings(Rnd.Lng, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
@@ -143,7 +143,7 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		var settings = new Settings(Rnd.Lng, null, null);
 		var existingSettings = new SettingsEntity();
-		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
+		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -167,7 +167,7 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var settings = new Settings(Rnd.Lng, null, null);
-		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
+		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -191,7 +191,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
+		var userId = LongId<AuthUserId>();
 		var settings = new Settings(Rnd.Lng, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 		var updated = Rnd.Flip;
@@ -218,7 +218,7 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var settings = new Settings(Rnd.Lng, null, null);
-		var query = new SaveSettingsCommand(RndId<AuthUserId>(), settings);
+		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)

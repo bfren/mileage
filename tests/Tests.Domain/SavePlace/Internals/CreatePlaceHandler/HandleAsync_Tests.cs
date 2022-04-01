@@ -38,7 +38,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
+		var userId = LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var postcode = Rnd.Str;
 		var query = new CreatePlaceQuery(userId, description, postcode);
@@ -59,7 +59,7 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = RndId<PlaceId>();
+		var expected = LongId<PlaceId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreatePlaceQuery(new(), Rnd.Str, Rnd.Str);

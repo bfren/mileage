@@ -29,7 +29,7 @@ public class CheckCarBelongsToUser_Tests : TestHandler
 			.ReturnsForAnyArgs(F.Some(value).AsTask);
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(RndId<CarId>(), RndId<AuthUserId>());
+		var result = await handler.CheckCarBelongsToUser(LongId<CarId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -44,7 +44,7 @@ public class CheckCarBelongsToUser_Tests : TestHandler
 			.ReturnsForAnyArgs(Create.None<bool>());
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(RndId<CarId>(), RndId<AuthUserId>());
+		var result = await handler.CheckCarBelongsToUser(LongId<CarId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.False(result);

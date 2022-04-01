@@ -28,7 +28,7 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng));
+			.Returns(new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng));
 		var query = new DeleteJourneyQuery(new(), new());
 
 		// Act
@@ -44,9 +44,9 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng));
-		var journeyId = RndId<JourneyId>();
-		var userId = RndId<AuthUserId>();
+			.Returns(new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng));
+		var journeyId = LongId<JourneyId>();
+		var userId = LongId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
@@ -85,8 +85,8 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(Create.None<JourneyToDelete>());
-		var journeyId = RndId<JourneyId>();
-		var userId = RndId<AuthUserId>();
+		var journeyId = LongId<JourneyId>();
+		var userId = LongId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
@@ -104,8 +104,8 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = RndId<JourneyId>();
-		var userId = RndId<AuthUserId>();
+		var journeyId = LongId<JourneyId>();
+		var userId = LongId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 		var model = new JourneyToDelete(journeyId, Rnd.Lng);
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
@@ -123,14 +123,14 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new JourneyToDelete(RndId<JourneyId>(), Rnd.Lng);
+		var model = new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng);
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(model);
 		var expected = Rnd.Flip;
 		v.Repo.DeleteAsync<JourneyToDelete>(default!)
 			.ReturnsForAnyArgs(expected);
-		var journeyId = RndId<JourneyId>();
-		var userId = RndId<AuthUserId>();
+		var journeyId = LongId<JourneyId>();
+		var userId = LongId<AuthUserId>();
 		var query = new DeleteJourneyQuery(journeyId, userId);
 
 		// Act
