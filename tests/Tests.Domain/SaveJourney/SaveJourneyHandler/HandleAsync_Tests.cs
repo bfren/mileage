@@ -309,7 +309,6 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		var journeyId = LongId<JourneyId>();
 		var query = new SaveJourneyQuery();
-		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
