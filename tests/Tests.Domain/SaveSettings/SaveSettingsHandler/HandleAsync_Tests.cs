@@ -74,14 +74,14 @@ public class HandleAsync_Tests : TestHandler
 	}
 
 	[Fact]
-	public async Task Car_Does_Not_Belong_To_User__Returns_None_With_SettingsCheckFailedMsg()
+	public async Task Car_Does_Not_Belong_To_User__Returns_None_With_SaveSettingsCheckFailedMsg()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var settings = new Settings(Rnd.Lng, LongId<CarId>(), null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -93,14 +93,14 @@ public class HandleAsync_Tests : TestHandler
 	}
 
 	[Fact]
-	public async Task Place_Does_Not_Belong_To_User__Returns_None_With_SettingsCheckFailedMsg()
+	public async Task Place_Does_Not_Belong_To_User__Returns_None_With_SaveSettingsCheckFailedMsg()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var settings = new Settings(Rnd.Lng, null, LongId<PlaceId>());
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -194,7 +194,6 @@ public class HandleAsync_Tests : TestHandler
 		var userId = LongId<AuthUserId>();
 		var settings = new Settings(Rnd.Lng, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
-		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
