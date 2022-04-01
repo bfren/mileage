@@ -5,19 +5,49 @@ using System;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
+using RndF;
 
 namespace Mileage.Domain.SaveJourney.Internals;
 
 /// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="Date">The date of the new journey</param>
-/// <param name="CarId">CarId to associate with the new journey</param>
+/// <param name="Date">Journey Date</param>
+/// <param name="CarId">Car ID</param>
 /// <param name="StartMiles">Starting miles</param>
+/// <param name="EndMiles">Ending miles</param>
 /// <param name="FromPlaceId">Starting place</param>
+/// <param name="ToPlaceIds">Places visited</param>
+/// <param name="RateId">Rate ID</param>
 internal sealed record class CreateJourneyQuery(
 	AuthUserId UserId,
 	DateOnly Date,
 	CarId CarId,
 	uint StartMiles,
-	PlaceId FromPlaceId
-) : IQuery<JourneyId>;
+	uint? EndMiles,
+	PlaceId FromPlaceId,
+	PlaceId[]? ToPlaceIds,
+	RateId? RateId
+) : IQuery<JourneyId>
+{
+	/// <summary>
+	/// Create from a <see cref="SaveJourneyQuery"/>
+	/// </summary>
+	/// <param name="query"></param>
+	public CreateJourneyQuery(SaveJourneyQuery query) :
+		this(
+			UserId: query.UserId,
+			Date: query.Date,
+			CarId: query.CarId,
+			StartMiles: query.StartMiles,
+			EndMiles: query.EndMiles,
+			FromPlaceId: query.FromPlaceId,
+			ToPlaceIds: query.ToPlaceIds,
+			RateId: query.RateId
+		)
+	{ }
+
+	/// <summary>
+	/// Allows quick creation in testing
+	/// </summary>
+	internal CreateJourneyQuery() : this(new(), Rnd.Date, new(), Rnd.UInt, null, new(), null, null) { }
+}

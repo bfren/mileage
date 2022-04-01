@@ -5,10 +5,11 @@ using System;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
+using RndF;
 
 namespace Mileage.Domain.SaveJourney;
 
-/// <see cref="SaveJourneyHandler"/>
+/// <inheritdoc cref="SaveJourneyHandler"/>
 /// <param name="UserId">User ID</param>
 /// <param name="JourneyId">Journey ID</param>
 /// <param name="Version">Entity Version</param>
@@ -21,8 +22,8 @@ namespace Mileage.Domain.SaveJourney;
 /// <param name="RateId">Rate ID</param>
 public sealed record class SaveJourneyQuery(
 	AuthUserId UserId,
-	JourneyId JourneyId,
-	long Version,
+	JourneyId? JourneyId,
+	long? Version,
 	DateOnly Date,
 	CarId CarId,
 	uint StartMiles,
@@ -30,4 +31,32 @@ public sealed record class SaveJourneyQuery(
 	PlaceId FromPlaceId,
 	PlaceId[]? ToPlaceIds,
 	RateId? RateId
-) : IQuery<JourneyId>;
+) : IQuery<JourneyId>
+{
+	/// <summary>
+	/// Save with minimum required values (only works for new journeys)
+	/// </summary>
+	/// <param name="userId"></param>
+	/// <param name="carId"></param>
+	/// <param name="startMiles">Starting miles</param>
+	/// <param name="fromPlaceId"></param>
+	public SaveJourneyQuery(AuthUserId userId, CarId carId, uint startMiles, PlaceId fromPlaceId) :
+		this(
+			UserId: userId,
+			JourneyId: null,
+			Version: null,
+			Date: DateOnly.FromDateTime(DateTime.Today),
+			CarId: carId,
+			StartMiles: startMiles,
+			EndMiles: null,
+			FromPlaceId: fromPlaceId,
+			ToPlaceIds: null,
+			RateId: null
+		)
+	{ }
+
+	/// <summary>
+	/// Allows quick creation in testing
+	/// </summary>
+	internal SaveJourneyQuery() : this(new(), new(), Rnd.UInt, new()) { }
+}

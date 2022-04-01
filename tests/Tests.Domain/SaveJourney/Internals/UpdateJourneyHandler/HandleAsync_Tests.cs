@@ -6,17 +6,17 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.SaveJourney.Internals.CreateJourneyHandler_Tests;
+namespace Mileage.Domain.SaveJourney.Internals.UpdateJourneyHandler_Tests;
 
 public class HandleAsync_Tests : TestHandler
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, CreateJourneyHandler>
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, UpdateJourneyHandler>
 	{
-		internal override CreateJourneyHandler GetHandler(Vars v) =>
+		internal override UpdateJourneyHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
 	}
 
-	private (CreateJourneyHandler, Setup.Vars) GetVars() =>
+	private (UpdateJourneyHandler, Setup.Vars) GetVars() =>
 		new Setup().GetVars();
 
 	[Fact]
@@ -24,13 +24,13 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new CreateJourneyQuery();
+		var command = new UpdateJourneyCommand();
 
 		// Act
-		await handler.HandleAsync(query);
+		await handler.HandleAsync(command);
 
 		// Assert
-		v.Log.Received().Vrb("Create Journey: {Query}", query);
+		v.Log.Received().Vrb("Update Journey: {Command}", command);
 	}
 
 	[Fact]
@@ -39,6 +39,8 @@ public class HandleAsync_Tests : TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
+		var journeyId = LongId<JourneyId>();
+		var version = Rnd.Lng;
 		var date = Rnd.DateF.Get();
 		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
@@ -46,14 +48,16 @@ public class HandleAsync_Tests : TestHandler
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var query = new CreateJourneyQuery(userId, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var command = new UpdateJourneyCommand(userId, journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
-		await handler.HandleAsync(query);
+		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().CreateAsync(Arg.Is<JourneyEntity>(j =>
+		await v.Repo.Received().UpdateAsync(Arg.Is<JourneyEntity>(j =>
 			j.UserId == userId
+			&& j.Id == journeyId
+			&& j.Version == version
 			&& j.Date == date.ToDateTime(TimeOnly.MinValue)
 			&& j.CarId == carId
 			&& j.StartMiles == startMiles
@@ -69,13 +73,13 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = LongId<JourneyId>();
-		v.Repo.CreateAsync(default!)
+		var expected = Rnd.Flip;
+		v.Repo.UpdateAsync<JourneyEntity>(default!)
 			.ReturnsForAnyArgs(expected);
-		var query = new CreateJourneyQuery();
+		var command = new UpdateJourneyCommand();
 
 		// Act
-		var result = await handler.HandleAsync(query);
+		var result = await handler.HandleAsync(command);
 
 		// Assert
 		var some = result.AssertSome();

@@ -2,8 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
+using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
+using RndF;
 
 namespace Mileage.Domain.SaveJourney.Internals;
 
@@ -18,6 +20,7 @@ namespace Mileage.Domain.SaveJourney.Internals;
 /// <param name="ToPlaceIds">Visited places</param>
 /// <param name="RateId">Rate ID</param>
 internal sealed record class UpdateJourneyCommand(
+	AuthUserId UserId,
 	JourneyId JourneyId,
 	long Version,
 	DateOnly Date,
@@ -27,4 +30,30 @@ internal sealed record class UpdateJourneyCommand(
 	PlaceId FromPlaceId,
 	PlaceId[]? ToPlaceIds,
 	RateId? RateId
-) : ICommand;
+) : ICommand
+{
+	/// <summary>
+	/// Update from a <see cref="SaveJourneyQuery"/>
+	/// </summary>
+	/// <param name="journeyId">Journey ID - set by <see cref="UpdateJourneyHandler.HandleAsync(UpdateJourneyCommand)"/></param>
+	/// <param name="query"></param>
+	public UpdateJourneyCommand(JourneyId journeyId, SaveJourneyQuery query) :
+		this(
+			UserId: query.UserId,
+			JourneyId: journeyId,
+			Version: query.Version ?? 0L,
+			Date: query.Date,
+			CarId: query.CarId,
+			StartMiles: query.StartMiles,
+			EndMiles: query.EndMiles,
+			FromPlaceId: query.FromPlaceId,
+			ToPlaceIds: query.ToPlaceIds,
+			RateId: query.RateId
+		)
+	{ }
+
+	/// <summary>
+	/// Allows quick creation in testing
+	/// </summary>
+	internal UpdateJourneyCommand() : this(new(), new(), Rnd.Lng, Rnd.Date, new(), Rnd.UInt, null, new(), null, null) { }
+}

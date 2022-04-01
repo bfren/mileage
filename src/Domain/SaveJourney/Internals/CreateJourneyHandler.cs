@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Jeebs.Collections;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Mileage.Persistence.Common.StrongIds;
@@ -41,7 +42,10 @@ internal sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jo
 				Date = query.Date.ToDateTime(TimeOnly.MinValue),
 				CarId = query.CarId,
 				StartMiles = (int)query.StartMiles,
-				FromPlaceId = query.FromPlaceId
+				EndMiles = (int?)query.EndMiles,
+				FromPlaceId = query.FromPlaceId,
+				ToPlaceIds = ImmutableList.Create(args: query.ToPlaceIds),
+				RateId = query.RateId
 			});
 	}
 }
