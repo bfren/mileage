@@ -7,7 +7,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
-using Mileage.Domain.CheckPlaceBelongsToUser;
+using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -54,15 +54,13 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		// If checks have failed, return with failure message
 		if (!carBelongsToUser || !placeBelongsToUser)
 		{
-			return F.None<bool, SettingsCheckFailedMsg>();
+			return F.None<bool, SaveSettingsCheckFailedMsg>();
 		}
 
 		// Add or update user settings
 		return await Settings
 			.StartFluentQuery()
-			.Where(
-				s => s.UserId, Compare.Equal, command.UserId
-			)
+			.Where(s => s.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<SettingsEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher
@@ -99,7 +97,7 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		{
 			PlaceId x =>
 				Dispatcher
-					.DispatchAsync(new CheckPlaceBelongsToUserQuery(userId, x))
+					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>

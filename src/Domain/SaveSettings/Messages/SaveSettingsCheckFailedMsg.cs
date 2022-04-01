@@ -5,5 +5,5 @@ using Jeebs.Messages;
 
 namespace Mileage.Domain.SaveSettings.Messages;
 
-/// <summary>Pre-save settings checks have failed</summary>
-public sealed record class SettingsCheckFailedMsg : Msg;
+/// <summary>Pre-save Settings checks have failed</summary>
+public sealed record class SaveSettingsCheckFailedMsg : Msg;
