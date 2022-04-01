@@ -26,14 +26,21 @@ log.Inf("Mileage Console app.");
 //  SETUP
 // ==========================================
 
-// Get dispatchers
 var dispatcher = app.Services.GetRequiredService<IDispatcher>();
+static void write(string text)
+{
+	var pad = new string('=', text.Length + 6);
+	Console.WriteLine();
+	Console.WriteLine(pad);
+	Console.WriteLine($"== {text} ==");
+	Console.WriteLine(pad);
+}
 
 // ==========================================
 //  RUN MIGRATIONS
 // ==========================================
 
-// Authentication
+write("MIGRATIONS");
 log.Inf("Migrate to latest database version.");
 await dispatcher.DispatchAsync(
 	new Q.MigrateToLatest.MigrateToLatestCommand()
@@ -43,6 +50,7 @@ await dispatcher.DispatchAsync(
 //  INSERT TEST USER
 // ==========================================
 
+write("INSERT USER");
 var userId = await dispatcher.DispatchAsync(
 	new Q.CreateUser.CreateUserQuery("Ben", "ben@bcgdesign.com", "fred")
 ).AuditAsync(
@@ -56,6 +64,7 @@ var userId = await dispatcher.DispatchAsync(
 //  INSERT TEST JOURNEY
 // ==========================================
 
+write("INSERT JOURNEY");
 var journeyId = await dispatcher.DispatchAsync(
 	new Q.SaveJourney.SaveJourneyQuery(userId, new(), Rnd.UInt, new())
 ).AuditAsync(
@@ -69,6 +78,7 @@ var journeyId = await dispatcher.DispatchAsync(
 //  DELETE TEST JOURNEY
 // ==========================================
 
+write("DELETE JOURNEY");
 await dispatcher.DispatchAsync(
 	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
 ).AuditAsync(
@@ -80,6 +90,7 @@ await dispatcher.DispatchAsync(
 //  LOAD SETTINGS
 // ==========================================
 
+write("LOAD SETTINGS");
 var settings = await dispatcher.DispatchAsync(
 	new Q.LoadSettings.LoadSettingsQuery(userId)
 ).UnwrapAsync(
@@ -95,6 +106,7 @@ log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
 //  TRUNCATE TABLES
 // ==========================================
 
+write("TRUNCATE TABLES");
 var authDb = app.Services.GetRequiredService<AuthDb>();
 
 var truncate = Task (string table) =>
