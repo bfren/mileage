@@ -42,7 +42,7 @@ internal sealed class DeleteJourneyHandler : QueryHandler<DeleteJourneyQuery, bo
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Journey.DeleteAsync(x),
-				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(query.JourneyId, query.UserId))
+				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(query.UserId, query.JourneyId))
 			);
 	}
 }

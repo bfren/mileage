@@ -10,6 +10,6 @@ namespace Mileage.Domain.DeleteJourney.Messages;
 /// <summary>
 /// The Journey does not exist, or does not belong to the specified User
 /// </summary>
-/// <param name="JourneyId">Journey ID</param>
 /// <param name="UserId">User ID</param>
-public sealed record class JourneyDoesNotExistMsg(JourneyId JourneyId, AuthUserId UserId) : Msg;
+/// <param name="JourneyId">Journey ID</param>
+public sealed record class JourneyDoesNotExistMsg(AuthUserId UserId, JourneyId JourneyId) : Msg;

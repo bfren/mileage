@@ -8,9 +8,9 @@ using Mileage.Persistence.Common.StrongIds;
 namespace Mileage.Domain.DeleteJourney;
 
 /// <inheritdoc cref="DeleteJourneyHandler"/>
-/// <param name="JourneyId">Journey ID</param>
 /// <param name="UserId">User ID</param>
+/// <param name="JourneyId">Journey ID</param>
 public sealed record class DeleteJourneyQuery(
-	JourneyId JourneyId,
-	AuthUserId UserId
+	AuthUserId UserId,
+	JourneyId JourneyId
 ) : IQuery<bool>;
