@@ -14,7 +14,7 @@
     },
 		"logging": {
 			"minimum": "Verbose",
-			"hooks": {
+			"providers": {
 				"console.serilog": {
 					"enabled": true
 				}
