@@ -1,0 +1,73 @@
+// Mileage Tracker: Unit Tests
+// Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
+
+using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Entities;
+using Mileage.Persistence.Repositories;
+
+namespace Mileage.Domain.SaveRate.Internals.UpdateRateHandler_Tests;
+
+public class HandleAsync_Tests : TestHandler
+{
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, UpdateRateHandler>
+	{
+		internal override UpdateRateHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (UpdateRateHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
+
+	[Fact]
+	public async Task Calls_Log_Vrb__With_Query()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+
+		// Act
+		await handler.HandleAsync(command);
+
+		// Assert
+		v.Log.Received().Vrb("Update Rate: {Command}", command);
+	}
+
+	[Fact]
+	public async Task Calls_Repo_CreateAsync__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var rateId = LongId<RateId>();
+		var version = Rnd.Lng;
+		var amountPerMileGBP = Rnd.Flt;
+		var command = new UpdateRateCommand(rateId, version, amountPerMileGBP);
+
+		// Act
+		await handler.HandleAsync(command);
+
+		// Assert
+		await v.Repo.Received().UpdateAsync(Arg.Is<RateEntity>(p =>
+			p.Id == rateId
+			&& p.Version == version
+			&& p.AmountPerMileGBP == amountPerMileGBP
+		));
+	}
+
+	[Fact]
+	public async void Calls_Repo_CreateAsync__Returns_Result()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var expected = Rnd.Flip;
+		v.Repo.UpdateAsync<RateEntity>(default!)
+			.ReturnsForAnyArgs(expected);
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+
+		// Act
+		var result = await handler.HandleAsync(command);
+
+		// Assert
+		var some = result.AssertSome();
+		Assert.Equal(expected, some);
+	}
+}
