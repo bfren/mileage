@@ -60,6 +60,6 @@ public sealed class MileageDb : Db
 
 		// Add type handlers
 		TypeMap.AddStrongIdTypeHandlers();
-		TypeMap.AddJsonTypeHandler<ImmutableList<PlaceId>>();
+		TypeMap.AddJsonTypeHandler<IImmutableList<PlaceId>>();
 	}
 }
