@@ -11,7 +11,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
 	{
@@ -45,9 +45,9 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng));
-		var journeyId = LongId<JourneyId>();
 		var userId = LongId<AuthUserId>();
-		var query = new DeleteJourneyQuery(journeyId, userId);
+		var journeyId = LongId<JourneyId>();
+		var query = new DeleteJourneyQuery(userId, journeyId);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -85,9 +85,9 @@ public class HandleAsync_Tests : TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(Create.None<JourneyToDelete>());
-		var journeyId = LongId<JourneyId>();
 		var userId = LongId<AuthUserId>();
-		var query = new DeleteJourneyQuery(journeyId, userId);
+		var journeyId = LongId<JourneyId>();
+		var query = new DeleteJourneyQuery(userId, journeyId);
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -104,9 +104,9 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = LongId<JourneyId>();
 		var userId = LongId<AuthUserId>();
-		var query = new DeleteJourneyQuery(journeyId, userId);
+		var journeyId = LongId<JourneyId>();
+		var query = new DeleteJourneyQuery(userId, journeyId);
 		var model = new JourneyToDelete(journeyId, Rnd.Lng);
 		v.Fluent.QuerySingleAsync<JourneyToDelete>()
 			.Returns(model);
@@ -129,9 +129,7 @@ public class HandleAsync_Tests : TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.DeleteAsync<JourneyToDelete>(default!)
 			.ReturnsForAnyArgs(expected);
-		var journeyId = LongId<JourneyId>();
-		var userId = LongId<AuthUserId>();
-		var query = new DeleteJourneyQuery(journeyId, userId);
+		var query = new DeleteJourneyQuery(LongId<AuthUserId>(), LongId<JourneyId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);

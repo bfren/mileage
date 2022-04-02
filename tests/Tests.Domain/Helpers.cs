@@ -101,6 +101,23 @@ internal static class Helpers
 		Expression<Func<TEntity, TValue>> property,
 		Compare compare,
 		TValue value
+	) =>
+		AssertWhere<TEntity, TValue>(call, property.GetPropertyInfo().UnsafeUnwrap().Name, compare, value);
+
+	/// <summary>
+	/// Validate a call to the fluent query where method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="compare"></param>
+	/// <param name="value"></param>
+	public static void AssertWhere<TEntity, TValue>(
+		ICall call,
+		string property,
+		Compare compare,
+		TValue value
 	)
 	{
 		// Check the method
@@ -118,10 +135,7 @@ internal static class Helpers
 			arg =>
 			{
 				var actual = Assert.IsAssignableFrom<Expression<Func<TEntity, TValue>>>(arg);
-				Assert.Equal(
-					property.GetPropertyInfo().UnsafeUnwrap().Name,
-					actual.GetPropertyInfo().UnsafeUnwrap().Name
-				);
+				Assert.Equal(property, actual.GetPropertyInfo().UnsafeUnwrap().Name);
 			},
 
 			// Check that the correct comparison is being used
@@ -147,7 +161,6 @@ internal static class Helpers
 	/// <typeparam name="TValue">Column select value type</typeparam>
 	/// <param name="call">Call</param>
 	/// <param name="property"></param>
-	/// <param name="compare"></param>
 	/// <param name="values"></param>
 	public static void AssertWhereIn<TEntity, TValue>(
 		ICall call,

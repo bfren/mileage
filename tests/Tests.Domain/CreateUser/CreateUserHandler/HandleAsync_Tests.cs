@@ -6,7 +6,7 @@ using Jeebs.Auth.Data.Entities;
 
 namespace Mileage.Domain.CreateUser.CreateUserHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<IAuthUserRepository, AuthUserEntity, AuthUserId, CreateUserHandler>
 	{

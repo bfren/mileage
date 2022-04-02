@@ -8,7 +8,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
-public class CheckPlaceBelongsToUser_Tests : TestHandler
+public class CheckPlaceBelongsToUser_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
 	{

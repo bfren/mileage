@@ -8,7 +8,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveRate.Internals.CreateRate.CreateRateHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<IRateRepository, RateEntity, RateId, CreateRateHandler>
 	{

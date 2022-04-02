@@ -8,7 +8,7 @@ using Jeebs.Logging;
 using NSubstitute.Extensions;
 using StrongId;
 
-namespace Mileage.Domain;
+namespace Abstracts;
 
 public abstract class TestHandler
 {

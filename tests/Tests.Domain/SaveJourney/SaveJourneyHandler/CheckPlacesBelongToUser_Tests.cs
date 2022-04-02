@@ -8,7 +8,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveJourney.SaveJourneyHandler_Tests;
 
-public class CheckPlacesBelongToUser_Tests : TestHandler
+public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, SaveJourneyHandler>
 	{

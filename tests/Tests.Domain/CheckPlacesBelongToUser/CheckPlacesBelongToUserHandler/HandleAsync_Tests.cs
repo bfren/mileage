@@ -10,7 +10,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlacesBelongToUserHandler>
 	{

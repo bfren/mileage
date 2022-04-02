@@ -12,7 +12,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveCar.SaveCarHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
 	private class Setup : Setup<ICarRepository, CarEntity, CarId, SaveCarHandler>
 	{
