@@ -19,7 +19,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test02_Calls_FluentQuery_WhereSingleAsync__Receives_None__Audits_Msg();
 
-	public abstract Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_CarDoesNotExistMsg();
+	public abstract Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg();
 
 	public abstract Task Test04_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__With_Correct_Value();
 

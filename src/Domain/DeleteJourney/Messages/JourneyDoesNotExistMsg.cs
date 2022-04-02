@@ -8,7 +8,7 @@ using Mileage.Persistence.Common.StrongIds;
 namespace Mileage.Domain.DeleteJourney.Messages;
 
 /// <summary>
-/// The Journey does not exist, or does not belong to the specified User
+/// The journey does not exist, or does not belong to the specified user
 /// </summary>
 /// <param name="UserId">User ID</param>
 /// <param name="JourneyId">Journey ID</param>

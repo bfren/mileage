@@ -2,33 +2,33 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Mileage.Domain.DeleteCar.Messages;
+using Mileage.Domain.DeleteRate.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.DeleteCar.DeleteCarHandler_Tests;
+namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Delete_Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDelete>
+	private class Setup : Delete_Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDelete>
 	{
-		public Setup() : base("Car") { }
+		public Setup() : base("Rate") { }
 
-		internal override DeleteCarHandler GetHandler(Vars v) =>
+		internal override DeleteRateHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
 
-		internal override DeleteCarCommand GetCommand(AuthUserId? userId = null, CarId? entityId = null)
+		internal override DeleteRateCommand GetCommand(AuthUserId? userId = null, RateId? entityId = null)
 		{
 			if (userId is not null && entityId is not null)
 			{
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<CarId>());
+			return new(LongId<AuthUserId>(), LongId<RateId>());
 		}
 
-		internal override CarToDelete EmptyModel { get; } = new(LongId<CarId>(), Rnd.Lng);
+		internal override RateToDelete EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng);
 	}
 
 	[Fact]
@@ -52,7 +52,7 @@ public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 	[Fact]
 	public override async Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg()
 	{
-		await new Setup().Test03<CarDoesNotExistMsg>(msg => msg.UserId, msg => msg.CarId);
+		await new Setup().Test03<RateDoesNotExistMsg>(msg => msg.UserId, msg => msg.RateId);
 	}
 
 	[Fact]

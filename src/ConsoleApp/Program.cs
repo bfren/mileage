@@ -137,7 +137,7 @@ Console.Read();
 
 write("DELETE JOURNEY");
 await dispatcher.DispatchAsync(
-	new Q.DeleteJourney.DeleteJourneyQuery(userId, journeyId)
+	new Q.DeleteJourney.DeleteJourneyCommand(userId, journeyId)
 ).AuditAsync(
 	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
 	none: r => log.Err("Failed to delete Journey: {Reason}.", r)

@@ -2,8 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Jeebs.Data.Enums;
-using Jeebs.Messages;
 using Mileage.Domain.DeleteJourney.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -11,133 +9,62 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyHandler>
+	private class Setup : Delete_Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDelete>
 	{
+		public Setup() : base("Journey") { }
+
 		internal override DeleteJourneyHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
-	}
 
-	private (DeleteJourneyHandler, Setup.Vars) GetVars() =>
-		new Setup().GetVars();
+		internal override DeleteJourneyCommand GetCommand(AuthUserId? userId = null, JourneyId? entityId = null)
+		{
+			if (userId is not null && entityId is not null)
+			{
+				return new(userId, entityId);
+			}
 
-	[Fact]
-	public async Task Calls_Log_Vrb__With_Query()
-	{
-		// Arrange
-		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng));
-		var query = new DeleteJourneyQuery(new(), new());
+			return new(LongId<AuthUserId>(), LongId<JourneyId>());
+		}
 
-		// Act
-		await handler.HandleAsync(query);
-
-		// Assert
-		v.Log.Received().Vrb("Delete Journey: {Query}", query);
+		internal override JourneyToDelete EmptyModel =>
+			new(LongId<JourneyId>(), Rnd.Lng);
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_Where__With_Correct_Values()
+	public override async Task Test00_Calls_Log_Vrb__With_Query()
 	{
-		// Arrange
-		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng));
-		var userId = LongId<AuthUserId>();
-		var journeyId = LongId<JourneyId>();
-		var query = new DeleteJourneyQuery(userId, journeyId);
-
-		// Act
-		await handler.HandleAsync(query);
-
-		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
-			c => Helpers.AssertWhere<JourneyEntity, JourneyId>(c, x => x.Id, Compare.Equal, journeyId),
-			c => Helpers.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
-			_ => { }
-		);
+		await new Setup().Test00();
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_None__Audits_Msg()
+	public override async Task Test01_Calls_FluentQuery_Where__With_Correct_Values()
 	{
-		// Arrange
-		var (handler, v) = GetVars();
-		var msg = new TestMsg();
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(F.None<JourneyToDelete>(msg));
-		var query = new DeleteJourneyQuery(new(), new());
-
-		// Act
-		await handler.HandleAsync(query);
-
-		// Assert
-		v.Log.Received().Msg(msg);
+		await new Setup().Test01();
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_JourneyDoesNotExistMsg()
+	public override async Task Test02_Calls_FluentQuery_WhereSingleAsync__Receives_None__Audits_Msg()
 	{
-		// Arrange
-		var (handler, v) = GetVars();
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(Create.None<JourneyToDelete>());
-		var userId = LongId<AuthUserId>();
-		var journeyId = LongId<JourneyId>();
-		var query = new DeleteJourneyQuery(userId, journeyId);
-
-		// Act
-		var result = await handler.HandleAsync(query);
-
-		// Assert
-		var none = result.AssertNone();
-		var msg = Assert.IsType<JourneyDoesNotExistMsg>(none);
-		Assert.Equal(journeyId, msg.JourneyId);
-		Assert.Equal(userId, msg.UserId);
+		await new Setup().Test02();
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__With_Correct_Value()
+	public override async Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg()
 	{
-		// Arrange
-		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var journeyId = LongId<JourneyId>();
-		var query = new DeleteJourneyQuery(userId, journeyId);
-		var model = new JourneyToDelete(journeyId, Rnd.Lng);
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(model);
-
-		// Act
-		await handler.HandleAsync(query);
-
-		// Assert
-		await v.Repo.Received().DeleteAsync(model);
+		await new Setup().Test03<JourneyDoesNotExistMsg>(msg => msg.UserId, msg => msg.JourneyId);
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__Returns_Result()
+	public override async Task Test04_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__With_Correct_Value()
 	{
-		// Arrange
-		var (handler, v) = GetVars();
-		var model = new JourneyToDelete(LongId<JourneyId>(), Rnd.Lng);
-		v.Fluent.QuerySingleAsync<JourneyToDelete>()
-			.Returns(model);
-		var expected = Rnd.Flip;
-		v.Repo.DeleteAsync<JourneyToDelete>(default!)
-			.ReturnsForAnyArgs(expected);
-		var query = new DeleteJourneyQuery(LongId<AuthUserId>(), LongId<JourneyId>());
-
-		// Act
-		var result = await handler.HandleAsync(query);
-
-		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		await new Setup().Test04((journeyId, version) => new(journeyId, version));
 	}
 
-	public sealed record class TestMsg : Msg;
+	[Fact]
+	public override async Task Test05_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__Returns_Result()
+	{
+		await new Setup().Test05();
+	}
 }
