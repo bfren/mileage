@@ -225,8 +225,7 @@ public class HandleAsync_Tests : TestHandler
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
 			Arg.Is<UpdateJourneyCommand>(x =>
-				x.UserId == userId
-				&& x.JourneyId == journeyId
+				x.JourneyId == journeyId
 				&& x.Version == version
 				&& x.Date == date
 				&& x.CarId == carId

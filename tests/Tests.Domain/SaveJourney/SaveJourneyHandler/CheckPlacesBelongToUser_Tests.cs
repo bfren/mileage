@@ -20,6 +20,20 @@ public class CheckPlacesBelongToUser_Tests : TestHandler
 		new Setup().GetVars();
 
 	[Fact]
+	public async Task PlaceIds_Null__Returns_True()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+
+		// Act
+		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), null);
+
+		// Assert
+		Assert.True(result);
+		await v.Dispatcher.DidNotReceiveWithAnyArgs().DispatchAsync(default!);
+	}
+
+	[Fact]
 	public async Task Calls_Dispatcher_DispatchAsync__Receives_Some__Returns_Value()
 	{
 		// Arrange

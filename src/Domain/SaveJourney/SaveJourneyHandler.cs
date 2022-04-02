@@ -47,8 +47,8 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 		// Ensure the car, from place, to places, and rate belong to the user (or that the rate is null)
 		var carBelongsToUser = await CheckCarBelongsToUser(query.UserId, query.CarId);
 		var fromBelongsToUser = await CheckPlacesBelongToUser(query.UserId, query.FromPlaceId);
-		var toBelongToUser = query.ToPlaceIds is null || await CheckPlacesBelongToUser(query.UserId, query.ToPlaceIds);
-		var rateBelongsToUser = query.RateId is null || await CheckRateBelongsToUser(query.UserId, query.RateId);
+		var toBelongToUser = await CheckPlacesBelongToUser(query.UserId, query.ToPlaceIds);
+		var rateBelongsToUser = await CheckRateBelongsToUser(query.UserId, query.RateId);
 
 		// If checks have failed, return with failure message
 		if (!carBelongsToUser || !fromBelongsToUser || !toBelongToUser || !rateBelongsToUser)
@@ -89,24 +89,38 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeIds"></param>
-	internal Task<bool> CheckPlacesBelongToUser(AuthUserId userId, params PlaceId[] placeIds) =>
-		Dispatcher
-			.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, placeIds))
-			.IfSomeAsync(
-				x => { if (!x) { Log.Dbg("Places {PlaceIds} do not all belong to user {UserId}.", placeIds.Select(p => p.Value), userId.Value); } }
-			)
-			.IsTrueAsync();
+	internal Task<bool> CheckPlacesBelongToUser(AuthUserId userId, params PlaceId[]? placeIds) =>
+		placeIds switch
+		{
+			PlaceId[] p =>
+				Dispatcher
+					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, p))
+					.IfSomeAsync(
+						x => { if (!x) { Log.Dbg("Places {PlaceIds} do not all belong to user {UserId}.", p.Select(p => p.Value), userId.Value); } }
+					)
+					.IsTrueAsync(),
+
+			_ =>
+				Task.FromResult(true)
+		};
 
 	/// <summary>
 	/// Returns true if <paramref name="rateId"/> belongs to <paramref name="userId"/>
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
-	internal Task<bool> CheckRateBelongsToUser(AuthUserId userId, RateId rateId) =>
-		Dispatcher
-			.DispatchAsync(new CheckRateBelongsToUserQuery(userId, rateId))
-			.IfSomeAsync(
-				x => { if (!x) { Log.Dbg("Rate {RateId} does not belong to user {UserId}.", rateId.Value, userId.Value); } }
-			)
-			.IsTrueAsync();
+	internal Task<bool> CheckRateBelongsToUser(AuthUserId userId, RateId? rateId) =>
+		rateId switch
+		{
+			RateId r =>
+				Dispatcher
+					.DispatchAsync(new CheckRateBelongsToUserQuery(userId, rateId))
+					.IfSomeAsync(
+						x => { if (!x) { Log.Dbg("Rate {RateId} does not belong to user {UserId}.", rateId.Value, userId.Value); } }
+					)
+					.IsTrueAsync(),
+
+			_ =>
+				Task.FromResult(true)
+		};
 }

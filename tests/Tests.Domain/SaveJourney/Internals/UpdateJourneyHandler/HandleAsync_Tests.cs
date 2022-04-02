@@ -1,7 +1,6 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -38,7 +37,6 @@ public class HandleAsync_Tests : TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
 		var journeyId = LongId<JourneyId>();
 		var version = Rnd.Lng;
 		var date = Rnd.DateF.Get();
@@ -48,15 +46,14 @@ public class HandleAsync_Tests : TestHandler
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var command = new UpdateJourneyCommand(userId, journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var command = new UpdateJourneyCommand(journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
 		await handler.HandleAsync(command);
 
 		// Assert
 		await v.Repo.Received().UpdateAsync(Arg.Is<JourneyEntity>(j =>
-			j.UserId == userId
-			&& j.Id == journeyId
+			j.Id == journeyId
 			&& j.Version == version
 			&& j.Date == date.ToDateTime(TimeOnly.MinValue)
 			&& j.CarId == carId

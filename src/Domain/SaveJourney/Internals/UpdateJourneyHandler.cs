@@ -40,7 +40,6 @@ internal sealed class UpdateJourneyHandler : CommandHandler<UpdateJourneyCommand
 			{
 				Id = command.JourneyId,
 				Version = command.Version,
-				UserId = command.UserId,
 				Date = command.Date.ToDateTime(TimeOnly.MinValue),
 				CarId = command.CarId,
 				StartMiles = (int)command.StartMiles,

@@ -34,7 +34,7 @@ public sealed record class SaveJourneyQuery(
 ) : IQuery<JourneyId>
 {
 	/// <summary>
-	/// Save with minimum required values (only works for new journeys)
+	/// Save with minimum required values (for new journeys)
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>

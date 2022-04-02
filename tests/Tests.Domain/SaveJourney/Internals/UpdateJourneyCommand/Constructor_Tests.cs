@@ -14,7 +14,6 @@ public class Constructor_Tests
 	public void Receives_SaveJourneyQuery__Sets_Correct_Values(long? queryVersion, long expectedVersion)
 	{
 		// Arrange
-		var userId = LongId<AuthUserId>();
 		var journeyId = LongId<JourneyId>();
 		var version = queryVersion;
 		var date = Rnd.Date;
@@ -24,13 +23,12 @@ public class Constructor_Tests
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var saveJourneyQuery = new SaveJourneyQuery(userId, journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var saveJourneyQuery = new SaveJourneyQuery(LongId<AuthUserId>(), journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
 		var result = new UpdateJourneyCommand(journeyId, saveJourneyQuery);
 
 		// Assert
-		Assert.Equal(userId, result.UserId);
 		Assert.Equal(journeyId, result.JourneyId);
 		Assert.Equal(expectedVersion, result.Version);
 		Assert.Equal(date, result.Date);
