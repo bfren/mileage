@@ -18,7 +18,7 @@ namespace Mileage.Domain.SaveSettings;
 /// <summary>
 /// Save settings for a user - create if they don't exist, or update if they do
 /// </summary>
-public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
+internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 {
 	private IDispatcher Dispatcher { get; init; }
 

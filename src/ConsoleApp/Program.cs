@@ -124,6 +124,36 @@ var journeyId = await dispatcher.DispatchAsync(
 );
 
 // ==========================================
+//  LOAD SETTINGS
+// ==========================================
+
+write("LOAD SETTINGS");
+var settings = await dispatcher.DispatchAsync(
+	new Q.LoadSettings.LoadSettingsQuery(userId)
+).UnwrapAsync(
+	x => x.Value(() => throw new InvalidOperationException())
+);
+log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
+
+// ==========================================
+//  SAVE SETTINGS
+// ==========================================
+
+await dispatcher.DispatchAsync(
+	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultCarId = carId })
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	none: r => log.Err("Failed to save settings: {Reason}.", r)
+);
+
+await dispatcher.DispatchAsync(
+	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultFromPlaceId = placeId })
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	none: r => log.Err("Failed to save settings: {Reason}.", r)
+);
+
+// ==========================================
 //  PAUSE
 // ==========================================
 
@@ -148,52 +178,44 @@ await dispatcher.DispatchAsync(
 // ==========================================
 
 write("DELETE RATE");
-//await dispatcher.DispatchAsync(
-//	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
-//).AuditAsync(
-//	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
-//	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
-//);
+await dispatcher.DispatchAsync(
+	new Q.DeleteRate.DeleteRateCommand(userId, rateId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Rate deleted."); } else { log.Dbg("Rate not deleted."); } },
+	none: r => log.Err("Failed to delete Rate: {Reason}.", r)
+);
 
 // ==========================================
 //  DELETE TEST PLACE
 // ==========================================
 
 write("DELETE PLACE");
-//await dispatcher.DispatchAsync(
-//	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
-//).AuditAsync(
-//	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
-//	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
-//);
+await dispatcher.DispatchAsync(
+	new Q.DeletePlace.DeletePlaceCommand(userId, placeId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Place deleted."); } else { log.Dbg("Place not deleted."); } },
+	none: r => log.Err("Failed to delete Place: {Reason}.", r)
+);
 
 // ==========================================
 //  DELETE TEST CAR
 // ==========================================
 
 write("DELETE CAR");
-//await dispatcher.DispatchAsync(
-//	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
-//).AuditAsync(
-//	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
-//	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
-//);
-
-// ==========================================
-//  LOAD SETTINGS
-// ==========================================
-
-write("LOAD SETTINGS");
-var settings = await dispatcher.DispatchAsync(
-	new Q.LoadSettings.LoadSettingsQuery(userId)
-).UnwrapAsync(
-	x => x.Value(() => throw new InvalidOperationException())
+await dispatcher.DispatchAsync(
+	new Q.DeleteCar.DeleteCarCommand(userId, carId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Car deleted."); } else { log.Dbg("Car not deleted."); } },
+	none: r => log.Err("Failed to delete Car: {Reason}.", r)
 );
-log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
 
 // ==========================================
-//  SAVE SETTINGS
+//  PAUSE
 // ==========================================
+
+write("PAUSE");
+Console.WriteLine("Press any key when ready.");
+Console.Read();
 
 // ==========================================
 //  TRUNCATE TABLES
