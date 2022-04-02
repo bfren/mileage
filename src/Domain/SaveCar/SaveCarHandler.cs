@@ -40,13 +40,16 @@ internal sealed class SaveCarHandler : QueryHandler<SaveCarQuery, CarId>
 	public override async Task<Maybe<CarId>> HandleAsync(SaveCarQuery query)
 	{
 		// Ensure the car belongs to the user
-		var carBelongsToUser = await Dispatcher
-			.DispatchAsync(new CheckCarBelongsToUserQuery(query.UserId, query.CarId))
-			.IsTrueAsync();
-
-		if (!carBelongsToUser)
+		if (query.CarId is not null)
 		{
-			return F.None<CarId>(new CarDoesNotBelongToUserMsg(query.CarId, query.UserId));
+			var carBelongsToUser = await Dispatcher
+					.DispatchAsync(new CheckCarBelongsToUserQuery(query.UserId, query.CarId))
+					.IsTrueAsync();
+
+			if (!carBelongsToUser)
+			{
+				return F.None<CarId>(new CarDoesNotBelongToUserMsg(query.UserId, query.CarId));
+			}
 		}
 
 		// Create or update car
@@ -57,7 +60,7 @@ internal sealed class SaveCarHandler : QueryHandler<SaveCarQuery, CarId>
 			.SwitchAsync(
 				some: x => Dispatcher
 					.DispatchAsync(new Internals.UpdateCarCommand(x.Id, query.Version, query.Description))
-					.BindAsync(_ => F.Some(query.CarId)),
+					.BindAsync(_ => F.Some(x.Id)),
 				none: () => Dispatcher
 					.DispatchAsync(new Internals.CreateCarQuery(query.UserId, query.Description))
 			);

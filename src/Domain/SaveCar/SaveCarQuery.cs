@@ -14,7 +14,26 @@ namespace Mileage.Domain.SaveCar;
 /// <param name="Description">Description</param>
 public sealed record class SaveCarQuery(
 	AuthUserId UserId,
-	CarId CarId,
+	CarId? CarId,
 	long Version,
 	string Description
-) : IQuery<CarId>;
+) : IQuery<CarId>
+{
+	/// <summary>
+	/// Save with minimum required values (for new cars)
+	/// </summary>
+	/// <param name="userId"></param>
+	/// <param name="description"></param>
+	public SaveCarQuery(AuthUserId userId, string description) : this(
+		UserId: userId,
+		CarId: null,
+		Version: 0L,
+		Description: description
+	)
+	{ }
+
+	/// <summary>
+	/// Allows quick creation in testing
+	/// </summary>
+	public SaveCarQuery() : this(new(), null, 0L, string.Empty) { }
+}

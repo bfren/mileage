@@ -8,6 +8,6 @@ using Mileage.Persistence.Common.StrongIds;
 namespace Mileage.Domain.SaveCar.Messages;
 
 /// <summary>Car does not belong to a user</summary>
-/// <param name="CarId"></param>
 /// <param name="UserId"></param>
-public sealed record class CarDoesNotBelongToUserMsg(CarId CarId, AuthUserId UserId) : Msg;
+/// <param name="CarId"></param>
+public sealed record class CarDoesNotBelongToUserMsg(AuthUserId UserId, CarId CarId) : Msg;
