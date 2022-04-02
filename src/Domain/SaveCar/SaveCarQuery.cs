@@ -31,9 +31,4 @@ public sealed record class SaveCarQuery(
 		Description: description
 	)
 	{ }
-
-	/// <summary>
-	/// Allows quick creation in testing
-	/// </summary>
-	public SaveCarQuery() : this(new(), null, 0L, string.Empty) { }
 }

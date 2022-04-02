@@ -55,7 +55,8 @@ internal sealed class SaveCarHandler : QueryHandler<SaveCarQuery, CarId>
 		// Create or update car
 		return await Car
 			.StartFluentQuery()
-			.Where(s => s.Id, Compare.Equal, query.CarId)
+			.Where(x => x.Id, Compare.Equal, query.CarId)
+			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<CarEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher

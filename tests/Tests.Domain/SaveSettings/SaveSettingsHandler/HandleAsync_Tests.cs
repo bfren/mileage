@@ -45,7 +45,7 @@ public class HandleAsync_Tests : TestHandler
 
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
-			Arg.Is<CheckCarBelongsToUserQuery>(q => q.UserId == userId && q.CarId == carId)
+			Arg.Is<CheckCarBelongsToUserQuery>(x => x.UserId == userId && x.CarId == carId)
 		);
 	}
 
@@ -69,7 +69,7 @@ public class HandleAsync_Tests : TestHandler
 
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
-			Arg.Is<CheckPlacesBelongToUserQuery>(q => q.UserId == userId && q.PlaceIds[0] == placeId)
+			Arg.Is<CheckPlacesBelongToUserQuery>(x => x.UserId == userId && x.PlaceIds[0] == placeId)
 		);
 	}
 

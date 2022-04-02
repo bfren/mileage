@@ -46,10 +46,10 @@ public class HandleAsync_Tests : TestHandler
 		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().UpdateAsync(Arg.Is<CarEntity>(c =>
-			c.Id == carId
-			&& c.Version == version
-			&& c.Description == description
+		await v.Repo.Received().UpdateAsync(Arg.Is<CarEntity>(x =>
+			x.Id == carId
+			&& x.Version == version
+			&& x.Description == description
 		));
 	}
 

@@ -46,9 +46,9 @@ public class HandleAsync_Tests : TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Repo.Received().CreateAsync(Arg.Is<CarEntity>(c =>
-			c.UserId == userId
-			&& c.Description == description
+		await v.Repo.Received().CreateAsync(Arg.Is<CarEntity>(x =>
+			x.UserId == userId
+			&& x.Description == description
 		));
 	}
 

@@ -59,8 +59,8 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 		// Add or update Journey
 		return await Journey
 			.StartFluentQuery()
-			.Where(s => s.Id, Compare.Equal, query.JourneyId)
-			.Where(s => s.UserId, Compare.Equal, query.UserId)
+			.Where(x => x.Id, Compare.Equal, query.JourneyId)
+			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<JourneyEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher
