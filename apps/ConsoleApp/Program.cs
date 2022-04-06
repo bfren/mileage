@@ -1,14 +1,10 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Data;
-using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Microsoft.Extensions.DependencyInjection;
 using Mileage.Domain;
-using Mileage.Persistence.Common.StrongIds;
 using RndF;
-using StrongId;
 using Q = Mileage.Domain;
 
 // ==========================================
@@ -310,32 +306,9 @@ pause();
 // ==========================================
 
 write("TRUNCATE TABLES");
-var authDb = app.Services.GetRequiredService<AuthDb>();
-
-Task truncate(string table, IDbTransaction transaction)
-{
-	log.Dbg("Truncating table {Table}.", table);
-	return authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text, transaction);
-}
-
-using (var w = authDb.UnitOfWork)
-{
-	await truncate("\"auth\".\"User\"", w.Transaction);
-	await truncate("\"mileage\".\"Car\"", w.Transaction);
-	await truncate("\"mileage\".\"Journey\"", w.Transaction);
-	await truncate("\"mileage\".\"Place\"", w.Transaction);
-	await truncate("\"mileage\".\"Rate\"", w.Transaction);
-	await truncate("\"mileage\".\"Settings\"", w.Transaction);
-}
-
-// ==========================================
-//  MODELS
-// ==========================================
-
-public sealed record class IncompleteModel(
-	JourneyId Id,
-	int Version,
-	CarId CarId,
-	uint StartMiles,
-	uint? EndMiles
-) : IWithId<JourneyId>;
+await dispatcher.DispatchAsync(
+	new Q.TruncateEverything.TruncateEverythingCommand()
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Tables truncated."); } else { log.Dbg("Tables not truncated."); } },
+	none: r => log.Err("Failed to truncate tables: {Reason}.", r)
+);

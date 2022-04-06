@@ -4,11 +4,19 @@
 using Jeebs.Apps.Web;
 using Jeebs.Mvc.Data;
 using Microsoft.AspNetCore.Mvc;
+using Mileage.Domain;
 
 namespace Mileage.WebApp;
 
 public sealed class App : RazorApp
 {
+	public override void ConfigureServices(HostBuilderContext ctx, IServiceCollection services)
+	{
+		base.ConfigureServices(ctx, services);
+
+		_ = services.AddData();
+	}
+
 	protected override void ConfigureServicesMvcOptions(MvcOptions opt)
 	{
 		base.ConfigureServicesMvcOptions(opt);
