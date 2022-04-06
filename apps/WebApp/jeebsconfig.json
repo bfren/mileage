@@ -1,0 +1,31 @@
+{
+  "jeebs": {
+    "app": {
+      "name": "Web App",
+      "suite": "Mileage"
+    },
+    "db": {
+      "default": "rpi",
+      "connections": {
+        "rpi": {
+          "connectionString": ""
+        }
+      }
+    },
+		"logging": {
+			"minimum": "Verbose",
+			"providers": {
+				"console.serilog": {
+					"enabled": true
+				}
+			}
+		},
+		"services": {
+			"console": {
+				"serilog": {
+					"addPrefix": false
+				}
+			}
+		}
+  }
+}

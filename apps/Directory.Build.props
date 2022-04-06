@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-
+	
 	<!-- Standard Configuration -->
-	<PropertyGroup Label="Framework and Language">
-		<TargetFrameworks>net7.0</TargetFrameworks>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
+		<OutputType>Exe</OutputType>
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyName>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
 		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	</PropertyGroup>
@@ -18,56 +20,9 @@
 		<Using Include="MaybeF"/>
 		<Using Include="MaybeF.Linq"/>
 	</ItemGroup>
-
-	<!-- Enable Internal Testing -->
-	<ItemGroup Label="Test Internals">
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>Tests.$(MSBuildProjectName.Replace(" ", "_"))</_Parameter1>
-		</AssemblyAttribute>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
-		</AssemblyAttribute>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Domain\Domain.csproj" />
+		<ProjectReference Include="..\..\src\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
-
-	<!-- Get Paths to Files -->
-	<PropertyGroup>
-		<LicenceFile>LICENSE</LicenceFile>
-		<LicencePath>$([MSBuild]::GetPathOfFileAbove('$(LicenceFile)'))</LicencePath>
-	</PropertyGroup>
-	<PropertyGroup>
-		<ReadmeFile>README.md</ReadmeFile>
-		<ReadmePath>$([MSBuild]::GetPathOfFileAbove('$(ReadmeFile)', '$(MSBuildProjectDirectory)'))</ReadmePath>
-	</PropertyGroup>
-	<PropertyGroup>
-		<VersionFile>Version</VersionFile>
-		<VersionPath>$([MSBuild]::GetPathOfFileAbove('$(VersionFile)'))</VersionPath>
-	</PropertyGroup>
-
-	<!-- Import Files -->
-	<ItemGroup Label="Files" Condition="'$(Configuration)'=='Release'">
-		<None Include="$(LicencePath)" Pack="true" PackagePath="/"/>
-		<None Include="$(ReadmePath)" Pack="true" PackagePath="/"/>
-	</ItemGroup>
-
-	<!-- Get Version -->
-	<PropertyGroup Label="Version">
-		<MileageVersion>$([System.IO.File]::ReadAllText('$(VersionPath)'))</MileageVersion>
-	</PropertyGroup>
-
-	<!-- Package Configuration -->
-	<PropertyGroup Label="Package">
-		<Authors>bfren</Authors>
-		<Company>bfren.dev</Company>
-		<Copyright>Copyright © bfren.dev $([System.DateTime]::Now.ToString(yyyy))</Copyright>
-		<Version>$(MileageVersion)</Version>
-		<Description>$(MSBuildProjectName) library</Description>
-		<RepositoryUrl>https://github.com/bfren/mileage</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-	</PropertyGroup>
-
-	<!-- Documentation -->
-	<PropertyGroup Label="Documentation" Condition="'$(Configuration)'=='Release'">
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	</PropertyGroup>
 
 </Project>
