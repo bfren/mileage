@@ -1,0 +1,33 @@
+/// <reference path="mileage" />
+
+* {
+	font-variant-numeric: lining-nums;
+}
+
+html {
+	font-display: fallback;
+	font-size: 85%;
+
+	@include media-breakpoint-up(md) {
+		font-size: 90%;
+	}
+
+	@include media-breakpoint-up(xl) {
+		font-size: 95%;
+	}
+
+	@include media-breakpoint-up(xxl) {
+		font-size: 100%;
+	}
+}
+
+a {
+	outline: 0 none;
+}
+
+%serif-heading {
+	font-family: $font-family-serif;
+	font-weight: 600;
+	letter-spacing: -0.05rem;
+	font-variant-numeric: lining-nums;
+}
