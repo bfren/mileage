@@ -19,17 +19,13 @@ public class CspNonceTagHelper : UrlResolutionTagHelper
 	private const string ScriptTag = "script";
 	private const string StyleTag = "style";
 	private const string CspNonceAttributeName = "csp-add-nonce";
-	private readonly ICspConfigurationOverrideHelper CspConfigOverride;
-	private readonly IHeaderOverrideHelper HeaderOverride;
 
-	public CspNonceTagHelper(
-		IUrlHelperFactory urlHelperFactory,
-		HtmlEncoder htmlEncoder
-	) : base(urlHelperFactory, htmlEncoder)
-	{
-		CspConfigOverride = new CspConfigurationOverrideHelper();
-		HeaderOverride = new HeaderOverrideHelper(new CspReportHelper());
-	}
+	private ICspConfigurationOverrideHelper CspOverride { get; }
+	private IHeaderOverrideHelper HeaderOverride { get; }
+
+	public CspNonceTagHelper(IUrlHelperFactory urlHelperFactory, HtmlEncoder htmlEncoder)
+		: base(urlHelperFactory, htmlEncoder) =>
+		(CspOverride, HeaderOverride) = (new CspConfigurationOverrideHelper(), new HeaderOverrideHelper(new CspReportHelper()));
 
 	internal CspNonceTagHelper(
 		ICspConfigurationOverrideHelper overrideHelper,
@@ -38,7 +34,7 @@ public class CspNonceTagHelper : UrlResolutionTagHelper
 		HtmlEncoder htmlEncoder
 	) : base(urlHelperFactory, htmlEncoder)
 	{
-		CspConfigOverride = overrideHelper;
+		CspOverride = overrideHelper;
 		HeaderOverride = headerOverride;
 	}
 
@@ -51,7 +47,9 @@ public class CspNonceTagHelper : UrlResolutionTagHelper
 	public override void Process(TagHelperContext context, TagHelperOutput output)
 	{
 		if (!UseCspNonce)
+		{
 			return;
+		}
 
 		var httpContext = new HttpContextWrapper(ViewContext.HttpContext);
 		string nonce;
@@ -60,17 +58,17 @@ public class CspNonceTagHelper : UrlResolutionTagHelper
 
 		if (tag == ScriptTag)
 		{
-			nonce = CspConfigOverride.GetCspScriptNonce(httpContext);
+			nonce = CspOverride.GetCspScriptNonce(httpContext);
 			contextMarkerKey = "NWebsecScriptNonceSet";
 		}
 		else if (tag == StyleTag)
 		{
-			nonce = CspConfigOverride.GetCspStyleNonce(httpContext);
+			nonce = CspOverride.GetCspStyleNonce(httpContext);
 			contextMarkerKey = "NWebsecStyleNonceSet";
 		}
 		else
 		{
-			throw new Exception($"Something went horribly wrong. You shouldn't be here for the tag {tag}.");
+			throw new InvalidProgramException($"Something went horribly wrong. You shouldn't be here for the tag {tag}.");
 		}
 
 		// First reference to a nonce, set header and mark that header has been set. We only need to set it once.
