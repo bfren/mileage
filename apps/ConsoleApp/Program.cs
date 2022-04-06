@@ -1,15 +1,14 @@
-// Mileage Tracker
+// Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Microsoft.Extensions.DependencyInjection;
 using Mileage.Domain;
+using Mileage.Persistence.Common.StrongIds;
 using RndF;
+using StrongId;
 using Q = Mileage.Domain;
 
 // ==========================================
@@ -29,6 +28,7 @@ log.Inf("Mileage Console app.");
 // ==========================================
 
 var dispatcher = app.Services.GetRequiredService<IDispatcher>();
+
 static void write(string text)
 {
 	var pad = new string('=', text.Length + 6);
@@ -36,6 +36,13 @@ static void write(string text)
 	Console.WriteLine(pad);
 	Console.WriteLine($"== {text} ==");
 	Console.WriteLine(pad);
+}
+
+static void pause()
+{
+	write("PAUSE");
+	Console.WriteLine("Press any key when ready.");
+	_ = Console.ReadLine();
 }
 
 // ==========================================
@@ -125,12 +132,18 @@ var journeyId = await dispatcher.DispatchAsync(
 );
 
 // ==========================================
-//  INSERT TEST JOURNEYS
+//  PAUSE
+// ==========================================
+
+pause();
+
+// ==========================================
+//  GET LATEST END MILES
 // ==========================================
 
 write("TEST GET LATEST END MILES");
 var mileage = new List<(uint start, uint end)>();
-var number = 5;
+var number = 10;
 for (var i = 0; i < number; i++)
 {
 	var start = Rnd.UInt;
@@ -152,20 +165,20 @@ _ = await dispatcher.DispatchAsync(
 ).AuditAsync(
 	some: x =>
 	{
-		if (x == mileage[4].end)
+		if (x == mileage.Last().end)
 		{
 			log.Dbg("Latest end miles: {EndMiles}.", x);
 		}
 		else
 		{
-			log.Err("End milage incorrect: {EndMiles}.", x);
+			log.Err("End mileage incorrect: {EndMiles}.", x);
 		}
 	},
 	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
 );
 
 _ = await dispatcher.DispatchAsync(
-	new Q.SaveJourney.SaveJourneyQuery(userId, carId, mileage[4].start + Rnd.UInt, placeId)
+	new Q.SaveJourney.SaveJourneyQuery(userId, carId, mileage.Last().start + Rnd.UInt, placeId)
 );
 _ = await dispatcher.DispatchAsync(
 	new Q.GetLatestEndMiles.GetLatestEndMilesQuery(userId, carId)
@@ -174,7 +187,7 @@ _ = await dispatcher.DispatchAsync(
 	{
 		if (x == 0)
 		{
-			log.Dbg("Latest end miles is unknown.");
+			log.Dbg("Latest end miles is not set.");
 		}
 		else
 		{
@@ -182,6 +195,24 @@ _ = await dispatcher.DispatchAsync(
 		}
 	},
 	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
+);
+
+// ==========================================
+//  GET INCOMPLETE JOURNEYS
+// ==========================================
+
+write("INCOMPLETE JOURNEYS");
+var incomplete = await dispatcher.DispatchAsync(
+	new Q.GetIncompleteJourneys.GetIncompleteJourneysQuery(userId)
+).AuditAsync(
+	some: x =>
+	{
+		foreach (var item in x)
+		{
+			log.Dbg("Incomplete journey: {Journey}", item);
+		}
+	},
+	none: r => log.Err("Unable to get incomplete journeys: {Reason}.", r)
 );
 
 // ==========================================
@@ -203,14 +234,14 @@ log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
 await dispatcher.DispatchAsync(
 	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultCarId = carId })
 ).AuditAsync(
-	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	some: x => { if (x) { log.Dbg("Saved settings with {CarId}.", carId); } else { log.Dbg("Settings not saved."); } },
 	none: r => log.Err("Failed to save settings: {Reason}.", r)
 );
 
 await dispatcher.DispatchAsync(
 	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultFromPlaceId = placeId })
 ).AuditAsync(
-	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	some: x => { if (x) { log.Dbg("Saved settings with {PlaceId}.", placeId); } else { log.Dbg("Settings not saved."); } },
 	none: r => log.Err("Failed to save settings: {Reason}.", r)
 );
 
@@ -218,15 +249,13 @@ await dispatcher.DispatchAsync(
 //  PAUSE
 // ==========================================
 
-write("PAUSE");
-Console.WriteLine("Press any key when ready.");
-Console.Read();
+pause();
 
 // ==========================================
 //  DELETE TEST JOURNEY
 // ==========================================
 
-write("DELETE JOURNEY");
+write("DELETE FIRST JOURNEY");
 await dispatcher.DispatchAsync(
 	new Q.DeleteJourney.DeleteJourneyCommand(userId, journeyId)
 ).AuditAsync(
@@ -274,9 +303,7 @@ await dispatcher.DispatchAsync(
 //  PAUSE
 // ==========================================
 
-write("PAUSE");
-Console.WriteLine("Press any key when ready.");
-Console.Read();
+pause();
 
 // ==========================================
 //  TRUNCATE TABLES
@@ -285,8 +312,11 @@ Console.Read();
 write("TRUNCATE TABLES");
 var authDb = app.Services.GetRequiredService<AuthDb>();
 
-var truncate = Task (string table, IDbTransaction transaction) =>
-	authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text, transaction);
+Task truncate(string table, IDbTransaction transaction)
+{
+	log.Dbg("Truncating table {Table}.", table);
+	return authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text, transaction);
+}
 
 using (var w = authDb.UnitOfWork)
 {
@@ -297,3 +327,15 @@ using (var w = authDb.UnitOfWork)
 	await truncate("\"mileage\".\"Rate\"", w.Transaction);
 	await truncate("\"mileage\".\"Settings\"", w.Transaction);
 }
+
+// ==========================================
+//  MODELS
+// ==========================================
+
+public sealed record class IncompleteModel(
+	JourneyId Id,
+	int Version,
+	CarId CarId,
+	uint StartMiles,
+	uint? EndMiles
+) : IWithId<JourneyId>;

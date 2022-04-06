@@ -13,7 +13,7 @@
       }
     },
 		"logging": {
-			"minimum": "Verbose",
+			"minimum": "Debug",
 			"providers": {
 				"console.serilog": {
 					"enabled": true
