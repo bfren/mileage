@@ -3,6 +3,14 @@
 		<Description>Mileage: Web app.</Description>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Content Remove="bundleconfig.json" />
+	  <Content Remove="compilerconfig.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="bundleconfig.json" />
+	  <None Include="compilerconfig.json" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Update="jeebsconfig-secrets.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -11,7 +19,7 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220406.1" />
+		<PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220406.2" />
 		<PackageReference Include="Jeebs.Mvc.Data" Version="8.0.0-beta.220406.1" />
 	</ItemGroup>
 	<ProjectExtensions>
