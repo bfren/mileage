@@ -9,4 +9,6 @@ namespace Mileage.Domain.GetIncompleteJourneys;
 
 /// <inheritdoc cref="GetIncompleteJourneysHandler"/>
 /// <param name="UserId"></param>
-public sealed record class GetIncompleteJourneysQuery(AuthUserId UserId) : IQuery<IEnumerable<IncompleteJourneyModel>>;
+public sealed record class GetIncompleteJourneysQuery(
+	AuthUserId UserId
+) : IQuery<IEnumerable<IncompleteJourneyModel>>;
