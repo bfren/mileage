@@ -1,12 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
 		<Description>Mileage: Console test app.</Description>
 	</PropertyGroup>
-	<ItemGroup>
-		<None Remove="jeebsconfig-secrets.json" />
-		<None Remove="jeebsconfig.json" />
-	</ItemGroup>
 	<ItemGroup>
 		<Content Include="jeebsconfig-secrets.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -16,13 +11,9 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220406.1" />
-		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220406.1" />
+		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220406.4" />
+		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220406.4" />
 		<PackageReference Include="Rnd" Version="8.1.2" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Domain\Domain.csproj" />
-		<ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	
+	<!-- Standard Configuration -->
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<OutputType>Exe</OutputType>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</AssemblyName>
+		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+	</PropertyGroup>
+
+	<!-- Common Packages -->
+	<ItemGroup>
+		<PackageReference Include="MaybeF" Version="8.3.0"/>
+	</ItemGroup>
+	<ItemGroup>
+		<Using Include="MaybeF"/>
+		<Using Include="MaybeF.Linq"/>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Domain\Domain.csproj" />
+		<ProjectReference Include="..\..\src\Persistence.Common\Persistence.Common.csproj" />
+	</ItemGroup>
+
+</Project>

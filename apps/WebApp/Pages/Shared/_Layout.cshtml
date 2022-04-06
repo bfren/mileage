@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>WebApp</title>
+
+	<!-- Style -->
+	<typekit library="lar5het" />
+	<environment names="Development">
+		<link rel="stylesheet" href="~/css/bundles/1.0/mileage-lib.css" />
+		<link rel="stylesheet" href="~/css/bundles/1.0/mileage.css" />
+	</environment>
+	<environment names="Staging,Production">
+		<link rel="stylesheet" href="~/css/bundles/1.0/mileage-lib.min.css" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/bundles/1.0/mileage.min.css" asp-append-version="true" />
+	</environment>
+	@await RenderSectionAsync("Styles", required: false)
+
+	<!-- Script -->
+	<script type="text/javascript" csp-add-nonce="true">
+		var readyF = [];
+		var ready = (f) => readyF.push(f);
+	</script>
+
+</head>
+<body>
+
+	<vc:header/>
+
+	<main role="main" id="content" class="flex-shrink-0 shadow">
+		@RenderBody()
+	</main>
+
+	<vc:footer/>
+
+	<!-- Script -->
+	<environment names="Development">
+		<script src="~/lib/font-awesome/js/all.js" data-auto-add-css="false"></script>
+		<script src="~/js/bundles/mileage-lib.js"></script>
+		<script src="~/js/bundles/mileage.js"></script>
+	</environment>
+	<environment names="Staging,Production">
+		<script src="~/lib/font-awesome/js/all.min.js" data-auto-add-css="false" asp-append-version="true" csp-add-nonce="true"></script>
+		<script src="~/js/bundles/mileage-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
+		<script src="~/js/bundles/mileage.min.js" asp-append-version="true" csp-add-nonce="true"></script>
+	</environment>
+	@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
