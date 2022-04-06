@@ -2,5 +2,14 @@
 @model Mileage.WebApp.Pages.IndexModel
 
 <div class="container">
-
+	@if (Model.IncompleteJourneys.Count > 0)
+	{
+		<h2>Incomplete Journeys</h2>
+		<div>
+			@foreach (var item in Model.IncompleteJourneys)
+			{
+				<p>@item.Id.Value - @item.CarId.Value</p>
+			}
+		</div>
+	}
 </div>
