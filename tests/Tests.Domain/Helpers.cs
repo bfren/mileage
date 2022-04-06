@@ -148,8 +148,15 @@ internal static class Helpers
 			// Check that the correct value is being used
 			arg =>
 			{
-				var actual = Assert.IsType<TValue>(arg);
-				Assert.Equal(value, actual);
+				if (arg is null)
+				{
+					Assert.Null(arg);
+				}
+				else
+				{
+					var actual = Assert.IsType<TValue>(arg);
+					Assert.Equal(value, actual);
+				}
 			}
 		);
 	}
