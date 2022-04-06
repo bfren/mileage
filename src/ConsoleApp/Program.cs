@@ -2,6 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
@@ -121,6 +122,66 @@ var journeyId = await dispatcher.DispatchAsync(
 	none: r => log.Err("Failed to add Journey: {Reason}.", r)
 ).UnwrapAsync(
 	s => s.Value(() => new())
+);
+
+// ==========================================
+//  INSERT TEST JOURNEYS
+// ==========================================
+
+write("TEST GET LATEST END MILES");
+var mileage = new List<(uint start, uint end)>();
+var number = 5;
+for (var i = 0; i < number; i++)
+{
+	var start = Rnd.UInt;
+	var end = start + Rnd.UInt;
+	mileage.Add((start, end));
+}
+mileage.Sort((a, b) => a.start.CompareTo(b.start));
+
+for (var i = 0; i < number; i++)
+{
+	var (start, end) = mileage[i];
+	_ = await dispatcher.DispatchAsync(
+		new Q.SaveJourney.SaveJourneyQuery(userId, null, null, Rnd.Date, carId, start, end, placeId, null, rateId)
+	);
+}
+
+_ = await dispatcher.DispatchAsync(
+	new Q.GetLatestEndMiles.GetLatestEndMilesQuery(userId, carId)
+).AuditAsync(
+	some: x =>
+	{
+		if (x == mileage[4].end)
+		{
+			log.Dbg("Latest end miles: {EndMiles}.", x);
+		}
+		else
+		{
+			log.Err("End milage incorrect: {EndMiles}.", x);
+		}
+	},
+	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
+);
+
+_ = await dispatcher.DispatchAsync(
+	new Q.SaveJourney.SaveJourneyQuery(userId, carId, mileage[4].start + Rnd.UInt, placeId)
+);
+_ = await dispatcher.DispatchAsync(
+	new Q.GetLatestEndMiles.GetLatestEndMilesQuery(userId, carId)
+).AuditAsync(
+	some: x =>
+	{
+		if (x == 0)
+		{
+			log.Dbg("Latest end miles is unknown.");
+		}
+		else
+		{
+			log.Err("End milage should be zero: {EndMiles}.", x);
+		}
+	},
+	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
 );
 
 // ==========================================
