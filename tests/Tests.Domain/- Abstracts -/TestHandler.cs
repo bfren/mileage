@@ -23,7 +23,7 @@ public abstract class TestHandler
 		{
 			// Create substitutes
 			var dispatcher = Substitute.For<IDispatcher>();
-			var fluent = Substitute.For<IQueryFluent<TEntity, TId>>();
+			var fluent = Substitute.For<IFluentQuery<TEntity, TId>>();
 			var log = Substitute.For<ILog<THandler>>();
 			var repo = Substitute.For<TRepo>();
 
@@ -41,7 +41,7 @@ public abstract class TestHandler
 
 		internal sealed record class Vars(
 			IDispatcher Dispatcher,
-			IQueryFluent<TEntity, TId> Fluent,
+			IFluentQuery<TEntity, TId> Fluent,
 			ILog<THandler> Log,
 			TRepo Repo
 		);

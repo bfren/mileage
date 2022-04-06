@@ -15,14 +15,14 @@ namespace Mileage.Domain;
 
 internal static class Helpers
 {
-	public static (TRepo repo, IQueryFluent<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
+	public static (TRepo repo, IFluentQuery<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : class, IStrongId, new()
 	{
 		// Create substitutes
 		var repo = Substitute.For<TRepo>();
-		var query = Substitute.For<IQueryFluent<TEntity, TId>>();
+		var query = Substitute.For<IFluentQuery<TEntity, TId>>();
 		var log = Substitute.For<ILog<THandler>>();
 
 		// Setup substitutes
