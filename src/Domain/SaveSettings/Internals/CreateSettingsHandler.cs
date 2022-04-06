@@ -11,7 +11,7 @@ namespace Mileage.Domain.SaveSettings.Internals;
 /// <summary>
 /// Create settings for user
 /// </summary>
-public class CreateSettingsHandler : CommandHandler<CreateSettingsCommand>
+internal sealed class CreateSettingsHandler : CommandHandler<CreateSettingsCommand>
 {
 	private ILog<CreateSettingsHandler> Log { get; init; }
 
@@ -39,11 +39,7 @@ public class CreateSettingsHandler : CommandHandler<CreateSettingsCommand>
 				DefaultCarId = command.Settings.DefaultCarId,
 				DefaultFromPlaceId = command.Settings.DefaultFromPlaceId
 			})
-			.AuditAsync(
-				some: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value)
-			)
-			.BindAsync(
-				_ => F.True
-			);
+			.AuditAsync(some: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value))
+			.BindAsync(_ => F.True);
 	}
 }

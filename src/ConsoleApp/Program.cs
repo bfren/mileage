@@ -2,6 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
@@ -26,14 +28,21 @@ log.Inf("Mileage Console app.");
 //  SETUP
 // ==========================================
 
-// Get dispatchers
 var dispatcher = app.Services.GetRequiredService<IDispatcher>();
+static void write(string text)
+{
+	var pad = new string('=', text.Length + 6);
+	Console.WriteLine();
+	Console.WriteLine(pad);
+	Console.WriteLine($"== {text} ==");
+	Console.WriteLine(pad);
+}
 
 // ==========================================
 //  RUN MIGRATIONS
 // ==========================================
 
-// Authentication
+write("MIGRATIONS");
 log.Inf("Migrate to latest database version.");
 await dispatcher.DispatchAsync(
 	new Q.MigrateToLatest.MigrateToLatestCommand()
@@ -43,8 +52,12 @@ await dispatcher.DispatchAsync(
 //  INSERT TEST USER
 // ==========================================
 
+write("INSERT USER");
+var name = Rnd.Str;
+var email = "info@bfren.dev";
+var pass = "fred";
 var userId = await dispatcher.DispatchAsync(
-	new Q.CreateUser.CreateUserQuery("Ben", "ben@bcgdesign.com", "fred")
+	new Q.CreateUser.CreateUserQuery(name, email, pass)
 ).AuditAsync(
 	some: x => log.Dbg("New User: {UserId}.", x),
 	none: r => log.Err("Failed to add User: {Reason}.", r)
@@ -53,11 +66,57 @@ var userId = await dispatcher.DispatchAsync(
 );
 
 // ==========================================
+//  INSERT TEST CAR
+// ==========================================
+
+write("INSERT CAR");
+var carDescription = Rnd.Str;
+var carId = await dispatcher.DispatchAsync(
+	new Q.SaveCar.SaveCarQuery(userId, carDescription)
+).AuditAsync(
+	some: x => log.Dbg("New Car: {CarId}.", x),
+	none: r => log.Err("Failed to add Car: {Reason}.", r)
+).UnwrapAsync(
+	s => s.Value(() => new())
+);
+
+// ==========================================
+//  INSERT TEST PLACE
+// ==========================================
+
+write("INSERT PLACE");
+var placeDescription = Rnd.Str;
+var placeId = await dispatcher.DispatchAsync(
+	new Q.SavePlace.SavePlaceQuery(userId, placeDescription)
+).AuditAsync(
+	some: x => log.Dbg("New Place: {PlaceId}.", x),
+	none: r => log.Err("Failed to add Place: {Reason}.", r)
+).UnwrapAsync(
+	s => s.Value(() => new())
+);
+
+// ==========================================
+//  INSERT TEST RATE
+// ==========================================
+
+write("INSERT PLACE");
+var amount = Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f);
+var rateId = await dispatcher.DispatchAsync(
+	new Q.SaveRate.SaveRateQuery(userId, amount)
+).AuditAsync(
+	some: x => log.Dbg("New Rate: {RateId}.", x),
+	none: r => log.Err("Failed to add Rate: {Reason}.", r)
+).UnwrapAsync(
+	s => s.Value(() => new())
+);
+
+// ==========================================
 //  INSERT TEST JOURNEY
 // ==========================================
 
+write("INSERT JOURNEY");
 var journeyId = await dispatcher.DispatchAsync(
-	new Q.SaveJourney.Internals.CreateJourney.CreateJourneyQuery(userId, DateOnly.FromDateTime(DateTime.Now), new(), Rnd.UInt, new())
+	new Q.SaveJourney.SaveJourneyQuery(userId, carId, Rnd.UInt, placeId)
 ).AuditAsync(
 	some: x => log.Dbg("New Journey: {JourneyId}.", x),
 	none: r => log.Err("Failed to add Journey: {Reason}.", r)
@@ -66,20 +125,70 @@ var journeyId = await dispatcher.DispatchAsync(
 );
 
 // ==========================================
-//  DELETE TEST JOURNEY
+//  INSERT TEST JOURNEYS
 // ==========================================
 
-await dispatcher.DispatchAsync(
-	new Q.DeleteJourney.DeleteJourneyQuery(journeyId, userId)
+write("TEST GET LATEST END MILES");
+var mileage = new List<(uint start, uint end)>();
+var number = 5;
+for (var i = 0; i < number; i++)
+{
+	var start = Rnd.UInt;
+	var end = start + Rnd.UInt;
+	mileage.Add((start, end));
+}
+mileage.Sort((a, b) => a.start.CompareTo(b.start));
+
+for (var i = 0; i < number; i++)
+{
+	var (start, end) = mileage[i];
+	_ = await dispatcher.DispatchAsync(
+		new Q.SaveJourney.SaveJourneyQuery(userId, null, null, Rnd.Date, carId, start, end, placeId, null, rateId)
+	);
+}
+
+_ = await dispatcher.DispatchAsync(
+	new Q.GetLatestEndMiles.GetLatestEndMilesQuery(userId, carId)
 ).AuditAsync(
-	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
-	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
+	some: x =>
+	{
+		if (x == mileage[4].end)
+		{
+			log.Dbg("Latest end miles: {EndMiles}.", x);
+		}
+		else
+		{
+			log.Err("End milage incorrect: {EndMiles}.", x);
+		}
+	},
+	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
+);
+
+_ = await dispatcher.DispatchAsync(
+	new Q.SaveJourney.SaveJourneyQuery(userId, carId, mileage[4].start + Rnd.UInt, placeId)
+);
+_ = await dispatcher.DispatchAsync(
+	new Q.GetLatestEndMiles.GetLatestEndMilesQuery(userId, carId)
+).AuditAsync(
+	some: x =>
+	{
+		if (x == 0)
+		{
+			log.Dbg("Latest end miles is unknown.");
+		}
+		else
+		{
+			log.Err("End milage should be zero: {EndMiles}.", x);
+		}
+	},
+	none: r => log.Err("Failed to get latest end miles: {Reason}.", r)
 );
 
 // ==========================================
 //  LOAD SETTINGS
 // ==========================================
 
+write("LOAD SETTINGS");
 var settings = await dispatcher.DispatchAsync(
 	new Q.LoadSettings.LoadSettingsQuery(userId)
 ).UnwrapAsync(
@@ -91,14 +200,100 @@ log.Dbg("Settings for User {UserId}: {Settings}", userId.Value, settings);
 //  SAVE SETTINGS
 // ==========================================
 
+await dispatcher.DispatchAsync(
+	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultCarId = carId })
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	none: r => log.Err("Failed to save settings: {Reason}.", r)
+);
+
+await dispatcher.DispatchAsync(
+	new Q.SaveSettings.SaveSettingsCommand(userId, settings with { DefaultFromPlaceId = placeId })
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Saved settings."); } else { log.Dbg("Settings not saved."); } },
+	none: r => log.Err("Failed to save settings: {Reason}.", r)
+);
+
+// ==========================================
+//  PAUSE
+// ==========================================
+
+write("PAUSE");
+Console.WriteLine("Press any key when ready.");
+Console.Read();
+
+// ==========================================
+//  DELETE TEST JOURNEY
+// ==========================================
+
+write("DELETE JOURNEY");
+await dispatcher.DispatchAsync(
+	new Q.DeleteJourney.DeleteJourneyCommand(userId, journeyId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Journey deleted."); } else { log.Dbg("Journey not deleted."); } },
+	none: r => log.Err("Failed to delete Journey: {Reason}.", r)
+);
+
+// ==========================================
+//  DELETE TEST RATE
+// ==========================================
+
+write("DELETE RATE");
+await dispatcher.DispatchAsync(
+	new Q.DeleteRate.DeleteRateCommand(userId, rateId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Rate deleted."); } else { log.Dbg("Rate not deleted."); } },
+	none: r => log.Err("Failed to delete Rate: {Reason}.", r)
+);
+
+// ==========================================
+//  DELETE TEST PLACE
+// ==========================================
+
+write("DELETE PLACE");
+await dispatcher.DispatchAsync(
+	new Q.DeletePlace.DeletePlaceCommand(userId, placeId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Place deleted."); } else { log.Dbg("Place not deleted."); } },
+	none: r => log.Err("Failed to delete Place: {Reason}.", r)
+);
+
+// ==========================================
+//  DELETE TEST CAR
+// ==========================================
+
+write("DELETE CAR");
+await dispatcher.DispatchAsync(
+	new Q.DeleteCar.DeleteCarCommand(userId, carId)
+).AuditAsync(
+	some: x => { if (x) { log.Dbg("Car deleted."); } else { log.Dbg("Car not deleted."); } },
+	none: r => log.Err("Failed to delete Car: {Reason}.", r)
+);
+
+// ==========================================
+//  PAUSE
+// ==========================================
+
+write("PAUSE");
+Console.WriteLine("Press any key when ready.");
+Console.Read();
+
 // ==========================================
 //  TRUNCATE TABLES
 // ==========================================
 
+write("TRUNCATE TABLES");
 var authDb = app.Services.GetRequiredService<AuthDb>();
 
-var truncate = Task (string table) =>
-	authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text);
+var truncate = Task (string table, IDbTransaction transaction) =>
+	authDb.ExecuteAsync($"TRUNCATE TABLE {table};", null, System.Data.CommandType.Text, transaction);
 
-await truncate("\"auth\".\"User\"");
-await truncate("\"mileage\".\"Journey\"");
+using (var w = authDb.UnitOfWork)
+{
+	await truncate("\"auth\".\"User\"", w.Transaction);
+	await truncate("\"mileage\".\"Car\"", w.Transaction);
+	await truncate("\"mileage\".\"Journey\"", w.Transaction);
+	await truncate("\"mileage\".\"Place\"", w.Transaction);
+	await truncate("\"mileage\".\"Rate\"", w.Transaction);
+	await truncate("\"mileage\".\"Settings\"", w.Transaction);
+}

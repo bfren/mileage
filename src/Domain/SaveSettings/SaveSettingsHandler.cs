@@ -7,7 +7,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
-using Mileage.Domain.CheckPlaceBelongsToUser;
+using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -16,9 +16,9 @@ using Mileage.Persistence.Repositories;
 namespace Mileage.Domain.SaveSettings;
 
 /// <summary>
-/// Save settings for a user
+/// Save settings for a user - create if they don't exist, or update if they do
 /// </summary>
-public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
+internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 {
 	private IDispatcher Dispatcher { get; init; }
 
@@ -54,23 +54,19 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		// If checks have failed, return with failure message
 		if (!carBelongsToUser || !placeBelongsToUser)
 		{
-			return F.None<bool, SettingsCheckFailedMsg>();
+			return F.None<bool, SaveSettingsCheckFailedMsg>();
 		}
 
 		// Add or update user settings
 		return await Settings
 			.StartFluentQuery()
-			.Where(
-				s => s.UserId, Compare.Equal, command.UserId
-			)
+			.Where(s => s.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<SettingsEntity>()
 			.SwitchAsync(
-				some: x => Dispatcher.DispatchAsync(
-					new Internals.UpdateSettingsCommand(x, command.Settings)
-				),
-				none: () => Dispatcher.DispatchAsync(
-					new Internals.CreateSettingsCommand(command.UserId, command.Settings)
-				)
+				some: x => Dispatcher
+					.DispatchAsync(new Internals.UpdateSettingsCommand(x, command.Settings)),
+				none: () => Dispatcher
+					.DispatchAsync(new Internals.CreateSettingsCommand(command.UserId, command.Settings))
 			);
 	}
 
@@ -79,18 +75,16 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="carId"></param>
 	/// <param name="userId"></param>
-	internal async Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId) =>
+	internal Task<bool> CheckCarBelongsToUser(CarId? carId, AuthUserId userId) =>
 		carId switch
 		{
 			CarId x =>
-				await Dispatcher
-					.DispatchAsync(
-						new CheckCarBelongsToUserQuery(userId, x)
-					)
+				Dispatcher
+					.DispatchAsync(new CheckCarBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
-				true
+				Task.FromResult(true)
 		};
 
 	/// <summary>
@@ -98,17 +92,15 @@ public sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="placeId"></param>
 	/// <param name="userId"></param>
-	internal async Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId) =>
+	internal Task<bool> CheckPlaceBelongsToUser(PlaceId? placeId, AuthUserId userId) =>
 		placeId switch
 		{
 			PlaceId x =>
-				await Dispatcher
-					.DispatchAsync(
-						new CheckPlaceBelongsToUserQuery(userId, x)
-					)
+				Dispatcher
+					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
-				true
+				Task.FromResult(true)
 		};
 }

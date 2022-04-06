@@ -10,7 +10,7 @@ namespace Mileage.Domain.SaveSettings.Internals;
 /// <inheritdoc cref="UpdateSettingsHandler"/>
 /// <param name="ExistingSettings"></param>
 /// <param name="UpdatedSettings"></param>
-public sealed record class UpdateSettingsCommand(
+internal sealed record class UpdateSettingsCommand(
 	SettingsEntity ExistingSettings,
 	Settings UpdatedSettings
 ) : ICommand;

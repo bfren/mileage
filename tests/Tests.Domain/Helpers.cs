@@ -5,24 +5,24 @@ using System.Linq.Expressions;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
-using StrongId;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using NSubstitute.Core;
 using NSubstitute.Extensions;
+using StrongId;
 
 namespace Mileage.Domain;
 
 internal static class Helpers
 {
-	public static (TRepo repo, IQueryFluent<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
+	public static (TRepo repo, IFluentQuery<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : class, IStrongId, new()
 	{
 		// Create substitutes
 		var repo = Substitute.For<TRepo>();
-		var query = Substitute.For<IQueryFluent<TEntity, TId>>();
+		var query = Substitute.For<IFluentQuery<TEntity, TId>>();
 		var log = Substitute.For<ILog<THandler>>();
 
 		// Setup substitutes
@@ -101,10 +101,75 @@ internal static class Helpers
 		Expression<Func<TEntity, TValue>> property,
 		Compare compare,
 		TValue value
+	) =>
+		AssertWhere<TEntity, TValue>(call, property.GetPropertyInfo().UnsafeUnwrap().Name, compare, value);
+
+	/// <summary>
+	/// Validate a call to the fluent query where method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="compare"></param>
+	/// <param name="value"></param>
+	public static void AssertWhere<TEntity, TValue>(
+		ICall call,
+		string property,
+		Compare compare,
+		TValue value
 	)
 	{
 		// Check the method
 		Assert.Equal("Where", call.GetMethodInfo().Name);
+
+		// Check the value generic type
+		Assert.Collection(call.GetMethodInfo().GetGenericArguments(),
+			type => Assert.Equal(typeof(TValue), type)
+		);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the correct property is being used
+			arg =>
+			{
+				var actual = Assert.IsAssignableFrom<Expression<Func<TEntity, TValue>>>(arg);
+				Assert.Equal(property, actual.GetPropertyInfo().UnsafeUnwrap().Name);
+			},
+
+			// Check that the correct comparison is being used
+			arg =>
+			{
+				var actual = Assert.IsType<Compare>(arg);
+				Assert.Equal(compare, actual);
+			},
+
+			// Check that the correct value is being used
+			arg =>
+			{
+				var actual = Assert.IsType<TValue>(arg);
+				Assert.Equal(value, actual);
+			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query where method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="values"></param>
+	public static void AssertWhereIn<TEntity, TValue>(
+		ICall call,
+		Expression<Func<TEntity, TValue>> property,
+		TValue[] values
+	)
+	{
+		// Check the method
+		Assert.Equal("WhereIn", call.GetMethodInfo().Name);
 
 		// Check the value generic type
 		Assert.Collection(call.GetMethodInfo().GetGenericArguments(),
@@ -124,18 +189,112 @@ internal static class Helpers
 				);
 			},
 
-			// Check that the correct comparison is being used
+			// Check that the correct values are being used
 			arg =>
 			{
-				var actual = Assert.IsType<Compare>(arg);
-				Assert.Equal(compare, actual);
+				var actual = Assert.IsType<TValue[]>(arg);
+				Assert.Equal(values, actual);
+			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query sort method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="order"></param>
+	public static void AssertSort<TEntity, TValue>(
+		ICall call,
+		Expression<Func<TEntity, TValue>> property,
+		SortOrder order
+	) =>
+		AssertSort<TEntity, TValue>(call, property.GetPropertyInfo().UnsafeUnwrap().Name, order);
+
+	/// <summary>
+	/// Validate a call to the fluent query sort method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	/// <param name="order"></param>
+	public static void AssertSort<TEntity, TValue>(
+		ICall call,
+		string property,
+		SortOrder order
+	)
+	{
+		// Check the method
+		Assert.Equal("Sort", call.GetMethodInfo().Name);
+
+		// Check the value generic type
+		Assert.Collection(call.GetMethodInfo().GetGenericArguments(),
+			type => Assert.Equal(typeof(TValue), type)
+		);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the correct property is being used
+			arg =>
+			{
+				var actual = Assert.IsAssignableFrom<Expression<Func<TEntity, TValue>>>(arg);
+				Assert.Equal(property, actual.GetPropertyInfo().UnsafeUnwrap().Name);
 			},
 
-			// Check that the correct value is being used
+			// Check that the correct order is being used
 			arg =>
 			{
-				var actual = Assert.IsType<TValue>(arg);
-				Assert.Equal(value, actual);
+				var actual = Assert.IsType<SortOrder>(arg);
+				Assert.Equal(order, actual);
+			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query sort method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	public static void AssertExecute<TEntity, TValue>(
+		ICall call,
+		Expression<Func<TEntity, TValue>> property
+	) =>
+		AssertExecute<TEntity, TValue>(call, property.GetPropertyInfo().UnsafeUnwrap().Name);
+
+	/// <summary>
+	/// Validate a call to the fluent query execute method
+	/// </summary>
+	/// <typeparam name="TEntity">Entity type</typeparam>
+	/// <typeparam name="TValue">Column select value type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="property"></param>
+	public static void AssertExecute<TEntity, TValue>(
+		ICall call,
+		string property
+	)
+	{
+		// Check the method
+		Assert.Equal("ExecuteAsync", call.GetMethodInfo().Name);
+
+		// Check the value generic type
+		Assert.Collection(call.GetMethodInfo().GetGenericArguments(),
+			type => Assert.Equal(typeof(TValue), type)
+		);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the correct property is being used
+			arg =>
+			{
+				var actual = Assert.IsAssignableFrom<Expression<Func<TEntity, TValue>>>(arg);
+				Assert.Equal(property, actual.GetPropertyInfo().UnsafeUnwrap().Name);
 			}
 		);
 	}

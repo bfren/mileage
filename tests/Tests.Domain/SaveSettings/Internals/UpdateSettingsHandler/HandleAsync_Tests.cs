@@ -9,18 +9,24 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.Internals.UpdateSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
-	public override UpdateSettingsHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
+	{
+		internal override UpdateSettingsHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (UpdateSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Logs_Vrb__With_UserId()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = RndId<SettingsId>();
-		var userId = RndId<AuthUserId>();
+		var settingsId = LongId<SettingsId>();
+		var userId = LongId<AuthUserId>();
 		var command = new UpdateSettingsCommand(new() { Id = settingsId, UserId = userId }, new());
 		v.Repo.UpdateAsync<SettingsEntity>(default!)
 			.ReturnsForAnyArgs(false);
@@ -37,18 +43,18 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = RndId<SettingsId>();
+		var settingsId = LongId<SettingsId>();
 		var version = Rnd.Lng;
-		var userId = RndId<AuthUserId>();
-		var carId = RndId<CarId>();
-		var placeId = RndId<PlaceId>();
+		var userId = LongId<AuthUserId>();
+		var carId = LongId<CarId>();
+		var placeId = LongId<PlaceId>();
 		var existingSettings = new SettingsEntity
 		{
 			Id = settingsId,
 			Version = version,
 			UserId = userId,
-			DefaultCarId = RndId<CarId>(),
-			DefaultFromPlaceId = RndId<PlaceId>()
+			DefaultCarId = LongId<CarId>(),
+			DefaultFromPlaceId = LongId<PlaceId>()
 		};
 		var updatedSettings = new Settings
 		{

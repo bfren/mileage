@@ -8,10 +8,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
-public class CheckPlaceBelongsToUser_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
+public class CheckPlaceBelongsToUser_Tests : Abstracts.TestHandler
 {
-	public override SaveSettingsHandler GetHandler(Vars v) =>
-		new(v.Dispatcher, v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
+	{
+		internal override SaveSettingsHandler GetHandler(Vars v) =>
+			new(v.Dispatcher, v.Repo, v.Log);
+	}
+
+	private (SaveSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task With_PlaceId__Calls_Dispatcher_DispatchAsync__Receives_Some__Returns_Value()
@@ -23,7 +29,7 @@ public class CheckPlaceBelongsToUser_Tests : TestHandler<ISettingsRepository, Se
 			.ReturnsForAnyArgs(F.Some(value).AsTask);
 
 		// Act
-		var result = await handler.CheckPlaceBelongsToUser(RndId<PlaceId>(), RndId<AuthUserId>());
+		var result = await handler.CheckPlaceBelongsToUser(LongId<PlaceId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -38,7 +44,7 @@ public class CheckPlaceBelongsToUser_Tests : TestHandler<ISettingsRepository, Se
 			.ReturnsForAnyArgs(Create.None<bool>());
 
 		// Act
-		var result = await handler.CheckPlaceBelongsToUser(RndId<PlaceId>(), RndId<AuthUserId>());
+		var result = await handler.CheckPlaceBelongsToUser(LongId<PlaceId>(), LongId<AuthUserId>());
 
 		// Assert
 		Assert.False(result);

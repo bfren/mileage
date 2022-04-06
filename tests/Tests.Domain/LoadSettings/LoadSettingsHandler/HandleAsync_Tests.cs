@@ -10,10 +10,16 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.LoadSettings.LoadSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler>
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
-	public override LoadSettingsHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler>
+	{
+		internal override LoadSettingsHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (LoadSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()
@@ -21,8 +27,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>()));
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+			.Returns(new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>()));
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -37,8 +43,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>()));
-		var userId = RndId<AuthUserId>();
+			.Returns(new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>()));
+		var userId = LongId<AuthUserId>();
 		var query = new LoadSettingsQuery(userId);
 
 		// Act
@@ -57,10 +63,10 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new Settings(Rnd.Lng, RndId<CarId>(), RndId<PlaceId>());
+		var model = new Settings(Rnd.Lng, LongId<CarId>(), LongId<PlaceId>());
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(model);
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -76,7 +82,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(Create.None<Settings>());
-		var query = new LoadSettingsQuery(RndId<AuthUserId>());
+		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);

@@ -9,17 +9,23 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.Internals.CreateSettingsHandler_Tests;
 
-public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity, SettingsId, CreateSettingsHandler>
+public class HandleAsync_Tests : Abstracts.TestHandler
 {
-	public override CreateSettingsHandler GetHandler(Vars v) =>
-		new(v.Repo, v.Log);
+	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, CreateSettingsHandler>
+	{
+		internal override CreateSettingsHandler GetHandler(Vars v) =>
+			new(v.Repo, v.Log);
+	}
+
+	private (CreateSettingsHandler, Setup.Vars) GetVars() =>
+		new Setup().GetVars();
 
 	[Fact]
 	public async Task Calls_Logs_Vrb__With_UserId()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
+		var userId = LongId<AuthUserId>();
 		var command = new CreateSettingsCommand(userId, new());
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(Create.None<SettingsId>());
@@ -36,10 +42,10 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
-		var settingsId = RndId<SettingsId>();
-		var carId = RndId<CarId>();
-		var placeId = RndId<PlaceId>();
+		var userId = LongId<AuthUserId>();
+		var settingsId = LongId<SettingsId>();
+		var carId = LongId<CarId>();
+		var placeId = LongId<PlaceId>();
 		var command = new CreateSettingsCommand(userId, new(0L, carId, placeId));
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
@@ -58,8 +64,8 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = RndId<AuthUserId>();
-		var settingsId = RndId<SettingsId>();
+		var userId = LongId<AuthUserId>();
+		var settingsId = LongId<SettingsId>();
 		var command = new CreateSettingsCommand(userId, new());
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
@@ -78,7 +84,7 @@ public class HandleAsync_Tests : TestHandler<ISettingsRepository, SettingsEntity
 		var (handler, v) = GetVars();
 		var command = new CreateSettingsCommand(new(), new());
 		v.Repo.CreateAsync(default!)
-			.ReturnsForAnyArgs(RndId<SettingsId>());
+			.ReturnsForAnyArgs(LongId<SettingsId>());
 
 		// Act
 		var result = await handler.HandleAsync(command);

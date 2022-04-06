@@ -12,13 +12,20 @@
         }
       }
     },
-    "logging": {
-      "minimum": "Verbose",
-      "hooks": {
-        "console.serilog": {
-          "enabled": true
-        }
-      }
-    }
+		"logging": {
+			"minimum": "Verbose",
+			"providers": {
+				"console.serilog": {
+					"enabled": true
+				}
+			}
+		},
+		"services": {
+			"console": {
+				"serilog": {
+					"addPrefix": false
+				}
+			}
+		}
   }
 }

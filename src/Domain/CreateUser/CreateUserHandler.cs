@@ -11,7 +11,7 @@ namespace Mileage.Domain.CreateUser;
 /// <summary>
 /// Create a new user
 /// </summary>
-public sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId>
+internal sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId>
 {
 	private ILog<CreateUserHandler> Log { get; init; }
 
@@ -33,8 +33,6 @@ public sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUserId
 	{
 		Log.Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
 		return User
-			.CreateAsync(
-				query.EmailAddress, query.Password, query.Name
-			);
+			.CreateAsync(query.EmailAddress, query.Password, query.Name);
 	}
 }

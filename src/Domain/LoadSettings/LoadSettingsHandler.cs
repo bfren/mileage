@@ -13,7 +13,7 @@ namespace Mileage.Domain.LoadSettings;
 /// <summary>
 /// Load a user's settings
 /// </summary>
-public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settings>
+internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settings>
 {
 	private ILog<LoadSettingsHandler> Log { get; init; }
 
@@ -37,9 +37,7 @@ public sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settin
 		Log.Vrb("Load settings for User {UserId}", query.Id.Value);
 		return Settings
 			.StartFluentQuery()
-			.Where(
-				s => s.UserId, Compare.Equal, query.Id
-			)
+			.Where(s => s.UserId, Compare.Equal, query.Id)
 			.QuerySingleAsync<Settings>()
 			.SwitchAsync(
 				some: x => F.Some(x).AsTask,

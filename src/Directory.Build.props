@@ -12,7 +12,7 @@
 
 	<!-- Common Packages -->
 	<ItemGroup>
-		<PackageReference Include="MaybeF" Version="8.2.0"/>
+		<PackageReference Include="MaybeF" Version="8.3.0"/>
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="MaybeF"/>
@@ -23,6 +23,9 @@
 	<ItemGroup Label="Test Internals">
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>Tests.$(MSBuildProjectName.Replace(" ", "_"))</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 
