@@ -1,0 +1,10 @@
+/// <reference path="mileage" />
+
+.navbar-brand {
+	font-family: $font-family-serif;
+	font-size: 1.5rem;
+}
+
+.navbar-dark {
+	background-color: $grey-dark;
+}

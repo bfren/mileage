@@ -3,7 +3,7 @@
 	{
 		"outputFileName": "wwwroot/js/bundles/mileage-lib.js",
 		"inputFiles": [
-			"wwwroot/lib/bootstrap/dist/js/bootstrap.js"
+			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js"
 		],
 		"minify": {
 			"enabled": false,
@@ -13,7 +13,7 @@
 	{
 		"outputFileName": "wwwroot/js/bundles/mileage-lib.min.js",
 		"inputFiles": [
-			"wwwroot/lib/bootstrap/dist/js/bootstrap.min.js"
+			"wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js"
 		],
 		"minify": {
 			"enabled": false,
