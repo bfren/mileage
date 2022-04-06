@@ -21,8 +21,8 @@
 		<PackageReference Include="Rnd" Version="8.1.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Domain\Domain.csproj" />
-		<ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />
+		<ProjectReference Include="..\..\src\Domain\Domain.csproj" />
+		<ProjectReference Include="..\..\src\Persistence.Common\Persistence.Common.csproj" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

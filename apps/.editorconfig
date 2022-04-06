@@ -1,0 +1,5 @@
+[*.{cs,csx,cake,vb,vbx}]
+
+file_header_template = Mileage Tracker Apps\nCopyright (c) bfren - licensed under https://mit.bfren.dev/2022
+
+insert_final_newline = true
