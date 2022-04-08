@@ -3,7 +3,8 @@
 	{
 		"outputFileName": "wwwroot/js/bundles/mileage-lib.js",
 		"inputFiles": [
-			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js"
+			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
+			"wwwroot/lib/axios/axios.js"
 		],
 		"minify": {
 			"enabled": false,
@@ -13,7 +14,8 @@
 	{
 		"outputFileName": "wwwroot/js/bundles/mileage-lib.min.js",
 		"inputFiles": [
-			"wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js"
+			"wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js",
+			"wwwroot/lib/axios/axios.min.js"
 		],
 		"minify": {
 			"enabled": false,
@@ -23,7 +25,7 @@
 	{
 		"outputFileName": "wwwroot/js/bundles/mileage.js",
 		"inputFiles": [
-			"wwwroot/js/**/ *.inc.js"
+			"wwwroot/js/**/*.inc.js"
 		],
 		"minify": {
 			"enabled": true,
