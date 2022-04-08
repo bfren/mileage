@@ -1,5 +1,3 @@
-/// <reference path="axios.d.ts" />
-
 document.addEventListener('submit', (e) => {
 	console.log("Axios Submit.");
 
