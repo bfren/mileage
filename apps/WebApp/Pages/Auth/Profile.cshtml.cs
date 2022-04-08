@@ -3,12 +3,11 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Mileage.WebApp.Pages;
+namespace Mileage.WebApp.Pages.Auth;
 
-public class ProfileModel : PageModel
+public sealed class ProfileModel : PageModel
 {
 	public void OnGet()
 	{
 	}
 }
-
