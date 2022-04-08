@@ -3,15 +3,14 @@
 
 <div class="container">
 
-	<!-- Alerts -->
-	<alerts />
+	<h2>Sign In</h2>
 
 	<!-- SignIn Form -->
 	<form method="post" action="@Url.Page("SignIn", new { returnUrl = Model.Form.ReturnUrl })">
 
 		<!-- Sign In details -->
-		<div class="form-group">
-			<label for="@nameof(Model.Form.Email)">Email address</label>
+		<div class="mb-3">
+			<label for="@nameof(Model.Form.Email)" class="form-label">Email address</label>
 			<input type="email"
 				   class="form-control"
 				   id="@nameof(Model.Form.Email)"
@@ -19,8 +18,8 @@
 				   placeholder="Please enter your email address"
 				   required />
 		</div>
-		<div class="form-group">
-			<label for="@nameof(Model.Form.Password)">Password</label>
+		<div class="mb-3">
+			<label for="@nameof(Model.Form.Password)" class="form-label">Password</label>
 			<input type="password"
 				   class="form-control"
 				   id="@nameof(Model.Form.Password)"
@@ -28,12 +27,12 @@
 				   placeholder="Please enter your password"
 				   required />
 		</div>
-		<div class="form-group">
+		<div class="mb3">
 			<input type="checkbox"
 				   class="form-check-input"
 				   id="@nameof(Model.Form.RememberMe)"
 				   name="@nameof(Model.Form.RememberMe)" />
-			<label for="@nameof(Model.Form.RememberMe)">Keep me signed in</label>
+			<label for="@nameof(Model.Form.RememberMe)" class="form-label">Keep me signed in</label>
 		</div>
 
 		<!-- Hidden values -->
@@ -44,7 +43,9 @@
 		@Html.AntiForgeryToken()
 
 		<!-- Submit -->
-		<button type="submit" class="btn btn-primary">Sign In</button>
+		<div class="d-flex justify-content-end">
+			<button type="submit" class="btn btn-primary">Sign In</button>
+		</div>
 
 	</form>
 
