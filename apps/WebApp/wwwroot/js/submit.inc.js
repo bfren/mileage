@@ -1,6 +1,4 @@
 document.addEventListener('submit', (e) => {
-	console.log("Axios Submit.");
-
 	// get form
 	const form = e.target;
 	const data = new FormData(form);
@@ -12,9 +10,7 @@ document.addEventListener('submit', (e) => {
 		data: data,
 		headers: { "Content-Type": "multipart/form-data" }
 	}).then((r) => {
-		if (r.data.redirectTo) {
-			window.location.href = r.data.redirectTo;
-		}
+		handleResult(r.data);
 	}).catch((e) => {
 		console.log(e);
 	});
