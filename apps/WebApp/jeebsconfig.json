@@ -5,40 +5,40 @@
       "suite": "Mileage"
     },
     "db": {
-			"default": "rpi",
-			"authentication": "rpi",
+      "default": "rpi",
+      "authentication": "rpi",
       "connections": {
         "rpi": {
           "connectionString": ""
         }
       }
     },
-		"logging": {
-			"minimum": "Verbose",
-			"providers": {
-				"console.serilog": {
-					"enabled": true
-				}
-			}
-		},
-		"services": {
-			"console": {
-				"serilog": {
-					"addPrefix": false
-				}
-			}
-		},
-		"web": {
-			"auth": {
-				"enabled": true,
-				"scheme": "cookies",
-				"jwt": {
-					"issuer": "http://localhost:5284",
-					"audience": "http://localhost:5284",
-					"signingKey": "lMh-jD¬£M7j@£of+UoJ^¬HUONAv@pNWW",
-					"encryptingKey": "P$lRgelYkgiEU@!#0CbN51I8du+Ui¬p`O:G=:!=R9X;n;-ly9emdTnn^LL#£~9Y^"
-				}
-			}
-		}
+    "logging": {
+      "minimum": "Debug",
+      "providers": {
+        "console.serilog": {
+          "enabled": true
+        }
+      }
+    },
+    "services": {
+      "console": {
+        "serilog": {
+          "addPrefix": false
+        }
+      }
+    },
+    "web": {
+      "auth": {
+        "enabled": true,
+        "scheme": "cookies",
+        "jwt": {
+          "issuer": "http://localhost:5284",
+          "audience": "http://localhost:5284",
+          "signingKey": "lMh-jD¬£M7j@£of+UoJ^¬HUONAv@pNWW",
+          "encryptingKey": "P$lRgelYkgiEU@!#0CbN51I8du+Ui¬p`O:G=:!=R9X;n;-ly9emdTnn^LL#£~9Y^"
+        }
+      }
+    }
   }
 }
