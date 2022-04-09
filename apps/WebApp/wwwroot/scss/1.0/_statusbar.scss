@@ -1,0 +1,32 @@
+/// <reference path="mileage" />
+
+.statusbar {
+	height: 40px;
+
+	.message {
+		background-color: #ffffcc;
+		border: 1px solid shade-color(#ffffcc, 10%);
+		padding: 5px 8px;
+		width: 100%;
+
+		.fa-check {
+			color: forestgreen;
+		}
+
+		.fa-triangle-exclamation {
+			color: darkorange;
+		}
+
+		.fa-ban {
+			color: red;
+		}
+
+		.close:hover {
+			cursor: pointer;
+		}
+
+		.manual {
+			color: red;
+		}
+	}
+}

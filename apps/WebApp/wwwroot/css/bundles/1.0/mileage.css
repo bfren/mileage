@@ -11177,15 +11177,32 @@ footer div {
   text-align: center;
 }
 
-.alerts {
+.statusbar {
   height: 40px;
-  margin-top: 60px;
 }
-.alerts .jeebs-alerts {
-  padding: 5px;
+.statusbar .message {
+  background-color: #ffffcc;
+  border: 1px solid #e6e6b8;
+  padding: 5px 8px;
+  width: 100%;
+}
+.statusbar .message .fa-check {
+  color: forestgreen;
+}
+.statusbar .message .fa-triangle-exclamation {
+  color: darkorange;
+}
+.statusbar .message .fa-ban {
+  color: red;
+}
+.statusbar .message .close:hover {
+  cursor: pointer;
+}
+.statusbar .message .manual {
+  color: red;
 }
 
 main {
   background-color: #fff;
-  padding: 15px 0;
+  padding: 5px 0 70px;
 }
