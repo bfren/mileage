@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>WebApp</title>
+	<title>Mileage Tracker</title>
 
 	<!-- Style -->
 	<typekit library="lar5het" />
@@ -25,19 +25,30 @@
 	</script>
 
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 
 	<!-- Header -->
 	<vc:header/>
 
-	<!-- Alerts -->
-	<div class="alerts container">
-		<alerts />
-	</div>
+	<main role="main" id="content" class="flex-grow-1 shadow">
 
-	<!-- Body -->
-	<main role="main" id="content" class="flex-shrink-0 shadow">
+		<!-- Alerts -->
+		<div class="container statusbar">
+			<div class="message hide rounded-2">
+			<div class="d-flex justify-content-between">
+				<div class="icon align-content-start pe-2"></div>
+				<div class="text flex-grow-1"></div>
+				<div class="close align-content-end">
+					<span class="countdown pe-1"></span>
+					<button type="button" class="btn-close" aria-label="Close Alert"></button>
+				</div>
+			</div>
+			</div>
+		</div>
+
+		<!-- Body -->
 		@RenderBody()
+
 	</main>
 
 	<!-- Footer -->
@@ -55,6 +66,9 @@
 		<script src="~/js/bundles/mileage.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 	</environment>
 	@await RenderSectionAsync("Scripts", required: false)
+	<script type="text/javascript" csp-add-nonce="true">
+		$.each(readyF, (_, f) => f());
+	</script>
 
 </body>
 </html>
