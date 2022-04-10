@@ -1,13 +1,14 @@
 /// <reference path="mileage" />
 
 .statusbar {
-  height: 40px;
+  min-height: 40px;
 
   .message {
     background-color: #ffffcc;
     border: 1px solid shade-color(#ffffcc, 10%);
+    overflow-y: visible;
     padding: 5px 8px;
-    width: 100%;
+    max-width: calc(100% - 55px);
 
     .fa-check {
       color: forestgreen;
