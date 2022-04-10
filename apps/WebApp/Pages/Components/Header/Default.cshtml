@@ -16,7 +16,7 @@
 					@foreach (var item in Model.Menu.Items)
 					{
 						string css = "";
-						if (this.Context.Request.Path.Value?.StartsWith(item.Page, StringComparison.InvariantCultureIgnoreCase) == true)
+						if (this.Context.IsChildOf(item.Page))
 						{
 							css = "active";
 						}
