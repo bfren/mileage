@@ -3,4 +3,30 @@
 
 <div class="container">
 
+	@if (Model.IncompleteJourneys.Count > 0)
+	{
+		<h2>Incomplete Journeys</h2>
+		<ul class="list-group w-100">
+			@foreach (var item in Model.IncompleteJourneys)
+			{
+				<li class="list-group-item d-flex justify-content-between align-items-start"
+					data-id="@item.Id"
+					data-version="@item.Version">
+					<div class="ms-2 me-auto mb-1 mb-sm-0">
+						<div class="fw-bold">
+							@item.Date.ToString("yyyy-MM-dd")
+							| Start @item.StartMiles miles
+						</div>
+						Car: <vc:car car-id="@item.CarId" journey-id="@item.Id"/>
+						From: <vc:place place-id="@item.FromPlaceId" journey-id="null"/>
+					</div>
+					<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
+					<button type="button" class="btn btn-success me-2"><i class="fa-solid fa-circle-check"></i></button>
+				</li>
+			}
+		</ul>
+	}
+
+	<h2 class="mt-4">Recent Journeys</h2>
+
 </div>

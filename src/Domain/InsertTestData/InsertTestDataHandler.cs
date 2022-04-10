@@ -11,6 +11,7 @@ using Mileage.Domain.SaveCar.Internals;
 using Mileage.Domain.SaveJourney.Internals;
 using Mileage.Domain.SavePlace.Internals;
 using Mileage.Domain.SaveRate.Internals;
+using Mileage.Domain.SaveSettings;
 using Mileage.Persistence.Common.StrongIds;
 using RndF;
 
@@ -40,16 +41,17 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 	public override async Task<Maybe<bool>> HandleAsync(InsertTestDataCommand command)
 	{
 		Log.Inf("Inserting test data.");
-		var q = from userId in Dispatcher.DispatchAsync(new CreateUserQuery("bf", "info@bfren.dev", "fred"))
-				from c0 in Dispatcher.DispatchAsync(new CreateCarQuery(userId, Rnd.Str))
-				from c1 in Dispatcher.DispatchAsync(new CreateCarQuery(userId, Rnd.Str))
-				from p0 in Dispatcher.DispatchAsync(new CreatePlaceQuery(userId, Rnd.Str, null))
-				from p1 in Dispatcher.DispatchAsync(new CreatePlaceQuery(userId, Rnd.Str, null))
-				from p2 in Dispatcher.DispatchAsync(new CreatePlaceQuery(userId, Rnd.Str, null))
-				from r0 in Dispatcher.DispatchAsync(new CreateRateQuery(userId, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
-				from r1 in Dispatcher.DispatchAsync(new CreateRateQuery(userId, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
-				from j0 in insertJourneys(userId, c0, p0, new[] { p1, p2 }, r0)
-				from j1 in insertJourneys(userId, c1, p0, new[] { p1, p2 }, r1)
+		var q = from u0 in Dispatcher.DispatchAsync(new CreateUserQuery("bf", "info@bfren.dev", "fred"))
+				from c0 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str))
+				from c1 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str))
+				from p0 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p1 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p2 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from r0 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
+				from r1 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
+				from j0 in insertJourneys(u0, c0, p0, new[] { p1, p2 }, r0)
+				from j1 in insertJourneys(u0, c1, p0, new[] { p1, p2 }, r1)
+				from s0 in Dispatcher.DispatchAsync(new SaveSettingsCommand(u0, new(0, c0, null)))
 				select true;
 
 		return await q.AuditAsync(

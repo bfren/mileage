@@ -1,13 +1,47 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Apps.Web.Constants;
+using Jeebs.Cqrs;
+using Jeebs.Mvc.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mileage.Domain.GetIncompleteJourneys;
 
 namespace Mileage.WebApp.Pages;
 
-public class IndexModel : PageModel
+#if DEBUG
+[ResponseCache(CacheProfileName = CacheProfiles.None)]
+#else
+[ResponseCache(CacheProfileName = CacheProfiles.Default)]
+#endif
+[Authorize]
+public sealed class IndexModel : PageModel
 {
-	public void OnGet()
+	private IDispatcher Dispatcher { get; init; }
+
+	public IList<IncompleteJourneyModel> IncompleteJourneys { get; private set; } = new List<IncompleteJourneyModel>();
+
+	public IndexModel(IDispatcher dispatcher) =>
+		Dispatcher = dispatcher;
+
+	public async Task<IActionResult> OnGetAsync()
 	{
+		foreach (var userId in User.GetUserId())
+		{
+			IncompleteJourneys = await Dispatcher
+				.DispatchAsync(
+					new GetIncompleteJourneysQuery(userId)
+				)
+				.SwitchAsync(
+					some: x => x.ToList(),
+					none: _ => new List<IncompleteJourneyModel>()
+				);
+
+			return Page();
+		}
+
+		return RedirectToPage("/auth/signout");
 	}
 }

@@ -10,14 +10,20 @@ public sealed class Menu
 {
 	public readonly record struct Item(string Text, string Page);
 
-	public IList<Item> Items { get; init; }
+	public IList<Item> Items { get; init; } = new List<Item>();
 
-	public Menu() =>
-		Items = new List<Item>
+	public Menu(bool isSignedIn)
+	{
+		if (isSignedIn)
 		{
-			{ new("Home", "/") },
-			{ new("Profile", "/profile") }
-		};
+			Items = new List<Item>
+			{
+				{ new("Settings", "/settings/index") },
+				{ new("Profile", "/auth/profile") },
+				{ new("Sign Out", "/auth/signout") }
+			};
+		}
+	}
 }
 
 public sealed record class HeaderModel(Menu Menu);
@@ -31,6 +37,6 @@ public sealed class HeaderViewComponent : ViewComponent
 {
 	public IViewComponentResult Invoke() =>
 		View(new HeaderModel(
-			Menu: new()
+			Menu: new(User.Identity?.IsAuthenticated == true)
 		));
 }

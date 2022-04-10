@@ -6,26 +6,33 @@
     },
     "db": {
       "default": "rpi",
+      "authentication": "rpi",
       "connections": {
         "rpi": {
           "connectionString": ""
         }
       }
     },
-		"logging": {
-			"minimum": "Verbose",
-			"providers": {
-				"console.serilog": {
-					"enabled": true
-				}
-			}
-		},
-		"services": {
-			"console": {
-				"serilog": {
-					"addPrefix": false
-				}
-			}
-		}
+    "logging": {
+      "minimum": "Debug",
+      "providers": {
+        "console.serilog": {
+          "enabled": true
+        }
+      }
+    },
+    "services": {
+      "console": {
+        "serilog": {
+          "addPrefix": false
+        }
+      }
+    },
+    "web": {
+      "auth": {
+        "enabled": true,
+        "scheme": "cookies"
+      }
+    }
   }
 }

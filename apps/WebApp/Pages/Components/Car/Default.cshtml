@@ -1,0 +1,15 @@
+@model Mileage.WebApp.Pages.Components.Car.CarModel
+
+@{
+	var data = new
+	{
+		id = Model.Id.Value,
+		target = Model.JourneyId is null ? "settings" : Model.JourneyId.Value.ToString()
+	};
+
+	var text = string.IsNullOrEmpty(Model.Description) ? "not set" : Model.Description.Trim();
+}
+
+<span class="car token">
+	<a href="javascript:void(0)" class="link-primary" data-id="@data.id" data-target="@data.target">@text</a>
+</span>

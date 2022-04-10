@@ -1,63 +1,65 @@
 [
-	/* SCRIPTS */
-	{
-		"outputFileName": "wwwroot/js/bundles/mileage-lib.js",
-		"inputFiles": [
-			"wwwroot/lib/bootstrap/js/bootstrap.bundle.js"
-		],
-		"minify": {
-			"enabled": false,
-			"renameLocals": false
-		}
-	},
-	{
-		"outputFileName": "wwwroot/js/bundles/mileage-lib.min.js",
-		"inputFiles": [
-			"wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js"
-		],
-		"minify": {
-			"enabled": false,
-			"renameLocals": false
-		}
-	},
-	{
-		"outputFileName": "wwwroot/js/bundles/mileage.js",
-		"inputFiles": [
-			"wwwroot/js/**/ *.inc.js"
-		],
-		"minify": {
-			"enabled": true,
-			"renameLocals": true
-		}
-	},
-	/* STYLESHEETS */
-	{
-		"outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.css",
-		"inputFiles": [
-			"wwwroot/lib/font-awesome/css/svg-with-js.css"
-		],
-		"minify": {
-			"enabled": false,
-			"renameLocals": false
-		}
-	},
-	{
-		"outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.min.css",
-		"inputFiles": [
-			"wwwroot/lib/font-awesome/css/svg-with-js.min.css"
-		],
-		"minify": {
-			"enabled": false,
-			"renameLocals": false
-		}
-	},
-	{
-		"outputFileName": "wwwroot/css/bundles/1.0/mileage.min.css",
-		"inputFiles": [
-			"wwwroot/css/bundles/1.0/mileage.css"
-		],
-		"minify": {
-			"enabled": true
-		}
-	}
+  /* SCRIPTS */
+  {
+    "outputFileName": "wwwroot/js/bundles/mileage-lib.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
+      "wwwroot/lib/jquery/jquery.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/mileage-lib.min.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js",
+      "wwwroot/lib/jquery/jquery.min.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/mileage.js",
+    "inputFiles": [
+      "wwwroot/js/**/*.inc.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  /* STYLESHEETS */
+  {
+    "outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.css",
+    "inputFiles": [
+      "wwwroot/lib/font-awesome/css/svg-with-js.css"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.min.css",
+    "inputFiles": [
+      "wwwroot/lib/font-awesome/css/svg-with-js.min.css"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundles/1.0/mileage.min.css",
+    "inputFiles": [
+      "wwwroot/css/bundles/1.0/mileage.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
 ]

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>WebApp</title>
+	<title>Mileage Tracker</title>
 
 	<!-- Style -->
 	<typekit library="lar5het" />
@@ -25,14 +25,22 @@
 	</script>
 
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 
+	<!-- Header -->
 	<vc:header/>
 
-	<main role="main" id="content" class="flex-shrink-0 shadow">
+	<main role="main" id="content" class="flex-grow-1 shadow">
+
+		<!-- Status Bar -->
+		<vc:status-bar/>
+
+		<!-- Body -->
 		@RenderBody()
+
 	</main>
 
+	<!-- Footer -->
 	<vc:footer/>
 
 	<!-- Script -->
@@ -47,6 +55,10 @@
 		<script src="~/js/bundles/mileage.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 	</environment>
 	@await RenderSectionAsync("Scripts", required: false)
+	<script type="text/javascript" csp-add-nonce="true">
+		$.each(readyF, (_, f) => f());
+	</script>
+	<jwt/>
 
 </body>
 </html>
