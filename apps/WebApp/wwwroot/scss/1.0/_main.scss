@@ -1,6 +1,16 @@
 /// <reference path="mileage" />
 
 main {
-	background-color: #fff;
-	padding: 5px 0 70px;
+  background-color: #fff;
+  padding: 5px 0 70px;
+}
+
+.list-group-item:hover {
+  background-color: $gray-100;
+}
+
+.token {
+  a {
+    font-weight: $font-weight-bold;
+  }
 }
