@@ -1,9 +1,13 @@
 const alertIcons = {
-	close: $("<i/>").addClass("fa-solid fa-xmark"),
-	info: $("<i/>").addClass("fa-solid fa-circle-info"),
-	success: $("<i/>").addClass("fa-solid fa-check"),
-	warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
-	error: $("<i/>").addClass("fa-solid fa-ban")
+  close: $("<i/>").addClass("fa-solid fa-xmark"),
+  info: $("<i/>").addClass("fa-solid fa-circle-info"),
+  success: $("<i/>").addClass("fa-solid fa-check"),
+  warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
+  error: $("<i/>").addClass("fa-solid fa-ban"),
+  edit: $("<i/>").addClass("fa-solid fa-pen-circle"),
+  delete: $("<i/>").addClass("fa-solid fa-circle-trash"),
+  complete: $("<i/>").addClass("fa-solid fa-circle-check"),
+  save: $("<i/>").addClass("fa-solid fa-ban")
 }
 
 const message = $(".statusbar > .message");
@@ -16,23 +20,23 @@ var alertTimeout = 0;
  * @param {string} text Alert text
  */
 function showAlert(type, text) {
-	// set alert values
-	message.find(".icon").html(alertIcons[type]);
-	message.find(".text").text(text);
-	message.find(".countdown").text("");
-	//message.find(".manual").html(alertIcons["close"]);
+  // set alert values
+  message.find(".icon").html(alertIcons[type]);
+  message.find(".text").text(text);
+  message.find(".countdown").text("");
+  //message.find(".manual").html(alertIcons["close"]);
 
-	// show alert and clear any existing timeouts
-	message.show();
-	clearTimeout(alertTimeout);
+  // show alert and clear any existing timeouts
+  message.show();
+  clearTimeout(alertTimeout);
 
-	// make error alerts sticky
-	if (type == "error") {
-		return;
-	}
+  // make error alerts sticky
+  if (type == "error") {
+    return;
+  }
 
-	// start countdown to hide other alerts automatically
-	updateAlert(5);
+  // start countdown to hide other alerts automatically
+  updateAlert(5);
 }
 
 /**
@@ -41,13 +45,13 @@ function showAlert(type, text) {
  * @param {number} seconds
  */
 function updateAlert(seconds) {
-	if (seconds == 0) {
-		closeAlert();
-		return;
-	}
+  if (seconds == 0) {
+    closeAlert();
+    return;
+  }
 
-	message.find(".countdown").text(seconds);
-	alertTimeout = setTimeout(() => updateAlert(seconds - 1), 1000);
+  message.find(".countdown").text(seconds);
+  alertTimeout = setTimeout(() => updateAlert(seconds - 1), 1000);
 }
 
 /**
@@ -55,13 +59,13 @@ function updateAlert(seconds) {
  * 
  */
 function closeAlert() {
-	message.slideUp();
+  message.slideUp();
 }
 
 ready(function () {
-	message.find(".close").click(function () {
-		closeAlert();
-	});
+  message.find(".close").click(function () {
+    closeAlert();
+  });
 })
 
 /**
@@ -74,44 +78,44 @@ function showAlertsOnLoad() {
 ready(showAlertsOnLoad);
 
 function handleResult(r) {
-	// show message and pass value to success function
-	showAlert(r.message.type, r.message.text);
+  // show message and pass value to success function
+  showAlert(r.message.type, r.message.text);
 
-	// redirect
-	if (r.redirectTo) {
-		showAlert("info", "Redirecting, please wait...");
-		window.location.href = r.redirectTo;
-	}
+  // redirect
+  if (r.redirectTo) {
+    showAlert("info", "Redirecting, please wait...");
+    window.location.href = r.redirectTo;
+  }
 }
 
-function useAjaxSubmit() {
-	$("form").submit(function (e) {
-		// stop default submit
-		e.preventDefault();
+function setupAjaxSubmit() {
+  $("form").submit(function (e) {
+    // stop default submit
+    e.preventDefault();
 
-		// show info message
-		showAlert("info", "Please wait...");
+    // show info message
+    showAlert("info", "Please wait...");
 
-		// get form info
-		var form = $(this);
-		var url = form.attr("action");
-		var data = form.serialize();
+    // get form info
+    var form = $(this);
+    var url = form.attr("action");
+    var data = form.serialize();
 
-		// post data and handle result
-		$.ajax({
-			url: url,
-			method: "POST",
-			data: data,
-			dataType: "json"
-		}).done(
-			function (data) {
-				handleResult(data);
-			}
-		).fail(
-			function (error) {
-				handleResult(error.responseJSON);
-			}
-		);
-	});
+    // post data and handle result
+    $.ajax({
+      url: url,
+      method: "POST",
+      data: data,
+      dataType: "json"
+    }).done(
+      function (data) {
+        handleResult(data);
+      }
+    ).fail(
+      function (error) {
+        handleResult(error.responseJSON);
+      }
+    );
+  });
 }
-ready(useAjaxSubmit);
+ready(setupAjaxSubmit);
