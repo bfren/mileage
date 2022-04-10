@@ -32,19 +32,8 @@
 
 	<main role="main" id="content" class="flex-grow-1 shadow">
 
-		<!-- Alerts -->
-		<div class="container statusbar">
-			<div class="message hide rounded-2">
-			<div class="d-flex justify-content-between">
-				<div class="icon align-content-start pe-2"></div>
-				<div class="text flex-grow-1"></div>
-				<div class="close align-content-end">
-					<span class="countdown pe-1"></span>
-					<button type="button" class="btn-close" aria-label="Close Alert"></button>
-				</div>
-			</div>
-			</div>
-		</div>
+		<!-- Status Bar -->
+		<vc:status-bar/>
 
 		<!-- Body -->
 		@RenderBody()
