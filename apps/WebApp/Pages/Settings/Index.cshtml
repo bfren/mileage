@@ -1,4 +1,19 @@
-﻿@page
+@page
 @model Mileage.WebApp.Pages.Settings.IndexModel
 @{
+	var settings = Model.Settings;
 }
+
+<div class="container">
+
+	<h2>Settings</h2>
+
+	<div>
+		<p>Default car: <vc:car car-id="@settings.DefaultCarId" journey-id="null"/></p>
+	</div>
+
+	<div>
+		<p>Default from place: <vc:place place-id="@settings.DefaultFromPlaceId" journey-id="null"/></p>
+	</div>
+
+</div>
