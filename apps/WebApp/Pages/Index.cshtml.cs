@@ -3,6 +3,7 @@
 
 using Jeebs.Apps.Web.Constants;
 using Jeebs.Cqrs;
+using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,15 +26,22 @@ public sealed class IndexModel : PageModel
 	public IndexModel(IDispatcher dispatcher) =>
 		Dispatcher = dispatcher;
 
-	public async Task OnGetAsync()
+	public async Task<IActionResult> OnGetAsync()
 	{
-		IncompleteJourneys = await Dispatcher.DispatchAsync(
-			new GetIncompleteJourneysQuery(new() { Value = 68 })
-		).SwitchAsync(
-			some: x => x.ToList(),
-			none: _ => new List<IncompleteJourneyModel>()
-		);
+		foreach (var userId in User.GetUserId())
+		{
+			IncompleteJourneys = await Dispatcher
+				.DispatchAsync(
+					new GetIncompleteJourneysQuery(userId)
+				)
+				.SwitchAsync(
+					some: x => x.ToList(),
+					none: _ => new List<IncompleteJourneyModel>()
+				);
 
-		return;
+			return Page();
+		}
+
+		return RedirectToPage("/auth/signout");
 	}
 }
