@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public class SignInModel : PageModel
+public sealed class SignInModel : PageModel
 {
 	private IAuthDataProvider Auth { get; }
 
