@@ -4,13 +4,13 @@ const alertIcons = {
   success: $("<i/>").addClass("fa-solid fa-check"),
   warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
   error: $("<i/>").addClass("fa-solid fa-ban"),
-  edit: $("<i/>").addClass("fa-solid fa-pen-circle"),
-  delete: $("<i/>").addClass("fa-solid fa-circle-trash"),
+  edit: $("<i/>").addClass("fa-solid fa-circle-plus"),
+  delete: $("<i/>").addClass("fa-solid fa-circle-minus"),
   complete: $("<i/>").addClass("fa-solid fa-circle-check"),
   save: $("<i/>").addClass("fa-solid fa-ban")
 }
 
-const message = $(".statusbar > .message");
+const message = $(".statusbar .message");
 var alertTimeout = 0;
 
 /**
@@ -63,7 +63,7 @@ function closeAlert() {
 }
 
 ready(function () {
-  message.find(".close").click(function () {
+  message.click(function () {
     closeAlert();
   });
 })

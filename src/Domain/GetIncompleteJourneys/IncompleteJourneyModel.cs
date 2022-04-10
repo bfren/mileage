@@ -1,6 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using System;
 using Jeebs.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -15,6 +16,12 @@ public sealed record class IncompleteJourneyModel : IWithVersion<JourneyId>
 
 	/// <inheritdoc cref="JourneyEntity.Version"/>
 	public long Version { get; init; }
+
+	/// <inheritdoc cref="JourneyEntity.Date"/>
+	public DateTime Date { get; init; }
+
+	/// <inheritdoc cref="JourneyEntity.FromPlaceId"/>
+	public PlaceId FromPlaceId { get; init; } = new();
 
 	/// <inheritdoc cref="JourneyEntity.CarId"/>
 	public CarId CarId { get; init; } = new();
