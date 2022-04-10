@@ -5,7 +5,7 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.GetCarForJourney;
+using Mileage.Domain.GetCar;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Car;
