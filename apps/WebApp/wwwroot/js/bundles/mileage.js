@@ -59,7 +59,7 @@ function updateAlert(seconds) {
  * 
  */
 function closeAlert() {
-  message.slideUp();
+  message.fadeOut();
 }
 
 ready(function () {
@@ -76,6 +76,48 @@ function showAlertsOnLoad() {
 }
 
 ready(showAlertsOnLoad);
+
+
+
+function setupTokenModals() {
+  $(".token > a").click(function () {
+    var editUrl = $(this).data("edit");
+    var replaceId = $(this).data("replace");
+    openModal(editUrl, replaceId);
+  });
+}
+ready(setupTokenModals);
+
+function openModal(url, replaceId) {
+  // show messages
+  showAlert("info", "Please wait...");
+  console.log("Loading modal from: " + url);
+
+  // load modal HTML and then show modal
+  $("#edit").load(url, function () {
+    // save replaceId
+    var form = $(this).find("form");
+    form.attr("data-replace", replaceId);
+
+    // close an alert
+    closeAlert();
+
+    // create and show the modal
+    var edit = document.getElementById("edit-modal");
+    var modal = new bootstrap.Modal(edit);
+    modal.show();
+
+    // setup save button and ajax submit
+    setupModalSave();
+    setupAjaxSubmit();
+  });
+}
+
+function setupModalSave() {
+  $("#edit .btn-save").click(function () {
+    $("#edit form").submit();
+  });
+}
 
 function handleResult(r) {
   // show message and pass value to success function
@@ -99,23 +141,33 @@ function setupAjaxSubmit() {
     // get form info
     var form = $(this);
     var url = form.attr("action");
+    var replaceId = form.data("replace");
     var data = form.serialize();
 
     // post data and handle result
     $.ajax({
       url: url,
       method: "POST",
-      data: data,
-      dataType: "json"
-    }).done(
-      function (data) {
+      data: data
+    }).done(function (data) {
+      if (replaceId) { // the response is expecting HTML to replace an object
+        if (data) { // there is some HTML to use
+          $("#" + replaceId).replaceWith(data);
+          showAlert("success", "Saved.");
+          setupTokenModals();
+        } else { // there is no HTML to use
+          showAlert("error", "Unable to save, please try again.");
+        }
+      } else if (data) { // the response is expecting a JSON result
         handleResult(data);
       }
-    ).fail(
-      function (error) {
+    }).fail(function (error) {
+      if (error && error.responseJSON) { // the response is a JSON result
         handleResult(error.responseJSON);
+      } else { // something else has gone wrong
+        showAlert("error", "Something went wrong, please try again.");
       }
-    );
+    });
   });
 }
 ready(setupAjaxSubmit);

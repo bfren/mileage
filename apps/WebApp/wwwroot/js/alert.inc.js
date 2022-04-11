@@ -59,7 +59,7 @@ function updateAlert(seconds) {
  * 
  */
 function closeAlert() {
-  message.slideUp();
+  message.fadeOut();
 }
 
 ready(function () {
