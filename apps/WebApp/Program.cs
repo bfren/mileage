@@ -10,11 +10,11 @@ var dispatcher = app.Services.GetRequiredService<IDispatcher>();
 await dispatcher.DispatchAsync(
 	new Mileage.Domain.MigrateToLatest.MigrateToLatestCommand()
 );
-await dispatcher.DispatchAsync(
-	new Mileage.Domain.TruncateEverything.TruncateEverythingCommand()
-);
-await dispatcher.DispatchAsync(
-	new Mileage.Domain.InsertTestData.InsertTestDataCommand()
-);
+//await dispatcher.DispatchAsync(
+//	new Mileage.Domain.TruncateEverything.TruncateEverythingCommand()
+//);
+//await dispatcher.DispatchAsync(
+//	new Mileage.Domain.InsertTestData.InsertTestDataCommand()
+//);
 
 app.Run();
