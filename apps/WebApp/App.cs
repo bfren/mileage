@@ -7,6 +7,7 @@ using Jeebs.Mvc.Auth;
 using Jeebs.Mvc.Data;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain;
+using Serilog;
 
 namespace Mileage.WebApp;
 
@@ -26,13 +27,18 @@ public sealed class App : RazorApp
 	protected override void ConfigureServicesMvcOptions(MvcOptions opt)
 	{
 		base.ConfigureServicesMvcOptions(opt);
-
 		opt.AddStrongIdModelBinding();
 	}
 
 	protected override void ConfigureAuth(WebApplication app, IConfiguration config)
 	{
-		app.UseAuthentication();
+		_ = app.UseAuthentication();
 		base.ConfigureAuth(app, config);
+	}
+
+	public override void ConfigureSerilog(HostBuilderContext ctx, LoggerConfiguration loggerConfig)
+	{
+		base.ConfigureSerilog(ctx, loggerConfig);
+		_ = loggerConfig.MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning);
 	}
 }
