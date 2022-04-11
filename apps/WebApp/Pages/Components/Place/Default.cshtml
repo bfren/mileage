@@ -8,8 +8,10 @@
 	};
 
 	var text = string.IsNullOrEmpty(Model.Description) ? "not set" : Model.Description.Trim();
+
+	var tokenId = Rnd.Str;
 }
 
-<span class="place token">
-	<a href="javascript:void(0)" class="link-primary" data-id="@data.id" data-target="@data.target">@text</a>
+<span id="@tokenId" class="place token">
+	<a href="javascript:void(0)" class="link-primary" data-edit="@Model.EditUrl" data-replace="@tokenId" data-id="@data.id" data-target="@data.target">@text</a>
 </span>

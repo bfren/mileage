@@ -10,10 +10,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Car;
 
-public sealed record class CarModel(CarId Id, string Description, JourneyId? JourneyId)
+public sealed record class CarModel(string? EditUrl, CarId Id, string Description, JourneyId? JourneyId)
 {
-	public static CarModel Blank =>
-		new(new(), string.Empty, null);
+	public static CarModel Blank(string? editUrl) =>
+		new(editUrl, new(), string.Empty, null);
 }
 
 public sealed class CarViewComponent : ViewComponent
@@ -25,10 +25,17 @@ public sealed class CarViewComponent : ViewComponent
 	public CarViewComponent(IDispatcher dispatcher, ILog<CarViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public Task<IViewComponentResult> InvokeAsync(CarId carId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string editPath, CarId carId, JourneyId? journeyId)
 	{
-		Log.Dbg("Get car {CarId}.", carId);
-		return UserClaimsPrincipal
+		var editUrl = Url.PageLink(editPath);
+		if (carId is null)
+		{
+			return View(CarModel.Blank(editUrl));
+		}
+
+		Log.Dbg("Get car: {CarId}.", carId);
+
+		return await UserClaimsPrincipal
 			.GetUserId()
 			.BindAsync(
 				x => Dispatcher.DispatchAsync(
@@ -39,8 +46,8 @@ public sealed class CarViewComponent : ViewComponent
 				none: r => Log.Err("Unable to get car: {Reason}", r)
 			)
 			.SwitchAsync(
-				some: x => View(new CarModel(x.Id, x.Description, journeyId)),
-				none: _ => (IViewComponentResult)View(CarModel.Blank)
+				some: x => View(new CarModel(editUrl, x.Id, x.Description, journeyId)),
+				none: _ => (IViewComponentResult)View(CarModel.Blank(editUrl))
 			);
 	}
 }

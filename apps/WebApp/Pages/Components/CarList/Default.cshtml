@@ -1,0 +1,23 @@
+@model Mileage.WebApp.Pages.Components.CarList.CarListModel
+
+@if (Model.Cars.Any())
+{
+	if (Model.AllowNull)
+	{
+		var check = Model.SelectedCar is null ? " checked" : string.Empty;
+		<input type="radio" class="btn-check" id="car-null" name="@Model.ListName" value="null" autocomplete="off"@check/>
+		<label class="btn btn-outline-primary" for="car-null">None</label>
+	}
+
+	foreach (var item in Model.Cars)
+	{
+		var id = $"car-{item.Id.Value}";
+		var check = item.Id == Model.SelectedCar ? " checked" : string.Empty;
+		<input type="radio" class="btn-check" id="@id" name="@Model.ListName" value="@item.Id.Value" autocomplete="off"@check/>
+		<label class="btn btn-outline-primary" for="@id">@item.Description.Trim()</label>
+	}
+}
+else
+{
+	<p>Please add some cars.</p>
+}
