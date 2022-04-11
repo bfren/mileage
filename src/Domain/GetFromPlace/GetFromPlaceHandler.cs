@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using Jeebs.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetFromPlace;
@@ -20,11 +21,22 @@ public sealed class GetFromPlaceHandler : QueryHandler<GetFromPlaceQuery, GetFro
 
 	public override Task<Maybe<GetFromPlaceModel>> HandleAsync(GetFromPlaceQuery query)
 	{
+		if (query.PlaceId is null)
+		{
+			return F.None<GetFromPlaceModel, M.PlaceIdIsNullMsg>().AsTask;
+		}
+
 		Log.Vrb("Get place: {Query}.", query);
 		return Place
 			.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, query.PlaceId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<GetFromPlaceModel>();
+	}
+
+	/// <summary>Messages</summary>
+	public static class M
+	{
+		public sealed record class PlaceIdIsNullMsg : Msg;
 	}
 }
