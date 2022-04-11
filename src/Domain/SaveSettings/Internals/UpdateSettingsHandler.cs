@@ -35,6 +35,7 @@ internal sealed class UpdateSettingsHandler : CommandHandler<UpdateSettingsComma
 		return Settings
 			.UpdateAsync(command.ExistingSettings with
 			{
+				Version = command.UpdatedSettings.Version,
 				DefaultCarId = command.UpdatedSettings.DefaultCarId,
 				DefaultFromPlaceId = command.UpdatedSettings.DefaultFromPlaceId
 			});
