@@ -17,7 +17,7 @@
 							@item.Date.ToString("yyyy-MM-dd")
 							| Start @item.StartMiles miles
 						</div>
-						Car: <vc:car car-id="@item.CarId" journey-id="@item.Id"/>
+						Car: <vc:car edit-path="" car-id="@item.CarId" journey-id="@item.Id"/>
 						From: <vc:place place-id="@item.FromPlaceId" journey-id="null"/>
 					</div>
 					<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
