@@ -9,11 +9,21 @@
 	<h2>Settings</h2>
 
 	<div>
-		<p>Default car: <vc:car car-id="@settings.DefaultCarId" journey-id="null"/></p>
+		Default car:
+		<vc:car
+			edit-path="EditDefaultCar"
+			car-id="@settings.DefaultCarId"
+			journey-id="null"
+		/>
 	</div>
 
 	<div>
-		<p>Default from place: <vc:place place-id="@settings.DefaultFromPlaceId" journey-id="null"/></p>
+		Default starting place:
+		<vc:place
+			edit-path="EditDefaultFromPlace"
+			place-id="@settings.DefaultFromPlaceId"
+			journey-id="null"
+		/>
 	</div>
 
 </div>
