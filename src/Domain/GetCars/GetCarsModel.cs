@@ -4,6 +4,6 @@
 using Mileage.Persistence.Common.StrongIds;
 using StrongId;
 
-namespace Mileage.Domain.GetPlacesForUser;
+namespace Mileage.Domain.GetCars;
 
-public sealed record class GetPlacesForUserModel(PlaceId Id, string Description) : IWithId<PlaceId>;
+public sealed record class GetCarsModel(CarId Id, string Description) : IWithId<CarId>;

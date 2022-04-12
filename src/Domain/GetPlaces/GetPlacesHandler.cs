@@ -8,24 +8,24 @@ using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.GetPlacesForUser;
+namespace Mileage.Domain.GetPlaces;
 
-public sealed class GetPlacesForUserHandler : QueryHandler<GetPlacesForUserQuery, IEnumerable<GetPlacesForUserModel>>
+public sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerable<GetPlacesModel>>
 {
 	private IPlaceRepository Place { get; init; }
 
-	private ILog<GetPlacesForUserHandler> Log { get; init; }
+	private ILog<GetPlacesHandler> Log { get; init; }
 
-	public GetPlacesForUserHandler(IPlaceRepository place, ILog<GetPlacesForUserHandler> log) =>
+	public GetPlacesHandler(IPlaceRepository place, ILog<GetPlacesHandler> log) =>
 		(Place, Log) = (place, log);
 
-	public override Task<Maybe<IEnumerable<GetPlacesForUserModel>>> HandleAsync(GetPlacesForUserQuery query)
+	public override Task<Maybe<IEnumerable<GetPlacesModel>>> HandleAsync(GetPlacesQuery query)
 	{
 		Log.Vrb("Get places for {User}", query.UserId);
 		return Place
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Sort(x => x.Description, SortOrder.Ascending)
-			.QueryAsync<GetPlacesForUserModel>();
+			.QueryAsync<GetPlacesModel>();
 	}
 }

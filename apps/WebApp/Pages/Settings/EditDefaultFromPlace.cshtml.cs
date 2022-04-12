@@ -6,7 +6,7 @@ using Jeebs.Logging;
 using Jeebs.Messages;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.GetPlacesForUser;
+using Mileage.Domain.GetPlaces;
 using Mileage.Domain.SaveSettings;
 using Mileage.WebApp.Pages.Partials;
 
@@ -16,7 +16,7 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
-	public List<GetPlacesForUserModel> Places { get; set; } = new();
+	public List<GetPlacesModel> Places { get; set; } = new();
 
 	public IDispatcher Dispatcher { get; }
 
@@ -30,7 +30,7 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
 					from s in Dispatcher.DispatchAsync(new Domain.LoadSettings.LoadSettingsQuery(u))
-					from p in Dispatcher.DispatchAsync(new GetPlacesForUserQuery(u))
+					from p in Dispatcher.DispatchAsync(new GetPlacesQuery(u))
 					select new
 					{
 						Settings = s,

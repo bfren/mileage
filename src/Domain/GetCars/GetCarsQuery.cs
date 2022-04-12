@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 
-namespace Mileage.Domain.GetCarsForUser;
+namespace Mileage.Domain.GetCars;
 
-public sealed record class GetCarsForUserQuery(
+public sealed record class GetCarsQuery(
 	AuthUserId UserId
-) : IQuery<IEnumerable<GetCarsForUserModel>>;
+) : IQuery<IEnumerable<GetCarsModel>>;

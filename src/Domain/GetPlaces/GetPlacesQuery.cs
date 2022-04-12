@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 
-namespace Mileage.Domain.GetPlacesForUser;
+namespace Mileage.Domain.GetPlaces;
 
-public sealed record class GetPlacesForUserQuery(
+public sealed record class GetPlacesQuery(
 	AuthUserId UserId
-) : IQuery<IEnumerable<GetPlacesForUserModel>>;
+) : IQuery<IEnumerable<GetPlacesModel>>;

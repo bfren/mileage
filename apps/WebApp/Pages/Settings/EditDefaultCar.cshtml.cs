@@ -6,7 +6,7 @@ using Jeebs.Logging;
 using Jeebs.Messages;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.GetCarsForUser;
+using Mileage.Domain.GetCars;
 using Mileage.Domain.SaveSettings;
 using Mileage.WebApp.Pages.Partials;
 
@@ -17,7 +17,7 @@ public sealed class EditDefaultCarModel : EditModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
-	public List<GetCarsForUserModel> Cars { get; set; } = new();
+	public List<GetCarsModel> Cars { get; set; } = new();
 
 	public IDispatcher Dispatcher { get; }
 
@@ -33,7 +33,7 @@ public sealed class EditDefaultCarModel : EditModalModel
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
 					from s in Dispatcher.DispatchAsync(new Domain.LoadSettings.LoadSettingsQuery(u))
-					from c in Dispatcher.DispatchAsync(new GetCarsForUserQuery(u))
+					from c in Dispatcher.DispatchAsync(new GetCarsQuery(u))
 					select new
 					{
 						Settings = s,

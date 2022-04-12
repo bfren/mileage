@@ -8,24 +8,24 @@ using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.GetCarsForUser;
+namespace Mileage.Domain.GetCars;
 
-public sealed class GetCarsForUserHandler : QueryHandler<GetCarsForUserQuery, IEnumerable<GetCarsForUserModel>>
+public sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<GetCarsModel>>
 {
 	private ICarRepository Car { get; init; }
 
-	private ILog<GetCarsForUserHandler> Log { get; init; }
+	private ILog<GetCarsHandler> Log { get; init; }
 
-	public GetCarsForUserHandler(ICarRepository car, ILog<GetCarsForUserHandler> log) =>
+	public GetCarsHandler(ICarRepository car, ILog<GetCarsHandler> log) =>
 		(Car, Log) = (car, log);
 
-	public override Task<Maybe<IEnumerable<GetCarsForUserModel>>> HandleAsync(GetCarsForUserQuery query)
+	public override Task<Maybe<IEnumerable<GetCarsModel>>> HandleAsync(GetCarsQuery query)
 	{
 		Log.Vrb("Get cars for {User}", query.UserId);
 		return Car
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Sort(x => x.Description, SortOrder.Ascending)
-			.QueryAsync<GetCarsForUserModel>();
+			.QueryAsync<GetCarsModel>();
 	}
 }
