@@ -3,22 +3,34 @@
 
 @if (Model.Items.Any())
 {
-	if (Model.AllowNull)
-	{
-		var check = Model.Selected is null ? " checked" : string.Empty;
-		<input type="radio" class="btn-check" id="@Model.Singular-null" name="@Model.ListName" value="null" autocomplete="off"@check/>
-		<label class="btn btn-outline-primary" for="@Model.Singular-null">None</label>
-	}
+	<div class="mb-2">
+		<input type="text" class="form-control modal-select" id="list-filter" placeholder="Search..." autocomplete="off" />
+	</div>
 
-	foreach (var item in Model.Items)
-	{
-		var id = $"{Model.Singular}-{item.Id}";
-		var check = item.Id == Model.Selected ? " checked" : string.Empty;
-		<input type="radio" class="btn-check" id="@id" name="@Model.ListName" value="@item.Id" autocomplete="off"@check/>
-		<label class="btn btn-outline-primary" for="@id">@item.Text.Trim()</label>
-	}
+	<div class="list-items mb-3" id="list-items">
+		@if (Model.AllowNull)
+		{
+			Radio($"{Model.Singular}-null", "null", "None", Model.Selected is null);
+		}
+
+		@foreach (var item in Model.Items)
+		{
+			Radio($"{Model.Singular}-{item.Id}", item.Id, item.Text.Trim(), Model.Selected == item.Id);
+		}
+	</div>
 }
 else
 {
 	<p>Please add some @Model.Singular.Pluralise(2).</p>
+}
+
+@functions {
+	void Radio(string id, object value, string text, bool selected)
+	{
+		var check = selected ? "checked" : string.Empty;
+		<div class="list-item" data-text="@text.ToLowerInvariant()">
+			<input type="radio" class="btn-check" id="@id" name="@Model.ListName" value="@value" autocomplete="off" @check />
+			<label class="btn btn-outline-primary" for="@id">@text</label>
+		</div>
+	}
 }

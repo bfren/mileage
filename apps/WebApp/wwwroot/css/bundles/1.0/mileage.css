@@ -11225,6 +11225,9 @@ main {
 #edit .modal-dialog {
   margin: 3rem auto;
 }
+#edit .list-items .list-item {
+  display: inline;
+}
 
 .btn-new {
   float: right;
