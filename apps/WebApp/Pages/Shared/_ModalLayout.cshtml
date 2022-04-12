@@ -1,8 +1,8 @@
 @model Mileage.WebApp.Pages.Partials.EditModalModel
 
-<div id="edit-modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
+<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false">
+	<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-content shadow">
 			<div class="modal-header">
 				<h5 class="modal-title">@Model.Title</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -12,7 +12,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary btn-save" data-bs-dismiss="modal">Save</button>
+				<button type="button" class="btn btn-primary btn-save">Save</button>
 			</div>
 		</div>
 	</div>

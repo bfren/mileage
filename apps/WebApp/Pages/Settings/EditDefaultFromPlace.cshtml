@@ -13,7 +13,7 @@
 		selected-place="@Model.Settings.DefaultFromPlaceId"
 	/>
 
-	@Html.HiddenFor(x => x.Settings.DefaultCarId)
+	@Html.HiddenForId(x => x.Settings.DefaultCarId)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
 </form>

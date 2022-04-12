@@ -13,7 +13,7 @@
 		selected-car="@Model.Settings.DefaultCarId"
 	/>
 
-	@Html.HiddenFor(x => x.Settings.DefaultFromPlaceId)
+	@Html.HiddenForId(x => x.Settings.DefaultFromPlaceId)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
 </form>
