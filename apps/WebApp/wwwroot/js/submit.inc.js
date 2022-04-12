@@ -1,41 +1,50 @@
 function setupAjaxSubmit() {
-  $("form").submit(function (e) {
-    // stop default submit
-    e.preventDefault();
+	$("form").submit(function (e) {
+		// stop default submit
+		e.preventDefault();
 
-    // show info message
-    showAlert("info", "Please wait...");
+		// show info message
+		showPleaseWaitAlert();
 
-    // get form info
-    var form = $(this);
-    var url = form.attr("action");
-    var replaceId = form.data("replace");
-    var data = form.serialize();
+		// get form info
+		var form = $(this);
+		var replaceId = form.data("replace");
 
-    // post data and handle result
-    $.ajax({
-      url: url,
-      method: "POST",
-      data: data
-    }).done(function (data) {
-      if (replaceId) { // the response is expecting HTML to replace an object
-        if (data) { // there is some HTML to use
-          $("#" + replaceId).replaceWith(data);
-          showAlert("success", "Saved.");
-          setupTokenModals();
-        } else { // there is no HTML to use
-          showAlert("error", "Unable to save, please try again.");
-        }
-      } else if (data) { // the response is expecting a JSON result
-        handleResult(data);
-      }
-    }).fail(function (error) {
-      if (error && error.responseJSON) { // the response is a JSON result
-        handleResult(error.responseJSON);
-      } else { // something else has gone wrong
-        showAlert("error", "Something went wrong, please try again.");
-      }
-    });
-  });
+		// post data and handle result
+		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
+
+			.done(function (data) {
+				// we are expecting HTML to replace an object
+				if (replaceId) {
+					// there is some HTML to use
+					if (data) {
+						$("#" + replaceId).replaceWith(data);
+						showAlert("success", "Saved.");
+						setupTokenModals();
+						return;
+					}
+
+					// there is no HTML to use
+					showAlert("error", "Unable to save, please try again.");
+					return;
+				}
+
+				// handle a JSON result object
+				if (data) { 
+					handleResult(data);
+				}
+			})
+
+			.fail(function (error) {
+				// the response is a JSON result
+				if (error && error.responseJSON) { 
+					handleResult(error.responseJSON);
+					return;
+				}
+
+				// something else has gone wrong
+				showAlert("error", "Something went wrong, please try again.");
+			});
+	});
 }
 ready(setupAjaxSubmit);
