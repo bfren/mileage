@@ -33,7 +33,6 @@ function openModal(url, replaceId) {
 		// create the modal object
 		var wrapper = $(this);
 		var modalId = $(this).find(".modal").attr("id");
-
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
@@ -51,10 +50,11 @@ function openModal(url, replaceId) {
 			closeAlert();
 		});
 
+		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
 		modal.show();
 
-		// Setup save and submit
+		// Setup behaviours
 		setupModalSearch();
 		setupModalSave();
 		setupAjaxSubmit();
@@ -66,19 +66,32 @@ function openModal(url, replaceId) {
  *
  */
 function setupModalSearch() {
+	// hide add item  button
+	var addItem = $("#edit .btn-add");
+	addItem.hide();
+
+	// don't submit form on enter
 	$("#list-filter").keydown(function (e) {
-		// ignore enter key
 		if (e.keyCode == 13) {
 			e.preventDefault();
-			return;
 		}
+	});
 
+	// filter as the user types
+	$("#list-filter").keyup(function () {
 		// get value from input
-		var value = $(this).val().toLowerCase();
+		var value = $(this).val();
+
+		// show add item button
+		if (value) {
+			addItem.text("Add: " + value).show();
+		} else {
+			addItem.text("").hide();
+		}
 
 		// filter items that match the input value
 		$("#list-items .list-item").filter(function () {
-			$(this).toggle($(this).data("text").indexOf(value) > -1);
+			$(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1);
 		});
 	});
 }
