@@ -9,8 +9,8 @@
 	<vc:place-list
 		list-name="Settings.DefaultFromPlaceId"
 		allow-null="true"
-		places="@Model.Places"
-		selected-place="@Model.Settings.DefaultFromPlaceId"
+		items="@Model.Places"
+		selected="@Model.Settings.DefaultFromPlaceId"
 	/>
 
 	@Html.HiddenForId(x => x.Settings.DefaultCarId)

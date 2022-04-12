@@ -9,9 +9,9 @@
 	<vc:car-list
 		list-name="Settings.DefaultCarId"
 		allow-null="true"
-		cars="@Model.Cars"
-		selected-car="@Model.Settings.DefaultCarId"
-	/>
+		items="@Model.Cars"
+		selected="@Model.Settings.DefaultCarId"
+	/>		
 
 	@Html.HiddenForId(x => x.Settings.DefaultFromPlaceId)
 	@Html.HiddenFor(x => x.Settings.Version)

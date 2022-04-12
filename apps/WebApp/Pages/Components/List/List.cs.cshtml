@@ -1,0 +1,24 @@
+@using Jeebs.Extensions
+@model Mileage.WebApp.Pages.Components.List.ListModel
+
+@if (Model.Items.Any())
+{
+	if (Model.AllowNull)
+	{
+		var check = Model.Selected is null ? " checked" : string.Empty;
+		<input type="radio" class="btn-check" id="@Model.Singular-null" name="@Model.ListName" value="null" autocomplete="off"@check/>
+		<label class="btn btn-outline-primary" for="@Model.Singular-null">None</label>
+	}
+
+	foreach (var item in Model.Items)
+	{
+		var id = $"{Model.Singular}-{item.Id}";
+		var check = item.Id == Model.Selected ? " checked" : string.Empty;
+		<input type="radio" class="btn-check" id="@id" name="@Model.ListName" value="@item.Id" autocomplete="off"@check/>
+		<label class="btn btn-outline-primary" for="@id">@item.Text.Trim()</label>
+	}
+}
+else
+{
+	<p>Please add some @Model.Singular.Pluralise(2).</p>
+}
