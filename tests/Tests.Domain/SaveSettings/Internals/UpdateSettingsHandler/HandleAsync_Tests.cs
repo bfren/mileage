@@ -51,13 +51,14 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var existingSettings = new SettingsEntity
 		{
 			Id = settingsId,
-			Version = version,
+			Version = Rnd.Lng,
 			UserId = userId,
 			DefaultCarId = LongId<CarId>(),
 			DefaultFromPlaceId = LongId<PlaceId>()
 		};
 		var updatedSettings = new Settings
 		{
+			Version = version,
 			DefaultCarId = carId,
 			DefaultFromPlaceId = placeId
 		};
@@ -69,8 +70,12 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().UpdateAsync(Arg.Is<SettingsEntity>(
-			x => x.Id == settingsId && x.Version == version && x.UserId == userId && x.DefaultCarId == carId && x.DefaultFromPlaceId == placeId
+		await v.Repo.Received().UpdateAsync(Arg.Is<SettingsEntity>(x =>
+			x.Id == settingsId
+			&& x.Version == version
+			&& x.UserId == userId
+			&& x.DefaultCarId == carId
+			&& x.DefaultFromPlaceId == placeId
 		));
 	}
 
