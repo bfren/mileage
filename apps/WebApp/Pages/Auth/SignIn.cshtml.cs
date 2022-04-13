@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Mileage.WebApp.Pages.Auth;
 
+[ValidateAntiForgeryToken]
 public sealed class SignInModel : PageModel
 {
 	private IAuthDataProvider Auth { get; }

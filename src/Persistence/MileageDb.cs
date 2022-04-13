@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Collections;
 using Jeebs.Config.Db;
 using Jeebs.Data;
 using Jeebs.Logging;
@@ -60,6 +59,6 @@ public sealed class MileageDb : Db
 
 		// Add type handlers
 		TypeMap.AddStrongIdTypeHandlers();
-		TypeMap.AddJsonTypeHandler<IImmutableList<PlaceId>>();
+		TypeMap.AddImmutableListTypeHandler<PlaceId>();
 	}
 }

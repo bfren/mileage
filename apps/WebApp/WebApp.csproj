@@ -19,10 +19,13 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220410.1" />
-		<PackageReference Include="Jeebs.Mvc.Data" Version="8.0.0-beta.220410.1" />
+    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220413.6" />
+    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220413.6" />
 		<PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
 		<PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Pages\Partials\" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

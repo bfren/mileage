@@ -28,12 +28,12 @@
 <body class="d-flex flex-column h-100">
 
 	<!-- Header -->
-	<vc:header/>
+	<vc:header />
 
 	<main role="main" id="content" class="flex-grow-1 shadow">
 
 		<!-- Status Bar -->
-		<vc:status-bar/>
+		<vc:status-bar />
 
 		<!-- Body -->
 		@RenderBody()
@@ -41,7 +41,7 @@
 	</main>
 
 	<!-- Footer -->
-	<vc:footer/>
+	<vc:footer />
 
 	<!-- Script -->
 	<environment names="Development">
@@ -58,7 +58,8 @@
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
 	</script>
-	<jwt/>
+	<jwt />
+	<div id="edit" class="fixed-bottom"></div>
 
 </body>
 </html>

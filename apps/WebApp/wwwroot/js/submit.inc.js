@@ -1,31 +1,50 @@
 function setupAjaxSubmit() {
-  $("form").submit(function (e) {
-    // stop default submit
-    e.preventDefault();
+	$("form").submit(function (e) {
+		// stop default submit
+		e.preventDefault();
 
-    // show info message
-    showAlert("info", "Please wait...");
+		// show info message
+		showPleaseWaitAlert();
 
-    // get form info
-    var form = $(this);
-    var url = form.attr("action");
-    var data = form.serialize();
+		// get form info
+		var form = $(this);
+		var replaceId = form.data("replace");
 
-    // post data and handle result
-    $.ajax({
-      url: url,
-      method: "POST",
-      data: data,
-      dataType: "json"
-    }).done(
-      function (data) {
-        handleResult(data);
-      }
-    ).fail(
-      function (error) {
-        handleResult(error.responseJSON);
-      }
-    );
-  });
+		// post data and handle result
+		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
+
+			.done(function (data) {
+				// we are expecting HTML to replace an object
+				if (replaceId) {
+					// there is some HTML to use
+					if (data) {
+						$("#" + replaceId).replaceWith(data);
+						showAlert("success", "Saved.");
+						setupTokenModals();
+						return;
+					}
+
+					// there is no HTML to use
+					showAlert("error", "Unable to save, please try again.");
+					return;
+				}
+
+				// handle a JSON result object
+				if (data) { 
+					handleResult(data);
+				}
+			})
+
+			.fail(function (error) {
+				// the response is a JSON result
+				if (error && error.responseJSON) { 
+					handleResult(error.responseJSON);
+					return;
+				}
+
+				// something else has gone wrong
+				showAlert("error", "Something went wrong, please try again.");
+			});
+	});
 }
 ready(setupAjaxSubmit);

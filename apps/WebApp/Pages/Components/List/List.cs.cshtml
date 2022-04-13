@@ -1,0 +1,36 @@
+@using Jeebs.Extensions
+@model Mileage.WebApp.Pages.Components.List.ListModel
+
+@if (Model.Items.Any())
+{
+	<div class="mb-2">
+		<input type="text" class="form-control modal-select" id="list-filter" placeholder="Search..." autocomplete="off" />
+	</div>
+
+	<div class="list-items mb-3" id="list-items">
+		@if (Model.AllowNull)
+		{
+			Radio($"{Model.Singular}-null", "null", "None", Model.Selected is null);
+		}
+
+		@foreach (var item in Model.Items)
+		{
+			Radio($"{Model.Singular}-{item.Id}", item.Id, item.Text.Trim(), Model.Selected == item.Id);
+		}
+	</div>
+}
+else
+{
+	<p>Please add some @Model.Singular.Pluralise(2).</p>
+}
+
+@functions {
+	void Radio(string id, object value, string text, bool selected)
+	{
+		var check = selected ? "checked" : string.Empty;
+		<div class="list-item" data-text="@text.ToLowerInvariant()">
+			<input type="radio" class="btn-check" id="@id" name="@Model.ListName" value="@value" autocomplete="off" @check />
+			<label class="btn btn-outline-primary" for="@id">@text</label>
+		</div>
+	}
+}

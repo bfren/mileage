@@ -10,10 +10,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Place;
 
-public sealed record class PlaceModel(PlaceId Id, string Description, JourneyId? JourneyId)
+public sealed record class PlaceModel(string? EditUrl, PlaceId Id, string Description, JourneyId? JourneyId)
 {
-	public static PlaceModel Blank =>
-		new(new(), string.Empty, null);
+	public static PlaceModel Blank(string? editUrl) =>
+		new(editUrl, new(), string.Empty, null);
 }
 
 public sealed class PlaceViewComponent : ViewComponent
@@ -25,10 +25,20 @@ public sealed class PlaceViewComponent : ViewComponent
 	public PlaceViewComponent(IDispatcher dispatcher, ILog<PlaceViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public Task<IViewComponentResult> InvokeAsync(PlaceId placeId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string editPath, PlaceId placeId, JourneyId? journeyId)
 	{
+		var editUrl = Url.PageLink(
+			pageName: editPath,
+			values: journeyId is not null ? new { journeyId = journeyId.Value } : null
+		);
+
+		if (placeId is null)
+		{
+			return View(PlaceModel.Blank(editUrl));
+		}
+
 		Log.Dbg("Get place {PlaceId}.", placeId);
-		return UserClaimsPrincipal
+		return await UserClaimsPrincipal
 			.GetUserId()
 			.BindAsync(
 				x => Dispatcher.DispatchAsync(
@@ -39,8 +49,8 @@ public sealed class PlaceViewComponent : ViewComponent
 				none: r => Log.Err("Unable to get place: {Reason}", r)
 			)
 			.SwitchAsync(
-				some: x => View(new PlaceModel(x.Id, x.Description, journeyId)),
-				none: _ => (IViewComponentResult)View(PlaceModel.Blank)
+				some: x => View(new PlaceModel(editUrl, x.Id, x.Description, journeyId)),
+				none: _ => (IViewComponentResult)View(PlaceModel.Blank(editUrl))
 			);
 	}
 }

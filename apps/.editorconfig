@@ -7,3 +7,8 @@ insert_final_newline = true
 [*.cshtml]
 
 insert_final_newline = true
+
+[*.js]
+
+indent_style = tab
+indent_size = 4

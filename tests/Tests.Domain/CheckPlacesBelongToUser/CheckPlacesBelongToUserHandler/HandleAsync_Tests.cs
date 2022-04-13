@@ -7,6 +7,7 @@ using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
+using static Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler.M;
 
 namespace Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler_Tests;
 
@@ -20,6 +21,20 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 
 	private (CheckPlacesBelongToUserHandler, Setup.Vars) GetVars() =>
 		new Setup().GetVars();
+
+	[Fact]
+	public async Task No_PlaceIds__Returns_None_With_PlaceIdsIsNullMsg()
+	{
+		// Arrange
+		var (handler, _) = GetVars();
+		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), Array.Empty<PlaceId>());
+
+		// Act
+		var result = await handler.HandleAsync(query);
+
+		// Assert
+		result.AssertNone().AssertType<PlaceIdsIsNullMsg>();
+	}
 
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Query()
@@ -74,7 +89,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var msg = new TestMsg();
 		v.Fluent.QueryAsync<PlaceEntity>()
 			.Returns(F.None<IEnumerable<PlaceEntity>>(msg));
-		var query = new CheckPlacesBelongToUserQuery(new(), Array.Empty<PlaceId>());
+		var query = new CheckPlacesBelongToUserQuery(new(), new[] { LongId<PlaceId>(), LongId<PlaceId>() });
 
 		// Act
 		await handler.HandleAsync(query);
@@ -90,7 +105,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
 				.Returns(Create.None<IEnumerable<PlaceEntity>>());
-		var query = new CheckPlacesBelongToUserQuery(new(), Array.Empty<PlaceId>());
+		var query = new CheckPlacesBelongToUserQuery(new(), new[] { LongId<PlaceId>(), LongId<PlaceId>() });
 
 		// Act
 		var result = await handler.HandleAsync(query);

@@ -11216,6 +11216,19 @@ main {
   font-weight: 700;
 }
 
+#edit {
+  background-color: rgba(0, 0, 0, 0.2);
+  display: none;
+  height: 100%;
+  padding-top: 150px;
+}
+#edit .modal-dialog {
+  margin: 3rem auto;
+}
+#edit .list-items .list-item {
+  display: inline;
+}
+
 .btn-new {
   float: right;
 }
