@@ -36,7 +36,7 @@ internal sealed class UpdateJourneyHandler : CommandHandler<UpdateJourneyCommand
 	{
 		Log.Vrb("Update Journey: {Command}", command);
 		return Journey
-			.UpdateAsync(new JourneyEntity()
+			.UpdateAsync(new JourneyEntity
 			{
 				Id = command.JourneyId,
 				Version = command.Version,
