@@ -10,7 +10,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetCar;
 
-public sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
+internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 {
 	private ICarRepository Car { get; init; }
 

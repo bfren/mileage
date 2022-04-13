@@ -10,7 +10,7 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetFromPlace;
 
-public sealed class GetFromPlaceHandler : QueryHandler<GetFromPlaceQuery, GetFromPlaceModel>
+internal sealed class GetFromPlaceHandler : QueryHandler<GetFromPlaceQuery, GetFromPlaceModel>
 {
 	private IPlaceRepository Place { get; init; }
 
