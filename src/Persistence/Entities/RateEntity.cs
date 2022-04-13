@@ -3,7 +3,6 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data;
-using Jeebs.Data.Attributes;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
@@ -16,13 +15,11 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// <summary>
 	/// Rate ID
 	/// </summary>
-	[Id]
 	public RateId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
 	/// </summary>
-	[Version]
 	public long Version { get; set; }
 
 	/// <summary>

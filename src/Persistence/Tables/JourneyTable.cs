@@ -1,6 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Data.Attributes;
 using Jeebs.Data.Map;
 using Mileage.Persistence.Common;
 
@@ -19,12 +20,14 @@ public sealed record class JourneyTable() : Table(Constants.Schema, TableName)
 	/// <summary>
 	/// Journey ID
 	/// </summary>
+	[Id]
 	public string Id =>
 		TableName + nameof(Id);
 
 	/// <summary>
 	/// Journey Version
 	/// </summary>
+	[Version]
 	public string Version =>
 		TableName + nameof(Version);
 

@@ -3,7 +3,6 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data;
-using Jeebs.Data.Attributes;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
@@ -16,13 +15,11 @@ public sealed record class PlaceEntity : IWithVersion<PlaceId>
 	/// <summary>
 	/// Place ID
 	/// </summary>
-	[Id]
 	public PlaceId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
 	/// </summary>
-	[Version]
 	public long Version { get; set; }
 
 	/// <summary>

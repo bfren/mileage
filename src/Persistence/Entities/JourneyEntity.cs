@@ -5,7 +5,6 @@ using System;
 using Jeebs.Auth.Data;
 using Jeebs.Collections;
 using Jeebs.Data;
-using Jeebs.Data.Attributes;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Persistence.Entities;
@@ -18,13 +17,11 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// Journey ID
 	/// </summary>
-	[Id]
 	public JourneyId Id { get; init; } = new();
 
 	/// <summary>
 	/// Version
 	/// </summary>
-	[Version]
 	public long Version { get; set; }
 
 	/// <summary>
@@ -60,7 +57,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// To (visited) places
 	/// </summary>
-	public IImmutableList<PlaceId> ToPlaceIds { get; init; } = new ImmutableList<PlaceId>();
+	public ImmutableList<PlaceId> ToPlaceIds { get; init; } = new();
 
 	/// <summary>
 	/// The rate used for the journey
