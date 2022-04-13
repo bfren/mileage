@@ -5,13 +5,15 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Messages;
 using Jeebs.Mvc.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCars;
 using Mileage.Domain.SaveSettings;
-using Mileage.WebApp.Pages.Partials;
+using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings;
 
+[Authorize]
 [ValidateAntiForgeryToken]
 public sealed class EditDefaultCarModel : EditModalModel
 {
@@ -49,7 +51,7 @@ public sealed class EditDefaultCarModel : EditModalModel
 					Cars = x.Cars.ToList();
 					return Page();
 				},
-				none: r => Partial("ErrorModal", r)
+				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 

@@ -3,40 +3,43 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Mileage.Domain.GetJourney;
 using Mileage.Domain.GetPlaces;
-using Mileage.Domain.SaveSettings;
+using Mileage.Domain.SaveJourney;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
 
-namespace Mileage.WebApp.Pages.Settings;
+namespace Mileage.WebApp.Pages.Journey;
 
 [Authorize]
 [ValidateAntiForgeryToken]
-public sealed class EditDefaultFromPlaceModel : EditModalModel
+public sealed class EditFromPlaceModel : EditModalModel
 {
-	public Persistence.Common.Settings Settings { get; set; } = new();
+	public GetJourneyModel Journey { get; set; } = new();
 
 	public List<GetPlacesModel> Places { get; set; } = new();
 
 	public IDispatcher Dispatcher { get; }
 
-	public ILog<EditDefaultFromPlaceModel> Log { get; }
+	public ILog<EditFromPlaceModel> Log { get; }
 
-	public EditDefaultFromPlaceModel(IDispatcher dispatcher, ILog<EditDefaultFromPlaceModel> log) : base("Default Starting Place") =>
+	public EditFromPlaceModel(IDispatcher dispatcher, ILog<EditFromPlaceModel> log) : base("Starting Place") =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IActionResult> OnGetAsync()
+	public async Task<IActionResult> OnGetAsync(JourneyId journeyId)
 	{
+		Log.Vrb("Getting journey {JourneyId}.", journeyId);
+
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
-					from s in Dispatcher.DispatchAsync(new Domain.LoadSettings.LoadSettingsQuery(u))
+					from j in Dispatcher.DispatchAsync(new GetJourneyQuery(u, journeyId))
 					from p in Dispatcher.DispatchAsync(new GetPlacesQuery(u))
 					select new
 					{
-						Settings = s,
+						Journey = j,
 						Places = p
 					};
 
@@ -45,7 +48,7 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 			.Switch<IActionResult>(
 				some: x =>
 				{
-					Settings = x.Settings;
+					Journey = x.Journey;
 					Places = x.Places.ToList();
 					return Page();
 				},
@@ -53,15 +56,15 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 			);
 	}
 
-	public async Task<IActionResult> OnPostAsync(SaveSettingsCommand form)
+	public async Task<IActionResult> OnPostAsync(UpdateJourneyFromPlaceCommand journey)
 	{
-		Log.Vrb("Saving {Settings} for {User}.", form.Settings, User.GetUserId());
+		Log.Vrb("Saving {Journey}.", journey);
 
-		var saveFromPlace = from u in User.GetUserId()
-							from r in Dispatcher.DispatchAsync(form with { UserId = u })
-							select r;
+		var saveCar = from u in User.GetUserId()
+					  from r in Dispatcher.DispatchAsync(journey with { UserId = u })
+					  select r;
 
-		var result = await saveFromPlace;
+		var result = await saveCar;
 		return result
 			.Audit(
 				none: Log.Msg
@@ -70,17 +73,12 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Place", new { PlaceId = form.Settings.DefaultFromPlaceId }),
+						ViewComponent("Place", new { placeId = journey.FromPlaceId, journeyId = journey.Id }),
 
 					false =>
 						new EmptyResult()
 				},
 				none: _ => new EmptyResult()
 			);
-	}
-
-	public static class M
-	{
-		public sealed record class UnableToSaveDefaultFromPlaceMsg : Msg;
 	}
 }
