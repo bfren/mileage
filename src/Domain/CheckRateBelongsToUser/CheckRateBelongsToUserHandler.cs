@@ -33,7 +33,7 @@ internal sealed class CheckRateBelongsToUserHandler : QueryHandler<CheckRateBelo
 	/// <param name="query"></param>
 	public override Task<Maybe<bool>> HandleAsync(CheckRateBelongsToUserQuery query)
 	{
-		Log.Vrb("Checking rate {RateId} belongs to user {UserId}.", query.RateId.Value, query.UserId.Value);
+		Log.Vrb("Checking Rate {RateId} belongs to User {UserId}.", query.RateId.Value, query.UserId.Value);
 		return Rate
 			.StartFluentQuery()
 			.Where(c => c.Id, Compare.Equal, query.RateId)
