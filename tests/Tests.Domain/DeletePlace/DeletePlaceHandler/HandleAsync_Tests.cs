@@ -34,35 +34,35 @@ public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 	[Fact]
 	public override async Task Test00_Calls_Log_Vrb__With_Query()
 	{
-		await new Setup().Test00();
+		await new Setup().Test00((q, c) => q.HandleAsync(c));
 	}
 
 	[Fact]
 	public override async Task Test01_Calls_FluentQuery_Where__With_Correct_Values()
 	{
-		await new Setup().Test01();
+		await new Setup().Test01((q, c) => q.HandleAsync(c));
 	}
 
 	[Fact]
 	public override async Task Test02_Calls_FluentQuery_WhereSingleAsync__Receives_None__Audits_Msg()
 	{
-		await new Setup().Test02();
+		await new Setup().Test02((q, c) => q.HandleAsync(c));
 	}
 
 	[Fact]
 	public override async Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg()
 	{
-		await new Setup().Test03<PlaceDoesNotExistMsg>(msg => msg.UserId, msg => msg.PlaceId);
+		await new Setup().Test03<PlaceDoesNotExistMsg>(msg => msg.UserId, msg => msg.PlaceId, (q, c) => q.HandleAsync(c));
 	}
 
 	[Fact]
 	public override async Task Test04_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__With_Correct_Value()
 	{
-		await new Setup().Test04((carId, version) => new(carId, version));
+		await new Setup().Test04((carId, version) => new(carId, version), (q, c) => q.HandleAsync(c));
 	}
 
 	public override async Task Test05_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__Returns_Result()
 	{
-		await new Setup().Test05();
+		await new Setup().Test05((q, c) => q.HandleAsync(c));
 	}
 }

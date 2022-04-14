@@ -42,7 +42,7 @@ public abstract class HandleAsync_Tests
 		protected Delete_Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00()
+		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -51,13 +51,13 @@ public abstract class HandleAsync_Tests
 			var command = GetCommand();
 
 			// Act
-			await handler.HandleAsync(command);
+			await handle(handler, command);
 
 			// Assert
 			v.Log.Received().Vrb($"Delete {Name}: {{Command}}", command);
 		}
 
-		internal async Task Test01()
+		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -68,7 +68,7 @@ public abstract class HandleAsync_Tests
 			var command = GetCommand(userId, entityId);
 
 			// Act
-			await handler.HandleAsync(command);
+			await handle(handler, command);
 
 			// Assert
 			var calls = v.Fluent.ReceivedCalls();
@@ -79,7 +79,7 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
-		internal async Task Test02()
+		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -89,13 +89,17 @@ public abstract class HandleAsync_Tests
 			var command = GetCommand();
 
 			// Act
-			await handler.HandleAsync(command);
+			await handle(handler, command);
 
 			// Assert
 			v.Log.Received().Msg(msg);
 		}
 
-		internal async Task Test03<TDoesNotExistMsg>(Func<TDoesNotExistMsg, AuthUserId> getUserId, Func<TDoesNotExistMsg, TId> getEntityId)
+		internal async Task Test03<TDoesNotExistMsg>(
+			Func<TDoesNotExistMsg, AuthUserId> getUserId,
+			Func<TDoesNotExistMsg, TId> getEntityId,
+			Func<THandler, TCommand, Task<Maybe<bool>>> handle
+		)
 			where TDoesNotExistMsg : Msg
 		{
 			// Arrange
@@ -107,7 +111,7 @@ public abstract class HandleAsync_Tests
 			var command = GetCommand(userId, entityId);
 
 			// Act
-			var result = await handler.HandleAsync(command);
+			var result = await handle(handler, command);
 
 			// Assert
 			var none = result.AssertNone();
@@ -116,25 +120,25 @@ public abstract class HandleAsync_Tests
 			Assert.Equal(entityId, getEntityId(msg));
 		}
 
-		internal async Task Test04(Func<TId, long, TModel> getModel)
+		internal async Task Test04(Func<TId, long, TModel> getModel, Func<THandler, TCommand, Task<Maybe<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
 			var userId = LongId<AuthUserId>();
 			var carId = LongId<TId>();
-			var query = GetCommand(userId, carId);
+			var command = GetCommand(userId, carId);
 			var model = getModel(carId, Rnd.Lng);
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(model);
 
 			// Act
-			await handler.HandleAsync(query);
+			await handle(handler, command);
 
 			// Assert
 			await v.Repo.Received().DeleteAsync(model);
 		}
 
-		internal async Task Test05()
+		internal async Task Test05(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -144,10 +148,10 @@ public abstract class HandleAsync_Tests
 			var expected = Rnd.Flip;
 			v.Repo.DeleteAsync<TModel>(default!)
 				.ReturnsForAnyArgs(expected);
-			var query = GetCommand();
+			var command = GetCommand();
 
 			// Act
-			var result = await handler.HandleAsync(query);
+			var result = await handle(handler, command);
 
 			// Assert
 			var some = result.AssertSome();
