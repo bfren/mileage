@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetRate;
@@ -35,7 +34,7 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 	{
 		if (query.RateId is null || query.RateId.Value == 0)
 		{
-			return F.None<GetRateModel, M.RateIdIsNullMsg>().AsTask;
+			return F.None<GetRateModel, Messages.RateIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Rate: {Query}.", query);
@@ -44,12 +43,5 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 			.Where(x => x.Id, Compare.Equal, query.RateId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<GetRateModel>();
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		/// <summary>Requested RateId is not set</summary>
-		public sealed record class RateIdIsNullMsg : Msg;
 	}
 }

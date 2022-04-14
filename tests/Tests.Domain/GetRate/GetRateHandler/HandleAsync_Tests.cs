@@ -5,7 +5,6 @@ using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using static Mileage.Domain.GetRate.GetRateHandler.M;
 
 namespace Mileage.Domain.GetRate.GetRate_Tests;
 
@@ -34,7 +33,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<RateIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00<Messages.RateIdIsNullMsg>((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

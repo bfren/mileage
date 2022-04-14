@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetPlaces;
@@ -36,7 +35,7 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<GetPlacesModel>, M.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<GetPlacesModel>, Messages.UserIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Places for {User}.", query.UserId);
@@ -45,12 +44,5 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Sort(x => x.Description, SortOrder.Ascending)
 			.QueryAsync<GetPlacesModel>();
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		/// <summary>UserId is null</summary>
-		public sealed record class UserIdIsNullMsg : Msg;
 	}
 }

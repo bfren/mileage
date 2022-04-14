@@ -7,7 +7,6 @@ using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using static Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler.M;
 
 namespace Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler_Tests;
 
@@ -33,7 +32,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		result.AssertNone().AssertType<PlaceIdsIsNullMsg>();
+		result.AssertNone().AssertType<Messages.PlaceIdsIsNullMsg>();
 	}
 
 	[Fact]

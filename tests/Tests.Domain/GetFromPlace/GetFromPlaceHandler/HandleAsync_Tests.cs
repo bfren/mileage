@@ -2,13 +2,11 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
-using Mileage.Domain.GetFromPlace;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using static Mileage.Domain.GetFromPlace.GetFromPlaceHandler.M;
 
-namespace Mileage.Domain.GetPlace.GetFromPlace_Tests;
+namespace Mileage.Domain.GetFromPlace.GetFromPlace_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
@@ -35,7 +33,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<PlaceIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00<Messages.PlaceIdIsNullMsg>((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetJourney;
@@ -35,7 +34,7 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, GetJourn
 	{
 		if (query.JourneyId is null || query.JourneyId.Value == 0)
 		{
-			return F.None<GetJourneyModel, M.JourneyIdIsNullMsg>().AsTask;
+			return F.None<GetJourneyModel, Messages.JourneyIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Journey: {Query}.", query);
@@ -44,12 +43,5 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, GetJourn
 			.Where(x => x.Id, Compare.Equal, query.JourneyId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<GetJourneyModel>();
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		/// <summary>Requested JourneyId is not set</summary>
-		public sealed record class JourneyIdIsNullMsg : Msg;
 	}
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetCar;
@@ -35,7 +34,7 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 	{
 		if (query.CarId is null || query.CarId.Value == 0)
 		{
-			return F.None<GetCarModel, M.CarIdIsNullMsg>().AsTask;
+			return F.None<GetCarModel, Messages.CarIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Car: {Query}.", query);
@@ -44,12 +43,5 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 			.Where(x => x.Id, Compare.Equal, query.CarId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<GetCarModel>();
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		/// <summary>Requested CarId is not set</summary>
-		public sealed record class CarIdIsNullMsg : Msg;
 	}
 }
