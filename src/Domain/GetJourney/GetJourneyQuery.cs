@@ -7,6 +7,9 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.GetJourney;
 
+/// <inheritdoc cref="GetJourneyHandler"/>
+/// <param name="UserId"></param>
+/// <param name="JourneyId"></param>
 public sealed record class GetJourneyQuery(
 	AuthUserId UserId,
 	JourneyId JourneyId
