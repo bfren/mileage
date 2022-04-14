@@ -7,6 +7,8 @@ using Jeebs.Cqrs;
 
 namespace Mileage.Domain.GetCars;
 
+/// <inheritdoc cref="GetCarsHandler"/>
+/// <param name="UserId"></param>
 public sealed record class GetCarsQuery(
 	AuthUserId UserId
 ) : IQuery<IEnumerable<GetCarsModel>>;

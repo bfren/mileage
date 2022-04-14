@@ -6,4 +6,9 @@ using StrongId;
 
 namespace Mileage.Domain.GetCars;
 
+/// <summary>
+/// Car model
+/// </summary>
+/// <param name="Id"></param>
+/// <param name="Description"></param>
 public sealed record class GetCarsModel(CarId Id, string Description) : IWithId<CarId>;
