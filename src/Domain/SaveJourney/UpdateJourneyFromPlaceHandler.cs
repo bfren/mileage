@@ -34,7 +34,7 @@ internal sealed class UpdateJourneyFromPlaceHandler : CommandHandler<UpdateJourn
 	/// <exception cref="NotImplementedException"></exception>
 	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyFromPlaceCommand command)
 	{
-		Log.Vrb("Updating from place for {Journey}.", command);
+		Log.Vrb("Updating From Place for {Journey}.", command);
 		return Journey.UpdateAsync(command);
 	}
 }

@@ -33,7 +33,7 @@ internal sealed class UpdateJourneyCarHandler : CommandHandler<UpdateJourneyCarC
 	/// <exception cref="NotImplementedException"></exception>
 	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyCarCommand command)
 	{
-		Log.Vrb("Updating car for {Journey}.", command);
+		Log.Vrb("Updating Car for {Journey}.", command);
 		return Journey.UpdateAsync(command);
 	}
 }

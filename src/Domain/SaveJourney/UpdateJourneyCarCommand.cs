@@ -8,6 +8,11 @@ using StrongId;
 
 namespace Mileage.Domain.SaveJourney;
 
+/// <inheritdoc cref="UpdateJourneyCarHandler"/>
+/// <param name="UserId"></param>
+/// <param name="Id"></param>
+/// <param name="Version"></param>
+/// <param name="CarId"></param>
 public sealed record class UpdateJourneyCarCommand(
 	AuthUserId UserId,
 	JourneyId Id,
