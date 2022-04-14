@@ -10,23 +10,35 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetCar;
 
+/// <summary>
+/// Get a car
+/// </summary>
 internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 {
 	private ICarRepository Car { get; init; }
 
 	private ILog<GetCarHandler> Log { get; init; }
 
+	/// <summary>
+	/// Inject dependencies
+	/// </summary>
+	/// <param name="car"></param>
+	/// <param name="log"></param>
 	public GetCarHandler(ICarRepository car, ILog<GetCarHandler> log) =>
 		(Car, Log) = (car, log);
 
+	/// <summary>
+	/// Get the specified car if it belongs to the user
+	/// </summary>
+	/// <param name="query"></param>
 	public override Task<Maybe<GetCarModel>> HandleAsync(GetCarQuery query)
 	{
-		if (query.CarId is null)
+		if (query.CarId is null || query.CarId.Value == 0)
 		{
 			return F.None<GetCarModel, M.CarIdIsNullMsg>().AsTask;
 		}
 
-		Log.Vrb("Get car: {Query}.", query);
+		Log.Vrb("Get Car: {Query}.", query);
 		return Car
 			.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, query.CarId)
@@ -37,6 +49,7 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 	/// <summary>Messages</summary>
 	public static class M
 	{
+		/// <summary>Requested CarId is not set</summary>
 		public sealed record class CarIdIsNullMsg : Msg;
 	}
 }

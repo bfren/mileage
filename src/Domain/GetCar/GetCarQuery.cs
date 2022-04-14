@@ -7,6 +7,9 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.GetCar;
 
+/// <inheritdoc cref="GetCarHandler"/>
+/// <param name="UserId"></param>
+/// <param name="CarId"></param>
 public sealed record class GetCarQuery(
 	AuthUserId UserId,
 	CarId CarId
