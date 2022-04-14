@@ -7,6 +7,8 @@ using Jeebs.Cqrs;
 
 namespace Mileage.Domain.GetPlaces;
 
+/// <inheritdoc cref="GetPlacesHandler"/>
+/// <param name="UserId"></param>
 public sealed record class GetPlacesQuery(
 	AuthUserId UserId
 ) : IQuery<IEnumerable<GetPlacesModel>>;
