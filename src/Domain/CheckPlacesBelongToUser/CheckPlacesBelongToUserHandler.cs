@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -37,7 +36,7 @@ internal sealed class CheckPlacesBelongToUserHandler : QueryHandler<CheckPlacesB
 	{
 		if (query.PlaceIds.Length == 0)
 		{
-			return F.None<bool, M.PlaceIdsIsNullMsg>().AsTask;
+			return F.None<bool, Messages.PlaceIdsIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Checking places {PlaceIds} belong to user {UserId}.", query.PlaceIds.Select(p => p.Value), query.UserId.Value);
@@ -58,11 +57,5 @@ internal sealed class CheckPlacesBelongToUserHandler : QueryHandler<CheckPlacesB
 				},
 				none: _ => F.False
 			);
-	}
-
-	/// <summary>Messages</summary>
-	public static class M
-	{
-		public sealed record class PlaceIdsIsNullMsg : Msg;
 	}
 }

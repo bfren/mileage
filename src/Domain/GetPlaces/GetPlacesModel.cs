@@ -6,4 +6,9 @@ using StrongId;
 
 namespace Mileage.Domain.GetPlaces;
 
+/// <summary>
+/// Place model
+/// </summary>
+/// <param name="Id"></param>
+/// <param name="Description"></param>
 public sealed record class GetPlacesModel(PlaceId Id, string Description) : IWithId<PlaceId>;

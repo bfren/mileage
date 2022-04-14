@@ -7,6 +7,18 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.GetJourney;
 
+/// <summary>
+/// Journey model
+/// </summary>
+/// <param name="Id"></param>
+/// <param name="Version"></param>
+/// <param name="Date"></param>
+/// <param name="CarId"></param>
+/// <param name="StartMiles"></param>
+/// <param name="EndMiles"></param>
+/// <param name="FromPlaceId"></param>
+/// <param name="ToPlaceIds"></param>
+/// <param name="RateId"></param>
 public sealed record class GetJourneyModel(
 	JourneyId Id,
 	long Version,
@@ -19,5 +31,8 @@ public sealed record class GetJourneyModel(
 	RateId? RateId
 )
 {
+	/// <summary>
+	/// Create empty model
+	/// </summary>
 	public GetJourneyModel() : this(new(), default, default, new(), default, null, new(), new ImmutableList<PlaceId>(), null) { }
 }
