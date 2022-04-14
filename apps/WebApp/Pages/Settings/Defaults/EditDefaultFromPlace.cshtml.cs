@@ -11,7 +11,7 @@ using Mileage.Domain.GetPlaces;
 using Mileage.Domain.SaveSettings;
 using Mileage.WebApp.Pages.Modals;
 
-namespace Mileage.WebApp.Pages.Settings;
+namespace Mileage.WebApp.Pages.Settings.Defaults;
 
 [Authorize]
 [ValidateAntiForgeryToken]

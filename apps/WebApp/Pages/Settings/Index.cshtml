@@ -1,29 +1,43 @@
 @page
 @model Mileage.WebApp.Pages.Settings.IndexModel
-@{
-	var settings = Model.Settings;
-}
+
 
 <div class="container">
 
 	<h2>Settings</h2>
 
-	<div>
-		Default car:
-		<vc:car
-			edit-path="EditDefaultCar"
-			car-id="@settings.DefaultCarId"
-			journey-id="null"
-		/>
-	</div>
+	<ul class="nav nav-tabs nav-fill" id="settings" role="tablist">
 
-	<div>
-		Default starting place:
-		<vc:place
-			edit-path="EditDefaultFromPlace"
-			place-id="@settings.DefaultFromPlaceId"
-			journey-id="null"
-		/>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="defaults-tab" data-bs-toggle="tab" data-bs-target="#defaults" type="button" role="tab" aria-controls="defaults" aria-selected="true">Defaults</button>
+		</li>
+		
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="cars-tab" data-bs-toggle="tab" data-bs-target="#cars" type="button" role="tab" aria-controls="cars" aria-selected="false">Cars</button>
+		</li>
+
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="places-tab" data-bs-toggle="tab" data-bs-target="#places" type="button" role="tab" aria-controls="places" aria-selected="false">Places</button>
+		</li>
+
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="rates-tab" data-bs-toggle="tab" data-bs-target="#rates" type="button" role="tab" aria-controls="rates" aria-selected="false">Rates</button>
+		</li>
+
+	</ul>
+
+	<div class="tab-content mt-3" id="settingsContent">
+
+		<div class="tab-pane face show active" id="defaults" role="tabpanel" aria-labelledby="defaults-tab">
+			@await Html.PartialAsync("Defaults/Index", Model.Defaults)
+		</div>
+
+		<div class="tab-pane face" id="cars" role="tabpanel" aria-labelledby="cars-tab"></div>
+
+		<div class="tab-pane face" id="places" role="tabpanel" aria-labelledby="places-tab"></div>
+
+		<div class="tab-pane face" id="rates" role="tabpanel" aria-labelledby="rates-tab"></div>
+
 	</div>
 
 </div>

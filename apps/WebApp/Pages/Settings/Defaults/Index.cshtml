@@ -1,0 +1,22 @@
+@model Mileage.WebApp.Pages.Settings.Defaults.IndexModel
+@{
+	var settings = Model.Settings;
+}
+
+<div>
+	Default car:
+	<vc:car
+		edit-path="Defaults/EditDefaultCar"
+		car-id="@settings.DefaultCarId"
+		journey-id="null"
+	/>
+</div>
+
+<div>
+	Default starting place:
+	<vc:place
+		edit-path="Defaults/EditDefaultFromPlace"
+		place-id="@settings.DefaultFromPlaceId"
+		journey-id="null"
+	/>
+</div>

@@ -24,7 +24,7 @@ public sealed class IndexModel : PageModel
 
 	private ILog<IndexModel> Log { get; }
 
-	public Persistence.Common.Settings Settings { get; set; } = new();
+	public Defaults.IndexModel Defaults { get; set; } = new();
 
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
@@ -39,7 +39,7 @@ public sealed class IndexModel : PageModel
 		// Save and return page
 		await foreach (var settings in query)
 		{
-			Settings = settings;
+			Defaults = new() { Settings = settings };
 			return Page();
 		}
 
