@@ -14,7 +14,7 @@ namespace Mileage.WebApp.Pages.Settings.Rates;
 [ResponseCache(CacheProfileName = CacheProfiles.Default)]
 #endif
 [Authorize]
-public class IndexModel : PageModel
+public sealed class IndexModel : PageModel
 {
 	public void OnGet()
 	{

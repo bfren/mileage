@@ -69,12 +69,7 @@ function updateAlert(seconds) {
 function closeAlert() {
 	message.fadeOut();
 }
-
-ready(function () {
-	message.click(function () {
-		closeAlert();
-	});
-})
+ready(() => message.click(() => closeAlert()));
 
 /**
  * Show any alerts on page load.
@@ -82,7 +77,6 @@ ready(function () {
  */
 function showAlertsOnLoad() {
 }
-
 ready(showAlertsOnLoad);
 
 /**
@@ -123,19 +117,13 @@ function openModal(url, replaceId) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", function () {
-			$(".modal-select").focus();
-		});
+		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
 
 		// fade out background when modal is closed
-		modalEl.addEventListener("hide.bs.modal", function () {
-			wrapper.fadeOut("fast");
-		});
+		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
 
 		// fade in background and show modal
-		wrapper.fadeIn("fast", function () {
-			closeAlert();
-		});
+		wrapper.fadeIn("fast", () => closeAlert());
 
 		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
@@ -177,9 +165,9 @@ function setupModalSearch() {
 		}
 
 		// filter items that match the input value
-		$("#list-items .list-item").filter(function () {
-			$(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1);
-		});
+		$("#list-items .list-item").filter(
+			() => $(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1)
+		);
 	});
 }
 
@@ -205,11 +193,44 @@ function handleResult(r) {
 
 	// redirect
 	if (r.redirectTo) {
-		showAlert("info", "Redirecting...");
+		showAlert("info", "Redirecting...", true);
 		window.location.href = r.redirectTo;
 	}
 }
 
+/**
+ * Setup tab buttons to load settings on click
+ *
+ */
+function setupSettingsTabs() {
+	$("#settings .nav-link").click(function () {
+		var tabId = $(this).data("bs-target");
+		loadSettingsTab(tabId);
+	});
+}
+ready(setupSettingsTabs);
+
+/**
+ * Load a settings tab
+ * 
+ * @param {any} tabId
+ */
+function loadSettingsTab(tabId) {
+	// get tab target
+	var tab = $(tabId);
+
+	// get tab source URL
+	var src = tab.data("src");
+
+	// load source
+	showPleaseWaitAlert()
+	tab.load(src, () => closeAlert());
+}
+
+/**
+ * Submit all forms via AJAX and handle results
+ *
+ */
 function setupAjaxSubmit() {
 	$("form").submit(function (e) {
 		// stop default submit

@@ -1,3 +1,7 @@
+/**
+ * Submit all forms via AJAX and handle results
+ *
+ */
 function setupAjaxSubmit() {
 	$("form").submit(function (e) {
 		// stop default submit

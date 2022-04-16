@@ -69,12 +69,7 @@ function updateAlert(seconds) {
 function closeAlert() {
 	message.fadeOut();
 }
-
-ready(function () {
-	message.click(function () {
-		closeAlert();
-	});
-})
+ready(() => message.click(() => closeAlert()));
 
 /**
  * Show any alerts on page load.
@@ -82,5 +77,4 @@ ready(function () {
  */
 function showAlertsOnLoad() {
 }
-
 ready(showAlertsOnLoad);

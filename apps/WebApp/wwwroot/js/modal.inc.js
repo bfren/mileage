@@ -36,19 +36,13 @@ function openModal(url, replaceId) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", function () {
-			$(".modal-select").focus();
-		});
+		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
 
 		// fade out background when modal is closed
-		modalEl.addEventListener("hide.bs.modal", function () {
-			wrapper.fadeOut("fast");
-		});
+		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
 
 		// fade in background and show modal
-		wrapper.fadeIn("fast", function () {
-			closeAlert();
-		});
+		wrapper.fadeIn("fast", () => closeAlert());
 
 		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
@@ -90,9 +84,9 @@ function setupModalSearch() {
 		}
 
 		// filter items that match the input value
-		$("#list-items .list-item").filter(function () {
-			$(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1);
-		});
+		$("#list-items .list-item").filter(
+			() => $(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1)
+		);
 	});
 }
 
