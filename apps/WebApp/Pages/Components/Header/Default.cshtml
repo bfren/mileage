@@ -1,4 +1,7 @@
 @model Mileage.WebApp.Pages.Components.Header.HeaderModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
 
 <header role="navigation">
 	<nav class="navbar navbar-expand-md navbar-dark">

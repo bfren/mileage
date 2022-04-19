@@ -1,6 +1,6 @@
 @model MaybeF.IMsg
 @{
-	var text = @Model.ToString() ?? "Unknown error";
+	var text = Model?.ToString() ?? "Unknown error";
 }
 
 <div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false" data-bs-focus="false">
