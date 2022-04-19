@@ -58,7 +58,7 @@ public sealed class MileageDb : Db
 		_ = Map<RateEntity>.To(Rate);
 
 		// Add type handlers
-		TypeMap.AddStrongIdTypeHandlers();
-		TypeMap.AddImmutableListTypeHandler<PlaceId>();
+		client.Types.AddStrongIdTypeHandlers();
+		client.Types.AddImmutableListTypeHandler<PlaceId>();
 	}
 }
