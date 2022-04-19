@@ -203,7 +203,7 @@ function handleResult(r) {
  *
  */
 function setupSettingsTabs() {
-	$("#settings .nav-link").click(function () {
+	$("#settingsButtons .nav-link").click(function () {
 		var tabId = $(this).data("bs-target");
 		loadSettingsTab(tabId);
 	});

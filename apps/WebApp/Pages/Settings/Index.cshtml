@@ -5,83 +5,55 @@
 
 	<h2>Settings</h2>
 
-	<ul class="nav nav-tabs nav-fill" id="settings" role="tablist">
-
-		<li class="nav-item" role="presentation">
-			<button id="defaults-tab"
-				class="nav-link active"
-				type="button"
-				role="tab"
-				data-bs-toggle="tab"
-				data-bs-target="#defaults"
-				aria-controls="defaults"
-				aria-selected="true">Defaults</button>
-		</li>
-		
-		<li class="nav-item" role="presentation">
-			<button id="cars-tab"
-				class="nav-link"
-				type="button"
-				role="tab"
-				data-bs-toggle="tab"
-				data-bs-target="#cars"
-				aria-controls="cars"
-				aria-selected="false">Cars</button>
-		</li>
-
-		<li class="nav-item" role="presentation">
-			<button id="places-tab"
-				class="nav-link"
-				type="button"
-				role="tab"
-				data-bs-toggle="tab"
-				data-bs-target="#places"
-				aria-controls="places"
-				aria-selected="false">Places</button>
-		</li>
-
-		<li class="nav-item" role="presentation">
-			<button id="rates-tab"
-				class="nav-link"
-				type="button"
-				role="tab"
-				data-bs-toggle="tab"
-				data-bs-target="#rates"
-				aria-controls="rates"
-				aria-selected="false">Rates</button>
-		</li>
-
+	<ul class="nav nav-tabs nav-fill" id="settingsButtons" role="tablist">
+		@{
+			TabButton("Defaults", true);
+			TabButton("Cars", false);
+			TabButton("Places", false);
+			TabButton("Rates", false);
+		}
 	</ul>
 
-	<div class="tab-content mt-3" id="settingsContent">
-
-		<div id="defaults"
-			class="tab-pane face show active"
-			role="tabpanel"
-			aria-labelledby="defaults-tab"
-			data-src="@Url.Page("Defaults/Index")"></div>
-
-		<div id="cars"
-			class="tab-pane face"
-			role="tabpanel"
-			aria-labelledby="cars-tab"
-			data-src="@Url.Page("Cars/Index")"></div>
-
-		<div id="places"
-			class="tab-pane face"
-			role="tabpanel"
-			aria-labelledby="places-tab"
-			data-src="@Url.Page("Places/Index")"></div>
-
-		<div id="rates"
-			class="tab-pane face"
-			role="tabpanel"
-			aria-labelledby="rates-tab"
-			data-src="@Url.Page("Rates/Index")"></div>
-
+	<div class="tab-content mt-3" id="settingsPanes">
+		@{
+			TabPane("Defaults", true);
+			TabPane("Cars", false);
+			TabPane("Places", false);
+			TabPane("Rates", false);
+		}
 	</div>
 
 </div>
+
+@functions {
+	void TabButton(string text, bool active)
+	{
+		var name = text.ToLowerInvariant();
+		var css = "nav-link" + (active ? " active" : "");
+
+		<li class="nav-item" role="presentation">
+			<button id="@name-tab"
+				class="@css"
+				type="button"
+				role="tab"
+				data-bs-toggle="tab"
+				data-bs-target="#@name"
+				aria-controls="@name"
+				aria-selected="@active">
+				@text
+			</button>
+		</li>
+	}
+
+	void TabPane(string page, bool active)
+	{
+		var name = page.ToLowerInvariant();
+		var src = Url.Page($"{page}/Index");
+		var css = "tab-pane face" + (active ? " show active" : "");
+
+		<div id="@name" class="@css" role="tabpanel" aria-labelledby="@name-tab" data-src="@src"></div>
+	}
+}
 
 @section Scripts {
 	<script type="text/javascript">
