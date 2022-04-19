@@ -3,6 +3,12 @@
     <Description>Mileage: Web app.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Pages\Partials\**" />
+    <Content Remove="Pages\Partials\**" />
+    <EmbeddedResource Remove="Pages\Partials\**" />
+    <None Remove="Pages\Partials\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
   </ItemGroup>
@@ -23,9 +29,6 @@
     <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220415.1" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Partials\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
