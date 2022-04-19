@@ -1,4 +1,4 @@
-﻿// Mileage Tracker Apps
+// Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Apps.Web.Constants;
@@ -24,7 +24,7 @@ public sealed class IndexModel : PageModel
 
 	private ILog<IndexModel> Log { get; }
 
-	public IList<GetCarsModel> Cars { get; set; }
+	public List<GetCarsModel> Cars { get; set; } = new();
 
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
