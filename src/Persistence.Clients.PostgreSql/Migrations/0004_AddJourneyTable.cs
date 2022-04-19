@@ -31,7 +31,7 @@ public sealed class AddJourneyTable : Migration
 			""{Col(j => j.StartMiles)}"" integer NOT NULL CHECK (""{Col(j => j.StartMiles)}"" > 0),
 			""{Col(j => j.EndMiles)}"" integer CHECK (""{Col(j => j.EndMiles)}"" > 0),
 			""{Col(j => j.FromPlaceId)}"" integer,
-			""{Col(j => j.ToPlaceIds)}"" text NOT NULL,
+			""{Col(j => j.ToPlaceIds)}"" jsonb NOT NULL,
 			""{Col(j => j.RateId)}"" integer,
 			CONSTRAINT ""{Col(j => j.Id)}_Key"" PRIMARY KEY(""{Col(j => j.Id)}"")
 		)

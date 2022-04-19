@@ -26,8 +26,8 @@ public sealed class AddPlaceTable : Migration
 			""{Col(p => p.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 			""{Col(p => p.Version)}"" integer NOT NULL DEFAULT 0,
 			""{Col(p => p.UserId)}"" integer NOT NULL,
-			""{Col(p => p.Description)}"" character(64) NOT NULL,
-			""{Col(p => p.Postcode)}"" character(8),
+			""{Col(p => p.Description)}"" character(64) COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
+			""{Col(p => p.Postcode)}"" character(8) COLLATE pg_catalog.""en-GB-x-icu"",
 			CONSTRAINT ""{Col(p => p.Id)}_Key"" PRIMARY KEY(""{Col(p => p.Id)}"")
 		)
 		TABLESPACE pg_default

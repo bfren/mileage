@@ -26,7 +26,7 @@ public sealed class AddCarTable : Migration
 			""{Col(c => c.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 			""{Col(c => c.Version)}"" integer NOT NULL DEFAULT 0,
 			""{Col(c => c.UserId)}"" integer NOT NULL,
-			""{Col(c => c.Description)}"" character(32) COLLATE pg_catalog.default NOT NULL,
+			""{Col(c => c.Description)}"" character(32) COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
 			CONSTRAINT ""{Col(c => c.Id)}_Key"" PRIMARY KEY(""{Col(c => c.Id)}"")
 		)
 		TABLESPACE pg_default
