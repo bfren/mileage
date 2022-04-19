@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<Description>Mileage: Console test app.</Description>
-	</PropertyGroup>
-	<ItemGroup>
-		<Content Include="jeebsconfig-secrets.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="jeebsconfig.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220413.6" />
-		<PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220413.6" />
-		<PackageReference Include="Rnd" Version="8.1.3" />
-	</ItemGroup>
-	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" />
-		</VisualStudio>
-	</ProjectExtensions>
+  <PropertyGroup>
+    <Description>Mileage: Console test app.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="jeebsconfig-secrets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="jeebsconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Jeebs.Apps" Version="8.0.0-beta.220415.1" />
+    <PackageReference Include="Jeebs.Auth.Data" Version="8.0.0-beta.220415.1" />
+    <PackageReference Include="Rnd" Version="8.1.3" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

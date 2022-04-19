@@ -4,10 +4,10 @@
 using Jeebs.Apps.Web;
 using Jeebs.Auth.Data.Clients.PostgreSql;
 using Jeebs.Mvc.Auth;
-using Jeebs.Mvc.Data;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain;
 using Serilog;
+using StrongId.Mvc;
 
 namespace Mileage.WebApp;
 
@@ -27,7 +27,7 @@ public sealed class App : RazorApp
 	protected override void ConfigureServicesMvcOptions(MvcOptions opt)
 	{
 		base.ConfigureServicesMvcOptions(opt);
-		opt.AddStrongIdModelBinding();
+		opt.AddStrongIdModelBinder();
 	}
 
 	protected override void ConfigureAuth(WebApplication app, IConfiguration config)
