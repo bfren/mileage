@@ -24,8 +24,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          7.0.x
-        include-prerelease: true
+          6.0.x
     -
       name: A - Restore
       run: |

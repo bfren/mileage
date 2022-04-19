@@ -1,6 +1,8 @@
 @model Mileage.WebApp.Pages.Components.Car.CarModel
 
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	var data = new
 	{
 		id = Model.Id.Value,
