@@ -3,4 +3,3 @@
     <ProjectReference Include="tests/**/*.csproj" />
   </ItemGroup>
 </Project>
-s
