@@ -7,21 +7,30 @@
 	{
 		<h2>Incomplete Journeys</h2>
 		<ul class="list-group w-100">
-			@foreach (var item in Model.IncompleteJourneys)
+			@foreach (var j in Model.IncompleteJourneys)
 			{
-				<li class="list-group-item d-flex justify-content-between align-items-start"
-					data-id="@item.Id"
-					data-version="@item.Version">
-					<div class="ms-2 me-auto mb-1 mb-sm-0">
-						<div class="fw-bold">
-							@item.Date.ToString("yyyy-MM-dd")
-							| Start @item.StartMiles miles
+				<li class="list-group-item"
+					data-id="@j.Id"
+					data-version="@j.Version">
+					<div class="d-flex justify-content-between align-items-start">
+						<div class="me-auto mb-1 mb-sm-0">
+							<div class="fw-bold">
+								@j.Date.ToString("yyyy-MM-dd")
+								| Start @j.StartMiles miles
+							</div>
+							Car: <vc:car edit-path="Journey/EditCar" car-id="@j.CarId" journey-id="@j.Id"/>
+							From: <vc:place edit-path="Journey/EditFromPlace" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
 						</div>
-						Car: <vc:car edit-path="Journey/EditCar" car-id="@item.CarId" journey-id="@item.Id"/>
-						From: <vc:place edit-path="Journey/EditFromPlace" place-id="@item.FromPlaceId" journey-id="@item.Id"/>
+						<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
+						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
 					</div>
-					<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
-					<button type="button" class="btn btn-success me-2"><i class="fa-solid fa-circle-check"></i></button>
+					<div class="">
+						To:
+						@foreach (var p in j.ToPlaceIds)
+						{
+							<vc:place edit-path="Journey/EditFromPlace" place-id="@p" journey-id="@j.Id"/>
+						}
+					</div>
 				</li>
 			}
 		</ul>

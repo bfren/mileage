@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<Description>Mileage: domain actions.</Description>
-		<AssemblyName>Mileage.Domain</AssemblyName>
-		<RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0-beta.220415.1" />
-		<PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220415.1" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
-		<ProjectReference Include="..\Persistence.Clients.PostgreSql\Persistence.Clients.PostgreSql.csproj" PrivateAssets="All" />
-	</ItemGroup>
+  <PropertyGroup>
+    <Description>Mileage: domain actions.</Description>
+    <AssemblyName>Mileage.Domain</AssemblyName>
+    <RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0-beta.220415.1" />
+    <PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220415.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Persistence.Clients.PostgreSql\Persistence.Clients.PostgreSql.csproj" PrivateAssets="All" />
+  </ItemGroup>
 </Project>

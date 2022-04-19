@@ -1,4 +1,7 @@
 @model Mileage.WebApp.Pages.Modals.EditModalModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
 
 <div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false" data-bs-focus="false">
 	<div class="modal-dialog modal-dialog-scrollable">
