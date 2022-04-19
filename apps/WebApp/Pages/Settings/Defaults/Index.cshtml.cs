@@ -1,4 +1,4 @@
-// Mileage Tracker Apps
+﻿// Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Security.Claims;
@@ -31,8 +31,6 @@ public sealed class IndexModel : PageModel
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		Console.WriteLine("=============== HI! ===============");
-
 		// Get settings and return page
 		await foreach (var settings in GetSettingsAsync(User, Dispatcher))
 		{
