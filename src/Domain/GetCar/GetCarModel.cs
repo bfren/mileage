@@ -14,5 +14,8 @@ namespace Mileage.Domain.GetCar;
 /// <param name="NumberPlate"></param>
 public sealed record class GetCarModel(CarId Id, long Version, string Description, string? NumberPlate)
 {
+	/// <summary>
+	/// Create empty - for model binding
+	/// </summary>
 	public GetCarModel() : this(new(), 0L, string.Empty, null) { }
 }
