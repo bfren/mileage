@@ -5,12 +5,10 @@
 	var settings = Model.Settings;
 }
 
-<h3>Defaults</h3>
-
 <div>
 	Default car:
 	<vc:car
-		edit-path="Defaults/EditDefaultCar"
+		edit-path="EditDefaultCar"
 		car-id="@settings.DefaultCarId"
 		journey-id="null"
 	/>
@@ -19,7 +17,7 @@
 <div>
 	Default starting place:
 	<vc:place
-		edit-path="Defaults/EditDefaultFromPlace"
+		edit-path="EditDefaultFromPlace"
 		place-id="@settings.DefaultFromPlaceId"
 		journey-id="null"
 	/>
