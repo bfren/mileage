@@ -21,13 +21,13 @@ public sealed class AddRateTable : Migration
 	/// 6: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{RateTable.TableName}""
+		CREATE TABLE IF NOT EXISTS {Constants.Schema}.{RateTable.TableName}
 		(
-			""{Col(r => r.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-			""{Col(r => r.Version)}"" integer NOT NULL DEFAULT 0,
-			""{Col(r => r.UserId)}"" integer NOT NULL,
-			""{Col(r => r.AmountPerMileGBP)}"" numeric(4,2) NOT NULL CHECK (""{Col(r => r.AmountPerMileGBP)}"" > 0),
-			CONSTRAINT ""{Col(r => r.Id)}_Key"" PRIMARY KEY(""{Col(r => r.Id)}"")
+			{Col(r => r.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+			{Col(r => r.Version)} integer NOT NULL DEFAULT 0,
+			{Col(r => r.UserId)} integer NOT NULL,
+			{Col(r => r.AmountPerMileGBP)} numeric(4,2) NOT NULL CHECK ({Col(r => r.AmountPerMileGBP)} > 0),
+			CONSTRAINT {Col(r => r.Id)}_key PRIMARY KEY({Col(r => r.Id)})
 		)
 		TABLESPACE pg_default
 		;
@@ -37,7 +37,7 @@ public sealed class AddRateTable : Migration
 	/// 6: Down
 	/// </summary>
 	protected override void Down() => Execute($@"
-		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{RateTable.TableName}""
+		DROP TABLE IF EXISTS {Constants.Schema}.{RateTable.TableName}
 		;
 	");
 }

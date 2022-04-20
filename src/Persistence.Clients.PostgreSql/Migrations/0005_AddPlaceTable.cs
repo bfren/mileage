@@ -21,14 +21,14 @@ public sealed class AddPlaceTable : Migration
 	/// 5: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{PlaceTable.TableName}""
+		CREATE TABLE IF NOT EXISTS {Constants.Schema}.{PlaceTable.TableName}
 		(
-			""{Col(p => p.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-			""{Col(p => p.Version)}"" integer NOT NULL DEFAULT 0,
-			""{Col(p => p.UserId)}"" integer NOT NULL,
-			""{Col(p => p.Description)}"" character(64) COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
-			""{Col(p => p.Postcode)}"" character(8) COLLATE pg_catalog.""en-GB-x-icu"",
-			CONSTRAINT ""{Col(p => p.Id)}_Key"" PRIMARY KEY(""{Col(p => p.Id)}"")
+			{Col(p => p.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+			{Col(p => p.Version)} integer NOT NULL DEFAULT 0,
+			{Col(p => p.UserId)} integer NOT NULL,
+			{Col(p => p.Description)} text COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
+			{Col(p => p.Postcode)} text COLLATE pg_catalog.""en-GB-x-icu"",
+			CONSTRAINT {Col(p => p.Id)}_key PRIMARY KEY({Col(p => p.Id)})
 		)
 		TABLESPACE pg_default
 		;
@@ -38,7 +38,7 @@ public sealed class AddPlaceTable : Migration
 	/// 5: Down
 	/// </summary>
 	protected override void Down() => Execute($@"
-		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{PlaceTable.TableName}""
+		DROP TABLE IF EXISTS {Constants.Schema}.{PlaceTable.TableName}
 		;
 	");
 }

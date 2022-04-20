@@ -21,19 +21,19 @@ public sealed class AddJourneyTable : Migration
 	/// 4: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{JourneyTable.TableName}""
+		CREATE TABLE IF NOT EXISTS {Constants.Schema}.{JourneyTable.TableName}
 		(
-			""{Col(j => j.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-			""{Col(j => j.Version)}"" integer NOT NULL DEFAULT 0,
-			""{Col(j => j.UserId)}"" integer NOT NULL,
-			""{Col(j => j.Date)}"" date NOT NULL,
-			""{Col(j => j.CarId)}"" integer NOT NULL,
-			""{Col(j => j.StartMiles)}"" integer NOT NULL CHECK (""{Col(j => j.StartMiles)}"" > 0),
-			""{Col(j => j.EndMiles)}"" integer CHECK (""{Col(j => j.EndMiles)}"" > 0),
-			""{Col(j => j.FromPlaceId)}"" integer,
-			""{Col(j => j.ToPlaceIds)}"" jsonb NOT NULL,
-			""{Col(j => j.RateId)}"" integer,
-			CONSTRAINT ""{Col(j => j.Id)}_Key"" PRIMARY KEY(""{Col(j => j.Id)}"")
+			{Col(j => j.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+			{Col(j => j.Version)} integer NOT NULL DEFAULT 0,
+			{Col(j => j.UserId)} integer NOT NULL,
+			{Col(j => j.Date)} timestamp with time zone NOT NULL,
+			{Col(j => j.CarId)} integer NOT NULL,
+			{Col(j => j.StartMiles)} integer NOT NULL CHECK ({Col(j => j.StartMiles)} > 0),
+			{Col(j => j.EndMiles)} integer CHECK ({Col(j => j.EndMiles)} > 0),
+			{Col(j => j.FromPlaceId)} integer,
+			{Col(j => j.ToPlaceIds)} jsonb NOT NULL,
+			{Col(j => j.RateId)} integer,
+			CONSTRAINT {Col(j => j.Id)}_key PRIMARY KEY({Col(j => j.Id)})
 		)
 		TABLESPACE pg_default
 		;
@@ -43,7 +43,7 @@ public sealed class AddJourneyTable : Migration
 	/// 4: Down
 	/// </summary>
 	protected override void Down() => Execute($@"
-		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{JourneyTable.TableName}""
+		DROP TABLE IF EXISTS {Constants.Schema}.{JourneyTable.TableName}
 		;
 	");
 }

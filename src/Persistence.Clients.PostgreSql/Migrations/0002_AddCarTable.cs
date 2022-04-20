@@ -21,13 +21,14 @@ public sealed class AddCarTable : Migration
 	/// 2: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{CarTable.TableName}""
+		CREATE TABLE IF NOT EXISTS {Constants.Schema}.{CarTable.TableName}
 		(
-			""{Col(c => c.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-			""{Col(c => c.Version)}"" integer NOT NULL DEFAULT 0,
-			""{Col(c => c.UserId)}"" integer NOT NULL,
-			""{Col(c => c.Description)}"" character(32) COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
-			CONSTRAINT ""{Col(c => c.Id)}_Key"" PRIMARY KEY(""{Col(c => c.Id)}"")
+			{Col(c => c.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+			{Col(c => c.Version)} integer NOT NULL DEFAULT 0,
+			{Col(c => c.UserId)} integer NOT NULL,
+			{Col(c => c.Description)} text COLLATE pg_catalog.""en-GB-x-icu"" NOT NULL,
+			{Col(c => c.NumberPlate)} text COLLATE pg_catalog.""en-GB-x-icu"",
+			CONSTRAINT {Col(c => c.Id)}_key PRIMARY KEY({Col(c => c.Id)})
 		)
 		TABLESPACE pg_default
 		;
@@ -37,7 +38,7 @@ public sealed class AddCarTable : Migration
 	/// 2: Down
 	/// </summary>
 	protected override void Down() => Execute($@"
-		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{CarTable.TableName}""
+		DROP TABLE IF EXISTS {Constants.Schema}.{CarTable.TableName}
 		;
 	");
 }

@@ -16,7 +16,7 @@ public sealed class AddSchema : Migration
 	/// 1: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE SCHEMA IF NOT EXISTS ""{Constants.Schema}""
+		CREATE SCHEMA IF NOT EXISTS {Constants.Schema}
 		;
 	");
 
