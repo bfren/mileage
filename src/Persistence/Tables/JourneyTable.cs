@@ -15,67 +15,67 @@ public sealed record class JourneyTable() : Table(Constants.Schema, TableName)
 	/// <summary>
 	/// Table name - used as a prefix for each column
 	/// </summary>
-	public static readonly string TableName = "Journey";
+	public static readonly string TableName = "journey";
 
 	/// <summary>
 	/// Journey ID
 	/// </summary>
 	[Id]
 	public string Id =>
-		TableName + nameof(Id);
+		"journey_id";
 
 	/// <summary>
 	/// Journey Version
 	/// </summary>
 	[Version]
 	public string Version =>
-		TableName + nameof(Version);
+		"journey_version";
 
 	/// <summary>
 	/// Journey User ID
 	/// </summary>
 	public string UserId =>
-		TableName + nameof(UserId);
+		"journey_user_id";
 
 	/// <summary>
 	/// Journey Date
 	/// </summary>
 	public string Date =>
-		TableName + nameof(Date);
+		"journey_date";
 
 	/// <summary>
 	/// Journey Car ID
 	/// </summary>
 	public string CarId =>
-		TableName + nameof(CarId);
+		"journey_car_id";
 
 	/// <summary>
 	/// Journey Start Miles
 	/// </summary>
 	public string StartMiles =>
-		TableName + nameof(StartMiles);
+		"journey_start_miles";
 
 	/// <summary>
 	/// Journey End Miles
 	/// </summary>
 	public string EndMiles =>
-		TableName + nameof(EndMiles);
+		"journey_end_miles";
 
 	/// <summary>
 	/// Journey From Place ID
 	/// </summary>
 	public string FromPlaceId =>
-		TableName + nameof(FromPlaceId);
+		"journey_from_place_id";
 
 	/// <summary>
 	/// Journey To Place IDs
 	/// </summary>
 	public string ToPlaceIds =>
-		TableName + nameof(ToPlaceIds);
+		"journey_to_place_ids";
 
 	/// <summary>
 	/// Journey Rate ID
 	/// </summary>
 	public string RateId =>
-		TableName + nameof(RateId);
+		"journey_rate_id";
 }

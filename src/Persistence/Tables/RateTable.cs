@@ -15,31 +15,31 @@ public sealed record class RateTable() : Table(Constants.Schema, TableName)
 	/// <summary>
 	/// Table name - used as a prefix for each column
 	/// </summary>
-	public static readonly string TableName = "Rate";
+	public static readonly string TableName = "rate";
 
 	/// <summary>
 	/// Rate ID
 	/// </summary>
 	[Id]
 	public string Id =>
-		TableName + nameof(Id);
+		"rate_id";
 
 	/// <summary>
 	/// Rate Version
 	/// </summary>
 	[Version]
 	public string Version =>
-		TableName + nameof(Version);
+		"rate_version";
 
 	/// <summary>
 	/// Rate User ID
 	/// </summary>
 	public string UserId =>
-		TableName + nameof(UserId);
+		"rate_user_id";
 
 	/// <summary>
 	/// Rate Amount per Mile (in GBP)
 	/// </summary>
 	public string AmountPerMileGBP =>
-		TableName + nameof(AmountPerMileGBP);
+		"rate_amount";
 }
