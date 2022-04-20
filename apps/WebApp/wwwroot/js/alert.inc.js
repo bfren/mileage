@@ -40,7 +40,7 @@ function showAlert(type, text, sticky) {
 }
 
 /**
- * Show a sticky 'Please wait' alert
+ * Show a sticky 'Please wait' alert.
  *
  */
 function showPleaseWaitAlert() {

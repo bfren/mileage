@@ -1,5 +1,5 @@
 /**
- * Submit all forms via AJAX and handle results
+ * Submit all forms via AJAX and handle results.
  *
  */
 function setupAjaxSubmit() {
@@ -13,6 +13,7 @@ function setupAjaxSubmit() {
 		// get form info
 		var form = $(this);
 		var replaceId = form.data("replace");
+		var replaceContents = form.data("replace-contents");
 
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
@@ -22,9 +23,13 @@ function setupAjaxSubmit() {
 				if (replaceId) {
 					// there is some HTML to use
 					if (data) {
-						$("#" + replaceId).replaceWith(data);
-						showAlert("success", "Saved.");
-						setupTokenModals();
+						var replace = $("#" + replaceId);
+						if (replaceContents) {
+							replace.html(data);
+						} else {
+							replace.replaceWith(data);
+						}
+						showAlert("success", "Success.");
 						return;
 					}
 
@@ -34,14 +39,14 @@ function setupAjaxSubmit() {
 				}
 
 				// handle a JSON result object
-				if (data) { 
+				if (data) {
 					handleResult(data);
 				}
 			})
 
 			.fail(function (error) {
 				// the response is a JSON result
-				if (error && error.responseJSON) { 
+				if (error && error.responseJSON) {
 					handleResult(error.responseJSON);
 					return;
 				}
