@@ -26,3 +26,15 @@ function loadSettingsTab(tabId) {
 	showPleaseWaitAlert()
 	tab.load(src, () => closeAlert());
 }
+
+function loadSaveForm(wrapper, el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get the URL to load
+	var url = el.data("load");
+
+	// show alert and load URL
+	showPleaseWaitAlert();
+	$("#save-" + wrapper).load(url, () => closeAlert());
+}

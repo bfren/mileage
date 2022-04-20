@@ -3,7 +3,7 @@
  *
  */
 function setupTokenModals() {
-	$(".token > a").click(function () {
+	$("body").on("click", ".token > a", function () {
 		var editUrl = $(this).data("edit");
 		var replaceId = $(this).data("replace");
 		openModal(editUrl, replaceId);
@@ -48,10 +48,8 @@ function openModal(url, replaceId) {
 		modal = new bootstrap.Modal(modalEl);
 		modal.show();
 
-		// Setup behaviours
+		// Setup search behaviour
 		setupModalSearch();
-		setupModalSave();
-		setupAjaxSubmit();
 	});
 }
 
@@ -60,14 +58,15 @@ function openModal(url, replaceId) {
  *
  */
 function setupModalSearch() {
-	// hide add item  button
+	// hide add item button
 	var addItem = $("#edit .btn-add");
 	addItem.hide();
 
-	// don't submit form on enter
+	// save new item on enter
 	$("#list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
+			addItem.click();
 		}
 	});
 
@@ -84,9 +83,10 @@ function setupModalSearch() {
 		}
 
 		// filter items that match the input value
-		$("#list-items .list-item").filter(
-			() => $(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1)
-		);
+		$("#list-items .list-item").filter(function () {
+			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
 	});
 }
 
@@ -95,8 +95,9 @@ function setupModalSearch() {
  *
  */
 function setupModalSave() {
-	$("#edit .btn-save").click(function () {
+	$("body").on("click", "#edit .btn-save", function () {
 		$("#edit form").submit();
 		modal.hide();
 	});
 }
+ready(setupModalSave);

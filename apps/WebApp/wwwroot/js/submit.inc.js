@@ -3,7 +3,7 @@
  *
  */
 function setupAjaxSubmit() {
-	$("form").submit(function (e) {
+	$("body").on("submit", "form", function (e) {
 		// stop default submit
 		e.preventDefault();
 

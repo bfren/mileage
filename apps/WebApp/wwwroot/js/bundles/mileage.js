@@ -84,7 +84,7 @@ ready(showAlertsOnLoad);
  *
  */
 function setupTokenModals() {
-	$(".token > a").click(function () {
+	$("body").on("click", ".token > a", function () {
 		var editUrl = $(this).data("edit");
 		var replaceId = $(this).data("replace");
 		openModal(editUrl, replaceId);
@@ -129,10 +129,8 @@ function openModal(url, replaceId) {
 		modal = new bootstrap.Modal(modalEl);
 		modal.show();
 
-		// Setup behaviours
+		// Setup search behaviour
 		setupModalSearch();
-		setupModalSave();
-		setupAjaxSubmit();
 	});
 }
 
@@ -141,14 +139,15 @@ function openModal(url, replaceId) {
  *
  */
 function setupModalSearch() {
-	// hide add item  button
+	// hide add item button
 	var addItem = $("#edit .btn-add");
 	addItem.hide();
 
-	// don't submit form on enter
+	// save new item on enter
 	$("#list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
+			addItem.click();
 		}
 	});
 
@@ -165,9 +164,10 @@ function setupModalSearch() {
 		}
 
 		// filter items that match the input value
-		$("#list-items .list-item").filter(
-			() => $(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1)
-		);
+		$("#list-items .list-item").filter(function () {
+			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
 	});
 }
 
@@ -176,11 +176,12 @@ function setupModalSearch() {
  *
  */
 function setupModalSave() {
-	$("#edit .btn-save").click(function () {
+	$("body").on("click", "#edit .btn-save", function () {
 		$("#edit form").submit();
 		modal.hide();
 	});
 }
+ready(setupModalSave);
 
 /**
  * Handle a JSON Result object
@@ -227,12 +228,24 @@ function loadSettingsTab(tabId) {
 	tab.load(src, () => closeAlert());
 }
 
+function loadSaveForm(wrapper, el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get the URL to load
+	var url = el.data("load");
+
+	// show alert and load URL
+	showPleaseWaitAlert();
+	$("#save-" + wrapper).load(url, () => closeAlert());
+}
+
 /**
  * Submit all forms via AJAX and handle results
  *
  */
 function setupAjaxSubmit() {
-	$("form").submit(function (e) {
+	$("body").on("submit", "form", function (e) {
 		// stop default submit
 		e.preventDefault();
 
