@@ -31,4 +31,9 @@ public sealed record class CarEntity : IWithVersion<CarId>
 	/// Description
 	/// </summary>
 	public string Description { get; init; } = string.Empty;
+
+	/// <summary>
+	/// Number Plate
+	/// </summary>
+	public string? NumberPlate { get; init; }
 }

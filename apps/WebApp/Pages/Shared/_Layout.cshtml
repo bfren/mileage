@@ -7,7 +7,6 @@
 	<title>Mileage Tracker</title>
 
 	<!-- Style -->
-	<typekit library="lar5het" />
 	<environment names="Development">
 		<link rel="stylesheet" href="~/css/bundles/1.0/mileage-lib.css" />
 		<link rel="stylesheet" href="~/css/bundles/1.0/mileage.css" />
@@ -54,12 +53,13 @@
 		<script src="~/js/bundles/mileage-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 		<script src="~/js/bundles/mileage.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 	</environment>
-	@await RenderSectionAsync("Scripts", required: false)
+	@await RenderSectionAsync("Script", required: false)
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
 	</script>
 	<jwt />
 	<div id="edit" class="fixed-bottom"></div>
+	<div id="delete" class="fixed-bottom"></div>
 
 </body>
 </html>

@@ -11,4 +11,9 @@ namespace Mileage.Domain.GetCars;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Description"></param>
-public sealed record class GetCarsModel(CarId Id, string Description) : IWithId<CarId>;
+/// <param name="NumberPlate"></param>
+public sealed record class GetCarsModel(
+	CarId Id,
+	string Description,
+	string? NumberPlate
+) : IWithId<CarId>;

@@ -25,7 +25,7 @@ public abstract class ListViewComponent<TModel, TId> : ViewComponent
 	{
 		var models = from i in items select new ListItemModel(i.Id.Value, GetText(i));
 		return View(
-			"~/Pages/Components/List/List.cs.cshtml",
+			"~/Pages/Components/List/List.cshtml",
 			new ListModel(listName, Singular, allowNull, models.ToList(), selected?.Value)
 		);
 	}

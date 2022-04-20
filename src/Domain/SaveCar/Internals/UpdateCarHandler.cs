@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveCar.Internals;
@@ -33,12 +32,6 @@ internal sealed class UpdateCarHandler : CommandHandler<UpdateCarCommand>
 	public override Task<Maybe<bool>> HandleAsync(UpdateCarCommand command)
 	{
 		Log.Vrb("Update Car: {Command}", command);
-		return Car
-			.UpdateAsync(new CarEntity
-			{
-				Id = command.CarId,
-				Version = command.Version,
-				Description = command.Description
-			});
+		return Car.UpdateAsync(command);
 	}
 }

@@ -21,14 +21,14 @@ public sealed class AddSettingsTable : Migration
 	/// 3: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
-		CREATE TABLE IF NOT EXISTS ""{Constants.Schema}"".""{SettingsTable.TableName}""
+		CREATE TABLE IF NOT EXISTS {Constants.Schema}.{SettingsTable.TableName}
 		(
-			""{Col(c => c.Id)}"" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-			""{Col(c => c.Version)}"" integer NOT NULL DEFAULT 0,
-			""{Col(c => c.UserId)}"" integer NOT NULL,
-			""{Col(c => c.DefaultCarId)}"" integer,
-			""{Col(c => c.DefaultFromPlaceId)}"" integer,
-			CONSTRAINT ""{Col(c => c.Id)}_Key"" PRIMARY KEY(""{Col(c => c.Id)}"")
+			{Col(c => c.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+			{Col(c => c.Version)} integer NOT NULL DEFAULT 0,
+			{Col(c => c.UserId)} integer NOT NULL,
+			{Col(c => c.DefaultCarId)} integer,
+			{Col(c => c.DefaultFromPlaceId)} integer,
+			CONSTRAINT {Col(c => c.Id)}_key PRIMARY KEY({Col(c => c.Id)})
 		)
 		TABLESPACE pg_default
 		;
@@ -38,7 +38,7 @@ public sealed class AddSettingsTable : Migration
 	/// 3: Down
 	/// </summary>
 	protected override void Down() => Execute($@"
-		DROP TABLE IF EXISTS ""{Constants.Schema}"".""{SettingsTable.TableName}""
+		DROP TABLE IF EXISTS {Constants.Schema}.{SettingsTable.TableName}
 		;
 	");
 }

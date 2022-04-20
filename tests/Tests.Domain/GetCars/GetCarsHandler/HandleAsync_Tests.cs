@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 			return (new(userId), userId);
 		}
 
-		internal override GetCarsModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str);
+		internal override GetCarsModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str, Rnd.Str);
 	}
 
 	[Fact]

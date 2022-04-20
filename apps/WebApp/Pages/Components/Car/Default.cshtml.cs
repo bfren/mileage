@@ -25,13 +25,8 @@ public sealed class CarViewComponent : ViewComponent
 	public CarViewComponent(IDispatcher dispatcher, ILog<CarViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string editPath, CarId carId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string editUrl, CarId carId, JourneyId? journeyId)
 	{
-		var editUrl = Url.PageLink(
-			pageName: editPath,
-			values: journeyId is not null ? new { journeyId = journeyId.Value } : null
-		);
-
 		if (carId is null)
 		{
 			return View(CarModel.Blank(editUrl));

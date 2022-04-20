@@ -27,7 +27,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<CarId>());
 		}
 
-		internal override GetCarModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str);
+		internal override GetCarModel NewModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 	}
 
 	[Fact]

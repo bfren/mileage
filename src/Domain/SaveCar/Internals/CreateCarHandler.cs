@@ -37,7 +37,8 @@ internal sealed class CreateCarHandler : QueryHandler<CreateCarQuery, CarId>
 			.CreateAsync(new()
 			{
 				UserId = query.UserId,
-				Description = query.Description
+				Description = query.Description,
+				NumberPlate = query.NumberPlate
 			});
 	}
 }

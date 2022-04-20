@@ -9,7 +9,7 @@ function handleResult(r) {
 
 	// redirect
 	if (r.redirectTo) {
-		showAlert("info", "Redirecting...");
+		showAlert("info", "Redirecting...", true);
 		window.location.href = r.redirectTo;
 	}
 }

@@ -17,7 +17,7 @@
 
 			@foreach (var item in Model.Items)
 			{
-				Radio(Model.ListName, "{Model.Singular}-{item.Id}", item.Id, item.Text.Trim(), Model.Selected == item.Id);
+				Radio(Model.ListName, $"{Model.Singular}-{item.Id}", item.Id, item.Text.Trim(), Model.Selected == item.Id);
 			}
 		</div>
 	}

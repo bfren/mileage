@@ -42,8 +42,8 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 	{
 		Log.Inf("Inserting test data.");
 		var q = from u0 in Dispatcher.DispatchAsync(new CreateUserQuery("bf", "info@bfren.dev", "fred"))
-				from c0 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str))
-				from c1 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str))
+				from c0 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
+				from c1 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
 				from p0 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
 				from p1 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
 				from p2 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))

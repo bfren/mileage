@@ -40,7 +40,7 @@ function showAlert(type, text, sticky) {
 }
 
 /**
- * Show a sticky 'Please wait' alert
+ * Show a sticky 'Please wait' alert.
  *
  */
 function showPleaseWaitAlert() {
@@ -69,12 +69,7 @@ function updateAlert(seconds) {
 function closeAlert() {
 	message.fadeOut();
 }
-
-ready(function () {
-	message.click(function () {
-		closeAlert();
-	});
-})
+ready(() => message.click(() => closeAlert()));
 
 /**
  * Show any alerts on page load.
@@ -82,40 +77,26 @@ ready(function () {
  */
 function showAlertsOnLoad() {
 }
-
 ready(showAlertsOnLoad);
-
-/**
- * Setup token links to open the edit modal when clicked.
- *
- */
-function setupTokenModals() {
-	$(".token > a").click(function () {
-		var editUrl = $(this).data("edit");
-		var replaceId = $(this).data("replace");
-		openModal(editUrl, replaceId);
-	});
-}
-ready(setupTokenModals);
 
 var modal;
 
 /**
- * Open the edit modal and load contents via HTTP.
+ * Open a modal and load contents via HTTP.
  * 
  * @param {any} url
  * @param {any} replaceId
  */
-function openModal(url, replaceId) {
+function openModal(selector, url, replaceId, replaceContents, setup) {
 	// show messages
 	showPleaseWaitAlert();
-	console.log("Loading modal from: " + url);
 
 	// load modal HTML and then show modal
-	$("#edit").load(url, function () {
+	$(selector).load(url, function () {
 		// save replaceId
 		var form = $(this).find("form");
 		form.attr("data-replace", replaceId);
+		form.attr("data-replace-contents", replaceContents);
 
 		// create the modal object
 		var wrapper = $(this);
@@ -123,44 +104,71 @@ function openModal(url, replaceId) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", function () {
-			$(".modal-select").focus();
-		});
+		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
 
 		// fade out background when modal is closed
-		modalEl.addEventListener("hide.bs.modal", function () {
-			wrapper.fadeOut("fast");
-		});
+		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
 
 		// fade in background and show modal
-		wrapper.fadeIn("fast", function () {
-			closeAlert();
-		});
+		wrapper.fadeIn("fast", () => closeAlert());
 
 		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
 		modal.show();
 
-		// Setup behaviours
-		setupModalSearch();
-		setupModalSave();
-		setupAjaxSubmit();
+		// Setup additional behaviour
+		if (setup) {
+			setup();
+		}
 	});
+}
+
+/**
+ * Open the delete modal.
+ * 
+ * @param {any} url
+ * @param {any} replaceId
+ */
+function openDeleteModal(url, replaceId) {
+	openModal("#delete", url, replaceId, true);
+}
+
+/**
+ * Submit modal delete form when the delete button is pressed.
+ *
+ */
+function setupDeleteModalSave() {
+	$("body").on("click", "#delete .btn-delete", function () {
+		$("#delete form").submit();
+		modal.hide();
+	});
+}
+ready(setupDeleteModalSave);
+
+/**
+ * Open the edit modal.
+ * 
+ * @param {any} url
+ * @param {any} replaceId
+ */
+function openEditModal(url, replaceId) {
+	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
 }
 
 /**
  * Filter list elements based on search field entry.
  *
  */
-function setupModalSearch() {
-	// hide add item  button
+function setupEditModalSearch() {
+	// hide add item button
 	var addItem = $("#edit .btn-add");
 	addItem.hide();
 
-	// don't submit form on enter
+	// save new item on enter
 	$("#list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
+			addItem.click();
 		}
 	});
 
@@ -178,7 +186,8 @@ function setupModalSearch() {
 
 		// filter items that match the input value
 		$("#list-items .list-item").filter(function () {
-			$(this).toggle($(this).data("text").indexOf(value.toLowerCase()) > -1);
+			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
 		});
 	});
 }
@@ -187,12 +196,26 @@ function setupModalSearch() {
  * Submit modal edit form when the save button is pressed.
  *
  */
-function setupModalSave() {
-	$("#edit .btn-save").click(function () {
+function setupEditModalSave() {
+	$("body").on("click", "#edit .btn-save", function () {
 		$("#edit form").submit();
 		modal.hide();
 	});
 }
+ready(setupEditModalSave);
+
+/**
+ * Setup token links to open the edit modal when clicked.
+ *
+ */
+function setupTokenEditModals() {
+	$("body").on("click", ".token > a", function () {
+		var editUrl = $(this).data("edit");
+		var replaceId = $(this).data("replace");
+		openEditModal(editUrl, replaceId);
+	});
+}
+ready(setupTokenEditModals);
 
 /**
  * Handle a JSON Result object
@@ -205,13 +228,110 @@ function handleResult(r) {
 
 	// redirect
 	if (r.redirectTo) {
-		showAlert("info", "Redirecting...");
+		showAlert("info", "Redirecting...", true);
 		window.location.href = r.redirectTo;
 	}
 }
 
+/**
+ * Setup tab buttons to load settings on click.
+ *
+ */
+function setupSettingsTabs() {
+	$("#settingsButtons .nav-link").click(function () {
+		var tabId = $(this).data("bs-target");
+		loadSettingsTab(tabId);
+	});
+}
+ready(setupSettingsTabs);
+
+/**
+ * Load a settings tab.
+ * 
+ * @param {any} tabId
+ */
+function loadSettingsTab(tabId) {
+	// get tab target
+	var tab = $(tabId);
+
+	// get tab source URL
+	var src = tab.data("src");
+
+	// load source
+	showPleaseWaitAlert()
+	tab.load(src, () => closeAlert());
+}
+
+/**
+ * Load a save form for creating / editing items.
+ *
+ * @param {any} item The name of the item being saved
+ * @param {any} el The element to be reloaded
+ * @param {any} e The click event
+ */
+function loadSaveForm(item, el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get the URL to load
+	var url = el.data("load");
+
+	// show alert and load URL
+	showPleaseWaitAlert();
+	$("#save-" + item).load(url, () => closeAlert());
+}
+
+/**
+ * Reload the form when the cancel button is clicked.
+ * 
+ * @param {any} form Form selector
+ * @param {any} item The name of the item being saved
+ * @param {any} el The element to be reloaded
+ */
+function setupReloadFormOnCancel(form, item, el) {
+	$(form).on("click", ".btn-cancel", function (e) {
+		loadSaveForm(item, el, e);
+	});
+}
+
+/**
+ * Submit the form when the enter key is pressed.
+ * 
+ * @param {any} form Form selector
+ */
+function setupSaveFormOnEnter(form) {
+	$(form).on("keydown", "input", function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			$(form).find(".btn-save").click();
+		}
+	});
+}
+
+/**
+ * Check whether or not the user really wants to delete an item.
+ * 
+ * @param {any} el The element being deleted
+ * @param {any} e The click event
+ */
+function checkDeleteItem(el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get info
+	var deleteUrl = el.data("delete");
+	var replaceId = el.data("replace");
+
+	// open modal to check delete
+	openDeleteModal(deleteUrl, replaceId);
+}
+
+/**
+ * Submit all forms via AJAX and handle results.
+ *
+ */
 function setupAjaxSubmit() {
-	$("form").submit(function (e) {
+	$("body").on("submit", "form", function (e) {
 		// stop default submit
 		e.preventDefault();
 
@@ -221,6 +341,7 @@ function setupAjaxSubmit() {
 		// get form info
 		var form = $(this);
 		var replaceId = form.data("replace");
+		var replaceContents = form.data("replace-contents");
 
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
@@ -230,9 +351,13 @@ function setupAjaxSubmit() {
 				if (replaceId) {
 					// there is some HTML to use
 					if (data) {
-						$("#" + replaceId).replaceWith(data);
-						showAlert("success", "Saved.");
-						setupTokenModals();
+						var replace = $("#" + replaceId);
+						if (replaceContents) {
+							replace.html(data);
+						} else {
+							replace.replaceWith(data);
+						}
+						showAlert("success", "Success.");
 						return;
 					}
 
@@ -242,14 +367,14 @@ function setupAjaxSubmit() {
 				}
 
 				// handle a JSON result object
-				if (data) { 
+				if (data) {
 					handleResult(data);
 				}
 			})
 
 			.fail(function (error) {
 				// the response is a JSON result
-				if (error && error.responseJSON) { 
+				if (error && error.responseJSON) {
 					handleResult(error.responseJSON);
 					return;
 				}

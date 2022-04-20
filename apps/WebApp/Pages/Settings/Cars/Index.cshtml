@@ -1,0 +1,39 @@
+@page
+@using Mileage.Persistence.Common.StrongIds
+@model Mileage.WebApp.Pages.Settings.Cars.IndexModel
+@{
+	Layout = null;
+	string? editLink(CarId? carId) =>
+		Url.Page(pageName: "Index", pageHandler: "FormPartial", values: new { carId = carId?.Value });
+
+	string? deleteLink(CarId carId) =>
+		Url.Page(pageName: "Index", pageHandler: "DeletePartial", values: new { carId = carId.Value });
+}
+
+<div id="save-car" class="mt-3 mb-3" data-load="@editLink(null)">
+	@await Html.PartialAsync("Form", model: null, ViewData)
+</div>
+
+<ul id="car-list" class="list-group w-100">
+	@foreach (var c in Model.Cars)
+	{
+		var description = c.Description;
+		if (c.NumberPlate is string plate)
+		{
+			description += $" ({plate})";
+		}
+
+		<li class="list-group-item" data-id="@c.Id.Value" data-load="@editLink(c.Id)">
+			<div class="d-flex justify-content-between align-items-start">
+				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@c.Id.Value</div>
+				<div class="me-auto mb-1 mb-sm-0">@description</div>
+				<button type="button" class="btn btn-danger btn-delete" data-delete="@deleteLink(c.Id)" data-replace="cars"><i class="fa-solid fa-circle-minus"></i></button>
+			</div>
+		</li>
+	}
+</ul>
+
+<script type="text/javascript">
+	$("#car-list .list-group-item").click(function(e) { loadSaveForm("car", $(this), e); });
+	$("#car-list .btn-delete").click(function(e) { checkDeleteItem($(this), e); });
+</script>

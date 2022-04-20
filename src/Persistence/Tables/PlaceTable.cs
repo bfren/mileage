@@ -15,37 +15,37 @@ public sealed record class PlaceTable() : Table(Constants.Schema, TableName)
 	/// <summary>
 	/// Table name - used as a prefix for each column
 	/// </summary>
-	public static readonly string TableName = "Place";
+	public static readonly string TableName = "place";
 
 	/// <summary>
 	/// Place ID
 	/// </summary>
 	[Id]
 	public string Id =>
-		TableName + nameof(Id);
+		"place_id";
 
 	/// <summary>
 	/// Place Version
 	/// </summary>
 	[Version]
 	public string Version =>
-		TableName + nameof(Version);
+		"place_version";
 
 	/// <summary>
 	/// Place User ID
 	/// </summary>
 	public string UserId =>
-		TableName + nameof(UserId);
+		"place_user_id";
 
 	/// <summary>
 	/// Place Description
 	/// </summary>
 	public string Description =>
-		TableName + nameof(Description);
+		"place_description";
 
 	/// <summary>
 	/// Place Postcode
 	/// </summary>
 	public string Postcode =>
-		TableName + nameof(Postcode);
+		"place_postcode";
 }
