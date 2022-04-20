@@ -53,7 +53,7 @@
 		<script src="~/js/bundles/mileage-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 		<script src="~/js/bundles/mileage.min.js" asp-append-version="true" csp-add-nonce="true"></script>
 	</environment>
-	@await RenderSectionAsync("Scripts", required: false)
+	@await RenderSectionAsync("Script", required: false)
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
 	</script>
