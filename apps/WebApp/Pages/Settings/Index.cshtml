@@ -7,27 +7,28 @@
 
 	<ul class="nav nav-tabs nav-fill" id="settingsButtons" role="tablist">
 		@{
-			TabButton("Defaults", true);
-			TabButton("Cars", false);
-			TabButton("Places", false);
-			TabButton("Rates", false);
+			TabButton("Defaults");
+			TabButton("Cars");
+			TabButton("Places");
+			TabButton("Rates");
 		}
 	</ul>
 
 	<div class="tab-content mt-3" id="settingsPanes">
 		@{
-			TabPane("Defaults", true);
-			TabPane("Cars", false);
-			TabPane("Places", false);
-			TabPane("Rates", false);
+			TabPane("Defaults");
+			TabPane("Cars");
+			TabPane("Places");
+			TabPane("Rates");
 		}
 	</div>
 
 </div>
 
 @functions {
-	void TabButton(string text, bool active)
+	void TabButton(string text)
 	{
+		var active = text == "Defaults";
 		var name = text.ToLowerInvariant();
 		var css = "nav-link" + (active ? " active" : "");
 
@@ -45,18 +46,16 @@
 		</li>
 	}
 
-	void TabPane(string page, bool active)
+	void TabPane(string page)
 	{
 		var name = page.ToLowerInvariant();
 		var src = Url.Page($"{page}/Index");
-		var css = "tab-pane face" + (active ? " show active" : "");
+		var css = "tab-pane face" + (page == "Defaults" ? " show active" : "");
 
 		<div id="@name" class="@css" role="tabpanel" aria-labelledby="@name-tab" data-src="@src"></div>
 	}
 }
 
-@section Scripts {
-	<script type="text/javascript">
-		ready(() => loadSettingsTab("#defaults"));
-	</script>
+@section Script {
+	<script type="text/javascript">ready(() => loadSettingsTab("#defaults"));</script>
 }
