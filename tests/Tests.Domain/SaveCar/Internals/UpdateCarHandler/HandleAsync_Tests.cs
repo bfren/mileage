@@ -23,7 +23,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str);
+		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -40,17 +40,14 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var carId = LongId<CarId>();
 		var version = Rnd.Lng;
 		var description = Rnd.Str;
-		var command = new UpdateCarCommand(carId, version, description);
+		var plate = Rnd.Str;
+		var command = new UpdateCarCommand(carId, version, description, plate);
 
 		// Act
 		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().UpdateAsync(Arg.Is<CarEntity>(x =>
-			x.Id == carId
-			&& x.Version == version
-			&& x.Description == description
-		));
+		await v.Repo.Received().UpdateAsync(command);
 	}
 
 	[Fact]
@@ -59,9 +56,9 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var expected = Rnd.Flip;
-		v.Repo.UpdateAsync<CarEntity>(default!)
+		v.Repo.UpdateAsync<UpdateCarCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str);
+		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 
 		// Act
 		var result = await handler.HandleAsync(command);

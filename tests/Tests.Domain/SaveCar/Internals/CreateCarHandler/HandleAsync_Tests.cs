@@ -24,7 +24,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new CreateCarQuery(new(), Rnd.Str);
+		var query = new CreateCarQuery(new(), Rnd.Str, Rnd.Str);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -40,7 +40,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var description = Rnd.Str;
-		var query = new CreateCarQuery(userId, description);
+		var plate = Rnd.Str;
+		var query = new CreateCarQuery(userId, description, plate);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -49,6 +50,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await v.Repo.Received().CreateAsync(Arg.Is<CarEntity>(x =>
 			x.UserId == userId
 			&& x.Description == description
+			&& x.NumberPlate == plate
 		));
 	}
 
@@ -60,7 +62,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = LongId<CarId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
-		var query = new CreateCarQuery(new(), Rnd.Str);
+		var query = new CreateCarQuery(new(), Rnd.Str, Rnd.Str);
 
 		// Act
 		var result = await handler.HandleAsync(query);
