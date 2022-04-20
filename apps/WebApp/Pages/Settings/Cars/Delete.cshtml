@@ -1,0 +1,16 @@
+@model WebApp.Pages.Settings.Cars.DeleteModel
+@{
+	Layout = "Modals/DeleteModal";
+}
+
+<form action="@Url.Page("Index", "DeletePartial", new { carId = Model?.Car.Id.Value })" method="post">
+	<div>
+		@Model?.Car.Description
+		@if (Model?.Car.NumberPlate is string plate)
+		{
+			<text> (@plate)</text>
+		}
+	</div>
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m.Car.Id)
+</form>
