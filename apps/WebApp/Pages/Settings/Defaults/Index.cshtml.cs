@@ -1,24 +1,20 @@
-﻿// Mileage Tracker Apps
+// Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Security.Claims;
-using Jeebs.Apps.Web.Constants;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mileage.Domain.LoadSettings;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-#if DEBUG
-[ResponseCache(CacheProfileName = CacheProfiles.None)]
-#else
-[ResponseCache(CacheProfileName = CacheProfiles.Default)]
-#endif
 [Authorize]
-public sealed class IndexModel : PageModel
+[ValidateAntiForgeryToken]
+public sealed partial class IndexModel : PageModel
 {
 	private IDispatcher Dispatcher { get; }
 
@@ -48,6 +44,6 @@ public sealed class IndexModel : PageModel
 	/// <param name="dispatcher"></param>
 	internal static Task<Maybe<Persistence.Common.Settings>> GetSettingsAsync(ClaimsPrincipal user, IDispatcher dispatcher) =>
 		from u in user.GetUserId()
-		from s in dispatcher.DispatchAsync(new Domain.LoadSettings.LoadSettingsQuery(u))
+		from s in dispatcher.DispatchAsync(new LoadSettingsQuery(u))
 		select s;
 }
