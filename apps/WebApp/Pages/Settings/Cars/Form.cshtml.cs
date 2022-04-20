@@ -3,24 +3,22 @@
 
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.DeleteCar;
 using Mileage.Domain.GetCar;
+using Mileage.Domain.SaveCar;
 using Mileage.Persistence.Common.StrongIds;
-using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Cars;
 
-public sealed class DeleteModel : DeleteModalModel
-{
-	public GetCarModel Car { get; set; } = new();
-
-	public DeleteModel() : base("Car") { }
-}
-
 public sealed partial class IndexModel
 {
-	public async Task<PartialViewResult> OnGetDeletePartialAsync(CarId carId)
+	public async Task<PartialViewResult> OnGetFormPartialAsync(CarId? carId)
 	{
+		// Return blank form
+		if (carId is null)
+		{
+			return Partial("Form");
+		}
+
 		// Create query
 		var query = from u in User.GetUserId()
 					from c in Dispatcher.DispatchAsync(new GetCarQuery(u, carId))
@@ -29,18 +27,18 @@ public sealed partial class IndexModel
 		return await query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("Delete", new DeleteModel { Car = x }),
-				none: () => new PartialViewResult()
+				some: x => Partial("Form", x),
+				none: () => Partial("Form")
 			);
 	}
 
-	public async Task<IActionResult> OnPostDeletePartialAsync(CarId carId)
+	public Task<IActionResult> OnPostFormPartialAsync(GetCarModel model)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(new DeleteCarCommand(u, carId))
+					from r in Dispatcher.DispatchAsync(new SaveCarQuery(u, model))
 					select r;
 
-		return await query
+		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: _ => OnGetAsync(),

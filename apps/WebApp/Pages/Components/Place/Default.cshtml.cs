@@ -25,13 +25,8 @@ public sealed class PlaceViewComponent : ViewComponent
 	public PlaceViewComponent(IDispatcher dispatcher, ILog<PlaceViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string editPath, PlaceId placeId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string editUrl, PlaceId placeId, JourneyId? journeyId)
 	{
-		var editUrl = Url.PageLink(
-			pageName: editPath,
-			values: journeyId is not null ? new { journeyId = journeyId.Value } : null
-		);
-
 		if (placeId is null)
 		{
 			return View(PlaceModel.Blank(editUrl));
