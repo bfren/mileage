@@ -10,7 +10,9 @@ namespace Mileage.Domain.SaveCar.Internals;
 /// <inheritdoc cref="CreateCarHandler"/>
 /// <param name="UserId">User ID</param>
 /// <param name="Description">Description</param>
+/// <param name="NumberPlate">Number Plate</param>
 internal sealed record class CreateCarQuery(
 	AuthUserId UserId,
-	string Description
+	string Description,
+	string? NumberPlate
 ) : IQuery<CarId>;
