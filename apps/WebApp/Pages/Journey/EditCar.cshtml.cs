@@ -57,24 +57,23 @@ public sealed class EditCarModel : EditModalModel
 			);
 	}
 
-	public async Task<IActionResult> OnPostAsync(UpdateJourneyCarCommand journey)
+	public Task<IActionResult> OnPostAsync(UpdateJourneyCarCommand journey)
 	{
 		Log.Vrb("Saving {Journey}.", journey);
 
-		var saveCar = from u in User.GetUserId()
-					  from r in Dispatcher.DispatchAsync(journey with { UserId = u })
-					  select r;
+		var query = from u in User.GetUserId()
+					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
+					select r;
 
-		var result = await saveCar;
-		return result
-			.Audit(
-				none: Log.Msg
-			)
-			.Switch<IActionResult>(
+		var editUrl = Url.Page("EditCar", values: new { journeyId = journey.Id.Value });
+
+		return query
+			.AuditAsync(none: Log.Msg)
+			.SwitchAsync<bool, IActionResult>(
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Car", new { journey.CarId, journeyId = journey.Id }),
+						ViewComponent("Car", new { editUrl, journey.CarId, journeyId = journey.Id }),
 
 					false =>
 						Result.Error("Unable to save car.")
