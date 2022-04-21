@@ -5,13 +5,7 @@
  * @param {any} replaceId
  */
 function openEditModal(url, replaceId) {
-	openModal("#edit", url, replaceId, false, function() {
-		setupEditModalSearch();
-		$("#edit input.auto-save").change(function () {
-			$("#edit form").submit();
-			modal.hide();
-		});
-	});
+	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
 }
 
 /**
@@ -56,10 +50,21 @@ function setupEditModalSearch() {
  *
  */
 function setupEditModalSave() {
-	$("body").on("click", "#edit .btn-save", function () {
+	// submit function
+	var submit = function (e) {
+		e.preventDefault();
 		$("#edit form").submit();
 		modal.hide();
-	});
+	}
+
+	// submit on button click, auto-save input change, and enter
+	$("body").on("click", "#edit .btn-save", (e) => submit(e));
+	$("body").on("change", "#edit .auto-save", (e) => submit(e));
+	$("body").on("keypress", "#edit input[type='text']", function (e) {
+		if (e.keyCode == 13) {
+			submit(e);
+		}
+	})
 }
 ready(setupEditModalSave);
 
