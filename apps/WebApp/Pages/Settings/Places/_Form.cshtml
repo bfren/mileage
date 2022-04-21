@@ -1,0 +1,60 @@
+@using Jeebs.Extensions
+@model Domain.GetPlace.GetPlaceModel?
+@{
+	Layout = null;
+	var formId = Rnd.Str;
+}
+
+<form id="@formId" class="row row-cols-md-auto g-3 align-items-center" action="@Url.Page("Index", "FormPartial")" method="post" data-replace="places" data-replace-contents="true">
+
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m!.Id)
+	@Html.HiddenFor(m => m!.Version)
+
+	<!-- Car Details -->
+	<div class="col-12">
+		@Html.LabelFor(
+			m => m!.Id,
+			labelText: Model is null ? "New" : Model.Id.Value.ToString(),
+			htmlAttributes: new { @class = "fw-bold" }
+		)
+	</div>
+
+	<div class="col-12">
+		@Html.LabelFor(m => m!.Description, new { @class = "visually-hidden" })
+		<div class="input-group">
+			<input type="text" class="form-control"
+				id="@Html.NameFor(m => m!.Description)"
+				name="@Html.NameFor(m => m!.Description)"
+				placeholder="@nameof(Model.Description)"
+				value="@Model?.Description"
+				required="required"
+			/>
+		</div>
+	</div>
+
+	<div class="col-12">
+		@Html.LabelFor(m => m!.Postcode, new { @class = "visually-hidden" })
+		<div class="input-group">
+			<input type="text" class="form-control"
+				id="@Html.NameFor(m => m!.Postcode)"
+				name="@Html.NameFor(m => m!.Postcode)"
+				placeholder="@nameof(Model.Postcode)"
+				value="@Model?.Postcode"
+			/>
+		</div>
+	</div>
+
+	<!-- Buttons -->
+	<div class="col-12">
+		<button class="btn btn-secondary btn-cancel">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-save">Save</button>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	setupSaveFormOnEnter("#@formId");
+	setupReloadFormOnCancel("#@formId", "place", $("#save-place"));
+</script>
