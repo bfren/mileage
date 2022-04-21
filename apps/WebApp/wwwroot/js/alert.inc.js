@@ -10,6 +10,13 @@ const alertIcons = {
 	save: $("<i/>").addClass("fa-solid fa-ban")
 }
 
+const alertTypes = {
+	info: "info",
+	success: "success",
+	warning: "warning",
+	error: "error"
+}
+
 const message = $(".statusbar .message");
 var alertTimeout = 0;
 
@@ -31,7 +38,7 @@ function showAlert(type, text, sticky) {
 	clearTimeout(alertTimeout);
 
 	// make error alerts sticky
-	if (type == "error" || sticky) {
+	if (type == alertTypes.error || sticky) {
 		return;
 	}
 
@@ -44,7 +51,7 @@ function showAlert(type, text, sticky) {
  *
  */
 function showPleaseWaitAlert() {
-	showAlert("info", "Please wait...", true);
+	showAlert(alertTypes.info, "Please wait...", true);
 }
 
 /**

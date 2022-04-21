@@ -21,7 +21,7 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 
 public sealed partial class IndexModel
 {
-	public Task<IActionResult> OnGetEditDefaultFromPlaceAsync()
+	public Task<PartialViewResult> OnGetEditDefaultFromPlaceAsync()
 	{
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
@@ -38,7 +38,7 @@ public sealed partial class IndexModel
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Partial("EditDefaultFromPlace", new EditDefaultFromPlaceModel { Settings = x.Settings, Places = x.Places.ToList() }),
-				none: r => (IActionResult)Partial("Modals/ErrorModal", r)
+				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
