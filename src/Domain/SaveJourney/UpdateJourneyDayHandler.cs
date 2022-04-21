@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -30,7 +29,6 @@ internal sealed class UpdateJourneyDayHandler : CommandHandler<UpdateJourneyDayC
 	/// Save the journey belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	/// <exception cref="NotImplementedException"></exception>
 	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyDayCommand command)
 	{
 		Log.Vrb("Updating Day for {Journey}.", command);
