@@ -12,6 +12,10 @@ main {
 
 .token {
   a {
+    background-color: $gray-200;
     font-weight: $font-weight-bold;
+    margin-right: 0.5rem;
+    padding: 0.1rem 0.2rem;
+    text-decoration: none;
   }
 }

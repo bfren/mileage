@@ -11216,7 +11216,11 @@ main {
 }
 
 .token a {
+  background-color: #e9ecef;
   font-weight: 700;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.2rem;
+  text-decoration: none;
 }
 
 #edit, #delete {

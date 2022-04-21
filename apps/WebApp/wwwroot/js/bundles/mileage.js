@@ -86,6 +86,12 @@ function showAlertsOnLoad() {
 }
 ready(showAlertsOnLoad);
 
+function setupDatepickers() {
+	$.fn.datepicker.defaults.todayBtn = "linked";
+	$.fn.datepicker.defaults.format = "yyyy-mm-dd";
+}
+ready(setupDatepickers);
+
 var modal;
 
 /**

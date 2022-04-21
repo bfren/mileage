@@ -4,7 +4,9 @@
     "outputFileName": "wwwroot/js/bundles/mileage-lib.js",
     "inputFiles": [
       "wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
-      "wwwroot/lib/jquery/jquery.js"
+      "wwwroot/lib/jquery/jquery.js",
+      "wwwroot/lib/bootstrap-datepicker/js/bootstrap-datepicker.js",
+      "wwwroot/lib/bootstrap-datepicker/locales/bootstrap-datepicker.en-GB.min.js"
     ],
     "minify": {
       "enabled": false,
@@ -15,7 +17,9 @@
     "outputFileName": "wwwroot/js/bundles/mileage-lib.min.js",
     "inputFiles": [
       "wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js",
-      "wwwroot/lib/jquery/jquery.min.js"
+      "wwwroot/lib/jquery/jquery.min.js",
+      "wwwroot/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js",
+      "wwwroot/lib/bootstrap-datepicker/locales/bootstrap-datepicker.en-GB.min.js"
     ],
     "minify": {
       "enabled": false,
@@ -36,6 +40,7 @@
   {
     "outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.css",
     "inputFiles": [
+      "wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css",
       "wwwroot/lib/font-awesome/css/svg-with-js.css"
     ],
     "minify": {
@@ -46,6 +51,7 @@
   {
     "outputFileName": "wwwroot/css/bundles/1.0/mileage-lib.min.css",
     "inputFiles": [
+      "wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css",
       "wwwroot/lib/font-awesome/css/svg-with-js.min.css"
     ],
     "minify": {
