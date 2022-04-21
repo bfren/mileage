@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Mileage.Persistence.Common.StrongIds;
-using StrongId;
 
 namespace Mileage.Domain.GetPlaces;
 
@@ -11,4 +10,9 @@ namespace Mileage.Domain.GetPlaces;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Description"></param>
-public sealed record class GetPlacesModel(PlaceId Id, string Description) : IWithId<PlaceId>;
+/// <param name="Postcode"></param>
+public sealed record class GetPlacesModel(
+	PlaceId Id,
+	string Description,
+	string? Postcode
+);
