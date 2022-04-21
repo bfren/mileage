@@ -9,26 +9,31 @@ namespace Mileage.Domain.SaveRate;
 
 /// <inheritdoc cref="SaveRateHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="RateId">Rate ID</param>
+/// <param name="Id">Rate ID</param>
 /// <param name="Version">Entity Verion</param>
-/// <param name="AmountPerMileInGBP">Amount per Mile (in GBP)</param>
+/// <param name="AmountPerMileGBP">Amount per Mile (in GBP)</param>
 public sealed record class SaveRateQuery(
 	AuthUserId UserId,
-	RateId? RateId,
+	RateId? Id,
 	long Version,
-	float AmountPerMileInGBP
+	float AmountPerMileGBP
 ) : IQuery<RateId>
 {
 	/// <summary>
 	/// Save with minimum required values (for new rates)
 	/// </summary>
 	/// <param name="userId"></param>
-	/// <param name="amountPerMileInGBP"></param>
-	public SaveRateQuery(AuthUserId userId, float amountPerMileInGBP) : this(
+	/// <param name="amountPerMileGBP"></param>
+	public SaveRateQuery(AuthUserId userId, float amountPerMileGBP) : this(
 		UserId: userId,
-		RateId: null,
+		Id: null,
 		Version: 0L,
-		AmountPerMileInGBP: amountPerMileInGBP
+		AmountPerMileGBP: amountPerMileGBP
 	)
 	{ }
+
+	/// <summary>
+	/// Create blank for model binding
+	/// </summary>
+	public SaveRateQuery() : this(new(), 0f) { }
 }
