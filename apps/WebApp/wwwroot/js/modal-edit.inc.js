@@ -5,7 +5,13 @@
  * @param {any} replaceId
  */
 function openEditModal(url, replaceId) {
-	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
+	openModal("#edit", url, replaceId, false, function() {
+		setupEditModalSearch();
+		$("#edit input.auto-save").change(function () {
+			$("#edit form").submit();
+			modal.hide();
+		});
+	});
 }
 
 /**

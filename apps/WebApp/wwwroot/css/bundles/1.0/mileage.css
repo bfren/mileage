@@ -11212,7 +11212,6 @@ main {
 
 .list-group-item:hover {
   background-color: #f8f9fa;
-  cursor: pointer;
 }
 
 .token a {

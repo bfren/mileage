@@ -86,11 +86,16 @@ function showAlertsOnLoad() {
 }
 ready(showAlertsOnLoad);
 
-function setupDatepickers() {
+/**
+ * Setup date picker defaults
+ *
+ */
+function setupDatepickerDefaults() {
+	$.fn.datepicker.defaults.autoclose = true;
 	$.fn.datepicker.defaults.todayBtn = "linked";
 	$.fn.datepicker.defaults.format = "yyyy-mm-dd";
 }
-ready(setupDatepickers);
+ready(setupDatepickerDefaults);
 
 var modal;
 
@@ -165,7 +170,13 @@ ready(setupDeleteModalSave);
  * @param {any} replaceId
  */
 function openEditModal(url, replaceId) {
-	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
+	openModal("#edit", url, replaceId, false, function() {
+		setupEditModalSearch();
+		$("#edit input.auto-save").change(function () {
+			$("#edit form").submit();
+			modal.hide();
+		});
+	});
 }
 
 /**

@@ -40,7 +40,7 @@
 	{
 		var check = selected ? "checked" : string.Empty;
 		<div class="list-item" data-text="@text.ToLowerInvariant()">
-			<input type="radio" class="btn-check" id="@id" name="@name" value="@value" autocomplete="off" @check />
+			<input type="radio" class="btn-check auto-save" id="@id" name="@name" value="@value" autocomplete="off" @check />
 			<label class="btn btn-outline-primary" for="@id">@text</label>
 		</div>
 	}
