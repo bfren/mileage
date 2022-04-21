@@ -24,15 +24,15 @@
 						<div class="me-auto mb-1 mb-sm-0">
 							<div class="fs-5 mb-1">
 								<vc:day edit-url="@editLink(j, "Day")" day="@j.Day" journey-id="@j.Id"/>
-								Start: @j.StartMiles miles
+								<vc:miles label="Start" edit-url="@editLink(j, "StartMiles")" miles="@j.StartMiles" journey-id="@j.Id"/>
 							</div>
 							<div class="mb-1">
-								Car: <vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
-								Rate: <vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
-								From: <vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+								<vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
+								<vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
+								<vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
 							</div>
 						</div>
-						<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
+						<button type="button" class="btn btn-danger me-2"><i class="fa-solid fa-circle-minus"></i></button>
 						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
 					</div>
 					<div class="">
