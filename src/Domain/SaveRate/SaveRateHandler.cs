@@ -40,30 +40,30 @@ internal sealed class SaveRateHandler : QueryHandler<SaveRateQuery, RateId>
 	public override async Task<Maybe<RateId>> HandleAsync(SaveRateQuery query)
 	{
 		// Ensure the rate belongs to the user
-		if (query.RateId is not null)
+		if (query.Id is not null)
 		{
 			var rateBelongsToUser = await Dispatcher
-					.DispatchAsync(new CheckRateBelongsToUserQuery(query.UserId, query.RateId))
+					.DispatchAsync(new CheckRateBelongsToUserQuery(query.UserId, query.Id))
 					.IsTrueAsync();
 
 			if (!rateBelongsToUser)
 			{
-				return F.None<RateId>(new RateDoesNotBelongToUserMsg(query.UserId, query.RateId));
+				return F.None<RateId>(new RateDoesNotBelongToUserMsg(query.UserId, query.Id));
 			}
 		}
 
 		// Create or update rate
 		return await Rate
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, query.RateId)
+			.Where(x => x.Id, Compare.Equal, query.Id)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<RateEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateRateCommand(x.Id, query.Version, query.AmountPerMileInGBP))
+					.DispatchAsync(new Internals.UpdateRateCommand(x.Id, query.Version, query.AmountPerMileGBP))
 					.BindAsync(_ => F.Some(x.Id)),
 				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateRateQuery(query.UserId, query.AmountPerMileInGBP))
+					.DispatchAsync(new Internals.CreateRateQuery(query.UserId, query.AmountPerMileGBP))
 			);
 	}
 }

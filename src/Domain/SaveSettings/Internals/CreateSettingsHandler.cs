@@ -37,7 +37,8 @@ internal sealed class CreateSettingsHandler : CommandHandler<CreateSettingsComma
 			{
 				UserId = command.UserId,
 				DefaultCarId = command.Settings.DefaultCarId,
-				DefaultFromPlaceId = command.Settings.DefaultFromPlaceId
+				DefaultFromPlaceId = command.Settings.DefaultFromPlaceId,
+				DefaultRateId = command.Settings.DefaultRateId
 			})
 			.AuditAsync(some: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value))
 			.BindAsync(_ => F.True);

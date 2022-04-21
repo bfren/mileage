@@ -4,6 +4,7 @@
 }
 
 <form action="@Url.Page("Index", "DeletePartial", new { placeId = Model?.Place.Id.Value })" method="post">
+
 	<div>
 		@Model?.Place.Description
 		@if (Model?.Place.Postcode is string postcode)
@@ -11,6 +12,8 @@
 			<text> (@postcode)</text>
 		}
 	</div>
+
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Place.Id)
+
 </form>

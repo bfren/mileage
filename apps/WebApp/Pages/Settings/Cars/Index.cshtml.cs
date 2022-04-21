@@ -33,9 +33,8 @@ public sealed partial class IndexModel : PageModel
 		await foreach (var cars in query)
 		{
 			Cars = cars.ToList();
-			return Page();
 		}
 
-		return new NoContentResult();
+		return Page();
 	}
 }

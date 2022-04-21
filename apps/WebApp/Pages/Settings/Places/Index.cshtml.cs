@@ -33,9 +33,8 @@ public sealed partial class IndexModel : PageModel
 		await foreach (var places in query)
 		{
 			Places = places.ToList();
-			return Page();
 		}
 
-		return new NoContentResult();
+		return Page();
 	}
 }

@@ -1,5 +1,13 @@
 @page
+@using Mileage.Domain.GetIncompleteJourneys
 @model Mileage.WebApp.Pages.IndexModel
+@{
+	string? editLink(IncompleteJourneyModel journey, string item)
+	{
+		var journeyId = journey.Id.Value;
+		return Url.Page("Journey/Edit" + item, values: new { journeyId });
+	}
+}
 
 <div class="container">
 
@@ -14,12 +22,13 @@
 					data-version="@j.Version">
 					<div class="d-flex justify-content-between align-items-start">
 						<div class="me-auto mb-1 mb-sm-0">
-							<div class="fw-bold">
+							<div class="fw-bold fs-5">
 								@j.Date.ToString("yyyy-MM-dd")
 								| Start @j.StartMiles miles
 							</div>
-							Car: <vc:car edit-path="Journey/EditCar" car-id="@j.CarId" journey-id="@j.Id"/>
-							From: <vc:place edit-path="Journey/EditFromPlace" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+							Car: <vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
+							Rate: <vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
+							From: <vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
 						</div>
 						<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
 						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
@@ -28,7 +37,7 @@
 						To:
 						@foreach (var p in j.ToPlaceIds)
 						{
-							<vc:place edit-path="Journey/EditFromPlace" place-id="@p" journey-id="@j.Id"/>
+							<span>@p.Value</span>
 						}
 					</div>
 				</li>

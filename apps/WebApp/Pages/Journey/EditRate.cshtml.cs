@@ -7,8 +7,8 @@ using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.GetCars;
 using Mileage.Domain.GetJourney;
+using Mileage.Domain.GetRates;
 using Mileage.Domain.SaveJourney;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
@@ -17,17 +17,17 @@ namespace Mileage.WebApp.Pages.Journey;
 
 [Authorize]
 [ValidateAntiForgeryToken]
-public sealed class EditCarModel : EditModalModel
+public sealed class EditRateModel : EditModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 
-	public List<GetCarsModel> Cars { get; set; } = new();
+	public List<GetRatesModel> Rates { get; set; } = new();
 
 	public IDispatcher Dispatcher { get; }
 
-	public ILog<EditCarModel> Log { get; }
+	public ILog<EditRateModel> Log { get; }
 
-	public EditCarModel(IDispatcher dispatcher, ILog<EditCarModel> log) : base("Car") =>
+	public EditRateModel(IDispatcher dispatcher, ILog<EditRateModel> log) : base("Rate") =>
 		(Dispatcher, Log) = (dispatcher, log);
 
 	public async Task<IActionResult> OnGetAsync(JourneyId journeyId)
@@ -37,11 +37,11 @@ public sealed class EditCarModel : EditModalModel
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
 					from j in Dispatcher.DispatchAsync(new GetJourneyQuery(u, journeyId))
-					from c in Dispatcher.DispatchAsync(new GetCarsQuery(u))
+					from r in Dispatcher.DispatchAsync(new GetRatesQuery(u))
 					select new
 					{
 						Journey = j,
-						Cars = c
+						Rates = r
 					};
 
 		// Return page
@@ -50,14 +50,14 @@ public sealed class EditCarModel : EditModalModel
 				some: x =>
 				{
 					Journey = x.Journey;
-					Cars = x.Cars.ToList();
+					Rates = x.Rates.ToList();
 					return Page();
 				},
 				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
-	public Task<IActionResult> OnPostAsync(UpdateJourneyCarCommand journey)
+	public Task<IActionResult> OnPostAsync(UpdateJourneyRateCommand journey)
 	{
 		Log.Vrb("Saving {Journey}.", journey);
 
@@ -65,7 +65,7 @@ public sealed class EditCarModel : EditModalModel
 					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
 					select r;
 
-		var editUrl = Url.Page("EditCar", values: new { journeyId = journey.Id.Value });
+		var editUrl = Url.Page("EditRate", values: new { journeyId = journey.Id.Value });
 
 		return query
 			.AuditAsync(none: Log.Msg)
@@ -73,10 +73,10 @@ public sealed class EditCarModel : EditModalModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Car", new { editUrl, journey.CarId, journeyId = journey.Id }),
+						ViewComponent("Rate", new { editUrl, journey.RateId, journeyId = journey.Id }),
 
 					false =>
-						Result.Error("Unable to save car.")
+						Result.Error("Unable to save rate.")
 				},
 				none: r => Result.Error(r)
 			);

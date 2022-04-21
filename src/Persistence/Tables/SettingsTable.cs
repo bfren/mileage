@@ -44,8 +44,14 @@ public sealed record class SettingsTable() : Table(Constants.Schema, TableName)
 		"settings_default_car_id";
 
 	/// <summary>
-	/// Settings Default Place ID
+	/// Settings Default From Place ID
 	/// </summary>
 	public string DefaultFromPlaceId =>
 		"settings_default_from_place_id";
+
+	/// <summary>
+	/// Settings Default Rate ID
+	/// </summary>
+	public string DefaultRateId =>
+		"settings_default_rate_id";
 }

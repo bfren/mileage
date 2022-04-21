@@ -35,14 +35,8 @@ public sealed class PlaceViewComponent : ViewComponent
 		Log.Dbg("Get place {PlaceId}.", placeId);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(
-				x => Dispatcher.DispatchAsync(
-					new GetPlaceQuery(x, placeId)
-				)
-			)
-			.AuditAsync(
-				none: r => Log.Err("Unable to get place: {Reason}", r)
-			)
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlaceQuery(x, placeId)))
+			.AuditAsync(none: r => Log.Err("Unable to get place: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new PlaceModel(editUrl, x.Id, x.Description, journeyId)),
 				none: _ => (IViewComponentResult)View(PlaceModel.Blank(editUrl))

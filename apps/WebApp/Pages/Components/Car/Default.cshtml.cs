@@ -33,17 +33,10 @@ public sealed class CarViewComponent : ViewComponent
 		}
 
 		Log.Dbg("Get car: {CarId}.", carId);
-
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(
-				x => Dispatcher.DispatchAsync(
-					new GetCarQuery(x, carId)
-				)
-			)
-			.AuditAsync(
-				none: r => Log.Err("Unable to get car: {Reason}", r)
-			)
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetCarQuery(x, carId)))
+			.AuditAsync(none: r => Log.Err("Unable to get car: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new CarModel(editUrl, x.Id, x.Description, journeyId)),
 				none: _ => (IViewComponentResult)View(CarModel.Blank(editUrl))

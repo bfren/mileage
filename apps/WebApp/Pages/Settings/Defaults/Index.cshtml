@@ -8,7 +8,7 @@
 <div>
 	Default car:
 	<vc:car
-		edit-url="@Url.Page("Index", "EditDefaultCar")"
+		edit-url="@Url.Page("Index", "Car")"
 		car-id="@settings.DefaultCarId"
 		journey-id="null"
 	/>
@@ -17,8 +17,17 @@
 <div>
 	Default starting place:
 	<vc:place
-		edit-url="@Url.Page("Index", "EditDefaultFromPlace")"
+		edit-url="@Url.Page("Index", "FromPlace")"
 		place-id="@settings.DefaultFromPlaceId"
+		journey-id="null"
+	/>
+</div>
+
+<div>
+	Default rate:
+	<vc:rate
+		edit-url="@Url.Page("Index", "Rate")"
+		rate-id="@settings.DefaultRateId"
 		journey-id="null"
 	/>
 </div>

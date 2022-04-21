@@ -8,6 +8,7 @@ using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
+using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -51,8 +52,13 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 			command.Settings.DefaultFromPlaceId, command.UserId
 		);
 
+		// Ensure the rate belongs to the user (or is null)
+		var rateBelongsToUser = await CheckRateBelongsToUser(
+			command.Settings.DefaultRateId, command.UserId
+		);
+
 		// If checks have failed, return with failure message
-		if (!carBelongsToUser || !placeBelongsToUser)
+		if (!carBelongsToUser || !placeBelongsToUser || !rateBelongsToUser)
 		{
 			return F.None<bool, SaveSettingsCheckFailedMsg>();
 		}
@@ -98,6 +104,23 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 			PlaceId x =>
 				Dispatcher
 					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, x))
+					.IsTrueAsync(),
+
+			_ =>
+				Task.FromResult(true)
+		};
+
+	/// <summary>
+	/// Returns true if <paramref name="rateId"/> is null or belongs to <paramref name="userId"/>
+	/// </summary>
+	/// <param name="rateId"></param>
+	/// <param name="userId"></param>
+	internal Task<bool> CheckRateBelongsToUser(RateId? rateId, AuthUserId userId) =>
+		rateId switch
+		{
+			RateId x =>
+				Dispatcher
+					.DispatchAsync(new CheckRateBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>

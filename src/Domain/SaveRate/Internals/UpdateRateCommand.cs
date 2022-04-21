@@ -3,15 +3,16 @@
 
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.SaveRate.Internals;
 
 /// <inheritdoc cref="UpdateRateHandler"/>
-/// <param name="RateId">Rate ID</param>
+/// <param name="Id">Rate ID</param>
 /// <param name="Version">Entity Version</param>
 /// <param name="AmountPerMileGBP">Amount per Mile (in GBP)</param>
 internal sealed record class UpdateRateCommand(
-	RateId RateId,
+	RateId Id,
 	long Version,
 	float AmountPerMileGBP
-) : ICommand;
+) : ICommand, IWithId<RateId>;

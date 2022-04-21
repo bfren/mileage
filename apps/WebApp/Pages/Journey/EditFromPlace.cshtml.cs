@@ -57,24 +57,23 @@ public sealed class EditFromPlaceModel : EditModalModel
 			);
 	}
 
-	public async Task<IActionResult> OnPostAsync(UpdateJourneyFromPlaceCommand journey)
+	public Task<IActionResult> OnPostAsync(UpdateJourneyFromPlaceCommand journey)
 	{
 		Log.Vrb("Saving {Journey}.", journey);
 
-		var saveCar = from u in User.GetUserId()
-					  from r in Dispatcher.DispatchAsync(journey with { UserId = u })
-					  select r;
+		var query = from u in User.GetUserId()
+					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
+					select r;
 
-		var result = await saveCar;
-		return result
-			.Audit(
-				none: Log.Msg
-			)
-			.Switch<IActionResult>(
+		var editUrl = Url.Page("EditFromPlace", values: new { journeyId = journey.Id.Value });
+
+		return query
+			.AuditAsync(none: Log.Msg)
+			.SwitchAsync<bool, IActionResult>(
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Place", new { placeId = journey.FromPlaceId, journeyId = journey.Id }),
+						ViewComponent("Place", new { editUrl, placeId = journey.FromPlaceId, journeyId = journey.Id }),
 
 					false =>
 						Result.Error("Unable to save starting place.")

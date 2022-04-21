@@ -40,22 +40,22 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 	public override async Task<Maybe<PlaceId>> HandleAsync(SavePlaceQuery query)
 	{
 		// Ensure the place belongs to the user
-		if (query.PlaceId is not null)
+		if (query.Id is not null)
 		{
 			var placeBelongsToUser = await Dispatcher
-					.DispatchAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.PlaceId))
+					.DispatchAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.Id))
 					.IsTrueAsync();
 
 			if (!placeBelongsToUser)
 			{
-				return F.None<PlaceId>(new PlaceDoesNotBelongToUserMsg(query.UserId, query.PlaceId));
+				return F.None<PlaceId>(new PlaceDoesNotBelongToUserMsg(query.UserId, query.Id));
 			}
 		}
 
 		// Create or update place
 		return await Place
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, query.PlaceId)
+			.Where(x => x.Id, Compare.Equal, query.Id)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<PlaceEntity>()
 			.SwitchAsync(

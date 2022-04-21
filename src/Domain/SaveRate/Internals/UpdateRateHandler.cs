@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveRate.Internals;
@@ -33,12 +32,6 @@ internal sealed class UpdateRateHandler : CommandHandler<UpdateRateCommand>
 	public override Task<Maybe<bool>> HandleAsync(UpdateRateCommand command)
 	{
 		Log.Vrb("Update Rate: {Command}", command);
-		return Rate
-			.UpdateAsync(new RateEntity
-			{
-				Id = command.RateId,
-				Version = command.Version,
-				AmountPerMileGBP = command.AmountPerMileGBP
-			});
+		return Rate.UpdateAsync(command);
 	}
 }

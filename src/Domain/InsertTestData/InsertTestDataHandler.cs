@@ -51,7 +51,7 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 				from r1 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
 				from j0 in insertJourneys(u0, c0, p0, new[] { p1, p2 }, r0)
 				from j1 in insertJourneys(u0, c1, p0, new[] { p1, p2 }, r1)
-				from s0 in Dispatcher.DispatchAsync(new SaveSettingsCommand(u0, new(0, c0, null)))
+				from s0 in Dispatcher.DispatchAsync(new SaveSettingsCommand(u0, new(0, c0, null, null)))
 				select true;
 
 		return await q.AuditAsync(

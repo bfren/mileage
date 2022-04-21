@@ -9,13 +9,13 @@ namespace Mileage.Domain.SavePlace;
 
 /// <inheritdoc cref="SavePlaceHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="PlaceId">Place ID</param>
+/// <param name="Id">Place ID</param>
 /// <param name="Version">Entity Verion</param>
 /// <param name="Description">Description</param>
 /// <param name="Postcode">Postcode</param>
 public sealed record class SavePlaceQuery(
 	AuthUserId UserId,
-	PlaceId? PlaceId,
+	PlaceId? Id,
 	long Version,
 	string Description,
 	string? Postcode
@@ -28,7 +28,7 @@ public sealed record class SavePlaceQuery(
 	/// <param name="description"></param>
 	public SavePlaceQuery(AuthUserId userId, string description) : this(
 		UserId: userId,
-		PlaceId: null,
+		Id: null,
 		Version: 0L,
 		Description: description,
 		Postcode: null

@@ -46,7 +46,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var settingsId = LongId<SettingsId>();
 		var carId = LongId<CarId>();
 		var placeId = LongId<PlaceId>();
-		var command = new CreateSettingsCommand(userId, new(0L, carId, placeId));
+		var rateId = LongId<RateId>();
+		var command = new CreateSettingsCommand(userId, new(0L, carId, placeId, rateId));
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
 
@@ -55,7 +56,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 
 		// Assert
 		await v.Repo.Received().CreateAsync(Arg.Is<SettingsEntity>(
-			x => x.UserId == userId && x.DefaultCarId == carId && x.DefaultFromPlaceId == placeId
+			x => x.UserId == userId && x.DefaultCarId == carId && x.DefaultFromPlaceId == placeId && x.DefaultRateId == rateId
 		));
 	}
 

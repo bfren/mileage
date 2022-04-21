@@ -46,11 +46,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().UpdateAsync(Arg.Is<RateEntity>(p =>
-			p.Id == rateId
-			&& p.Version == version
-			&& p.AmountPerMileGBP == amountPerMileGBP
-		));
+		await v.Repo.Received().UpdateAsync(command);
 	}
 
 	[Fact]
@@ -59,7 +55,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var expected = Rnd.Flip;
-		v.Repo.UpdateAsync<RateEntity>(default!)
+		v.Repo.UpdateAsync<UpdateRateCommand>(default!)
 			.ReturnsForAnyArgs(expected);
 		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
 

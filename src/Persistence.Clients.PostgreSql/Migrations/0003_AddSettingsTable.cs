@@ -28,6 +28,7 @@ public sealed class AddSettingsTable : Migration
 			{Col(c => c.UserId)} integer NOT NULL,
 			{Col(c => c.DefaultCarId)} integer,
 			{Col(c => c.DefaultFromPlaceId)} integer,
+			{Col(c => c.DefaultRateId)} integer,
 			CONSTRAINT {Col(c => c.Id)}_key PRIMARY KEY({Col(c => c.Id)})
 		)
 		TABLESPACE pg_default

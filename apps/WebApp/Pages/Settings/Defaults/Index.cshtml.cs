@@ -1,7 +1,6 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Security.Claims;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
@@ -27,23 +26,15 @@ public sealed partial class IndexModel : PageModel
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		// Get settings and return page
-		await foreach (var settings in GetSettingsAsync(User, Dispatcher))
+		var query = from u in User.GetUserId()
+					from s in Dispatcher.DispatchAsync(new LoadSettingsQuery(u))
+					select s;
+
+		await foreach (var settings in query)
 		{
 			Settings = settings;
-			return Page();
 		}
 
-		return new NoContentResult();
+		return Page();
 	}
-
-	/// <summary>
-	/// Get settings for the current user
-	/// </summary>
-	/// <param name="user"></param>
-	/// <param name="dispatcher"></param>
-	internal static Task<Maybe<Persistence.Common.Settings>> GetSettingsAsync(ClaimsPrincipal user, IDispatcher dispatcher) =>
-		from u in user.GetUserId()
-		from s in dispatcher.DispatchAsync(new LoadSettingsQuery(u))
-		select s;
 }
