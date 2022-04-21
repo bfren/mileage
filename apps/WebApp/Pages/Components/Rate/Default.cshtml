@@ -1,0 +1,19 @@
+@model Mileage.WebApp.Pages.Components.Rate.RateModel
+
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var data = new
+	{
+		id = Model.Id.Value,
+		target = Model.JourneyId is null ? "settings" : Model.JourneyId.Value.ToString()
+	};
+
+	var text = Model.AmountPerMileGBP == 0 ? "not set" : Model.AmountPerMileGBP.ToString("0.00");
+
+	var tokenId = Rnd.Str;
+}
+
+<span id="@tokenId" class="rate token">
+	<a href="javascript:void(0)" class="link-primary" data-edit="@Model.EditUrl" data-replace="@tokenId" data-id="@data.id" data-target="@data.target">@text</a>
+</span>
