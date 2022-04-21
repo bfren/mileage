@@ -36,4 +36,9 @@ public sealed record class SettingsEntity : IWithVersion<SettingsId>
 	/// Default Place to be used as the from (start) place for new journeys
 	/// </summary>
 	public PlaceId? DefaultFromPlaceId { get; set; }
+
+	/// <summary>
+	/// Default Rate to be used for new journeys
+	/// </summary>
+	public RateId? DefaultRateId { get; set; }
 }
