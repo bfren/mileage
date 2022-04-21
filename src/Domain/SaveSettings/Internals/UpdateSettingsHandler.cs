@@ -37,7 +37,8 @@ internal sealed class UpdateSettingsHandler : CommandHandler<UpdateSettingsComma
 			{
 				Version = command.UpdatedSettings.Version,
 				DefaultCarId = command.UpdatedSettings.DefaultCarId,
-				DefaultFromPlaceId = command.UpdatedSettings.DefaultFromPlaceId
+				DefaultFromPlaceId = command.UpdatedSettings.DefaultFromPlaceId,
+				DefaultRateId = command.UpdatedSettings.DefaultRateId,
 			});
 	}
 }
