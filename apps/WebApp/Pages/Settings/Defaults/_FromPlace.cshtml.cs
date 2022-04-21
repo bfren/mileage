@@ -11,18 +11,18 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public sealed class EditDefaultFromPlaceModel : EditModalModel
+public sealed class FromPlaceModel : EditModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
 	public List<GetPlacesModel> Places { get; set; } = new();
 
-	public EditDefaultFromPlaceModel() : base("Default Starting Place") { }
+	public FromPlaceModel() : base("Default Starting Place") { }
 }
 
 public sealed partial class IndexModel
 {
-	public Task<PartialViewResult> OnGetEditDefaultFromPlaceAsync()
+	public Task<PartialViewResult> OnGetFromPlaceAsync()
 	{
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
@@ -38,12 +38,12 @@ public sealed partial class IndexModel
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("_EditDefaultFromPlace", new EditDefaultFromPlaceModel { Settings = x.Settings, Places = x.Places.ToList() }),
+				some: x => Partial("_FromPlace", new FromPlaceModel { Settings = x.Settings, Places = x.Places.ToList() }),
 				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
-	public Task<IActionResult> OnPostEditDefaultFromPlaceAsync(SaveSettingsCommand form)
+	public Task<IActionResult> OnPostFromPlaceAsync(SaveSettingsCommand form)
 	{
 		Log.Vrb("Saving {Settings} for {User}.", form.Settings, User.GetUserId());
 
@@ -57,7 +57,7 @@ public sealed partial class IndexModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Place", new { EditUrl = Url.Page("Index", "EditDefaultFromPlace"), PlaceId = form.Settings.DefaultFromPlaceId }),
+						ViewComponent("Place", new { EditUrl = Url.Page("Index", "FromPlace"), PlaceId = form.Settings.DefaultFromPlaceId }),
 
 					false =>
 						Result.Error("Unable to save default starting place.")

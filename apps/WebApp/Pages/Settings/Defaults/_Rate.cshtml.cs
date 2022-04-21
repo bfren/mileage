@@ -40,7 +40,7 @@ public sealed partial class IndexModel
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("_EditDefaultCar", new RateModel { Settings = x.Settings, Rates = x.Rates.ToList() }),
+				some: x => Partial("_Rate", new RateModel { Settings = x.Settings, Rates = x.Rates.ToList() }),
 				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
