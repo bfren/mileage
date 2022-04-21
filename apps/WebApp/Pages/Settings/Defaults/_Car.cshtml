@@ -1,9 +1,9 @@
-@model Mileage.WebApp.Pages.Settings.Defaults.EditDefaultCarModel
+@model Mileage.WebApp.Pages.Settings.Defaults.CarModel
 @{
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("Index", "EditDefaultCar")">
+<form method="post" action="@Url.Page("Index", "Car")">
 	<p>Please select a default car:</p>
 	<vc:car-list
 		list-name="Settings.DefaultCarId"
