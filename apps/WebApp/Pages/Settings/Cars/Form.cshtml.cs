@@ -1,6 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCar;
@@ -32,17 +33,17 @@ public sealed partial class IndexModel
 			);
 	}
 
-	public Task<IActionResult> OnPostFormPartialAsync(GetCarModel model)
+	public Task<IActionResult> OnPostFormPartialAsync(SaveCarQuery form)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(new SaveCarQuery(u, model))
+					from r in Dispatcher.DispatchAsync(form with { UserId = u })
 					select r;
 
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: _ => OnGetAsync(),
-				none: () => new NoContentResult()
+				none: r => Result.Error(r)
 			);
 	}
 }

@@ -1,6 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetPlaces;
@@ -59,9 +60,9 @@ public sealed partial class IndexModel
 						ViewComponent("Place", new { EditUrl = Url.Page("Index", "EditDefaultFromPlace"), PlaceId = form.Settings.DefaultFromPlaceId }),
 
 					false =>
-						new EmptyResult()
+						Result.Error("Unable to save default starting place.")
 				},
-				none: _ => new EmptyResult()
+				none: r => Result.Error(r)
 			);
 	}
 }
