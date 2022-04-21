@@ -8,7 +8,7 @@ using StrongId;
 
 namespace Mileage.Domain.SaveJourney;
 
-/// <inheritdoc cref="UpdateJourneyCarHandler"/>
+/// <inheritdoc cref="UpdateJourneyRateHandler"/>
 /// <param name="UserId"></param>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
