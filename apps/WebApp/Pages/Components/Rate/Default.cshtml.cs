@@ -33,17 +33,10 @@ public sealed class RateViewComponent : ViewComponent
 		}
 
 		Log.Dbg("Get rate: {RateId}.", rateId);
-
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(
-				x => Dispatcher.DispatchAsync(
-					new GetRateQuery(x, rateId)
-				)
-			)
-			.AuditAsync(
-				none: r => Log.Err("Unable to get rate: {Reason}", r)
-			)
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetRateQuery(x, rateId)))
+			.AuditAsync(none: r => Log.Err("Unable to get rate: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new RateModel(editUrl, x.Id, x.AmountPerMileGBP, journeyId)),
 				none: _ => (IViewComponentResult)View(RateModel.Blank(editUrl))
