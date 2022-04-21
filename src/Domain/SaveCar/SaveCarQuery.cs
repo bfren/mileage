@@ -9,13 +9,13 @@ namespace Mileage.Domain.SaveCar;
 
 /// <inheritdoc cref="SaveCarHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="CarId">Car ID</param>
+/// <param name="Id">Car ID</param>
 /// <param name="Version">Entity Verion</param>
 /// <param name="Description">Description</param>
 /// <param name="NumberPlate">Number Plate</param>
 public sealed record class SaveCarQuery(
 	AuthUserId UserId,
-	CarId? CarId,
+	CarId? Id,
 	long Version,
 	string Description,
 	string? NumberPlate
@@ -28,7 +28,7 @@ public sealed record class SaveCarQuery(
 	/// <param name="description"></param>
 	public SaveCarQuery(AuthUserId userId, string description) : this(
 		UserId: userId,
-		CarId: null,
+		Id: null,
 		Version: 0L,
 		Description: description,
 		NumberPlate: null
