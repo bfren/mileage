@@ -386,7 +386,7 @@ function setupAjaxSubmit() {
 			.fail(function (xhr) {
 				// the response is a JSON result
 				if (xhr && xhr.responseJSON) {
-					handleResult(error.responseJSON);
+					handleResult(xhr.responseJSON);
 					return;
 				}
 
