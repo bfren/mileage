@@ -47,12 +47,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(command);
 
 		// Assert
-		await v.Repo.Received().UpdateAsync(Arg.Is<PlaceEntity>(p =>
-			p.Id == placeId
-			&& p.Version == version
-			&& p.Description == description
-			&& p.Postcode == postcode
-		));
+		await v.Repo.Received().UpdateAsync(command);
 	}
 
 	[Fact]
@@ -61,7 +56,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var expected = Rnd.Flip;
-		v.Repo.UpdateAsync<PlaceEntity>(default!)
+		v.Repo.UpdateAsync<UpdatePlaceCommand>(default!)
 			.ReturnsForAnyArgs(expected);
 		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 
