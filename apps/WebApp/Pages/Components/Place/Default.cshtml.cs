@@ -5,7 +5,7 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Mileage.Domain.GetFromPlace;
+using Mileage.Domain.GetPlace;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Place;
@@ -37,7 +37,7 @@ public sealed class PlaceViewComponent : ViewComponent
 			.GetUserId()
 			.BindAsync(
 				x => Dispatcher.DispatchAsync(
-					new GetFromPlaceQuery(x, placeId)
+					new GetPlaceQuery(x, placeId)
 				)
 			)
 			.AuditAsync(
