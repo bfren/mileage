@@ -6,18 +6,18 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
-namespace Mileage.Domain.GetFromPlace.GetFromPlace_Tests;
+namespace Mileage.Domain.GetPlace.GetPlace_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<IPlaceRepository, PlaceEntity, PlaceId, GetFromPlaceQuery, GetFromPlaceHandler, GetFromPlaceModel>
+	private class Setup : GetSingle_Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlaceQuery, GetPlaceHandler, GetPlaceModel>
 	{
 		public Setup() : base("Place") { }
 
-		internal override GetFromPlaceHandler GetHandler(Vars v) =>
+		internal override GetPlaceHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
 
-		internal override GetFromPlaceQuery GetQuery(AuthUserId? userId = null, PlaceId? entityId = null)
+		internal override GetPlaceQuery GetQuery(AuthUserId? userId = null, PlaceId? entityId = null)
 		{
 			if (userId is not null && entityId is not null)
 			{
@@ -27,7 +27,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<PlaceId>());
 		}
 
-		internal override GetFromPlaceModel NewModel { get; } = new(LongId<PlaceId>(), Rnd.Str);
+		internal override GetPlaceModel NewModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 	}
 
 	[Fact]
