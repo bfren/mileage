@@ -59,7 +59,12 @@ public sealed partial class IndexModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Car", new { EditUrl = Url.Page("Index", "Car"), CarId = form.Settings.DefaultCarId }),
+						ViewComponent("Car", new
+						{
+							label = "Default Car",
+							editUrl = Url.Page("Index", "Car"),
+							carId = form.Settings.DefaultCarId
+						}),
 
 					false =>
 						Result.Error("Unable to save default car.")

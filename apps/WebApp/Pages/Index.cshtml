@@ -27,9 +27,9 @@
 								<vc:miles label="Start" edit-url="@editLink(j, "StartMiles")" miles="@j.StartMiles" journey-id="@j.Id"/>
 							</div>
 							<div class="mb-1">
-								<vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
-								<vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
-								<vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+								<vc:car label="Car" edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
+								<vc:rate label="Rate" edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
+								<vc:from-place label="From" edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
 							</div>
 						</div>
 						<button type="button" class="btn btn-danger me-2"><i class="fa-solid fa-circle-minus"></i></button>

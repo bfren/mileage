@@ -59,7 +59,12 @@ public sealed partial class IndexModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Rate", new { EditUrl = Url.Page("Index", "Rate"), RateId = form.Settings.DefaultRateId }),
+						ViewComponent("Rate", new
+						{
+							label = "Default Rate",
+							editUrl = Url.Page("Index", "Rate"),
+							rateId = form.Settings.DefaultRateId
+						}),
 
 					false =>
 						Result.Error("Unable to save default rate.")

@@ -57,7 +57,12 @@ public sealed partial class IndexModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Place", new { EditUrl = Url.Page("Index", "FromPlace"), PlaceId = form.Settings.DefaultFromPlaceId }),
+						ViewComponent("FromPlace", new
+						{
+							label = "Default Starting Place",
+							editUrl = Url.Page("Index", "FromPlace"),
+							placeId = form.Settings.DefaultFromPlaceId
+						}),
 
 					false =>
 						Result.Error("Unable to save default starting place.")
