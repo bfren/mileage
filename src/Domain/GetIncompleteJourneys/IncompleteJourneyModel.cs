@@ -35,4 +35,7 @@ public sealed record class IncompleteJourneyModel : IWithVersion<JourneyId>
 
 	/// <inheritdoc cref="JourneyEntity.EndMiles"/>
 	public int? EndMiles { get; set; }
+
+	/// <inheritdoc cref="JourneyEntity.RateId"/>
+	public RateId RateId { get; init; } = new();
 }
