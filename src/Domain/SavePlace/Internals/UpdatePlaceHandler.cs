@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SavePlace.Internals;
@@ -33,13 +32,6 @@ internal sealed class UpdatePlaceHandler : CommandHandler<UpdatePlaceCommand>
 	public override Task<Maybe<bool>> HandleAsync(UpdatePlaceCommand command)
 	{
 		Log.Vrb("Update Place: {Command}", command);
-		return Place
-			.UpdateAsync(new PlaceEntity
-			{
-				Id = command.PlaceId,
-				Version = command.Version,
-				Description = command.Description,
-				Postcode = command.Postcode
-			});
+		return Place.UpdateAsync(command);
 	}
 }

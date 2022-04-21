@@ -11,4 +11,9 @@ namespace Mileage.Domain.GetPlaces;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Description"></param>
-public sealed record class GetPlacesModel(PlaceId Id, string Description) : IWithId<PlaceId>;
+/// <param name="Postcode"></param>
+public sealed record class GetPlacesModel(
+	PlaceId Id,
+	string Description,
+	string? Postcode
+) : IWithId<PlaceId>;

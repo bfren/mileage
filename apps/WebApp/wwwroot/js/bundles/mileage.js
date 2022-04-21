@@ -10,6 +10,13 @@ const alertIcons = {
 	save: $("<i/>").addClass("fa-solid fa-ban")
 }
 
+const alertTypes = {
+	info: "info",
+	success: "success",
+	warning: "warning",
+	error: "error"
+}
+
 const message = $(".statusbar .message");
 var alertTimeout = 0;
 
@@ -31,7 +38,7 @@ function showAlert(type, text, sticky) {
 	clearTimeout(alertTimeout);
 
 	// make error alerts sticky
-	if (type == "error" || sticky) {
+	if (type == alertTypes.error || sticky) {
 		return;
 	}
 
@@ -44,7 +51,7 @@ function showAlert(type, text, sticky) {
  *
  */
 function showPleaseWaitAlert() {
-	showAlert("info", "Please wait...", true);
+	showAlert(alertTypes.info, "Please wait...", true);
 }
 
 /**
@@ -218,7 +225,7 @@ function setupTokenEditModals() {
 ready(setupTokenEditModals);
 
 /**
- * Handle a JSON Result object
+ * Handle a JSON Result object.
  * 
  * @param {any} r
  */
@@ -228,7 +235,7 @@ function handleResult(r) {
 
 	// redirect
 	if (r.redirectTo) {
-		showAlert("info", "Redirecting...", true);
+		showAlert(alertTypes.info, "Redirecting...", true);
 		window.location.href = r.redirectTo;
 	}
 }
@@ -254,11 +261,12 @@ function loadSettingsTab(tabId) {
 	// get tab target
 	var tab = $(tabId);
 
-	// get tab source URL
-	var src = tab.data("src");
+	// show loading alerts
+	tab.html($("<div/>").text("Loading..."));
+	showPleaseWaitAlert();
 
 	// load source
-	showPleaseWaitAlert()
+	var src = tab.data("src");
 	tab.load(src, () => closeAlert());
 }
 
@@ -346,41 +354,44 @@ function setupAjaxSubmit() {
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
 
-			.done(function (data) {
-				// we are expecting HTML to replace an object
-				if (replaceId) {
-					// there is some HTML to use
-					if (data) {
-						var replace = $("#" + replaceId);
-						if (replaceContents) {
-							replace.html(data);
-						} else {
-							replace.replaceWith(data);
-						}
-						showAlert("success", "Success.");
-						return;
-					}
-
-					// there is no HTML to use
-					showAlert("error", "Unable to save, please try again.");
+			.done(function (data, status, xhr) {
+				// handle JSON response
+				if (xhr.responseJSON) {
+					handleResult(xhr.responseJSON);
 					return;
 				}
 
-				// handle a JSON result object
-				if (data) {
-					handleResult(data);
+				// handle HTML response
+				if (data && replaceId) {
+					// get the DOM element to be replaced
+					var replace = $("#" + replaceId);
+
+					// replace contents or the element itself
+					if (replaceContents) {
+						replace.html(data);
+					} else {
+						replace.replaceWith(data);
+					}
+					
+					// show alert
+					showAlert(alertTypes.success, "Done.");
+					return;
 				}
+
+				// something unexpected has happened
+				showAlert(alertTypes.warning, "Something went wrong, refreshing the page...", true);
+				location.reload();
 			})
 
-			.fail(function (error) {
+			.fail(function (xhr) {
 				// the response is a JSON result
-				if (error && error.responseJSON) {
+				if (xhr && xhr.responseJSON) {
 					handleResult(error.responseJSON);
 					return;
 				}
 
 				// something else has gone wrong
-				showAlert("error", "Something went wrong, please try again.");
+				showAlert(alertTypes.error, "Something went wrong, please try again.");
 			});
 	});
 }

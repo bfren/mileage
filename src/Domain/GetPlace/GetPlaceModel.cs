@@ -3,24 +3,24 @@
 
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.GetCar;
+namespace Mileage.Domain.GetPlace;
 
 /// <summary>
-/// Car model
+/// From Place model
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
 /// <param name="Description"></param>
-/// <param name="NumberPlate"></param>
-public sealed record class GetCarModel(
-	CarId Id,
+/// <param name="Postcode"></param>
+public sealed record class GetPlaceModel(
+	PlaceId Id,
 	long Version,
 	string Description,
-	string? NumberPlate
+	string? Postcode
 )
 {
 	/// <summary>
-	/// Create empty - for model binding
+	/// Create blank for model binding
 	/// </summary>
-	public GetCarModel() : this(new(), 0L, string.Empty, null) { }
+	public GetPlaceModel() : this(new(), 0L, string.Empty, null) { }
 }

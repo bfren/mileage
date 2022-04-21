@@ -34,4 +34,9 @@ public sealed record class SavePlaceQuery(
 		Postcode: null
 	)
 	{ }
+
+	/// <summary>
+	/// Create blank for model binding
+	/// </summary>
+	public SavePlaceQuery() : this(new(), string.Empty) { }
 }

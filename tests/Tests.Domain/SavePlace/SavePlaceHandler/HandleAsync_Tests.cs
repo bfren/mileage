@@ -112,7 +112,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
 			Arg.Is<UpdatePlaceCommand>(c =>
-				c.PlaceId == placeId
+				c.Id == placeId
 				&& c.Version == version
 				&& c.Description == description
 				&& c.Postcode == postcode

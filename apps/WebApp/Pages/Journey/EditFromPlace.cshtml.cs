@@ -3,6 +3,7 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,9 +77,9 @@ public sealed class EditFromPlaceModel : EditModalModel
 						ViewComponent("Place", new { placeId = journey.FromPlaceId, journeyId = journey.Id }),
 
 					false =>
-						new EmptyResult()
+						Result.Error("Unable to save starting place.")
 				},
-				none: _ => new EmptyResult()
+				none: r => Result.Error(r)
 			);
 	}
 }

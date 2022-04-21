@@ -1,6 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetPlaces;
@@ -21,7 +22,7 @@ public sealed class EditDefaultFromPlaceModel : EditModalModel
 
 public sealed partial class IndexModel
 {
-	public Task<IActionResult> OnGetEditDefaultFromPlaceAsync()
+	public Task<PartialViewResult> OnGetEditDefaultFromPlaceAsync()
 	{
 		// Get settings for the current user
 		var query = from u in User.GetUserId()
@@ -37,8 +38,8 @@ public sealed partial class IndexModel
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("EditDefaultFromPlace", new EditDefaultFromPlaceModel { Settings = x.Settings, Places = x.Places.ToList() }),
-				none: r => (IActionResult)Partial("Modals/ErrorModal", r)
+				some: x => Partial("_EditDefaultFromPlace", new EditDefaultFromPlaceModel { Settings = x.Settings, Places = x.Places.ToList() }),
+				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
@@ -59,9 +60,9 @@ public sealed partial class IndexModel
 						ViewComponent("Place", new { EditUrl = Url.Page("Index", "EditDefaultFromPlace"), PlaceId = form.Settings.DefaultFromPlaceId }),
 
 					false =>
-						new EmptyResult()
+						Result.Error("Unable to save default starting place.")
 				},
-				none: _ => new EmptyResult()
+				none: r => Result.Error(r)
 			);
 	}
 }

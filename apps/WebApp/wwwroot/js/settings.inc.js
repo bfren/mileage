@@ -19,11 +19,12 @@ function loadSettingsTab(tabId) {
 	// get tab target
 	var tab = $(tabId);
 
-	// get tab source URL
-	var src = tab.data("src");
+	// show loading alerts
+	tab.html($("<div/>").text("Loading..."));
+	showPleaseWaitAlert();
 
 	// load source
-	showPleaseWaitAlert()
+	var src = tab.data("src");
 	tab.load(src, () => closeAlert());
 }
 

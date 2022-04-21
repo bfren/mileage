@@ -3,17 +3,18 @@
 
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.SavePlace.Internals;
 
 /// <inheritdoc cref="UpdatePlaceHandler"/>
-/// <param name="PlaceId">Car ID</param>
+/// <param name="Id">Place ID</param>
 /// <param name="Version">Entity Version</param>
 /// <param name="Description">Description</param>
 /// <param name="Postcode">Postcode</param>
 internal sealed record class UpdatePlaceCommand(
-	PlaceId PlaceId,
+	PlaceId Id,
 	long Version,
 	string Description,
 	string? Postcode
-) : ICommand;
+) : ICommand, IWithId<PlaceId>;

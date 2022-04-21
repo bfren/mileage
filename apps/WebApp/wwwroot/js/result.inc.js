@@ -1,5 +1,5 @@
 /**
- * Handle a JSON Result object
+ * Handle a JSON Result object.
  * 
  * @param {any} r
  */
@@ -9,7 +9,7 @@ function handleResult(r) {
 
 	// redirect
 	if (r.redirectTo) {
-		showAlert("info", "Redirecting...", true);
+		showAlert(alertTypes.info, "Redirecting...", true);
 		window.location.href = r.redirectTo;
 	}
 }

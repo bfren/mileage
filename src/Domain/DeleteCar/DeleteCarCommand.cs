@@ -13,4 +13,10 @@ namespace Mileage.Domain.DeleteCar;
 public sealed record class DeleteCarCommand(
 	AuthUserId UserId,
 	CarId CarId
-) : ICommand;
+) : ICommand
+{
+	/// <summary>
+	/// Create blank for model binding
+	/// </summary>
+	public DeleteCarCommand() : this(new(), new()) { }
+}

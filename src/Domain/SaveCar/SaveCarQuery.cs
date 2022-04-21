@@ -3,7 +3,6 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
-using Mileage.Domain.GetCar;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.SaveCar;
@@ -37,16 +36,7 @@ public sealed record class SaveCarQuery(
 	{ }
 
 	/// <summary>
-	/// Create using get model
+	/// Create empty for model binding
 	/// </summary>
-	/// <param name="userId"></param>
-	/// <param name="model"></param>
-	public SaveCarQuery(AuthUserId userId, GetCarModel model) : this(
-		UserId: userId,
-		CarId: model.Id,
-		Version: model.Version,
-		Description: model.Description,
-		NumberPlate: model.NumberPlate
-	)
-	{ }
+	public SaveCarQuery() : this(new(), string.Empty) { }
 }

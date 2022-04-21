@@ -1,6 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCars;
@@ -21,7 +22,7 @@ public sealed class EditDefaultCarModel : EditModalModel
 
 public sealed partial class IndexModel
 {
-	public Task<IActionResult> OnGetEditDefaultCarAsync()
+	public Task<PartialViewResult> OnGetEditDefaultCarAsync()
 	{
 		Log.Vrb("Getting settings for {User}.", User.GetUserId());
 
@@ -39,8 +40,8 @@ public sealed partial class IndexModel
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("EditDefaultCar", new EditDefaultCarModel { Settings = x.Settings, Cars = x.Cars.ToList() }),
-				none: r => (IActionResult)Partial("Modals/ErrorModal", r)
+				some: x => Partial("_EditDefaultCar", new EditDefaultCarModel { Settings = x.Settings, Cars = x.Cars.ToList() }),
+				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
@@ -61,9 +62,9 @@ public sealed partial class IndexModel
 						ViewComponent("Car", new { EditUrl = Url.Page("Index", "EditDefaultCar"), CarId = form.Settings.DefaultCarId }),
 
 					false =>
-						new EmptyResult()
+						Result.Error("Unable to save default car.")
 				},
-				none: _ => new EmptyResult()
+				none: r => Result.Error(r)
 			);
 	}
 }

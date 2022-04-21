@@ -3,7 +3,7 @@
 
 using Jeebs.Messages;
 
-namespace Mileage.Domain.GetFromPlace.Messages;
+namespace Mileage.Domain.GetPlace.Messages;
 
 /// <summary>Requested PlaceId is not set</summary>
 public sealed record class PlaceIdIsNullMsg : Msg;

@@ -3,6 +3,7 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,9 +77,9 @@ public sealed class EditCarModel : EditModalModel
 						ViewComponent("Car", new { journey.CarId, journeyId = journey.Id }),
 
 					false =>
-						new EmptyResult()
+						Result.Error("Unable to save car.")
 				},
-				none: _ => new EmptyResult()
+				none: r => Result.Error(r)
 			);
 	}
 }
