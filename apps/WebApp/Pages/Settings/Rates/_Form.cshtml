@@ -1,0 +1,51 @@
+@using Jeebs.Extensions
+@model Domain.GetRate.GetRateModel?
+@{
+	Layout = null;
+	var formId = Rnd.Str;
+}
+
+<form id="@formId" class="row row-cols-md-auto g-3 align-items-center" action="@Url.Page("Index", "FormPartial")" method="post" data-replace="rates" data-replace-contents="true">
+
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m!.Id)
+	@Html.HiddenFor(m => m!.Version)
+
+	<!-- Car Details -->
+	<div class="col-12">
+		@Html.LabelFor(
+			m => m!.Id,
+			labelText: Model is null ? "New" : Model.Id.Value.ToString(),
+			htmlAttributes: new { @class = "fw-bold" }
+		)
+	</div>
+
+	<div class="col-12">
+		@Html.LabelFor(m => m!.AmountPerMileGBP, new { @class = "visually-hidden" })
+		<div class="input-group">
+			<input type="number" class="form-control"
+				id="@Html.NameFor(m => m!.AmountPerMileGBP)"
+				name="@Html.NameFor(m => m!.AmountPerMileGBP)"
+				placeholder="Amount Per Mile in GBP"
+				value="@Model?.AmountPerMileGBP.ToString("0.00")"
+				min="0"
+				max="2"
+				step="0.01"
+				required="required"
+			/>
+		</div>
+	</div>
+
+	<!-- Buttons -->
+	<div class="col-12">
+		<button class="btn btn-secondary btn-cancel">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-save">Save</button>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	setupSaveFormOnEnter("#@formId");
+	setupReloadFormOnCancel("#@formId", "rate", $("#save-rate"));
+</script>
