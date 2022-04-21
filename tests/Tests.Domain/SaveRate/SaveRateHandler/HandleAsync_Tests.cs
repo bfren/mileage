@@ -111,7 +111,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Assert
 		await v.Dispatcher.Received().DispatchAsync(
 			Arg.Is<UpdateRateCommand>(c =>
-				c.RateId == rateId
+				c.Id == rateId
 				&& c.Version == version
 				&& c.AmountPerMileGBP == amountPerMileInGBP
 			)
