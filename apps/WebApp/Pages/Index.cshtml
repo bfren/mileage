@@ -22,13 +22,15 @@
 					data-version="@j.Version">
 					<div class="d-flex justify-content-between align-items-start">
 						<div class="me-auto mb-1 mb-sm-0">
-							<div class="fw-bold fs-5">
-								@j.Date.ToString("yyyy-MM-dd")
-								| Start @j.StartMiles miles
+							<div class="fs-5 mb-1">
+								<vc:day edit-url="@editLink(j, "Date")" day="@j.Date" journey-id="@j.Id"/>
+								Start: @j.StartMiles miles
 							</div>
-							Car: <vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
-							Rate: <vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
-							From: <vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+							<div class="mb-1">
+								Car: <vc:car edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
+								Rate: <vc:rate edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
+								From: <vc:place edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+							</div>
 						</div>
 						<button type="button" class="btn btn-secondary me-2"><i class="fa-solid fa-circle-plus"></i></button>
 						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>

@@ -40,7 +40,7 @@ public sealed record class JourneyTable() : Table(Constants.Schema, TableName)
 	/// <summary>
 	/// Journey Date
 	/// </summary>
-	public string Date =>
+	public string Day =>
 		"journey_date";
 
 	/// <summary>

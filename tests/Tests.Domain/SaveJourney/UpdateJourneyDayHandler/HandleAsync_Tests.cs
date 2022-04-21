@@ -4,15 +4,15 @@
 using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.SaveJourney.UpdateJourneyDateHandler_Tests;
+namespace Mileage.Domain.SaveJourney.UpdateJourneyDayHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 {
-	private class Setup : UpdateJourney_Setup<UpdateJourneyDateCommand, UpdateJourneyDateHandler>
+	private class Setup : UpdateJourney_Setup<UpdateJourneyDayCommand, UpdateJourneyDayHandler>
 	{
-		public Setup() : base("Date") { }
+		public Setup() : base("Day") { }
 
-		internal override UpdateJourneyDateCommand GetCommand(AuthUserId? userId = null)
+		internal override UpdateJourneyDayCommand GetCommand(AuthUserId? userId = null)
 		{
 			if (userId is null)
 			{
@@ -22,7 +22,7 @@ public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 			return new(userId, LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime);
 		}
 
-		internal override UpdateJourneyDateHandler GetHandler(Vars v) =>
+		internal override UpdateJourneyDayHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
 	}
 

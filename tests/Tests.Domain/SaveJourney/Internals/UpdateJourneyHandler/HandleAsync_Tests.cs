@@ -55,7 +55,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await v.Repo.Received().UpdateAsync(Arg.Is<JourneyEntity>(j =>
 			j.Id == journeyId
 			&& j.Version == version
-			&& j.Date == date.ToDateTime(TimeOnly.MinValue)
+			&& j.Day == date.ToDateTime(TimeOnly.MinValue)
 			&& j.CarId == carId
 			&& j.StartMiles == startMiles
 			&& j.EndMiles == endMiles

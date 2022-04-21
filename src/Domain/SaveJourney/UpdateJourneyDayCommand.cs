@@ -13,10 +13,10 @@ namespace Mileage.Domain.SaveJourney;
 /// <param name="UserId"></param>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
-/// <param name="Date"></param>
-public sealed record class UpdateJourneyDateCommand(
+/// <param name="Day"></param>
+public sealed record class UpdateJourneyDayCommand(
 	AuthUserId UserId,
 	JourneyId Id,
 	long Version,
-	DateTime Date
+	DateTime Day
 ) : ICommand, IWithId<JourneyId>;

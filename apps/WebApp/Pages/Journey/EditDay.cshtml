@@ -1,0 +1,22 @@
+@page
+@model Mileage.WebApp.Pages.Journey.EditDayModel
+@{
+	Model.Title += $" (Journey {Model.Journey.Id.Value})";
+	Layout = "Modals/EditModal";
+}
+
+<form method="post" action="@Url.Page("EditDay")">
+	<label for="">Please select a day:</label>
+	<input 
+		class="form-control auto-save"
+		id="@Html.NameFor(x => x.Journey.Day)"
+		name="@Html.NameFor(x => x.Journey.Day)"
+		data-provide="datepicker"
+		value="@Model?.Journey.Day.ToString("yyyy-MM-dd")"
+		required="required"
+	/>
+
+	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenFor(x => x.Journey.Version)
+	@Html.AntiForgeryToken()
+</form>

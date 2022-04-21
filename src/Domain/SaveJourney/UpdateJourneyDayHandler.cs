@@ -12,18 +12,18 @@ namespace Mileage.Domain.SaveJourney;
 /// <summary>
 /// Save a journey - create if it doesn't exist, or update if it does
 /// </summary>
-internal sealed class UpdateJourneyDateHandler : CommandHandler<UpdateJourneyDateCommand>
+internal sealed class UpdateJourneyDayHandler : CommandHandler<UpdateJourneyDayCommand>
 {
 	private IJourneyRepository Journey { get; init; }
 
-	private ILog<UpdateJourneyDateHandler> Log { get; init; }
+	private ILog<UpdateJourneyDayHandler> Log { get; init; }
 
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="journey"></param>
 	/// <param name="log"></param>
-	public UpdateJourneyDateHandler(IJourneyRepository journey, ILog<UpdateJourneyDateHandler> log) =>
+	public UpdateJourneyDayHandler(IJourneyRepository journey, ILog<UpdateJourneyDayHandler> log) =>
 		(Journey, Log) = (journey, log);
 
 	/// <summary>
@@ -31,9 +31,9 @@ internal sealed class UpdateJourneyDateHandler : CommandHandler<UpdateJourneyDat
 	/// </summary>
 	/// <param name="command"></param>
 	/// <exception cref="NotImplementedException"></exception>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyDateCommand command)
+	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyDayCommand command)
 	{
-		Log.Vrb("Updating Date for {Journey}.", command);
+		Log.Vrb("Updating Day for {Journey}.", command);
 		return Journey.UpdateAsync(command);
 	}
 }

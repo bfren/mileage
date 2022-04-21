@@ -30,9 +30,9 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	public AuthUserId UserId { get; init; } = new();
 
 	/// <summary>
-	/// Journey Date
+	/// Journey Day
 	/// </summary>
-	public DateTime Date { get; init; }
+	public DateTime Day { get; init; }
 
 	/// <summary>
 	/// The car used for the journey

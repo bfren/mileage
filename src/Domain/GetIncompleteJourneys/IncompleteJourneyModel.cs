@@ -18,8 +18,8 @@ public sealed record class IncompleteJourneyModel : IWithVersion<JourneyId>
 	/// <inheritdoc cref="JourneyEntity.Version"/>
 	public long Version { get; init; }
 
-	/// <inheritdoc cref="JourneyEntity.Date"/>
-	public DateTime Date { get; init; }
+	/// <inheritdoc cref="JourneyEntity.Day"/>
+	public DateTime Day { get; init; }
 
 	/// <inheritdoc cref="JourneyEntity.CarId"/>
 	public CarId CarId { get; init; } = new();
