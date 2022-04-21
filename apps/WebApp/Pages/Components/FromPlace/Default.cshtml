@@ -1,4 +1,4 @@
-@model Mileage.WebApp.Pages.Components.Place.PlaceModel
+@model Mileage.WebApp.Pages.Components.FromPlace.FromPlaceModel
 
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -15,7 +15,7 @@
 }
 
 <span id="@tokenId" class="place token">
-	From
+	@Model.Label
 	<a href="javascript:void(0)"
 		class="link-primary"
 		data-edit="@Model.EditUrl"
