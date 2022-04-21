@@ -17,7 +17,7 @@ public sealed partial class IndexModel
 		// Return blank form
 		if (carId is null)
 		{
-			return Partial("Form");
+			return Partial("_Form");
 		}
 
 		// Create query
@@ -28,8 +28,8 @@ public sealed partial class IndexModel
 		return await query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("Form", x),
-				none: () => Partial("Form")
+				some: x => Partial("_Form", x),
+				none: () => Partial("_Form")
 			);
 	}
 

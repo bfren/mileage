@@ -20,31 +20,38 @@ public sealed class DeleteModel : DeleteModalModel
 
 public sealed partial class IndexModel
 {
-	public async Task<PartialViewResult> OnGetDeletePartialAsync(CarId carId)
+	public Task<PartialViewResult> OnGetDeletePartialAsync(CarId carId)
 	{
 		// Create query
 		var query = from u in User.GetUserId()
 					from c in Dispatcher.DispatchAsync(new GetCarQuery(u, carId))
 					select c;
 
-		return await query
+		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("Delete", new DeleteModel { Car = x }),
+				some: x => Partial("_Delete", new DeleteModel { Car = x }),
 				none: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
-	public async Task<IActionResult> OnPostDeletePartialAsync(DeleteCarCommand form)
+	public Task<IActionResult> OnPostDeletePartialAsync(DeleteCarCommand form)
 	{
 		var query = from u in User.GetUserId()
 					from r in Dispatcher.DispatchAsync(form with { UserId = u })
 					select r;
 
-		return await query
+		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: _ => OnGetAsync(),
+				some: async x => x switch
+				{
+					true =>
+						await OnGetAsync(),
+
+					false =>
+						Result.Error("Unable to delete car.")
+				},
 				none: r => Result.Error(r)
 			);
 	}
