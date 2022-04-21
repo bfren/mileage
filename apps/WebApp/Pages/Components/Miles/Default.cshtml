@@ -1,0 +1,16 @@
+@model Mileage.WebApp.Pages.Components.Miles.MilesModel
+
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var tokenId = Rnd.Str;
+}
+
+<span id="@tokenId" class="miles token">
+	@Model.Label
+	<a href="javascript:void(0)"
+		class="link-primary"
+		data-edit="@Model.EditUrl"
+		data-replace="@tokenId"
+		data-target="@Model?.JourneyId?.Value">@Model?.Miles</a>
+</span>
