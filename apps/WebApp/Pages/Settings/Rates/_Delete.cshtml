@@ -1,0 +1,15 @@
+@model WebApp.Pages.Settings.Rates.DeleteModel
+@{
+	Layout = "Modals/DeleteModal";
+}
+
+<form action="@Url.Page("Index", "DeletePartial", new { rateId = Model?.Rate.Id.Value })" method="post">
+
+	<div>
+		@Model?.Rate.AmountPerMileGBP.ToString("0.00")
+	</div>
+
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m.Rate.Id)
+
+</form>
