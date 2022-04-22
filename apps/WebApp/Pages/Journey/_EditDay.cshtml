@@ -1,11 +1,12 @@
-@page
 @model Mileage.WebApp.Pages.Journey.EditDayModel
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("EditDay")">
+<form method="post" action="@Url.Page("Index", "EditDay")">
 	<label for="">Please select a day:</label>
 	<input 
 		class="form-control auto-save"

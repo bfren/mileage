@@ -1,15 +1,16 @@
-@page
 @model Mileage.WebApp.Pages.Journey.EditFromPlaceModel
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("EditFromPlace")">
+<form method="post" action="@Url.Page("Index", "EditFromPlace")">
 	<p>Please select a starting place:</p>
 	<vc:place-list
 		list-name="Journey.FromPlaceId"
-		allow-null="true"
+		allow-null="false"
 		items="@Model.Places"
 		selected="@Model.Journey.FromPlaceId"
 	/>

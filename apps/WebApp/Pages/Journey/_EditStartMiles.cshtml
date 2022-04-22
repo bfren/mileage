@@ -1,11 +1,12 @@
-@page
 @model Mileage.WebApp.Pages.Journey.EditStartMilesModel
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("EditStartMiles")">
+<form method="post" action="@Url.Page("Index", "EditStartMiles")">
 	<label for="">Please enter the starting miles:</label>
 	@Html.TextBoxFor(x => x.Journey.StartMiles, htmlAttributes: new { @class = "form-control", type = "number", required = true })
 

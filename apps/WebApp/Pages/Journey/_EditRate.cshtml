@@ -1,15 +1,16 @@
-@page
 @model Mileage.WebApp.Pages.Journey.EditRateModel
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("EditRate")">
+<form method="post" action="@Url.Page("Index", "EditRate")">
 	<p>Please select a rate:</p>
 	<vc:rate-list
 		list-name="Journey.RateId"
-		allow-null="true"
+		allow-null="false"
 		items="@Model.Rates"
 		selected="@Model.Journey.RateId"
 	/>

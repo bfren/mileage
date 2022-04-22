@@ -1,15 +1,16 @@
-@page
 @model Mileage.WebApp.Pages.Journey.EditCarModel
 @{
+	ArgumentNullException.ThrowIfNull(Model);
+
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("EditCar")">
+<form method="post" action="@Url.Page("Index", "EditCar")">
 	<p>Please select a car:</p>
 	<vc:car-list
 		list-name="Journey.CarId"
-		allow-null="true"
+		allow-null="false"
 		items="@Model.Cars"
 		selected="@Model.Journey.CarId"
 	/>
