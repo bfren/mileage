@@ -25,17 +25,17 @@ public sealed class CarViewComponent : ViewComponent
 	public CarViewComponent(IDispatcher dispatcher, ILog<CarViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, CarId carId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, CarId value, JourneyId? journeyId)
 	{
-		if (carId is null)
+		if (value is null)
 		{
 			return View(CarModel.Blank(label, editUrl));
 		}
 
-		Log.Dbg("Get car: {CarId}.", carId);
+		Log.Dbg("Get car: {CarId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetCarQuery(x, carId)))
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetCarQuery(x, value)))
 			.AuditAsync(none: r => Log.Err("Unable to get car: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new CarModel(label, editUrl, x.Id, x.Description, journeyId)),

@@ -25,17 +25,17 @@ public sealed class FromPlaceViewComponent : ViewComponent
 	public FromPlaceViewComponent(IDispatcher dispatcher, ILog<FromPlaceViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, PlaceId placeId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, PlaceId value, JourneyId? journeyId)
 	{
-		if (placeId is null)
+		if (value is null)
 		{
 			return View(FromPlaceModel.Blank(label, editUrl));
 		}
 
-		Log.Dbg("Get place {PlaceId}.", placeId);
+		Log.Dbg("Get place {PlaceId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlaceQuery(x, placeId)))
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlaceQuery(x, value)))
 			.AuditAsync(none: r => Log.Err("Unable to get place: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new FromPlaceModel(label, editUrl, x.Id, x.Description, journeyId)),

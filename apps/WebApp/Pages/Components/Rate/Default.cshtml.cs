@@ -25,17 +25,17 @@ public sealed class RateViewComponent : ViewComponent
 	public RateViewComponent(IDispatcher dispatcher, ILog<RateViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, RateId rateId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, RateId value, JourneyId? journeyId)
 	{
-		if (rateId is null)
+		if (value is null)
 		{
 			return View(RateModel.Blank(label, editUrl));
 		}
 
-		Log.Dbg("Get rate: {RateId}.", rateId);
+		Log.Dbg("Get rate: {RateId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetRateQuery(x, rateId)))
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetRateQuery(x, value)))
 			.AuditAsync(none: r => Log.Err("Unable to get rate: {Reason}", r))
 			.SwitchAsync(
 				some: x => View(new RateModel(label, editUrl, x.Id, x.AmountPerMileGBP, journeyId)),

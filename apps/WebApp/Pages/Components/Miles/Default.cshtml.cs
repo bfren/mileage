@@ -10,6 +10,6 @@ public sealed record class MilesModel(string Label, string? EditUrl, int Miles, 
 
 public sealed class MilesViewComponent : ViewComponent
 {
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, int miles, JourneyId journeyId) =>
-		await Task.FromResult(View(new MilesModel(label, editUrl, miles, journeyId)));
+	public IViewComponentResult Invoke(string label, string editUrl, int value, JourneyId journeyId) =>
+		View(new MilesModel(label, editUrl, value, journeyId));
 }
