@@ -3,7 +3,7 @@
 	Layout = "Modals/DeleteModal";
 }
 
-<form action="@Url.Page("Index", "DeletePartial", new { rateId = Model?.Rate.Id.Value })" method="post">
+<form action="@Url.Page("Index", "Delete")" method="post">
 
 	<div>
 		@Model?.Rate.AmountPerMileGBP.ToString("0.00")

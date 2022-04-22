@@ -3,7 +3,7 @@
 	Layout = "Modals/DeleteModal";
 }
 
-<form action="@Url.Page("Index", "DeletePartial", new { placeId = Model?.Place.Id.Value })" method="post">
+<form action="@Url.Page("Index", "Delete")" method="post">
 
 	<div>
 		@Model?.Place.Description

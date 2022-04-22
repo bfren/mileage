@@ -12,7 +12,7 @@ namespace Mileage.WebApp.Pages.Settings.Rates;
 
 public sealed partial class IndexModel
 {
-	public async Task<PartialViewResult> OnGetFormPartialAsync(RateId? rateId)
+	public async Task<PartialViewResult> OnGetFormAsync(RateId? rateId)
 	{
 		// Return blank form
 		if (rateId is null)
@@ -33,7 +33,7 @@ public sealed partial class IndexModel
 			);
 	}
 
-	public Task<IActionResult> OnPostFormPartialAsync(SaveRateQuery form)
+	public Task<IActionResult> OnPostFormAsync(SaveRateQuery form)
 	{
 		var query = from u in User.GetUserId()
 					from r in Dispatcher.DispatchAsync(form with { UserId = u })

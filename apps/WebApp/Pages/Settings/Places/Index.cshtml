@@ -4,10 +4,10 @@
 @{
 	Layout = null;
 	string? editLink(PlaceId? placeId) =>
-		Url.Page(pageName: "Index", pageHandler: "FormPartial", values: new { placeId = placeId?.Value });
+		Url.Page(pageName: "Index", pageHandler: "Form", values: new { placeId = placeId?.Value });
 
 	string? deleteLink(PlaceId placeId) =>
-		Url.Page(pageName: "Index", pageHandler: "DeletePartial", values: new { placeId = placeId.Value });
+		Url.Page(pageName: "Index", pageHandler: "Delete", values: new { placeId = placeId.Value });
 }
 
 <div id="save-place" class="mt-3 mb-3" data-load="@editLink(null)">
