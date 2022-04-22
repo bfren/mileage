@@ -38,6 +38,10 @@ function loadSettingsTab(tabId) {
 function loadSaveForm(item, el, e) {
 	// don't do whatever the link / button was going to do
 	e.preventDefault();
+	var cls = "btn-delete-check";
+	if ($(e.target).hasClass(cls) || $(e.target).parents("." + cls).length > 0) {
+		return;
+	}
 
 	// get the URL to load
 	var url = el.data("load");
@@ -74,6 +78,10 @@ function setupSaveFormOnEnter(form) {
 	});
 }
 
+/**
+ * Select an input when HTML is loaded.
+ *
+ */
 function selectInputOnLoad() {
 	$(".select-on-load").select();
 }

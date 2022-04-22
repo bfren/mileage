@@ -9,6 +9,17 @@ function openDeleteModal(url, replaceId) {
 }
 
 /**
+ * Open delete modals when delete buttons are clicked.
+ *
+ */
+function setupDeleteModalOpen() {
+	$("body").on("click", ".btn-delete-check", function (e) {
+		checkDeleteItem($(this), e);
+	});
+}
+ready(setupDeleteModalOpen);
+
+/**
  * Submit modal delete form when the delete button is pressed.
  *
  */

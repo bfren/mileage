@@ -27,7 +27,7 @@
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@p.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@description</div>
-				<button type="button" class="btn btn-danger btn-delete" data-delete="@deleteLink(p.Id)" data-replace="places"><i class="fa-solid fa-circle-minus"></i></button>
+				<button type="button" class="btn btn-danger btn-delete-check" data-delete="@deleteLink(p.Id)" data-replace="places"><i class="fa-solid fa-circle-minus"></i></button>
 			</div>
 		</li>
 	}
@@ -36,5 +36,4 @@
 <script type="text/javascript">
 	selectInputOnLoad();
 	$("#place-list .list-group-item").click(function(e) { loadSaveForm("place", $(this), e); });
-	$("#place-list .btn-delete").click(function(e) { checkDeleteItem($(this), e); });
 </script>
