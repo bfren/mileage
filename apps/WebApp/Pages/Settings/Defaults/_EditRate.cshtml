@@ -1,9 +1,9 @@
-@model Mileage.WebApp.Pages.Settings.Defaults.RateModel
+@model Mileage.WebApp.Pages.Settings.Defaults.EditRateModel
 @{
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("Index", "Rate")">
+<form method="post" action="@Url.Page("Index", "EditRate")">
 	<p>Please select a default rate:</p>
 	<vc:rate-list
 		list-name="Settings.DefaultRateId"

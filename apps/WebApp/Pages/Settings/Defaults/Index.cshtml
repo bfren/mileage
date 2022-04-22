@@ -8,8 +8,8 @@
 <div>
 	<vc:car
 		label="Default Car"
-		edit-url="@Url.Page("Index", "Car")"
-		car-id="@settings.DefaultCarId"
+		edit-url="@Url.Page("Index", "EditCar")"
+		value="@settings.DefaultCarId"
 		journey-id="null"
 	/>
 </div>
@@ -17,8 +17,8 @@
 <div>
 	<vc:from-place
 		label="Default Starting Place"
-		edit-url="@Url.Page("Index", "FromPlace")"
-		place-id="@settings.DefaultFromPlaceId"
+		edit-url="@Url.Page("Index", "EditFromPlace")"
+		value="@settings.DefaultFromPlaceId"
 		journey-id="null"
 	/>
 </div>
@@ -26,8 +26,8 @@
 <div>
 	<vc:rate
 		label="Default Rate"
-		edit-url="@Url.Page("Index", "Rate")"
-		rate-id="@settings.DefaultRateId"
+		edit-url="@Url.Page("Index", "EditRate")"
+		value="@settings.DefaultRateId"
 		journey-id="null"
 	/>
 </div>

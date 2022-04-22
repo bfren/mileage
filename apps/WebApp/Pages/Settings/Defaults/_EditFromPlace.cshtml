@@ -1,9 +1,9 @@
-@model Mileage.WebApp.Pages.Settings.Defaults.FromPlaceModel
+@model Mileage.WebApp.Pages.Settings.Defaults.EditFromPlaceModel
 @{
 	Layout = "Modals/EditModal";
 }
 
-<form method="post" action="@Url.Page("Index", "FromPlace")">
+<form method="post" action="@Url.Page("Index", "EditFromPlace")">
 	<p>Please select a default starting place:</p>
 	<vc:place-list
 		list-name="Settings.DefaultFromPlaceId"

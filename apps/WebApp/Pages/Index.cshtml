@@ -2,10 +2,10 @@
 @using Mileage.Domain.GetIncompleteJourneys
 @model Mileage.WebApp.Pages.IndexModel
 @{
-	string? editLink(IncompleteJourneyModel journey, string item)
+	string? link(IncompleteJourneyModel journey, string item)
 	{
 		var journeyId = journey.Id.Value;
-		return Url.Page("Journey/Edit" + item, values: new { journeyId });
+		return Url.Page(pageName: "Journey/Index", pageHandler: "Edit" + item, values: new { journeyId });
 	}
 }
 
@@ -23,13 +23,13 @@
 					<div class="d-flex justify-content-between align-items-start">
 						<div class="me-auto mb-1 mb-sm-0">
 							<div class="fs-5 mb-1">
-								<vc:day edit-url="@editLink(j, "Day")" day="@j.Day" journey-id="@j.Id"/>
-								<vc:miles label="Start" edit-url="@editLink(j, "StartMiles")" miles="@j.StartMiles" journey-id="@j.Id"/>
+								<vc:day label="" edit-url="@link(j, "Day")" value="@j.Day" journey-id="@j.Id"/>
+								<vc:miles label="Start" edit-url="@link(j, "StartMiles")" value="@j.StartMiles" journey-id="@j.Id"/>
 							</div>
 							<div class="mb-1">
-								<vc:car label="Car" edit-url="@editLink(j, "Car")" car-id="@j.CarId" journey-id="@j.Id"/>
-								<vc:rate label="Rate" edit-url="@editLink(j, "Rate")" rate-id="@j.RateId" journey-id="@j.Id"/>
-								<vc:from-place label="From" edit-url="@editLink(j, "FromPlace")" place-id="@j.FromPlaceId" journey-id="@j.Id"/>
+								<vc:car label="Car" edit-url="@link(j, "Car")" value="@j.CarId" journey-id="@j.Id"/>
+								<vc:rate label="Rate" edit-url="@link(j, "Rate")" value="@j.RateId" journey-id="@j.Id"/>
+								<vc:from-place label="From" edit-url="@link(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id"/>
 							</div>
 						</div>
 						<button type="button" class="btn btn-danger me-2"><i class="fa-solid fa-circle-minus"></i></button>
