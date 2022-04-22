@@ -6,7 +6,7 @@
 }
 
 <form method="post" action="@Url.Page("EditStartMiles")">
-	<label for="">Please enter the ending miles:</label>
+	<label for="@Html.NameFor(x => x.Journey.EndMiles)">Please enter the ending miles:</label>
 	@Html.TextBoxFor(x => x.Journey.EndMiles, htmlAttributes: new { @class = "form-control", type = "number", required = true })
 
 	@Html.HiddenForId(x => x.Journey.Id)
