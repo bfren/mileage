@@ -299,7 +299,7 @@ function setupUpdateModalSave() {
 	// submit on button click, auto-save input change, and enter
 	$("body").on("click", "#update .btn-save", (e) => submit(e));
 	$("body").on("change", "#update .auto-save", (e) => submit(e));
-	$("body").on("keypress", "#update input[type='text']", function (e) {
+	$("body").on("keypress", "#update input", function (e) {
 		if (e.keyCode == 13) {
 			submit(e);
 		}
@@ -312,7 +312,7 @@ ready(setupUpdateModalSave);
  *
  */
 function setupTokenUpdateModals() {
-	$("body").on("click", ".token > a", function () {
+	$("body").on("click", ".token > a, .btn-complete", function () {
 		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
 		openUpdateModal(updateUrl, replaceId);
