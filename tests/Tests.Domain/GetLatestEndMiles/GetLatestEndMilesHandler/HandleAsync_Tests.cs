@@ -23,6 +23,22 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		new Setup().GetVars();
 
 	[Fact]
+	public async Task CarId_Null__Returns_Zero()
+	{
+		// Arrange
+		var (handler, _) = GetVars();
+		var userId = LongId<AuthUserId>();
+		var query = new GetLatestEndMilesQuery(userId, null);
+
+		// Act
+		var result = await handler.HandleAsync(query);
+
+		// Assert
+		var some = result.AssertSome();
+		Assert.Equal(0u, some);
+	}
+
+	[Fact]
 	public async Task Logs_To_Vrb__With_Query()
 	{
 		// Arrange
