@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <Description>Mileage: Web app.</Description>
+    <DefineConstants>$(Truncate)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Pages\Partials\**" />
@@ -25,8 +26,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220421.7" />
-    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220421.7" />
+    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220422.4" />
+    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220422.4" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
   </ItemGroup>
