@@ -1,0 +1,30 @@
+@model Mileage.WebApp.Pages.Components.ToPlaces.ToPlacesModel
+
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var tokenId = Rnd.Str;
+}
+
+<span id="@tokenId">
+	@Model.Label
+
+	@foreach (var p in Model.Places)
+	{
+		var text = p.Description;
+		if (p.Postcode is string postcode)
+		{
+			text += $" ({postcode})";
+		}
+
+		<span class="place token">
+			<a href="javascript:void(0)"
+				class="link-primary"
+				data-edit="@Model.EditUrl"
+				data-replace="@tokenId"
+				data-id="@p.Id.Value"
+				data-target="@Model.JourneyId.Value">@text</a>
+		</span>
+	}
+
+</span>
