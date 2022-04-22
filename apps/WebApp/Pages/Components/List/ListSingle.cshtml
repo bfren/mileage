@@ -1,5 +1,5 @@
 @using Jeebs.Extensions
-@model Mileage.WebApp.Pages.Components.List.ListModel
+@model Mileage.WebApp.Pages.Components.List.ListSingleModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 
@@ -17,7 +17,7 @@
 
 			@foreach (var item in Model.Items)
 			{
-				Radio(Model.ListName, $"{Model.Singular}-{item.Id}", item.Id, item.Text.Trim(), Model.Selected == item.Id);
+				Radio(Model.ListName, $"{Model.Singular}-{item.Id}", item.Id, item.Text, Model.Selected == item.Id);
 			}
 		</div>
 	}
@@ -41,7 +41,7 @@
 		var check = selected ? "checked" : string.Empty;
 		<div class="list-item" data-text="@text.ToLowerInvariant()">
 			<input type="radio" class="btn-check auto-save" id="@id" name="@name" value="@value" autocomplete="off" @check />
-			<label class="btn btn-outline-primary" for="@id">@text</label>
+			<label class="btn btn-outline-primary mb-1" for="@id">@text</label>
 		</div>
 	}
 }

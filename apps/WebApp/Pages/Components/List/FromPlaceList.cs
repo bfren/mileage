@@ -6,7 +6,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
-public sealed class PlaceListViewComponent : ListViewComponent<GetPlacesModel, PlaceId>
+public sealed class FromPlaceListViewComponent : ListSingleViewComponent<GetPlacesModel, PlaceId>
 {
-	public PlaceListViewComponent() : base("place", x => x.Description) { }
+	public FromPlaceListViewComponent() : base("place", x => x.Description) { }
 }
