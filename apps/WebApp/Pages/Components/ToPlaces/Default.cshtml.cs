@@ -11,10 +11,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.ToPlaces;
 
-public sealed record class ToPlacesModel(string Label, string? EditUrl, List<GetPlacesModel> Places, JourneyId JourneyId)
+public sealed record class ToPlacesModel(string Label, string? UpdateUrl, List<GetPlacesModel> Places, JourneyId JourneyId)
 {
-	public static ToPlacesModel Blank(string label, string? editUrl, JourneyId journeyId) =>
-		new(label, editUrl, new(), journeyId);
+	public static ToPlacesModel Blank(string label, string? updateUrl, JourneyId journeyId) =>
+		new(label, updateUrl, new(), journeyId);
 }
 
 public sealed class ToPlacesViewComponent : ViewComponent
@@ -26,7 +26,7 @@ public sealed class ToPlacesViewComponent : ViewComponent
 	public ToPlacesViewComponent(IDispatcher dispatcher, ILog<ToPlacesViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, List<PlaceId> value, JourneyId journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string updateUrl, List<PlaceId> value, JourneyId journeyId)
 	{
 		Log.Dbg("Get places {PlaceIds}.", value);
 		return await UserClaimsPrincipal
@@ -38,8 +38,8 @@ public sealed class ToPlacesViewComponent : ViewComponent
 			)
 			.AuditAsync(none: r => Log.Err("Unable to get places: {Reason}", r))
 			.SwitchAsync(
-				some: x => View(new ToPlacesModel(label, editUrl, x, journeyId)),
-				none: _ => (IViewComponentResult)View(ToPlacesModel.Blank(label, editUrl, journeyId))
+				some: x => View(new ToPlacesModel(label, updateUrl, x, journeyId)),
+				none: _ => (IViewComponentResult)View(ToPlacesModel.Blank(label, updateUrl, journeyId))
 			);
 	}
 

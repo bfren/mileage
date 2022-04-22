@@ -1,7 +1,6 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Apps.Web.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mileage.WebApp.Pages.Components.Header;
@@ -28,11 +27,6 @@ public sealed class Menu
 
 public sealed record class HeaderModel(Menu Menu);
 
-#if DEBUG
-[ResponseCache(CacheProfileName = CacheProfiles.None)]
-#else
-[ResponseCache(CacheProfileName = CacheProfiles.Default)]
-#endif
 public sealed class HeaderViewComponent : ViewComponent
 {
 	public IViewComponentResult Invoke() =>

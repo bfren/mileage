@@ -15,7 +15,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public abstract class EditSettingsModalModel : EditModalModel
+public abstract class EditSettingsModalModel : UpdateModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
@@ -78,7 +78,7 @@ public sealed partial class IndexModel : PageModel
 	)
 	{
 		// Get values
-		var editUrl = Url.Page("Index", "Edit" + component);
+		var updateUrl = Url.Page("Index", "Edit" + component);
 		var value = getValue(form.Settings);
 
 		// Log operation
@@ -95,7 +95,7 @@ public sealed partial class IndexModel : PageModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent(component, new { label, editUrl, value }),
+						ViewComponent(component, new { label, updateUrl, value }),
 
 					false =>
 						Result.Error($"Unable to save {label}.")

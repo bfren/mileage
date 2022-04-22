@@ -6,10 +6,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Miles;
 
-public sealed record class MilesModel(string Label, string? EditUrl, int Miles, JourneyId JourneyId);
+public sealed record class MilesModel(string Label, string? UpdateUrl, int Miles, JourneyId JourneyId);
 
 public sealed class MilesViewComponent : ViewComponent
 {
-	public IViewComponentResult Invoke(string label, string editUrl, int value, JourneyId journeyId) =>
-		View(new MilesModel(label, editUrl, value, journeyId));
+	public IViewComponentResult Invoke(string label, string updateUrl, int value, JourneyId journeyId) =>
+		View(new MilesModel(label, updateUrl, value, journeyId));
 }

@@ -11226,17 +11226,17 @@ main {
   text-decoration: none;
 }
 
-#edit, #delete {
+#update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
   height: 100%;
   padding-top: 150px;
 }
-#edit .modal-dialog, #delete .modal-dialog {
+#update .modal-dialog, #delete .modal-dialog {
   margin: 3rem auto;
 }
 
-#edit .list-items .list-item {
+#update .list-items .list-item {
   display: inline;
 }
 

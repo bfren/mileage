@@ -3,7 +3,7 @@
 	ArgumentNullException.ThrowIfNull(Model);
 
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
-	Layout = "Modals/EditModal";
+	Layout = "Modals/UpdateModal";
 }
 
 <form method="post" action="@Url.Page("Index", "EditRate")">

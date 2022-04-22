@@ -1,6 +1,6 @@
 /// <reference path="mileage" />
 
-#edit, #delete {
+#update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
   height: 100%;
@@ -11,7 +11,7 @@
   }
 }
 
-#edit {
+#update {
   .list-items {
     .list-item {
       display: inline;

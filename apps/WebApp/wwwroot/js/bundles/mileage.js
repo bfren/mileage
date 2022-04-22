@@ -4,7 +4,7 @@ const alertIcons = {
 	success: $("<i/>").addClass("fa-solid fa-check"),
 	warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
 	error: $("<i/>").addClass("fa-solid fa-ban"),
-	edit: $("<i/>").addClass("fa-solid fa-circle-plus"),
+	update: $("<i/>").addClass("fa-solid fa-circle-plus"),
 	delete: $("<i/>").addClass("fa-solid fa-circle-minus"),
 	complete: $("<i/>").addClass("fa-solid fa-circle-check"),
 	save: $("<i/>").addClass("fa-solid fa-ban")
@@ -147,6 +147,39 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
  * @param {any} url
  * @param {any} replaceId
  */
+function openCreateModal(url, replaceId) {
+	openModal("#create", url, replaceId, true);
+}
+
+/**
+ * Open delete modals when delete buttons are clicked.
+ *
+ */
+function setupCreateModalOpen() {
+	$("body").on("click", ".btn-delete-check", function (e) {
+		checkDeleteItem($(this), e);
+	});
+}
+ready(setupCreateModalOpen);
+
+/**
+ * Submit modal delete form when the delete button is pressed.
+ *
+ */
+function setupCreateModalSave() {
+	$("body").on("click", "#delete .btn-delete", function () {
+		$("#delete form").submit();
+		modal.hide();
+	});
+}
+ready(setupCreateModalSave);
+
+/**
+ * Open the delete modal.
+ * 
+ * @param {any} url
+ * @param {any} replaceId
+ */
 function openDeleteModal(url, replaceId) {
 	openModal("#delete", url, replaceId, true);
 }
@@ -175,22 +208,22 @@ function setupDeleteModalSave() {
 ready(setupDeleteModalSave);
 
 /**
- * Open the edit modal.
+ * Open the update modal.
  * 
  * @param {any} url
  * @param {any} replaceId
  */
-function openEditModal(url, replaceId) {
-	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
+function openUpdateModal(url, replaceId) {
+	openModal("#update", url, replaceId, false, () => setupUpdateModalSearch());
 }
 
 /**
  * Filter list elements based on search field entry.
  *
  */
-function setupEditModalSearch() {
+function setupUpdateModalSearch() {
 	// hide add item button
-	var addItem = $("#edit .btn-add");
+	var addItem = $("#update .btn-add");
 	addItem.hide();
 
 	// save new item on enter
@@ -222,40 +255,40 @@ function setupEditModalSearch() {
 }
 
 /**
- * Submit modal edit form when the save button is pressed.
+ * Submit update modal form when the save button is pressed.
  *
  */
-function setupEditModalSave() {
+function setupUpdateModalSave() {
 	// submit function
 	var submit = function (e) {
 		e.preventDefault();
-		$("#edit form").submit();
+		$("#update form").submit();
 		modal.hide();
 	}
 
 	// submit on button click, auto-save input change, and enter
-	$("body").on("click", "#edit .btn-save", (e) => submit(e));
-	$("body").on("change", "#edit .auto-save", (e) => submit(e));
-	$("body").on("keypress", "#edit input[type='text']", function (e) {
+	$("body").on("click", "#update .btn-save", (e) => submit(e));
+	$("body").on("change", "#update .auto-save", (e) => submit(e));
+	$("body").on("keypress", "#update input[type='text']", function (e) {
 		if (e.keyCode == 13) {
 			submit(e);
 		}
 	})
 }
-ready(setupEditModalSave);
+ready(setupUpdateModalSave);
 
 /**
- * Setup token links to open the edit modal when clicked.
+ * Setup token links to open the update modal when clicked.
  *
  */
-function setupTokenEditModals() {
+function setupTokenUpdateModals() {
 	$("body").on("click", ".token > a", function () {
-		var editUrl = $(this).data("edit");
+		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
-		openEditModal(editUrl, replaceId);
+		openUpdateModal(updateUrl, replaceId);
 	});
 }
-ready(setupTokenEditModals);
+ready(setupTokenUpdateModals);
 
 /**
  * Handle a JSON Result object.

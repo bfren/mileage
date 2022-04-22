@@ -17,7 +17,7 @@ using StrongId;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public abstract class EditJourneyModalModel : EditModalModel
+public abstract class EditJourneyModalModel : UpdateModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 
@@ -79,7 +79,7 @@ public sealed partial class IndexModel : PageModel
 		var journeyId = command.Id;
 		var label = description ?? component;
 		var value = getValue(command);
-		var editUrl = Url.Page(pageName: "Index", pageHandler: "Edit" + component, values: new { journeyId = journeyId.Value });
+		var updateUrl = Url.Page(pageName: "Index", pageHandler: "Edit" + component, values: new { journeyId = journeyId.Value });
 
 		// Log operation
 		Log.Vrb("Saving {Label} for Journey {JourneyId}.", label, journeyId);
@@ -96,7 +96,7 @@ public sealed partial class IndexModel : PageModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent(component, new { label, editUrl, value, journeyId }),
+						ViewComponent(component, new { label, updateUrl, value, journeyId }),
 
 					false =>
 						Result.Error($"Unable to save {label}.")

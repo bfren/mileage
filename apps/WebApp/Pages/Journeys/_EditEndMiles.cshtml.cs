@@ -16,7 +16,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 [Authorize]
 [ValidateAntiForgeryToken]
-public sealed class EditEndMilesModel : EditModalModel
+public sealed class EditEndMilesModel : UpdateModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 
@@ -59,7 +59,7 @@ public sealed class EditEndMilesModel : EditModalModel
 					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
 					select r;
 
-		var editUrl = Url.Page("EditEndMiles", values: new { journeyId = journey.Id.Value });
+		var updateUrl = Url.Page("EditEndMiles", values: new { journeyId = journey.Id.Value });
 
 		return query
 			.AuditAsync(none: Log.Msg)
@@ -67,7 +67,7 @@ public sealed class EditEndMilesModel : EditModalModel
 				some: x => x switch
 				{
 					true =>
-						ViewComponent("Miles", new { label = "End", editUrl, miles = journey.EndMiles, journeyId = journey.Id }),
+						ViewComponent("Miles", new { label = "End", updateUrl, miles = journey.EndMiles, journeyId = journey.Id }),
 
 					false =>
 						Result.Error("Unable to save end miles.")

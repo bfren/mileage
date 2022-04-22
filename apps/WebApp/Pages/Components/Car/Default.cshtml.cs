@@ -10,10 +10,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Car;
 
-public sealed record class CarModel(string Label, string? EditUrl, CarId Id, string Description, JourneyId? JourneyId)
+public sealed record class CarModel(string Label, string? UpdateUrl, CarId Id, string Description, JourneyId? JourneyId)
 {
-	public static CarModel Blank(string label, string? editUrl) =>
-		new(label, editUrl, new(), string.Empty, null);
+	public static CarModel Blank(string label, string? updateUrl) =>
+		new(label, updateUrl, new(), string.Empty, null);
 }
 
 public sealed class CarViewComponent : ViewComponent
@@ -25,11 +25,11 @@ public sealed class CarViewComponent : ViewComponent
 	public CarViewComponent(IDispatcher dispatcher, ILog<CarViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string label, string editUrl, CarId value, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string updateUrl, CarId value, JourneyId? journeyId)
 	{
 		if (value is null)
 		{
-			return View(CarModel.Blank(label, editUrl));
+			return View(CarModel.Blank(label, updateUrl));
 		}
 
 		Log.Dbg("Get car: {CarId}.", value);
@@ -38,8 +38,8 @@ public sealed class CarViewComponent : ViewComponent
 			.BindAsync(x => Dispatcher.DispatchAsync(new GetCarQuery(x, value)))
 			.AuditAsync(none: r => Log.Err("Unable to get car: {Reason}", r))
 			.SwitchAsync(
-				some: x => View(new CarModel(label, editUrl, x.Id, x.Description, journeyId)),
-				none: _ => (IViewComponentResult)View(CarModel.Blank(label, editUrl))
+				some: x => View(new CarModel(label, updateUrl, x.Id, x.Description, journeyId)),
+				none: _ => (IViewComponentResult)View(CarModel.Blank(label, updateUrl))
 			);
 	}
 }

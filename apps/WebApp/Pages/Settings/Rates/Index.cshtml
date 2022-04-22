@@ -3,14 +3,14 @@
 @model Mileage.WebApp.Pages.Settings.Rates.IndexModel
 @{
 	Layout = null;
-	string? editLink(RateId? rateId) =>
+	string? updateLink(RateId? rateId) =>
 		Url.Page(pageName: "Index", pageHandler: "Form", values: new { rateId = rateId?.Value });
 
 	string? deleteLink(RateId rateId) =>
 		Url.Page(pageName: "Index", pageHandler: "Delete", values: new { rateId = rateId.Value });
 }
 
-<div id="save-rate" class="mt-3 mb-3" data-load="@editLink(null)">
+<div id="save-rate" class="mt-3 mb-3" data-load="@updateLink(null)">
 	@await Html.PartialAsync("_Form", model: null, ViewData)
 </div>
 
@@ -19,7 +19,7 @@
 	{
 		var amount = r.AmountPerMileGBP.ToString("0.00");
 
-		<li class="list-group-item" data-id="@r.Id.Value" data-load="@editLink(r.Id)">
+		<li class="list-group-item" data-id="@r.Id.Value" data-load="@updateLink(r.Id)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@r.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@amount</div>
