@@ -113,8 +113,10 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	$(selector).load(url, function () {
 		// save replaceId
 		var form = $(this).find("form");
-		form.attr("data-replace", replaceId);
-		form.attr("data-replace-contents", replaceContents);
+		if (replaceId) {
+			form.attr("data-replace", replaceId);
+			form.attr("data-replace-contents", replaceContents);
+		}
 
 		// create the modal object
 		var wrapper = $(this);
@@ -142,33 +144,40 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 }
 
 /**
- * Open the delete modal.
+ * Open the create modal.
  * 
  * @param {any} url
  * @param {any} replaceId
  */
-function openCreateModal(url, replaceId) {
-	openModal("#create", url, replaceId, true);
+function openCreateModal(url) {
+	openModal("#create", url, null, true);
 }
 
 /**
- * Open delete modals when delete buttons are clicked.
+ * Open create modal when create button is clicked.
  *
  */
 function setupCreateModalOpen() {
-	$("body").on("click", ".btn-delete-check", function (e) {
-		checkDeleteItem($(this), e);
+	$("body").on("click", ".btn-create", function (e) {
+		// don't do whatever the link / button was going to do
+		e.preventDefault();
+
+		// get info
+		var createUrl = $(this).data("create");
+
+		// open modal
+		openCreateModal(createUrl);
 	});
 }
 ready(setupCreateModalOpen);
 
 /**
- * Submit modal delete form when the delete button is pressed.
+ * Submit modal create form when the save button is pressed.
  *
  */
 function setupCreateModalSave() {
-	$("body").on("click", "#delete .btn-delete", function () {
-		$("#delete form").submit();
+	$("body").on("click", "#create .btn-save", function () {
+		$("#create form").submit();
 		modal.hide();
 	});
 }
@@ -185,7 +194,7 @@ function openDeleteModal(url, replaceId) {
 }
 
 /**
- * Open delete modals when delete buttons are clicked.
+ * Open delete modal when delete buttons are clicked.
  *
  */
 function setupDeleteModalOpen() {
@@ -208,6 +217,24 @@ function setupDeleteModalSave() {
 ready(setupDeleteModalSave);
 
 /**
+ * Check whether or not the user really wants to delete an item.
+ * 
+ * @param {any} el The element being deleted
+ * @param {any} e The click event
+ */
+function checkDeleteItem(el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get info
+	var deleteUrl = el.data("delete");
+	var replaceId = el.data("replace");
+
+	// open modal to check delete
+	openDeleteModal(deleteUrl, replaceId);
+}
+
+/**
  * Open the update modal.
  * 
  * @param {any} url
@@ -227,7 +254,7 @@ function setupUpdateModalSearch() {
 	addItem.hide();
 
 	// save new item on enter
-	$("#list-filter").keydown(function (e) {
+	$("#update .list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
 			addItem.click();
@@ -235,7 +262,7 @@ function setupUpdateModalSearch() {
 	});
 
 	// filter as the user types
-	$("#list-filter").keyup(function () {
+	$("#update .list-filter").keyup(function () {
 		// get value from input
 		var value = $(this).val();
 
@@ -246,8 +273,11 @@ function setupUpdateModalSearch() {
 			addItem.text("").hide();
 		}
 
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
 		// filter items that match the input value
-		$("#list-items .list-item").filter(function () {
+		$("#" + filterItems + " .list-item").filter(function () {
 			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
 			$(this).toggle(show);
 		});
@@ -392,24 +422,6 @@ function setupSaveFormOnEnter(form) {
  */
 function selectInputOnLoad() {
 	$(".select-on-load").select();
-}
-
-/**
- * Check whether or not the user really wants to delete an item.
- * 
- * @param {any} el The element being deleted
- * @param {any} e The click event
- */
-function checkDeleteItem(el, e) {
-	// don't do whatever the link / button was going to do
-	e.preventDefault();
-
-	// get info
-	var deleteUrl = el.data("delete");
-	var replaceId = el.data("replace");
-
-	// open modal to check delete
-	openDeleteModal(deleteUrl, replaceId);
 }
 
 /**

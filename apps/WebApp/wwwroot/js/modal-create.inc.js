@@ -1,31 +1,38 @@
 /**
- * Open the delete modal.
+ * Open the create modal.
  * 
  * @param {any} url
  * @param {any} replaceId
  */
-function openCreateModal(url, replaceId) {
-	openModal("#create", url, replaceId, true);
+function openCreateModal(url) {
+	openModal("#create", url, null, true);
 }
 
 /**
- * Open delete modals when delete buttons are clicked.
+ * Open create modal when create button is clicked.
  *
  */
 function setupCreateModalOpen() {
-	$("body").on("click", ".btn-delete-check", function (e) {
-		checkDeleteItem($(this), e);
+	$("body").on("click", ".btn-create", function (e) {
+		// don't do whatever the link / button was going to do
+		e.preventDefault();
+
+		// get info
+		var createUrl = $(this).data("create");
+
+		// open modal
+		openCreateModal(createUrl);
 	});
 }
 ready(setupCreateModalOpen);
 
 /**
- * Submit modal delete form when the delete button is pressed.
+ * Submit modal create form when the save button is pressed.
  *
  */
 function setupCreateModalSave() {
-	$("body").on("click", "#delete .btn-delete", function () {
-		$("#delete form").submit();
+	$("body").on("click", "#create .btn-save", function () {
+		$("#create form").submit();
 		modal.hide();
 	});
 }

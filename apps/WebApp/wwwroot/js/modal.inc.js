@@ -14,8 +14,10 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	$(selector).load(url, function () {
 		// save replaceId
 		var form = $(this).find("form");
-		form.attr("data-replace", replaceId);
-		form.attr("data-replace-contents", replaceContents);
+		if (replaceId) {
+			form.attr("data-replace", replaceId);
+			form.attr("data-replace-contents", replaceContents);
+		}
 
 		// create the modal object
 		var wrapper = $(this);

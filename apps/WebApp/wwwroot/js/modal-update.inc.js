@@ -18,7 +18,7 @@ function setupUpdateModalSearch() {
 	addItem.hide();
 
 	// save new item on enter
-	$("#list-filter").keydown(function (e) {
+	$("#update .list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
 			addItem.click();
@@ -26,7 +26,7 @@ function setupUpdateModalSearch() {
 	});
 
 	// filter as the user types
-	$("#list-filter").keyup(function () {
+	$("#update .list-filter").keyup(function () {
 		// get value from input
 		var value = $(this).val();
 
@@ -37,8 +37,11 @@ function setupUpdateModalSearch() {
 			addItem.text("").hide();
 		}
 
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
 		// filter items that match the input value
-		$("#list-items .list-item").filter(function () {
+		$("#" + filterItems + " .list-item").filter(function () {
 			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
 			$(this).toggle(show);
 		});

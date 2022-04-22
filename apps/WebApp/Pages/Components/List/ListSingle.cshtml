@@ -5,11 +5,12 @@
 
 	if (Model.Items.Any())
 	{
+		var itemsId = Rnd.Str;
 		<div class="mb-2">
-			<input type="text" class="form-control modal-select" id="list-filter" placeholder="Search..." autocomplete="off" />
+			<input type="text" class="form-control modal-select list-filter" placeholder="Search..." autocomplete="off" data-filter-for="@itemsId" />
 		</div>
 
-		<div class="list-items mb-3" id="list-items">
+		<div class="list-items mb-3" id="@itemsId">
 			@if (Model.AllowNull)
 			{
 				Radio(Model.ListName, $"{Model.Singular}-null", "null", "None", Model.Selected is null);

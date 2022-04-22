@@ -85,21 +85,3 @@ function setupSaveFormOnEnter(form) {
 function selectInputOnLoad() {
 	$(".select-on-load").select();
 }
-
-/**
- * Check whether or not the user really wants to delete an item.
- * 
- * @param {any} el The element being deleted
- * @param {any} e The click event
- */
-function checkDeleteItem(el, e) {
-	// don't do whatever the link / button was going to do
-	e.preventDefault();
-
-	// get info
-	var deleteUrl = el.data("delete");
-	var replaceId = el.data("replace");
-
-	// open modal to check delete
-	openDeleteModal(deleteUrl, replaceId);
-}
