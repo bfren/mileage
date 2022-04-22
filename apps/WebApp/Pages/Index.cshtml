@@ -1,47 +1,12 @@
 @page
-@using Mileage.Domain.GetIncompleteJourneys
 @model Mileage.WebApp.Pages.IndexModel
-@{
-	string? link(IncompleteJourneyModel journey, string item)
-	{
-		var journeyId = journey.Id.Value;
-		return Url.Page(pageName: "Journey/Index", pageHandler: "Edit" + item, values: new { journeyId });
-	}
-}
 
 <div class="container">
 
-	@if (Model.IncompleteJourneys.Count > 0)
-	{
-		<h2>Incomplete Journeys</h2>
-		<ul class="list-group w-100">
-			@foreach (var j in Model.IncompleteJourneys)
-			{
-				<li class="list-group-item"
-					data-id="@j.Id"
-					data-version="@j.Version">
-					<div class="d-flex justify-content-between align-items-start">
-						<div class="me-auto mb-1 mb-sm-0">
-							<div class="fs-5 mb-1">
-								<vc:day label="" edit-url="@link(j, "Day")" value="@j.Day" journey-id="@j.Id"/>
-								<vc:miles label="Start" edit-url="@link(j, "StartMiles")" value="@j.StartMiles" journey-id="@j.Id"/>
-							</div>
-							<div class="mb-1">
-								<vc:car label="Car" edit-url="@link(j, "Car")" value="@j.CarId" journey-id="@j.Id"/>
-								<vc:rate label="Rate" edit-url="@link(j, "Rate")" value="@j.RateId" journey-id="@j.Id"/>
-							</div>
-						</div>
-						<button type="button" class="btn btn-danger me-2"><i class="fa-solid fa-circle-minus"></i></button>
-						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
-					</div>
-					<div class="places">
-						<vc:from-place label="From" edit-url="@link(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id"/>
-						<vc:to-places label="To" edit-url="@link(j, "ToPlaces")" value="@j.ToPlaceIds.ToList()" journey-id="@j.Id"/>
-					</div>
-				</li>
-			}
-		</ul>
-	}
+	<h2>Incomplete Journeys</h2>
+	<div id="incomplete-journeys">
+		@await Html.PartialAsync("Journeys/_Incomplete", Model.IncompleteJourneys)
+	</div>
 
 	<h2 class="mt-4">Recent Journeys</h2>
 

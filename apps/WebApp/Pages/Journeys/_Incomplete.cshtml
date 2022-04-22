@@ -1,0 +1,53 @@
+@using Mileage.Domain.GetIncompleteJourneys
+@model Mileage.WebApp.Pages.Journeys.IncompleteModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	string? editLink(IncompleteJourneyModel journey, string item)
+	{
+		var journeyId = journey.Id.Value;
+		return Url.Page(pageName: "/Journeys/Index", pageHandler: "Edit" + item, values: new { journeyId });
+	}
+
+	string? deleteLink(IncompleteJourneyModel journey)
+	{
+		var journeyId = journey.Id.Value;
+		return Url.Page(pageName: "/Journeys/Index", pageHandler: "Delete", values: new { journeyId });
+	}
+}
+
+@if (Model.Journeys.Count == 0)
+{
+	<div>There are no outstanding journeys.</div>
+	return;
+}
+
+<ul class="list-group w-100">
+	@foreach (var j in Model.Journeys)
+	{
+		<li class="list-group-item" data-id="@j.Id" data-version="@j.Version">
+			<div class="d-flex justify-content-between align-items-start">
+				<div class="me-auto mb-1 mb-sm-0">
+					<div class="fs-5 mb-1">
+						<vc:day label="" edit-url="@editLink(j, "Day")" value="@j.Day" journey-id="@j.Id" />
+						<vc:miles label="Start" edit-url="@editLink(j, "StartMiles")" value="@j.StartMiles" journey-id="@j.Id" />
+					</div>
+					<div class="mb-1">
+						<vc:car label="Car" edit-url="@editLink(j, "Car")" value="@j.CarId" journey-id="@j.Id" />
+						<vc:rate label="Rate" edit-url="@editLink(j, "Rate")" value="@j.RateId" journey-id="@j.Id" />
+					</div>
+				</div>
+				<button type="button"
+					class="btn btn-danger btn-delete-check me-2"
+					data-delete="@deleteLink(j)"
+					data-replace="incomplete-journeys"><i class="fa-solid fa-circle-minus"></i></button>
+				<button type="button"
+					class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
+			</div>
+			<div class="places">
+				<vc:from-place label="From" edit-url="@editLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />
+				<vc:to-places label="To" edit-url="@editLink(j, "ToPlaces")" value="@j.ToPlaceIds.ToList()" journey-id="@j.Id" />
+			</div>
+		</li>
+	}
+</ul>

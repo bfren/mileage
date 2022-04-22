@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetIncompleteJourneys;
+using Mileage.WebApp.Pages.Journeys;
 
 namespace Mileage.WebApp.Pages;
 
@@ -21,24 +22,20 @@ public sealed class IndexModel : PageModel
 {
 	private IDispatcher Dispatcher { get; init; }
 
-	public IList<IncompleteJourneyModel> IncompleteJourneys { get; private set; } = new List<IncompleteJourneyModel>();
+	public IncompleteModel IncompleteJourneys { get; private set; } = new();
 
 	public IndexModel(IDispatcher dispatcher) =>
 		Dispatcher = dispatcher;
 
 	public async Task<IActionResult> OnGetAsync()
 	{
-		foreach (var userId in User.GetUserId())
-		{
-			IncompleteJourneys = await Dispatcher
-				.DispatchAsync(
-					new GetIncompleteJourneysQuery(userId)
-				)
-				.SwitchAsync(
-					some: x => x.ToList(),
-					none: _ => new List<IncompleteJourneyModel>()
-				);
+		var query = from u in User.GetUserId()
+					from j in Dispatcher.DispatchAsync(new GetIncompleteJourneysQuery(u))
+					select j;
 
+		await foreach (var journeys in query)
+		{
+			IncompleteJourneys = new() { Journeys = journeys.ToList() };
 			return Page();
 		}
 
