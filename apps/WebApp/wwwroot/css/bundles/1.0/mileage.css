@@ -11226,17 +11226,16 @@ main {
   text-decoration: none;
 }
 
-#update, #delete {
+#create, #update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
   height: 100%;
-  padding-top: 150px;
 }
-#update .modal-dialog, #delete .modal-dialog {
-  margin: 3rem auto;
+#create .modal-dialog, #update .modal-dialog, #delete .modal-dialog {
+  padding-top: 3rem;
 }
 
-#update .list-items .list-item {
+#create .list-items .list-item, #update .list-items .list-item {
   display: inline;
 }
 
