@@ -1,17 +1,16 @@
 /// <reference path="mileage" />
 
-#update, #delete {
+#create, #update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
   height: 100%;
-  padding-top: 150px;
 
   .modal-dialog {
-    margin: 3rem auto;
+    padding-top: 3rem;
   }
 }
 
-#update {
+#create, #update {
   .list-items {
     .list-item {
       display: inline;
