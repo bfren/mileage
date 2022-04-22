@@ -7,8 +7,15 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditStartMiles")">
-	<label for="@Html.NameFor(x => x.Journey.StartMiles)">Please enter the starting miles:</label>
-	@Html.TextBoxFor(x => x.Journey.StartMiles, htmlAttributes: new { @class = "form-control", type = "number", required = true })
+	<label class="form-label" for="@Html.NameFor(x => x.Journey.StartMiles)">Please enter the starting miles:</label>
+	<input type="number"
+		class="form-control modal-select"
+		name="@Html.NameFor(x => x.Journey.StartMiles)"
+		id="@Html.NameFor(x => x.Journey.StartMiles)"
+		required="required"
+		min="@Model.Journey.StartMiles"
+		value="@Model.Journey.StartMiles"
+	/>
 
 	@Html.HiddenForId(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)
