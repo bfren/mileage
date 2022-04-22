@@ -3,7 +3,6 @@
 
 using System;
 using Jeebs.Auth.Data;
-using Jeebs.Collections;
 using Jeebs.Data;
 using Mileage.Persistence.Common.StrongIds;
 
@@ -57,7 +56,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// To (visited) places
 	/// </summary>
-	public ImmutableList<PlaceId> ToPlaceIds { get; init; } = new();
+	public PlaceId[] ToPlaceIds { get; init; } = Array.Empty<PlaceId>();
 
 	/// <summary>
 	/// The rate used for the journey
