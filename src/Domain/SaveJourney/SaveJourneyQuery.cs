@@ -56,7 +56,7 @@ public sealed record class SaveJourneyQuery(
 	{ }
 
 	/// <summary>
-	/// Allows quick creation in testing
+	/// Create empty for testing and model binding
 	/// </summary>
-	internal SaveJourneyQuery() : this(new(), new(), Rnd.UInt, new()) { }
+	public SaveJourneyQuery() : this(new(), new(), Rnd.UInt, new()) { }
 }
