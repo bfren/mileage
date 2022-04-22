@@ -8,7 +8,7 @@
 
 <form method="post" action="@Url.Page("Index", "EditFromPlace")">
 	<p>Please select a starting place:</p>
-	<vc:place-list
+	<vc:from-place-list
 		list-name="Journey.FromPlaceId"
 		allow-null="false"
 		items="@Model.Places"
