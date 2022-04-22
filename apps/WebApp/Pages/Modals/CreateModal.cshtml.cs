@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Mileage.WebApp.Pages.Modals;
 
-public abstract class EditModalModel : PageModel
+public abstract class CreateModalModel : PageModel
 {
 	public string Title { get; set; }
 
-	protected EditModalModel(string title) =>
+	protected CreateModalModel(string title) =>
 		Title = title;
 }
