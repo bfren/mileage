@@ -15,7 +15,7 @@ using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
 using StrongId;
 
-namespace Mileage.WebApp.Pages.Journey;
+namespace Mileage.WebApp.Pages.Journeys;
 
 public abstract class EditJourneyModalModel : EditModalModel
 {
@@ -34,6 +34,8 @@ public sealed partial class IndexModel : PageModel
 
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
+
+	#region Update Fields
 
 	private Task<PartialViewResult> GetFieldAsync<TModel>(
 		string partial,
@@ -102,4 +104,6 @@ public sealed partial class IndexModel : PageModel
 				none: r => Result.Error(r)
 			);
 	}
+
+	#endregion Update Fields
 }

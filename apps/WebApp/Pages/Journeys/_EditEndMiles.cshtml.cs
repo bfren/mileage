@@ -12,7 +12,7 @@ using Mileage.Domain.SaveJourney;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
 
-namespace Mileage.WebApp.Pages.Journey;
+namespace Mileage.WebApp.Pages.Journeys;
 
 [Authorize]
 [ValidateAntiForgeryToken]

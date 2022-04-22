@@ -6,7 +6,7 @@ using Mileage.Domain.GetCars;
 using Mileage.Domain.SaveJourney;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.WebApp.Pages.Journey;
+namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditCarModel : EditJourneyModalModel
 {
