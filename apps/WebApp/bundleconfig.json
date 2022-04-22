@@ -60,6 +60,16 @@
     }
   },
   {
+    "outputFileName": "wwwroot/css/bundles/1.0/bootstrap-datepicker3.css.map",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap-datepicker/css/bootstrap-datepicker3.css.map"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
     "outputFileName": "wwwroot/css/bundles/1.0/mileage.min.css",
     "inputFiles": [
       "wwwroot/css/bundles/1.0/mileage.css"
