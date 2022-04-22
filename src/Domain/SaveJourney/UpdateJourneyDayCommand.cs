@@ -19,4 +19,4 @@ public sealed record class UpdateJourneyDayCommand(
 	JourneyId Id,
 	long Version,
 	DateTime Day
-) : ICommand, IWithId<JourneyId>;
+) : WithUserId, ICommand, IWithId<JourneyId>;
