@@ -24,7 +24,7 @@
 	<div class="col-12">
 		@Html.LabelFor(m => m!.Description, new { @class = "visually-hidden" })
 		<div class="input-group">
-			<input type="text" class="form-control"
+			<input type="text" class="form-control select-on-load"
 				id="@Html.NameFor(m => m!.Description)"
 				name="@Html.NameFor(m => m!.Description)"
 				placeholder="@nameof(Model.Description)"
@@ -55,6 +55,7 @@
 </form>
 
 <script type="text/javascript">
+	selectInputOnLoad();
 	setupSaveFormOnEnter("#@formId");
 	setupReloadFormOnCancel("#@formId", "car", $("#save-car"));
 </script>

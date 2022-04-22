@@ -11214,6 +11214,10 @@ main {
   background-color: #f8f9fa;
 }
 
+#settingsPanes .list-group-item {
+  cursor: pointer;
+}
+
 .token a {
   background-color: #e9ecef;
   font-weight: 700;

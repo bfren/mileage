@@ -24,7 +24,7 @@
 	<div class="col-12">
 		@Html.LabelFor(m => m!.AmountPerMileGBP, new { @class = "visually-hidden" })
 		<div class="input-group">
-			<input type="number" class="form-control"
+			<input type="number" class="form-control select-on-load"
 				id="@Html.NameFor(m => m!.AmountPerMileGBP)"
 				name="@Html.NameFor(m => m!.AmountPerMileGBP)"
 				placeholder="Amount Per Mile in GBP"
@@ -46,6 +46,7 @@
 </form>
 
 <script type="text/javascript">
+	selectInputOnLoad();
 	setupSaveFormOnEnter("#@formId");
 	setupReloadFormOnCancel("#@formId", "rate", $("#save-rate"));
 </script>

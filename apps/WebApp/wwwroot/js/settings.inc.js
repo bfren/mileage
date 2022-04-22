@@ -74,6 +74,10 @@ function setupSaveFormOnEnter(form) {
 	});
 }
 
+function selectInputOnLoad() {
+	$(".select-on-load").select();
+}
+
 /**
  * Check whether or not the user really wants to delete an item.
  * 
