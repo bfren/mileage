@@ -9,8 +9,8 @@ namespace Mileage.Domain.DeleteRate;
 
 /// <inheritdoc cref="DeleteRateHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="RateId">Rate ID</param>
+/// <param name="Id">Rate ID</param>
 public sealed record class DeleteRateCommand(
 	AuthUserId UserId,
-	RateId RateId
+	RateId Id
 ) : ICommand;

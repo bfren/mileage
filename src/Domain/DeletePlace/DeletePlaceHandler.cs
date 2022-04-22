@@ -36,13 +36,13 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 		Log.Vrb("Delete Place: {Command}", command);
 		return Place
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, command.PlaceId)
+			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<PlaceToDelete>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Place.DeleteAsync(x),
-				none: _ => F.None<bool>(new PlaceDoesNotExistMsg(command.UserId, command.PlaceId))
+				none: _ => F.None<bool>(new PlaceDoesNotExistMsg(command.UserId, command.Id))
 			);
 	}
 }

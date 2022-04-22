@@ -36,13 +36,13 @@ internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 		Log.Vrb("Delete Car: {Command}", command);
 		return Car
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, command.CarId)
+			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<CarToDelete>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Car.DeleteAsync(x),
-				none: _ => F.None<bool>(new CarDoesNotExistMsg(command.UserId, command.CarId))
+				none: _ => F.None<bool>(new CarDoesNotExistMsg(command.UserId, command.Id))
 			);
 	}
 }

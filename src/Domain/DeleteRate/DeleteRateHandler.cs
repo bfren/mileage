@@ -36,13 +36,13 @@ internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 		Log.Vrb("Delete Rate: {Command}", command);
 		return Rate
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, command.RateId)
+			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<RateToDelete>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Rate.DeleteAsync(x),
-				none: _ => F.None<bool>(new RateDoesNotExistMsg(command.UserId, command.RateId))
+				none: _ => F.None<bool>(new RateDoesNotExistMsg(command.UserId, command.Id))
 			);
 	}
 }

@@ -9,14 +9,8 @@ namespace Mileage.Domain.DeleteCar;
 
 /// <inheritdoc cref="DeleteCarHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="CarId">Car ID</param>
+/// <param name="Id">Car ID</param>
 public sealed record class DeleteCarCommand(
 	AuthUserId UserId,
-	CarId CarId
-) : ICommand
-{
-	/// <summary>
-	/// Create blank for model binding
-	/// </summary>
-	public DeleteCarCommand() : this(new(), new()) { }
-}
+	CarId Id
+) : ICommand;

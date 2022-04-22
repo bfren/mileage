@@ -9,8 +9,8 @@ namespace Mileage.Domain.DeleteJourney;
 
 /// <inheritdoc cref="DeleteJourneyHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="JourneyId">Journey ID</param>
+/// <param name="Id">Journey ID</param>
 public sealed record class DeleteJourneyCommand(
 	AuthUserId UserId,
-	JourneyId JourneyId
+	JourneyId Id
 ) : ICommand;

@@ -9,8 +9,8 @@ namespace Mileage.Domain.DeletePlace;
 
 /// <inheritdoc cref="DeletePlaceHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="PlaceId">Place ID</param>
+/// <param name="Id">Place ID</param>
 public sealed record class DeletePlaceCommand(
 	AuthUserId UserId,
-	PlaceId PlaceId
+	PlaceId Id
 ) : ICommand;
