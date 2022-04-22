@@ -29,18 +29,14 @@
 							<div class="mb-1">
 								<vc:car label="Car" edit-url="@link(j, "Car")" value="@j.CarId" journey-id="@j.Id"/>
 								<vc:rate label="Rate" edit-url="@link(j, "Rate")" value="@j.RateId" journey-id="@j.Id"/>
-								<vc:from-place label="From" edit-url="@link(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id"/>
 							</div>
 						</div>
 						<button type="button" class="btn btn-danger me-2"><i class="fa-solid fa-circle-minus"></i></button>
 						<button type="button" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></button>
 					</div>
-					<div class="">
-						To:
-						@foreach (var p in j.ToPlaceIds)
-						{
-							<span>@p.Value</span>
-						}
+					<div class="places">
+						<vc:from-place label="From" edit-url="@link(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id"/>
+						<vc:to-places label="To" edit-url="@link(j, "ToPlaces")" value="@j.ToPlaceIds.ToList()" journey-id="@j.Id"/>
 					</div>
 				</li>
 			}
