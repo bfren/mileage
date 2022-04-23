@@ -154,7 +154,6 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
  * Open the create modal.
  * 
  * @param {any} url
- * @param {any} replaceId
  */
 function openCreateModal(url) {
 	openModal("#create", url, null, true, () => {
@@ -285,6 +284,19 @@ function checkDeleteItem(el, e) {
 	// open modal to check delete
 	openDeleteModal(deleteUrl, replaceId);
 }
+
+/**
+ * Setup button to open the change password modal when clicked.
+ *
+ */
+function setupChangePasswordUpdateModal() {
+	$(".change-password").click(function (e) {
+		e.preventDefault();
+		var changeUrl = $(this).data("change");
+		openUpdateModal(changeUrl, null);
+	});
+}
+ready(setupChangePasswordUpdateModal);
 
 /**
  * Open the update modal.
