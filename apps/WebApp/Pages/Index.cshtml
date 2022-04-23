@@ -9,5 +9,8 @@
 	</div>
 
 	<h2 class="mt-4">Recent Journeys</h2>
+	<div id="recent-journeys">
+		@await Html.PartialAsync("Journeys/_Recent", Model.RecentJourneys)
+	</div>
 
 </div>
