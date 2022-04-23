@@ -39,13 +39,17 @@ function setupCreateModalSearch() {
 	});
 }
 
+/**
+ * Enable unknown toggle switch for ending miles.
+ *
+ */
 function setupCreateModalUnknown() {
 	$(".unknown-toggle").on("change", function () {
 		if ($(this).is(":checked")) {
 			$(".unknown").val("").attr("disabled", true).blur();
 		} else {
 			var value = $(".unknown-value").val();
-			$(".unknown").val(value).removeAttr("disabled").focus();
+			$(".unknown").val(value).removeAttr("disabled").select();
 		}
 	})
 }

@@ -14,11 +14,12 @@ function setupAjaxSubmit() {
 
 		// check validity
 		if (this.checkValidity() === false) {
-			form.find(":input:visible").not("[formnovalidate]").parent().addClass("was-validated");
+			form.find(":input:visible").not("[formnovalidate]")
+				.parent().addClass("was-validated");
 			return;
 		}
 
-		// hide modal and show info message
+		// hide modal and show please wait message
 		if (modal) {
 			modal.hide();
 		}

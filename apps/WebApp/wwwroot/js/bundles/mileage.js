@@ -124,7 +124,14 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select")[0].focus());
+		modalEl.addEventListener("shown.bs.modal", () => {
+			var s = $(".modal-select");
+			if (s.length == 1) {
+				s.select();
+			} else {
+				s.first().select();
+			}
+		});
 
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
@@ -184,13 +191,17 @@ function setupCreateModalSearch() {
 	});
 }
 
+/**
+ * Enable unknown toggle switch for ending miles.
+ *
+ */
 function setupCreateModalUnknown() {
 	$(".unknown-toggle").on("change", function () {
 		if ($(this).is(":checked")) {
 			$(".unknown").val("").attr("disabled", true).blur();
 		} else {
 			var value = $(".unknown-value").val();
-			$(".unknown").val(value).removeAttr("disabled").focus();
+			$(".unknown").val(value).removeAttr("disabled").select();
 		}
 	})
 }
@@ -480,11 +491,12 @@ function setupAjaxSubmit() {
 
 		// check validity
 		if (this.checkValidity() === false) {
-			form.find(":input:visible").not("[formnovalidate]").parent().addClass("was-validated");
+			form.find(":input:visible").not("[formnovalidate]")
+				.parent().addClass("was-validated");
 			return;
 		}
 
-		// hide modal and show info message
+		// hide modal and show please wait message
 		if (modal) {
 			modal.hide();
 		}
