@@ -12,5 +12,6 @@
 
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Journey.Id)
+	@Html.HiddenFor(m => m.Type)
 
 </form>

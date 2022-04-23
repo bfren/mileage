@@ -154,8 +154,7 @@ internal static class Helpers
 				}
 				else
 				{
-					var actual = Assert.IsType<TValue>(arg);
-					Assert.Equal(value, actual);
+					Assert.Equal(value!, arg);
 				}
 			}
 		);
@@ -258,6 +257,27 @@ internal static class Helpers
 				var actual = Assert.IsType<SortOrder>(arg);
 				Assert.Equal(order, actual);
 			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query maximum method
+	/// </summary>
+	/// <param name="call">Call</param>
+	/// <param name="value"></param>
+	public static void AssertMaximum(
+		ICall call,
+		ulong value
+	)
+	{
+		// Check the method
+		Assert.Equal("Maximum", call.GetMethodInfo().Name);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the correct property is being used
+			arg => Assert.Equal(value, arg)
 		);
 	}
 

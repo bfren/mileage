@@ -1,24 +1,24 @@
-@using Mileage.Domain.GetIncompleteJourneys
-@model Mileage.WebApp.Pages.Journeys.IncompleteModel
+@using Mileage.Domain.GetRecentJourneys
+@model Mileage.WebApp.Pages.Journeys.RecentModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 
-	string? updateLink(IncompleteJourneyModel journey, string item)
+	string? updateLink(RecentJourneyModel journey, string item)
 	{
 		var journeyId = journey.Id.Value;
 		return Url.Page(pageName: "/Journeys/Index", pageHandler: "Edit" + item, values: new { journeyId });
 	}
 
-	string? deleteLink(IncompleteJourneyModel journey)
+	string? deleteLink(RecentJourneyModel journey)
 	{
 		var journeyId = journey.Id.Value;
-		return Url.Page(pageName: "/Journeys/Index", pageHandler: "DeleteIncomplete", values: new { journeyId });
+		return Url.Page(pageName: "/Journeys/Index", pageHandler: "DeleteRecent", values: new { journeyId });
 	}
 }
 
 @if (Model.Journeys.Count == 0)
 {
-	<div>There are no outstanding journeys.</div>
+	<div>There are no recent journeys.</div>
 	return;
 }
 
@@ -30,7 +30,10 @@
 				<div class="me-auto mb-1">
 					<div class="fs-5 mb-1">
 						<vc:day label="" update-url="@updateLink(j, "Day")" value="@j.Day" journey-id="@j.Id" />
+					</div>
+					<div class="mb-1">
 						<vc:miles label="Start" update-url="@updateLink(j, "StartMiles")" value="@j.StartMiles" journey-id="@j.Id" />
+						<vc:miles label="End" update-url="@updateLink(j, "EndMiles")" value="@j.EndMiles ?? 0" journey-id="@j.Id" />
 					</div>
 					<div>
 						<vc:car label="Car" update-url="@updateLink(j, "Car")" value="@j.CarId" journey-id="@j.Id" />
@@ -38,13 +41,9 @@
 					</div>
 				</div>
 				<button type="button"
-					class="btn btn-danger btn-delete-check me-2"
+					class="btn btn-danger btn-delete-check"
 					data-delete="@deleteLink(j)"
-					data-replace="incomplete-journeys"><i class="fa-solid fa-circle-minus"></i></button>
-				<button type="button"
-					class="btn btn-success btn-complete"
-					data-update="@updateLink(j, "EndMiles")"
-					data-replace="incomplete-journeys"><i class="fa-solid fa-circle-check"></i></button>
+					data-replace="recent-journeys"><i class="fa-solid fa-circle-minus"></i></button>
 			</div>
 			<div class="places">
 				<vc:from-place label="From" update-url="@updateLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />
