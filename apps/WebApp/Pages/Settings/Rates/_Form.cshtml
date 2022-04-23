@@ -5,7 +5,7 @@
 	var formId = Rnd.Str;
 }
 
-<form id="@formId" class="row row-cols-md-auto g-3 align-items-center" action="@Url.Page("Index", "Form")" method="post" data-replace="rates" data-replace-contents="true">
+<form id="@formId" class="row row-cols-md-auto g-3 align-items-center needs-validation" action="@Url.Page("Index", "Form")" method="post" data-replace="rates" data-replace-contents="true" novalidate>
 
 	<!-- Hidden Values -->
 	@Html.AntiForgeryToken()
@@ -14,27 +14,21 @@
 
 	<!-- Car Details -->
 	<div class="col-12">
-		@Html.LabelFor(
-			m => m!.Id,
-			labelText: Model is null ? "New" : Model.Id.Value.ToString(),
-			htmlAttributes: new { @class = "fw-bold" }
-		)
+		@Html.LabelFor(m => m!.Id, Model is null ? "New" : Model.Id.Value.ToString(), new { @class = "fw-bold" })
 	</div>
 
-	<div class="col-12">
+	<div class="col-12 position-relative">
 		@Html.LabelFor(m => m!.AmountPerMileGBP, new { @class = "visually-hidden" })
-		<div class="input-group">
-			<input type="number" class="form-control select-on-load"
-				id="@Html.NameFor(m => m!.AmountPerMileGBP)"
-				name="@Html.NameFor(m => m!.AmountPerMileGBP)"
-				placeholder="Amount Per Mile in GBP"
-				value="@Model?.AmountPerMileGBP.ToString("0.00")"
-				min="0"
-				max="2"
-				step="0.01"
-				required="required"
-			/>
-		</div>
+		<input type="number" class="form-control select-on-load"
+			   name="@Html.NameFor(m => m!.AmountPerMileGBP)"
+			   id="@Html.NameFor(m => m!.AmountPerMileGBP)"
+			   placeholder="Amount Per Mile in GBP"
+			   value="@Model?.AmountPerMileGBP.ToString("0.00")"
+			   min="0"
+			   max="2"
+			   step="0.01"
+			   required />
+		<div class="invalid-tooltip">Please enter a description.</div>
 	</div>
 
 	<!-- Buttons -->
