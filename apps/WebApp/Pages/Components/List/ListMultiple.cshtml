@@ -7,13 +7,13 @@
 	{
 		var itemsId = Rnd.Str;
 		<div class="mb-2">
-			<input type="text" class="form-control modal-select list-filter" placeholder="Search..." autocomplete="off" data-filter-for="@itemsId" />
+			<input type="text" class="form-control modal-select list-filter" placeholder="Search @Model.Singular.Pluralise(2)..." autocomplete="off" data-filter-for="@itemsId" formnovalidate />
 		</div>
 
 		<div class="list-items mb-3" id="@itemsId">
 			@foreach (var item in Model.Items)
 			{
-				Check(Model.ListName, $"{Model.Singular}-{item.Id}", item.Id, item.Text, item.Selected);
+				Check(Model.ListName, $"{Model.ListName}-{item.Id}", item.Id, item.Text, item.Selected);
 			}
 		</div>
 	}
@@ -35,9 +35,7 @@
 	void Check(string name, string id, object value, string text, bool selected)
 	{
 		var check = selected ? "checked" : string.Empty;
-		<div class="list-item" data-text="@text.ToLowerInvariant()">
-			<input type="checkbox" class="btn-check" id="@id" name="@name" value="@value" autocomplete="off" @check />
-			<label class="btn btn-outline-primary mb-1" for="@id">@text</label>
-		</div>
+		<input type="checkbox" class="btn-check" id="@id" name="@name" value="@value" autocomplete="off" @check />
+		<label class="btn btn-outline-primary mb-1" for="@id" data-text="@text.ToLowerInvariant()">@text</label>
 	}
 }

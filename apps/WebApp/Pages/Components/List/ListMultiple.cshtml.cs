@@ -25,7 +25,7 @@ public abstract class ListMultipleViewComponent<TModel, TId> : ViewComponent
 	protected ListMultipleViewComponent(string singular, Func<TModel, string> getText) =>
 		(Singular, GetText) = (singular, getText);
 
-	public IViewComponentResult Invoke(string listName, List<TModel> items, List<TId> selected)
+	public IViewComponentResult Invoke(string listName, List<TModel> items, TId[] selected)
 	{
 		var models = from i in items
 					 let s = selected.Contains(i.Id)
