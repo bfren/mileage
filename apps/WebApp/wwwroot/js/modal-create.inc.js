@@ -2,7 +2,6 @@
  * Open the create modal.
  * 
  * @param {any} url
- * @param {any} replaceId
  */
 function openCreateModal(url) {
 	openModal("#create", url, null, true, () => {
