@@ -3,35 +3,125 @@
 	Layout = "Modals/CreateModal";
 }
 
-<form action="@Url.Page("Index", "Create")" method="post">
+<form class="needs-validation" action="@Url.Page("Index", "Create")" method="post" novalidate>
 
+	<!-- Day -->
 	<div class="mb-3">
-		<label class="form-label" for="@Html.NameFor(x => x.Journey.Day)">Please select a day:</label>
+		<label class="form-label" for="@Html.NameFor(x => x.Journey.Day)">Day:</label>
 		<input type="text"
-			class="form-control"
-			id="@Html.NameFor(x => x.Journey.Day)"
-			name="@Html.NameFor(x => x.Journey.Day)"
-			data-provide="datepicker"
-			value="@Model?.Journey.Day.ToString("yyyy-MM-dd")"
-			required="required"
-		/>
+			   class="form-control"
+			   id="@Html.NameFor(x => x.Journey.Day).Normalise()"
+			   name="@Html.NameFor(x => x.Journey.Day)"
+			   data-provide="datepicker"
+			   value="@Model?.Journey.Day.ToString("yyyy-MM-dd")"
+			   required />
+		<div class="invalid-feedback">Please select a day.</div>
 	</div>
-	
+
+	<!-- StartMiles -->
 	<div class="mb-3">
-		<label class="form-label" for="@Html.NameFor(x => x.Journey.StartMiles)">Please enter the starting miles:</label>
+		<label class="form-label" for="@Html.NameFor(x => x.Journey.StartMiles)">Starting miles:</label>
 		<input type="number"
-			class="form-control"
-			id="@Html.NameFor(x => x.Journey.StartMiles)"
-			name="@Html.NameFor(x => x.Journey.StartMiles)"
-			value="@Model?.Journey.StartMiles"
-			min="1"
-			required="required"
-		/>
+			   class="form-control modal-select unknown-value"
+			   id="@Html.NameFor(x => x.Journey.StartMiles).Normalise()"
+			   name="@Html.NameFor(x => x.Journey.StartMiles)"
+			   value="@Model?.Journey.StartMiles"
+			   min="1"
+			   required />
+		<div class="invalid-feedback">Please enter a valid number.</div>
 	</div>
-	
-	@Html.HiddenForId(x => x.Journey.CarId)
-	@Html.HiddenForId(x => x.Journey.FromPlaceId)
-	@Html.HiddenForId(x => x.Journey.RateId)
+
+	<!-- EndMiles -->
+	@{
+		var endingId = @Html.NameFor(x => x.Journey.EndMiles).Normalise();
+	}
+	<label class="form-label" for="@Html.NameFor(x => x.Journey.EndMiles)">Ending miles:</label>
+	<div class="input-group mb-3">
+		<div class="input-group-text">
+			<input type="checkbox"
+				   class="form-check-input mt-0 unknown-toggle"
+				   id="@endingId-unknown"
+				   data-bs-toggle="collapse"
+				   aria-label="Checkbox for marking ending miles as null."
+				   checked />
+			<label class="form-check-label ms-2" for="@endingId-unknown">Unknown</label>
+		</div>
+		<input type="number"
+			   class="form-control unknown"
+			   id="@Html.NameFor(x => x.Journey.EndMiles).Normalise()"
+			   name="@Html.NameFor(x => x.Journey.EndMiles)"
+			   value="@Model?.Journey.EndMiles"
+			   disabled />
+	</div>
+
+	<!-- Other Values -->
+	<div class="accordion accordion-flush" id="default-values">
+		@{
+			await AccordionItem("Car", Model?.Journey.CarId is null, "CarList", new
+			{
+				listName = Html.NameFor(x => x.Journey.CarId),
+				allowNull = false,
+				items = Model?.Cars,
+				selected = Model?.Journey.CarId
+			});
+
+			await AccordionItem("Starting Place", Model?.Journey.FromPlaceId is null, "FromPlaceList", new
+			{
+				listName = Html.NameFor(x => x.Journey.FromPlaceId),
+				allowNull = false,
+				items = Model?.Places,
+				selected = Model?.Journey.FromPlaceId
+			});
+
+			await AccordionItem("Destinations", false, "ToPlacesList", new
+			{
+				listName = Html.NameFor(x => x.Journey.ToPlaceIds),
+				items = Model?.Places,
+				selected = Model?.Journey.ToPlaceIds
+			});
+
+			await AccordionItem("Rate", Model?.Journey.RateId is null, "RateList", new
+			{
+				listName = Html.NameFor(x => x.Journey.RateId),
+				allowNull = false,
+				items = Model?.Rates,
+				selected = Model?.Journey.RateId
+			});
+		}
+	</div>
+
 	@Html.AntiForgeryToken()
 
 </form>
+
+@functions {
+	/// <summary>
+	/// Output an accordion item
+	/// </summary>
+	/// <param name="text">Header text</param>
+	/// <param name="show">Whether or not to start open</param>
+	/// <param name="component">ViewComponent name (minus the ViewComponent suffix)</param>
+	/// <param name="arguments">Arguments for ViewComponent InvokeAsync</param>
+	async Task AccordionItem<TModel>(string text, bool show, string component, TModel arguments)
+	{
+		var name = Rnd.Str;
+
+		var buttonClass = "accordion-button";
+		if (!show) buttonClass += " collapsed";
+
+		var sectionClass = "accordion-collapse collapse";
+		if (show) sectionClass += " show";
+
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="@name-header" data-bs-toggle="collapse">
+				<button class="@buttonClass" type="button" data-bs-toggle="collapse" data-bs-target="#@name"
+					aria-expanded="@show" aria-controls="@name" formnovalidate>
+					@text
+				</button>
+			</h2>
+			<div class="@sectionClass" id="@name" aria-labelledby="@name-header" data-bs-parent="default-values">
+				<div class="accordion-body">@await Component.InvokeAsync(component, arguments)</div>
+			</div>
+		</div>
+	}
+}

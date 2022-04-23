@@ -7,9 +7,8 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditCar")">
-	<label class="form-label" for="Journey.CarId">Please select a car:</label>
 	<vc:car-list
-		list-name="Journey.CarId"
+		list-name="@Html.LabelFor(x => x.Journey.CarId)"
 		allow-null="false"
 		items="@Model.Cars"
 		selected="@Model.Journey.CarId"

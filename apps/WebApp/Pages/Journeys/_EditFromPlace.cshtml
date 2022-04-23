@@ -7,9 +7,8 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditFromPlace")">
-	<label class="form-label" for="Journey.FromPlaceId">Please select a starting place:</label>
 	<vc:from-place-list
-		list-name="Journey.FromPlaceId"
+		list-name="@Html.NameFor(x => x.Journey.FromPlaceId)"
 		allow-null="false"
 		items="@Model.Places"
 		selected="@Model.Journey.FromPlaceId"

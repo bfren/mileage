@@ -7,9 +7,8 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditRate")">
-	<label class="form-label" for="Journey.RateId">Please select a rate:</label>
 	<vc:rate-list
-		list-name="Journey.RateId"
+		list-name="@Html.NameFor(x => x.Journey.RateId)"
 		allow-null="false"
 		items="@Model.Rates"
 		selected="@Model.Journey.RateId"
