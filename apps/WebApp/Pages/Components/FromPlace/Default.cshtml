@@ -1,0 +1,25 @@
+@model Mileage.WebApp.Pages.Components.FromPlace.FromPlaceModel
+
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var data = new
+	{
+		id = Model.Id.Value,
+		target = Model.JourneyId is null ? "settings" : Model.JourneyId.Value.ToString()
+	};
+
+	var text = string.IsNullOrEmpty(Model.Description) ? "not set" : Model.Description;
+
+	var tokenId = Rnd.Str;
+}
+
+<span id="@tokenId" class="place token">
+	@Model.Label
+	<a href="javascript:void(0)"
+		class="link-primary"
+		data-update="@Model.UpdateUrl"
+		data-replace="@tokenId"
+		data-id="@data.id"
+		data-target="@data.target">@text</a>
+</span>

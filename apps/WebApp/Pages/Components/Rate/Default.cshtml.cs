@@ -10,10 +10,10 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.Rate;
 
-public sealed record class RateModel(string? EditUrl, RateId Id, float AmountPerMileGBP, JourneyId? JourneyId)
+public sealed record class RateModel(string Label, string? UpdateUrl, RateId Id, float AmountPerMileGBP, JourneyId? JourneyId)
 {
-	public static RateModel Blank(string? editUrl) =>
-		new(editUrl, new(), 0f, null);
+	public static RateModel Blank(string label, string? updateUrl) =>
+		new(label, updateUrl, new(), 0f, null);
 }
 
 public sealed class RateViewComponent : ViewComponent
@@ -25,21 +25,21 @@ public sealed class RateViewComponent : ViewComponent
 	public RateViewComponent(IDispatcher dispatcher, ILog<RateViewComponent> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
-	public async Task<IViewComponentResult> InvokeAsync(string editUrl, RateId rateId, JourneyId? journeyId)
+	public async Task<IViewComponentResult> InvokeAsync(string label, string updateUrl, RateId value, JourneyId? journeyId)
 	{
-		if (rateId is null)
+		if (value is null)
 		{
-			return View(RateModel.Blank(editUrl));
+			return View(RateModel.Blank(label, updateUrl));
 		}
 
-		Log.Dbg("Get rate: {RateId}.", rateId);
+		Log.Dbg("Get rate: {RateId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetRateQuery(x, rateId)))
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetRateQuery(x, value)))
 			.AuditAsync(none: r => Log.Err("Unable to get rate: {Reason}", r))
 			.SwitchAsync(
-				some: x => View(new RateModel(editUrl, x.Id, x.AmountPerMileGBP, journeyId)),
-				none: _ => (IViewComponentResult)View(RateModel.Blank(editUrl))
+				some: x => View(new RateModel(label, updateUrl, x.Id, x.AmountPerMileGBP, journeyId)),
+				none: _ => (IViewComponentResult)View(RateModel.Blank(label, updateUrl))
 			);
 	}
 }

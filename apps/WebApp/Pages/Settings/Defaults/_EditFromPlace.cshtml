@@ -1,0 +1,19 @@
+@model Mileage.WebApp.Pages.Settings.Defaults.EditFromPlaceModel
+@{
+	Layout = "Modals/UpdateModal";
+}
+
+<form method="post" action="@Url.Page("Index", "EditFromPlace")">
+	<p>Please select a default starting place:</p>
+	<vc:from-place-list
+		list-name="Settings.DefaultFromPlaceId"
+		allow-null="true"
+		items="@Model?.Places"
+		selected="@Model?.Settings.DefaultFromPlaceId"
+	/>
+
+	@Html.HiddenForId(x => x.Settings.DefaultCarId)
+	@Html.HiddenForId(x => x.Settings.DefaultRateId)
+	@Html.HiddenFor(x => x.Settings.Version)
+	@Html.AntiForgeryToken()
+</form>

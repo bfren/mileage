@@ -33,6 +33,11 @@ internal sealed class GetLatestEndMilesHandler : QueryHandler<GetLatestEndMilesQ
 	/// <param name="query"></param>
 	public override Task<Maybe<uint>> HandleAsync(GetLatestEndMilesQuery query)
 	{
+		if (query.CarId is null)
+		{
+			return F.Some(0u).AsTask;
+		}
+
 		Log.Vrb("Getting latest end miles for User {UserId} and Car {CarId}.", query.UserId.Value, query.CarId.Value);
 		return Journey
 			.StartFluentQuery()

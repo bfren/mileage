@@ -1,0 +1,20 @@
+@model Mileage.WebApp.Pages.Journeys.EditCarModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Model.Title += $" (Journey {Model.Journey.Id.Value})";
+	Layout = "Modals/UpdateModal";
+}
+
+<form method="post" action="@Url.Page("Index", "EditCar")">
+	<vc:car-list
+		list-name="@Html.LabelFor(x => x.Journey.CarId)"
+		allow-null="false"
+		items="@Model.Cars"
+		selected="@Model.Journey.CarId"
+	/>
+
+	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenFor(x => x.Journey.Version)
+	@Html.AntiForgeryToken()
+</form>

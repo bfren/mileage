@@ -3,9 +3,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Jeebs.Collections;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -40,12 +40,12 @@ internal sealed class UpdateJourneyHandler : CommandHandler<UpdateJourneyCommand
 			{
 				Id = command.JourneyId,
 				Version = command.Version,
-				Date = command.Date.ToDateTime(TimeOnly.MinValue),
+				Day = command.Date.ToDateTime(TimeOnly.MinValue),
 				CarId = command.CarId,
 				StartMiles = (int)command.StartMiles,
 				EndMiles = (int?)command.EndMiles,
 				FromPlaceId = command.FromPlaceId,
-				ToPlaceIds = ImmutableList.Create(args: command.ToPlaceIds),
+				ToPlaceIds = command.ToPlaceIds ?? Array.Empty<PlaceId>(),
 				RateId = command.RateId
 			});
 	}

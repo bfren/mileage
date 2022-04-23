@@ -1,0 +1,130 @@
+@model Mileage.WebApp.Pages.Journeys.CreateModel
+@{
+	Layout = "Modals/CreateModal";
+	var dayName = Html.NameFor(x => x.Journey.Day);
+	var startMilesName = Html.NameFor(x => x.Journey.StartMiles);
+	var endMilesName = Html.NameFor(x => x.Journey.EndMiles);
+}
+
+<form class="needs-validation" action="@Url.Page("Index", "Create")" method="post" novalidate>
+
+	<!-- Day -->
+	<div class="mb-3">
+		<label class="form-label" for="@dayName">Day:</label>
+		<input type="text"
+			   class="form-control"
+			   name="@dayName"
+			   id="@dayName.Normalise()"
+			   data-provide="datepicker"
+			   value="@Model?.Journey.Day.ToString("yyyy-MM-dd")"
+			   required />
+		<div class="invalid-feedback">Please select a day.</div>
+	</div>
+
+	<!-- StartMiles -->
+	<div class="mb-3">
+		<label class="form-label" for="@startMilesName">Starting miles:</label>
+		<input type="number"
+			   class="form-control modal-select unknown-value"
+			   name="@startMilesName"
+			   id="@startMilesName.Normalise()"
+			   value="@Model?.Journey.StartMiles"
+			   min="1"
+			   required />
+		<div class="invalid-feedback">Please enter a valid number.</div>
+	</div>
+
+	<!-- EndMiles -->
+	@{
+		var endMilesId = @endMilesName.Normalise();
+	}
+	<label class="form-label" for="@endMilesName">Ending miles:</label>
+	<div class="input-group mb-3">
+		<div class="input-group-text">
+			<input type="checkbox"
+				   class="form-check-input mt-0 unknown-toggle"
+				   id="@endMilesId-unknown"
+				   data-bs-toggle="collapse"
+				   aria-label="Checkbox for marking ending miles as null."
+				   checked />
+			<label class="form-check-label ms-2" for="@endMilesId-unknown">Unknown</label>
+		</div>
+		<input type="number"
+			   class="form-control unknown"
+			   name="@endMilesName"
+			   id="@endMilesId"
+			   value="@Model?.Journey.EndMiles"
+			   disabled />
+	</div>
+
+	<!-- Other Values -->
+	<div class="accordion accordion-flush" id="default-values">
+		@{
+			await AccordionItem("Car", Model?.Journey.CarId is null, "CarList", new
+			{
+				listName = Html.NameFor(x => x.Journey.CarId),
+				allowNull = false,
+				items = Model?.Cars,
+				selected = Model?.Journey.CarId
+			});
+
+			await AccordionItem("Starting Place", Model?.Journey.FromPlaceId is null, "FromPlaceList", new
+			{
+				listName = Html.NameFor(x => x.Journey.FromPlaceId),
+				allowNull = false,
+				items = Model?.Places,
+				selected = Model?.Journey.FromPlaceId
+			});
+
+			await AccordionItem("Destinations", false, "ToPlacesList", new
+			{
+				listName = Html.NameFor(x => x.Journey.ToPlaceIds),
+				items = Model?.Places,
+				selected = Model?.Journey.ToPlaceIds
+			});
+
+			await AccordionItem("Rate", Model?.Journey.RateId is null, "RateList", new
+			{
+				listName = Html.NameFor(x => x.Journey.RateId),
+				allowNull = false,
+				items = Model?.Rates,
+				selected = Model?.Journey.RateId
+			});
+		}
+	</div>
+
+	@Html.AntiForgeryToken()
+
+</form>
+
+@functions {
+	/// <summary>
+	/// Output an accordion item
+	/// </summary>
+	/// <param name="text">Header text</param>
+	/// <param name="show">Whether or not to start open</param>
+	/// <param name="component">ViewComponent name (minus the ViewComponent suffix)</param>
+	/// <param name="arguments">Arguments for ViewComponent InvokeAsync</param>
+	async Task AccordionItem<TModel>(string text, bool show, string component, TModel arguments)
+	{
+		var name = Rnd.Str;
+
+		var buttonClass = "accordion-button";
+		if (!show) buttonClass += " collapsed";
+
+		var sectionClass = "accordion-collapse collapse";
+		if (show) sectionClass += " show";
+
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="@name-header" data-bs-toggle="collapse">
+				<button class="@buttonClass" type="button" data-bs-toggle="collapse" data-bs-target="#@name"
+					aria-expanded="@show" aria-controls="@name" formnovalidate>
+					@text
+				</button>
+			</h2>
+			<div class="@sectionClass" id="@name" aria-labelledby="@name-header" data-bs-parent="default-values">
+				<div class="accordion-body">@await Component.InvokeAsync(component, arguments)</div>
+			</div>
+		</div>
+	}
+}

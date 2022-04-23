@@ -4,21 +4,31 @@
 using Jeebs.Cqrs;
 using Mileage.WebApp;
 
-var app = Jeebs.Apps.Web.MvcApp.Create<App>(args);
-
+// Create app
+var (app, log) = Jeebs.Apps.Web.MvcApp.Create<App>(args);
 var dispatcher = app.Services.GetRequiredService<IDispatcher>();
-await dispatcher.DispatchAsync(
+
+// Migrate to latest database version
+log.Inf("Migrate database to latest version.");
+_ = await dispatcher.DispatchAsync(
 	new Mileage.Domain.MigrateToLatest.MigrateToLatestCommand()
 );
 
-if (false)
+#if DEBUG
+// Truncate database tables and insert fresh test data
+if (app.Environment.IsEnvironment("Truncate"))
 {
-	await dispatcher.DispatchAsync(
+	log.Wrn("Truncating database tables.");
+	_ = await dispatcher.DispatchAsync(
 		new Mileage.Domain.TruncateEverything.TruncateEverythingCommand()
 	);
-	await dispatcher.DispatchAsync(
+
+	log.Inf("Inserting test data.");
+	_ = await dispatcher.DispatchAsync(
 		new Mileage.Domain.InsertTestData.InsertTestDataCommand()
 	);
 }
+#endif
 
+// Run app
 app.Run();

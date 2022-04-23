@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using Jeebs.Collections;
 using Jeebs.Data;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -18,8 +17,8 @@ public sealed record class IncompleteJourneyModel : IWithVersion<JourneyId>
 	/// <inheritdoc cref="JourneyEntity.Version"/>
 	public long Version { get; init; }
 
-	/// <inheritdoc cref="JourneyEntity.Date"/>
-	public DateTime Date { get; init; }
+	/// <inheritdoc cref="JourneyEntity.Day"/>
+	public DateTime Day { get; init; }
 
 	/// <inheritdoc cref="JourneyEntity.CarId"/>
 	public CarId CarId { get; init; } = new();
@@ -28,7 +27,7 @@ public sealed record class IncompleteJourneyModel : IWithVersion<JourneyId>
 	public PlaceId FromPlaceId { get; init; } = new();
 
 	/// <inheritdoc cref="JourneyEntity.ToPlaceIds"/>
-	public ImmutableList<PlaceId> ToPlaceIds { get; init; } = new();
+	public PlaceId[] ToPlaceIds { get; init; } = Array.Empty<PlaceId>();
 
 	/// <inheritdoc cref="JourneyEntity.StartMiles"/>
 	public int StartMiles { get; init; }

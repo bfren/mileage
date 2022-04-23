@@ -1,0 +1,20 @@
+@model Mileage.WebApp.Pages.Journeys.EditRateModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Model.Title += $" (Journey {Model.Journey.Id.Value})";
+	Layout = "Modals/UpdateModal";
+}
+
+<form method="post" action="@Url.Page("Index", "EditRate")">
+	<vc:rate-list
+		list-name="@Html.NameFor(x => x.Journey.RateId)"
+		allow-null="false"
+		items="@Model.Rates"
+		selected="@Model.Journey.RateId"
+	/>
+
+	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenFor(x => x.Journey.Version)
+	@Html.AntiForgeryToken()
+</form>

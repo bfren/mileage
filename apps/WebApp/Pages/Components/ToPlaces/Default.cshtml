@@ -1,0 +1,42 @@
+@model Mileage.WebApp.Pages.Components.ToPlaces.ToPlacesModel
+
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var tokenId = Rnd.Str;
+}
+
+<span id="@tokenId">
+	@Model.Label
+
+	@if (Model.Places.Count == 0)
+	{
+		Place(Model.UpdateUrl, tokenId, null, Model.JourneyId.Value, "not set");
+	}
+
+	@foreach (var p in Model.Places)
+	{
+		var text = p.Description;
+		if (p.Postcode is string postcode)
+		{
+			text += $" ({postcode})";
+		}
+
+		Place(Model.UpdateUrl, tokenId, p.Id.Value, Model.JourneyId.Value, text);
+	}
+
+</span>
+
+@functions {
+	void Place(string? updateUrl, string tokenId, long? placeId, long target, string text)
+	{
+		<span class="place token">
+			<a href="javascript:void(0)"
+			   class="link-primary"
+			   data-update="@updateUrl"
+			   data-replace="@tokenId"
+			   data-id="@placeId"
+			   data-target="@target">@text</a>
+		</span>
+	}
+}

@@ -12,7 +12,7 @@ namespace Mileage.WebApp.Pages.Settings.Cars;
 
 public sealed partial class IndexModel
 {
-	public async Task<PartialViewResult> OnGetFormPartialAsync(CarId? carId)
+	public async Task<PartialViewResult> OnGetFormAsync(CarId? carId)
 	{
 		// Return blank form
 		if (carId is null)
@@ -33,7 +33,7 @@ public sealed partial class IndexModel
 			);
 	}
 
-	public Task<IActionResult> OnPostFormPartialAsync(SaveCarQuery form)
+	public Task<IActionResult> OnPostFormAsync(SaveCarQuery form)
 	{
 		var query = from u in User.GetUserId()
 					from r in Dispatcher.DispatchAsync(form with { UserId = u })

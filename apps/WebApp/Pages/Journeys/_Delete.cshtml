@@ -1,0 +1,16 @@
+@model WebApp.Pages.Journeys.DeleteModel
+@{
+	Layout = "Modals/DeleteModal";
+}
+
+<form action="@Url.Page("Index", "Delete")" method="post">
+
+	<div>
+		@Model?.Journey.Day.ToString("yyyy-MM-dd")
+		from @Model?.Journey.StartMiles to @Model?.Journey.EndMiles
+	</div>
+
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m.Journey.Id)
+
+</form>

@@ -20,7 +20,7 @@ public sealed class DeleteModel : DeleteModalModel
 
 public sealed partial class IndexModel
 {
-	public Task<PartialViewResult> OnGetDeletePartialAsync(PlaceId placeId)
+	public Task<PartialViewResult> OnGetDeleteAsync(PlaceId placeId)
 	{
 		// Create query
 		var query = from u in User.GetUserId()
@@ -35,10 +35,10 @@ public sealed partial class IndexModel
 			);
 	}
 
-	public Task<IActionResult> OnPostDeletePartialAsync(DeletePlaceCommand form)
+	public Task<IActionResult> OnPostDeleteAsync(DeletePlaceCommand place)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(form with { UserId = u })
+					from r in Dispatcher.DispatchAsync(place with { UserId = u })
 					select r;
 
 		return query

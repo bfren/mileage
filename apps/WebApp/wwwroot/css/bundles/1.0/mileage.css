@@ -11155,10 +11155,6 @@ body {
   margin: 0 auto;
 }
 
-.clear {
-  clear: both;
-}
-
 .hide {
   display: none;
 }
@@ -11212,24 +11208,30 @@ main {
 
 .list-group-item:hover {
   background-color: #f8f9fa;
+}
+
+#settingsPanes .list-group-item {
   cursor: pointer;
 }
 
 .token a {
+  background-color: #e9ecef;
   font-weight: 700;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.2rem;
+  text-decoration: none;
 }
 
-#edit, #delete {
+#create, #update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
   height: 100%;
-  padding-top: 150px;
 }
-#edit .modal-dialog, #delete .modal-dialog {
-  margin: 3rem auto;
+#create .modal-dialog, #update .modal-dialog, #delete .modal-dialog {
+  padding-top: 3rem;
 }
 
-#edit .list-items .list-item {
+#create .list-items .list-item, #update .list-items .list-item {
   display: inline;
 }
 

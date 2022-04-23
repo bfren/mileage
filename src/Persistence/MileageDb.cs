@@ -59,6 +59,6 @@ public sealed class MileageDb : Db
 
 		// Add type handlers
 		client.Types.AddStrongIdTypeHandlers();
-		client.Types.AddImmutableListTypeHandler<PlaceId>();
+		client.Types.AddListTypeHandlers<PlaceId>();
 	}
 }

@@ -14,8 +14,10 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	$(selector).load(url, function () {
 		// save replaceId
 		var form = $(this).find("form");
-		form.attr("data-replace", replaceId);
-		form.attr("data-replace-contents", replaceContents);
+		if (replaceId) {
+			form.attr("data-replace", replaceId);
+			form.attr("data-replace-contents", replaceContents);
+		}
 
 		// create the modal object
 		var wrapper = $(this);
@@ -23,7 +25,14 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
+		modalEl.addEventListener("shown.bs.modal", () => {
+			var s = $(".modal-select");
+			if (s.length == 1) {
+				s.select();
+			} else {
+				s.first().select();
+			}
+		});
 
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));

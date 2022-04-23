@@ -7,7 +7,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
-public sealed class RateListViewComponent : ListViewComponent<GetRatesModel, RateId>
+public sealed class RateListViewComponent : ListSingleViewComponent<GetRatesModel, RateId>
 {
 	public RateListViewComponent() : base("rate", x => x.AmountPerMileGBP.ToString("0.00", CultureInfo.InvariantCulture)) { }
 }

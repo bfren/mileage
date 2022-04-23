@@ -38,6 +38,10 @@ function loadSettingsTab(tabId) {
 function loadSaveForm(item, el, e) {
 	// don't do whatever the link / button was going to do
 	e.preventDefault();
+	var cls = "btn-delete-check";
+	if ($(e.target).hasClass(cls) || $(e.target).parents("." + cls).length > 0) {
+		return;
+	}
 
 	// get the URL to load
 	var url = el.data("load");
@@ -75,19 +79,9 @@ function setupSaveFormOnEnter(form) {
 }
 
 /**
- * Check whether or not the user really wants to delete an item.
- * 
- * @param {any} el The element being deleted
- * @param {any} e The click event
+ * Select an input when HTML is loaded.
+ *
  */
-function checkDeleteItem(el, e) {
-	// don't do whatever the link / button was going to do
-	e.preventDefault();
-
-	// get info
-	var deleteUrl = el.data("delete");
-	var replaceId = el.data("replace");
-
-	// open modal to check delete
-	openDeleteModal(deleteUrl, replaceId);
+function selectInputOnLoad() {
+	$(".select-on-load").select();
 }

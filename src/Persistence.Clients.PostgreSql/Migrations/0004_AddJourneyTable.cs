@@ -26,7 +26,7 @@ public sealed class AddJourneyTable : Migration
 			{Col(j => j.Id)} integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 			{Col(j => j.Version)} integer NOT NULL DEFAULT 0,
 			{Col(j => j.UserId)} integer NOT NULL,
-			{Col(j => j.Date)} timestamp with time zone NOT NULL,
+			{Col(j => j.Day)} date NOT NULL,
 			{Col(j => j.CarId)} integer NOT NULL,
 			{Col(j => j.StartMiles)} integer NOT NULL CHECK ({Col(j => j.StartMiles)} > 0),
 			{Col(j => j.EndMiles)} integer CHECK ({Col(j => j.EndMiles)} > 0),

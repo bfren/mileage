@@ -4,7 +4,7 @@ const alertIcons = {
 	success: $("<i/>").addClass("fa-solid fa-check"),
 	warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
 	error: $("<i/>").addClass("fa-solid fa-ban"),
-	edit: $("<i/>").addClass("fa-solid fa-circle-plus"),
+	update: $("<i/>").addClass("fa-solid fa-circle-plus"),
 	delete: $("<i/>").addClass("fa-solid fa-circle-minus"),
 	complete: $("<i/>").addClass("fa-solid fa-circle-check"),
 	save: $("<i/>").addClass("fa-solid fa-ban")
@@ -86,6 +86,17 @@ function showAlertsOnLoad() {
 }
 ready(showAlertsOnLoad);
 
+/**
+ * Setup date picker defaults
+ *
+ */
+function setupDatepickerDefaults() {
+	$.fn.datepicker.defaults.autoclose = true;
+	$.fn.datepicker.defaults.todayBtn = "linked";
+	$.fn.datepicker.defaults.format = "yyyy-mm-dd";
+}
+ready(setupDatepickerDefaults);
+
 var modal;
 
 /**
@@ -102,8 +113,10 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	$(selector).load(url, function () {
 		// save replaceId
 		var form = $(this).find("form");
-		form.attr("data-replace", replaceId);
-		form.attr("data-replace-contents", replaceContents);
+		if (replaceId) {
+			form.attr("data-replace", replaceId);
+			form.attr("data-replace-contents", replaceContents);
+		}
 
 		// create the modal object
 		var wrapper = $(this);
@@ -111,7 +124,14 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
+		modalEl.addEventListener("shown.bs.modal", () => {
+			var s = $(".modal-select");
+			if (s.length == 1) {
+				s.select();
+			} else {
+				s.first().select();
+			}
+		});
 
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
@@ -131,6 +151,91 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 }
 
 /**
+ * Open the create modal.
+ * 
+ * @param {any} url
+ * @param {any} replaceId
+ */
+function openCreateModal(url) {
+	openModal("#create", url, null, true, () => {
+		setupCreateModalSearch();
+		setupCreateModalUnknown();
+	});
+}
+
+/**
+ * Filter list elements based on search field entry.
+ *
+ */
+function setupCreateModalSearch() {
+	// save new item on enter
+	$("#create .list-filter").keydown(function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+		}
+	});
+
+	// filter as the user types
+	$("#create .list-filter").keyup(function () {
+		// get value from input
+		var value = $(this).val();
+
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
+		// filter items that match the input value
+		$("#" + filterItems + " label").filter(function () {
+			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
+	});
+}
+
+/**
+ * Enable unknown toggle switch for ending miles.
+ *
+ */
+function setupCreateModalUnknown() {
+	$(".unknown-toggle").on("change", function () {
+		if ($(this).is(":checked")) {
+			$(".unknown").val("").attr("disabled", true).blur();
+		} else {
+			var value = $(".unknown-value").val();
+			$(".unknown").val(value).removeAttr("disabled").select();
+		}
+	})
+}
+
+/**
+ * Open create modal when create button is clicked.
+ *
+ */
+function setupCreateModalOpen() {
+	$("body").on("click", ".btn-create", function (e) {
+		// don't do whatever the link / button was going to do
+		e.preventDefault();
+
+		// get info
+		var createUrl = $(this).data("create");
+
+		// open modal
+		openCreateModal(createUrl);
+	});
+}
+ready(setupCreateModalOpen);
+
+/**
+ * Submit modal create form when the save button is pressed.
+ *
+ */
+function setupCreateModalSave() {
+	$("body").on("click", "#create .btn-save", function () {
+		$("#create form").submit();
+	});
+}
+ready(setupCreateModalSave);
+
+/**
  * Open the delete modal.
  * 
  * @param {any} url
@@ -139,6 +244,17 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 function openDeleteModal(url, replaceId) {
 	openModal("#delete", url, replaceId, true);
 }
+
+/**
+ * Open delete modal when delete buttons are clicked.
+ *
+ */
+function setupDeleteModalOpen() {
+	$("body").on("click", ".btn-delete-check", function (e) {
+		checkDeleteItem($(this), e);
+	});
+}
+ready(setupDeleteModalOpen);
 
 /**
  * Submit modal delete form when the delete button is pressed.
@@ -153,26 +269,44 @@ function setupDeleteModalSave() {
 ready(setupDeleteModalSave);
 
 /**
- * Open the edit modal.
+ * Check whether or not the user really wants to delete an item.
+ * 
+ * @param {any} el The element being deleted
+ * @param {any} e The click event
+ */
+function checkDeleteItem(el, e) {
+	// don't do whatever the link / button was going to do
+	e.preventDefault();
+
+	// get info
+	var deleteUrl = el.data("delete");
+	var replaceId = el.data("replace");
+
+	// open modal to check delete
+	openDeleteModal(deleteUrl, replaceId);
+}
+
+/**
+ * Open the update modal.
  * 
  * @param {any} url
  * @param {any} replaceId
  */
-function openEditModal(url, replaceId) {
-	openModal("#edit", url, replaceId, false, () => setupEditModalSearch());
+function openUpdateModal(url, replaceId) {
+	openModal("#update", url, replaceId, false, () => setupUpdateModalSearch());
 }
 
 /**
  * Filter list elements based on search field entry.
  *
  */
-function setupEditModalSearch() {
+function setupUpdateModalSearch() {
 	// hide add item button
-	var addItem = $("#edit .btn-add");
+	var addItem = $("#update .btn-add");
 	addItem.hide();
 
 	// save new item on enter
-	$("#list-filter").keydown(function (e) {
+	$("#update .list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
 			addItem.click();
@@ -180,7 +314,7 @@ function setupEditModalSearch() {
 	});
 
 	// filter as the user types
-	$("#list-filter").keyup(function () {
+	$("#update .list-filter").keyup(function () {
 		// get value from input
 		var value = $(this).val();
 
@@ -191,8 +325,11 @@ function setupEditModalSearch() {
 			addItem.text("").hide();
 		}
 
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
 		// filter items that match the input value
-		$("#list-items .list-item").filter(function () {
+		$("#" + filterItems + " label").filter(function () {
 			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
 			$(this).toggle(show);
 		});
@@ -200,29 +337,39 @@ function setupEditModalSearch() {
 }
 
 /**
- * Submit modal edit form when the save button is pressed.
+ * Submit update modal form when the save button is pressed.
  *
  */
-function setupEditModalSave() {
-	$("body").on("click", "#edit .btn-save", function () {
-		$("#edit form").submit();
-		modal.hide();
-	});
+function setupUpdateModalSave() {
+	// submit function
+	var submit = function (e) {
+		e.preventDefault();
+		$("#update form").submit();
+	}
+
+	// submit on button click, auto-save input change, and enter
+	$("body").on("click", "#update .btn-save", (e) => submit(e));
+	$("body").on("change", "#update .auto-save", (e) => submit(e));
+	$("body").on("keypress", "#update input", function (e) {
+		if (e.keyCode == 13) {
+			submit(e);
+		}
+	})
 }
-ready(setupEditModalSave);
+ready(setupUpdateModalSave);
 
 /**
- * Setup token links to open the edit modal when clicked.
+ * Setup token links to open the update modal when clicked.
  *
  */
-function setupTokenEditModals() {
-	$("body").on("click", ".token > a", function () {
-		var editUrl = $(this).data("edit");
+function setupTokenUpdateModals() {
+	$("body").on("click", ".token > a, .btn-complete", function () {
+		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
-		openEditModal(editUrl, replaceId);
+		openUpdateModal(updateUrl, replaceId);
 	});
 }
-ready(setupTokenEditModals);
+ready(setupTokenUpdateModals);
 
 /**
  * Handle a JSON Result object.
@@ -280,6 +427,10 @@ function loadSettingsTab(tabId) {
 function loadSaveForm(item, el, e) {
 	// don't do whatever the link / button was going to do
 	e.preventDefault();
+	var cls = "btn-delete-check";
+	if ($(e.target).hasClass(cls) || $(e.target).parents("." + cls).length > 0) {
+		return;
+	}
 
 	// get the URL to load
 	var url = el.data("load");
@@ -317,21 +468,11 @@ function setupSaveFormOnEnter(form) {
 }
 
 /**
- * Check whether or not the user really wants to delete an item.
- * 
- * @param {any} el The element being deleted
- * @param {any} e The click event
+ * Select an input when HTML is loaded.
+ *
  */
-function checkDeleteItem(el, e) {
-	// don't do whatever the link / button was going to do
-	e.preventDefault();
-
-	// get info
-	var deleteUrl = el.data("delete");
-	var replaceId = el.data("replace");
-
-	// open modal to check delete
-	openDeleteModal(deleteUrl, replaceId);
+function selectInputOnLoad() {
+	$(".select-on-load").select();
 }
 
 /**
@@ -343,13 +484,23 @@ function setupAjaxSubmit() {
 		// stop default submit
 		e.preventDefault();
 
-		// show info message
-		showPleaseWaitAlert();
-
 		// get form info
 		var form = $(this);
 		var replaceId = form.data("replace");
 		var replaceContents = form.data("replace-contents");
+
+		// check validity
+		if (this.checkValidity() === false) {
+			form.find(":input:visible").not("[formnovalidate]")
+				.parent().addClass("was-validated");
+			return;
+		}
+
+		// hide modal and show please wait message
+		if (modal) {
+			modal.hide();
+		}
+		showPleaseWaitAlert();
 
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })

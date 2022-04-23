@@ -7,13 +7,23 @@ function setupAjaxSubmit() {
 		// stop default submit
 		e.preventDefault();
 
-		// show info message
-		showPleaseWaitAlert();
-
 		// get form info
 		var form = $(this);
 		var replaceId = form.data("replace");
 		var replaceContents = form.data("replace-contents");
+
+		// check validity
+		if (this.checkValidity() === false) {
+			form.find(":input:visible").not("[formnovalidate]")
+				.parent().addClass("was-validated");
+			return;
+		}
+
+		// hide modal and show please wait message
+		if (modal) {
+			modal.hide();
+		}
+		showPleaseWaitAlert();
 
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })

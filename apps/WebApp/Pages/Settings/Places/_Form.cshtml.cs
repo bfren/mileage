@@ -12,7 +12,7 @@ namespace Mileage.WebApp.Pages.Settings.Places;
 
 public sealed partial class IndexModel
 {
-	public async Task<PartialViewResult> OnGetFormPartialAsync(PlaceId? placeId)
+	public async Task<PartialViewResult> OnGetFormAsync(PlaceId? placeId)
 	{
 		// Return blank form
 		if (placeId is null)
@@ -33,7 +33,7 @@ public sealed partial class IndexModel
 			);
 	}
 
-	public Task<IActionResult> OnPostFormPartialAsync(SavePlaceQuery form)
+	public Task<IActionResult> OnPostFormAsync(SavePlaceQuery form)
 	{
 		var query = from u in User.GetUserId()
 					from r in Dispatcher.DispatchAsync(form with { UserId = u })

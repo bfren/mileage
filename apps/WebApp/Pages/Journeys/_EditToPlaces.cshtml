@@ -1,0 +1,19 @@
+@model Mileage.WebApp.Pages.Journeys.EditToPlacesModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Model.Title += $" (Journey {Model.Journey.Id.Value})";
+	Layout = "Modals/UpdateModal";
+}
+
+<form method="post" action="@Url.Page("Index", "EditToPlaces")">
+	<vc:to-places-list
+		list-name="Journey.ToPlaceIds"
+		items="@Model.Places"
+		selected="@Model.Selected"
+	/>
+
+	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenFor(x => x.Journey.Version)
+	@Html.AntiForgeryToken()
+</form>

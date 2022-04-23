@@ -1,0 +1,22 @@
+@model Mileage.WebApp.Pages.Modals.CreateModalModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
+
+<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false" data-bs-focus="false">
+	<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-content shadow">
+			<div class="modal-header">
+				<h5 class="modal-title">Create @Model.Title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				@RenderBody()
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary btn-save">Save</button>
+			</div>
+		</div>
+	</div>
+</div>

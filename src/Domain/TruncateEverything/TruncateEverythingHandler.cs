@@ -41,12 +41,12 @@ internal sealed class TruncateEverythingHandler : CommandHandler<TruncateEveryth
 		}
 
 		using var w = Db.UnitOfWork;
-		await truncate("\"auth\".\"User\"", w.Transaction);
-		await truncate("\"mileage\".\"Car\"", w.Transaction);
-		await truncate("\"mileage\".\"Journey\"", w.Transaction);
-		await truncate("\"mileage\".\"Place\"", w.Transaction);
-		await truncate("\"mileage\".\"Rate\"", w.Transaction);
-		await truncate("\"mileage\".\"Settings\"", w.Transaction);
+		await truncate("auth.user", w.Transaction);
+		await truncate("mileage.car", w.Transaction);
+		await truncate("mileage.journey", w.Transaction);
+		await truncate("mileage.place", w.Transaction);
+		await truncate("mileage.rate", w.Transaction);
+		await truncate("mileage.settings", w.Transaction);
 
 		return true;
 	}

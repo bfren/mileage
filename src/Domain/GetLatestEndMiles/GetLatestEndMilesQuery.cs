@@ -12,5 +12,5 @@ namespace Mileage.Domain.GetLatestEndMiles;
 /// <param name="CarId">Car ID</param>
 public sealed record class GetLatestEndMilesQuery(
 	AuthUserId UserId,
-	CarId CarId
+	CarId? CarId
 ) : IQuery<uint>;

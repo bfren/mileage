@@ -12,7 +12,7 @@ namespace Mileage.Domain.GetJourney;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
-/// <param name="Date"></param>
+/// <param name="Day"></param>
 /// <param name="CarId"></param>
 /// <param name="StartMiles"></param>
 /// <param name="EndMiles"></param>
@@ -22,7 +22,7 @@ namespace Mileage.Domain.GetJourney;
 public sealed record class GetJourneyModel(
 	JourneyId Id,
 	long Version,
-	DateTime Date,
+	DateTime Day,
 	CarId CarId,
 	int StartMiles,
 	int? EndMiles,

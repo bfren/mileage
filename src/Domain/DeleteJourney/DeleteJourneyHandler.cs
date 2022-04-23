@@ -36,13 +36,13 @@ internal sealed class DeleteJourneyHandler : CommandHandler<DeleteJourneyCommand
 		Log.Vrb("Delete Journey: {Command}", command);
 		return Journey
 			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, command.JourneyId)
+			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<JourneyToDelete>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Journey.DeleteAsync(x),
-				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(command.UserId, command.JourneyId))
+				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(command.UserId, command.Id))
 			);
 	}
 }

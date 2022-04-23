@@ -4,7 +4,7 @@ const alertIcons = {
 	success: $("<i/>").addClass("fa-solid fa-check"),
 	warning: $("<i/>").addClass("fa-solid fa-triangle-exclamation"),
 	error: $("<i/>").addClass("fa-solid fa-ban"),
-	edit: $("<i/>").addClass("fa-solid fa-circle-plus"),
+	update: $("<i/>").addClass("fa-solid fa-circle-plus"),
 	delete: $("<i/>").addClass("fa-solid fa-circle-minus"),
 	complete: $("<i/>").addClass("fa-solid fa-circle-check"),
 	save: $("<i/>").addClass("fa-solid fa-ban")

@@ -1,0 +1,41 @@
+@using Jeebs.Extensions
+@model Mileage.WebApp.Pages.Components.List.ListMultipleModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	if (Model.Items.Any())
+	{
+		var itemsId = Rnd.Str;
+		<div class="mb-2">
+			<input type="text" class="form-control modal-select list-filter" placeholder="Search @Model.Singular.Pluralise(2)..." autocomplete="off" data-filter-for="@itemsId" formnovalidate />
+		</div>
+
+		<div class="list-items mb-3" id="@itemsId">
+			@foreach (var item in Model.Items)
+			{
+				Check(Model.ListName, item.Id, item.Text, item.Selected);
+			}
+		</div>
+	}
+	else
+	{
+		<p>Please add some @Model.Singular.Pluralise(2).</p>
+	}
+}
+
+@functions {
+	/// <summary>
+	/// Output a checkbox input item
+	/// </summary>
+	/// <param name="name">The List name</param>
+	/// <param name="value">Item value</param>
+	/// <param name="text">Item display text</param>
+	/// <param name="selected">True if the item should be marked as selected</param>
+	void Check(string name, object value, string text, bool selected)
+	{
+		string id = $"{name.Normalise()}-{value}";
+		var check = selected ? "checked" : string.Empty;
+		<input type="checkbox" class="btn-check" id="@id" name="@name" value="@value" autocomplete="off" @check />
+		<label class="btn btn-outline-primary mb-1" for="@id" data-text="@text.ToLowerInvariant()">@text</label>
+	}
+}

@@ -7,11 +7,20 @@ main {
 
 .list-group-item:hover {
   background-color: $gray-100;
-  cursor: pointer;
+}
+
+#settingsPanes {
+  .list-group-item {
+    cursor: pointer;
+  }
 }
 
 .token {
   a {
+    background-color: $gray-200;
     font-weight: $font-weight-bold;
+    margin-right: 0.5rem;
+    padding: 0.1rem 0.2rem;
+    text-decoration: none;
   }
 }
