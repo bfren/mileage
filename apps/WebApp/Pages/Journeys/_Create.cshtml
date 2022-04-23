@@ -1,17 +1,20 @@
 @model Mileage.WebApp.Pages.Journeys.CreateModel
 @{
 	Layout = "Modals/CreateModal";
+	var dayName = Html.NameFor(x => x.Journey.Day);
+	var startMilesName = Html.NameFor(x => x.Journey.StartMiles);
+	var endMilesName = Html.NameFor(x => x.Journey.EndMiles);
 }
 
 <form class="needs-validation" action="@Url.Page("Index", "Create")" method="post" novalidate>
 
 	<!-- Day -->
 	<div class="mb-3">
-		<label class="form-label" for="@Html.NameFor(x => x.Journey.Day)">Day:</label>
+		<label class="form-label" for="@dayName">Day:</label>
 		<input type="text"
 			   class="form-control"
-			   id="@Html.NameFor(x => x.Journey.Day).Normalise()"
-			   name="@Html.NameFor(x => x.Journey.Day)"
+			   name="@dayName"
+			   id="@dayName.Normalise()"
 			   data-provide="datepicker"
 			   value="@Model?.Journey.Day.ToString("yyyy-MM-dd")"
 			   required />
@@ -20,11 +23,11 @@
 
 	<!-- StartMiles -->
 	<div class="mb-3">
-		<label class="form-label" for="@Html.NameFor(x => x.Journey.StartMiles)">Starting miles:</label>
+		<label class="form-label" for="@startMilesName">Starting miles:</label>
 		<input type="number"
 			   class="form-control modal-select unknown-value"
-			   id="@Html.NameFor(x => x.Journey.StartMiles).Normalise()"
-			   name="@Html.NameFor(x => x.Journey.StartMiles)"
+			   name="@startMilesName"
+			   id="@startMilesName.Normalise()"
 			   value="@Model?.Journey.StartMiles"
 			   min="1"
 			   required />
@@ -33,23 +36,23 @@
 
 	<!-- EndMiles -->
 	@{
-		var endingId = @Html.NameFor(x => x.Journey.EndMiles).Normalise();
+		var endMilesId = @endMilesName.Normalise();
 	}
-	<label class="form-label" for="@Html.NameFor(x => x.Journey.EndMiles)">Ending miles:</label>
+	<label class="form-label" for="@endMilesName">Ending miles:</label>
 	<div class="input-group mb-3">
 		<div class="input-group-text">
 			<input type="checkbox"
 				   class="form-check-input mt-0 unknown-toggle"
-				   id="@endingId-unknown"
+				   id="@endMilesId-unknown"
 				   data-bs-toggle="collapse"
 				   aria-label="Checkbox for marking ending miles as null."
 				   checked />
-			<label class="form-check-label ms-2" for="@endingId-unknown">Unknown</label>
+			<label class="form-check-label ms-2" for="@endMilesId-unknown">Unknown</label>
 		</div>
 		<input type="number"
 			   class="form-control unknown"
-			   id="@Html.NameFor(x => x.Journey.EndMiles).Normalise()"
-			   name="@Html.NameFor(x => x.Journey.EndMiles)"
+			   name="@endMilesName"
+			   id="@endMilesId"
 			   value="@Model?.Journey.EndMiles"
 			   disabled />
 	</div>
