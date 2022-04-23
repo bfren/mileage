@@ -41,7 +41,7 @@ function setupUpdateModalSearch() {
 		var filterItems = $(this).data("filter-for");
 
 		// filter items that match the input value
-		$("#" + filterItems + " .list-item").filter(function () {
+		$("#" + filterItems + " label").filter(function () {
 			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
 			$(this).toggle(show);
 		});
@@ -57,7 +57,6 @@ function setupUpdateModalSave() {
 	var submit = function (e) {
 		e.preventDefault();
 		$("#update form").submit();
-		modal.hide();
 	}
 
 	// submit on button click, auto-save input change, and enter

@@ -25,7 +25,7 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
+		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select")[0].focus());
 
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));

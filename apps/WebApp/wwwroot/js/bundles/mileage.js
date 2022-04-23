@@ -124,7 +124,7 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		var modalEl = document.getElementById(modalId)
 
 		// select item when modal is opened
-		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select").focus());
+		modalEl.addEventListener("shown.bs.modal", () => $(".modal-select")[0].focus());
 
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
@@ -150,7 +150,49 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
  * @param {any} replaceId
  */
 function openCreateModal(url) {
-	openModal("#create", url, null, true);
+	openModal("#create", url, null, true, () => {
+		setupCreateModalSearch();
+		setupCreateModalUnknown();
+	});
+}
+
+/**
+ * Filter list elements based on search field entry.
+ *
+ */
+function setupCreateModalSearch() {
+	// save new item on enter
+	$("#create .list-filter").keydown(function (e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+		}
+	});
+
+	// filter as the user types
+	$("#create .list-filter").keyup(function () {
+		// get value from input
+		var value = $(this).val();
+
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
+		// filter items that match the input value
+		$("#" + filterItems + " label").filter(function () {
+			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
+	});
+}
+
+function setupCreateModalUnknown() {
+	$(".unknown-toggle").on("change", function () {
+		if ($(this).is(":checked")) {
+			$(".unknown").val("").attr("disabled", true).blur();
+		} else {
+			var value = $(".unknown-value").val();
+			$(".unknown").val(value).removeAttr("disabled").focus();
+		}
+	})
 }
 
 /**
@@ -178,7 +220,6 @@ ready(setupCreateModalOpen);
 function setupCreateModalSave() {
 	$("body").on("click", "#create .btn-save", function () {
 		$("#create form").submit();
-		modal.hide();
 	});
 }
 ready(setupCreateModalSave);
@@ -277,7 +318,7 @@ function setupUpdateModalSearch() {
 		var filterItems = $(this).data("filter-for");
 
 		// filter items that match the input value
-		$("#" + filterItems + " .list-item").filter(function () {
+		$("#" + filterItems + " label").filter(function () {
 			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
 			$(this).toggle(show);
 		});
@@ -293,7 +334,6 @@ function setupUpdateModalSave() {
 	var submit = function (e) {
 		e.preventDefault();
 		$("#update form").submit();
-		modal.hide();
 	}
 
 	// submit on button click, auto-save input change, and enter
@@ -433,13 +473,22 @@ function setupAjaxSubmit() {
 		// stop default submit
 		e.preventDefault();
 
-		// show info message
-		showPleaseWaitAlert();
-
 		// get form info
 		var form = $(this);
 		var replaceId = form.data("replace");
 		var replaceContents = form.data("replace-contents");
+
+		// check validity
+		if (this.checkValidity() === false) {
+			form.find(":input:visible").not("[formnovalidate]").parent().addClass("was-validated");
+			return;
+		}
+
+		// hide modal and show info message
+		if (modal) {
+			modal.hide();
+		}
+		showPleaseWaitAlert();
 
 		// post data and handle result
 		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
