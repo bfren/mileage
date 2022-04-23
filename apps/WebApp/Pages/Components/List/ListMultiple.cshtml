@@ -13,7 +13,7 @@
 		<div class="list-items mb-3" id="@itemsId">
 			@foreach (var item in Model.Items)
 			{
-				Check(Model.ListName, $"{Model.ListName}-{item.Id}", item.Id, item.Text, item.Selected);
+				Check(Model.ListName, item.Id, item.Text, item.Selected);
 			}
 		</div>
 	}
@@ -28,12 +28,12 @@
 	/// Output a checkbox input item
 	/// </summary>
 	/// <param name="name">The List name</param>
-	/// <param name="id">Item ID</param>
 	/// <param name="value">Item value</param>
 	/// <param name="text">Item display text</param>
 	/// <param name="selected">True if the item should be marked as selected</param>
-	void Check(string name, string id, object value, string text, bool selected)
+	void Check(string name, object value, string text, bool selected)
 	{
+		string id = $"{name.Normalise()}-{value}";
 		var check = selected ? "checked" : string.Empty;
 		<input type="checkbox" class="btn-check" id="@id" name="@name" value="@value" autocomplete="off" @check />
 		<label class="btn btn-outline-primary mb-1" for="@id" data-text="@text.ToLowerInvariant()">@text</label>
