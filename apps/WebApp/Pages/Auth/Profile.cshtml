@@ -1,4 +1,59 @@
 @page
 @model Mileage.WebApp.Pages.Auth.ProfileModel
 @{
+	var emailName = Html.NameFor(x => x.Profile.EmailAddress);
+	var givenName = Html.NameFor(x => x.Profile.GivenName);
+	var surname = Html.NameFor(x => x.Profile.FamilyName);
 }
+
+<div class="container">
+	<h2>Profile</h2>
+
+	<form method="post" class="needs-validation" novalidate>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 col-form-label" for="@emailName.Normalise()">Email Address</label>
+			<div class="col-sm-9">
+				<input type="email"
+					   class="form-control"
+					   name="@emailName"
+					   id="@emailName.Normalise()"
+					   value="@Model.Profile.EmailAddress"
+					   required />
+				<div class="invalid-feedback">Please enter a valid email address.</div>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 col-form-label" for="@givenName.Normalise()">Given Name</label>
+			<div class="col-sm-9">
+				<input type="text"
+					   class="form-control"
+					   name="@givenName"
+					   id="@givenName.Normalise()"
+					   value="@Model.Profile.GivenName" />
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 col-form-label" for="@surname.Normalise()">Family Name</label>
+			<div class="col-sm-9">
+				<input type="text"
+					   class="form-control"
+					   name="@surname"
+					   id="@surname.Normalise()"
+					   value="@Model.Profile.FamilyName" />
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end">
+			<button class="btn btn-secondary me-4 change-password" data-change="@Url.Page("Profile", "ChangePassword")">Change Password</button>
+			<button type="submit" class="btn btn-primary">Save</button>
+		</div>
+
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(x => x.Profile.Version)
+
+	</form>
+
+</div>
