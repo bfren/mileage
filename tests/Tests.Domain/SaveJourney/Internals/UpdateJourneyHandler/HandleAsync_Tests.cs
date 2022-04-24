@@ -39,14 +39,14 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var journeyId = LongId<JourneyId>();
 		var version = Rnd.Lng;
-		var date = Rnd.DateF.Get();
+		var day = Rnd.DateTime;
 		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
 		var endMiles = startMiles + Rnd.UInt;
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var command = new UpdateJourneyCommand(journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var command = new UpdateJourneyCommand(journeyId, version, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -55,7 +55,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await v.Repo.Received().UpdateAsync(Arg.Is<JourneyEntity>(j =>
 			j.Id == journeyId
 			&& j.Version == version
-			&& j.Day == date.ToDateTime(TimeOnly.MinValue)
+			&& j.Day == day
 			&& j.CarId == carId
 			&& j.StartMiles == startMiles
 			&& j.EndMiles == endMiles

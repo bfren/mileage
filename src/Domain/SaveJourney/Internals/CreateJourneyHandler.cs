@@ -38,7 +38,7 @@ internal sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jo
 			.CreateAsync(new()
 			{
 				UserId = query.UserId,
-				Day = query.Date.ToDateTime(TimeOnly.MinValue),
+				Day = query.Day,
 				CarId = query.CarId,
 				StartMiles = (int)query.StartMiles,
 				EndMiles = (int?)query.EndMiles,

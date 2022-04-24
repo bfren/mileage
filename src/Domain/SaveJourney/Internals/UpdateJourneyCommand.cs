@@ -11,7 +11,7 @@ namespace Mileage.Domain.SaveJourney.Internals;
 /// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="JourneyId">Journey ID</param>
 /// <param name="Version">Entity Version</param>
-/// <param name="Date">The date of the new journey</param>
+/// <param name="Day">The date of the new journey</param>
 /// <param name="CarId">CarId to associate with the new journey</param>
 /// <param name="StartMiles">Starting miles</param>
 /// <param name="EndMiles">Ending miles</param>
@@ -21,7 +21,7 @@ namespace Mileage.Domain.SaveJourney.Internals;
 internal sealed record class UpdateJourneyCommand(
 	JourneyId JourneyId,
 	long Version,
-	DateOnly Date,
+	DateTime Day,
 	CarId CarId,
 	uint StartMiles,
 	uint? EndMiles,
@@ -39,7 +39,7 @@ internal sealed record class UpdateJourneyCommand(
 		this(
 			JourneyId: journeyId,
 			Version: query.Version ?? 0L,
-			Date: query.Date,
+			Day: query.Day,
 			CarId: query.CarId,
 			StartMiles: query.StartMiles,
 			EndMiles: query.EndMiles,
@@ -52,5 +52,5 @@ internal sealed record class UpdateJourneyCommand(
 	/// <summary>
 	/// Allows quick creation in testing
 	/// </summary>
-	internal UpdateJourneyCommand() : this(new(), Rnd.Lng, Rnd.Date, new(), Rnd.UInt, null, new(), null, null) { }
+	internal UpdateJourneyCommand() : this(new(), Rnd.Lng, Rnd.DateTime, new(), Rnd.UInt, null, new(), null, null) { }
 }

@@ -11,7 +11,7 @@ namespace Mileage.Domain.SaveJourney.Internals;
 
 /// <inheritdoc cref="CreateJourneyHandler"/>
 /// <param name="UserId">User ID</param>
-/// <param name="Date">Journey Date</param>
+/// <param name="Day">Journey Date</param>
 /// <param name="CarId">Car ID</param>
 /// <param name="StartMiles">Starting miles</param>
 /// <param name="EndMiles">Ending miles</param>
@@ -20,7 +20,7 @@ namespace Mileage.Domain.SaveJourney.Internals;
 /// <param name="RateId">Rate ID</param>
 internal sealed record class CreateJourneyQuery(
 	AuthUserId UserId,
-	DateOnly Date,
+	DateTime Day,
 	CarId CarId,
 	uint StartMiles,
 	uint? EndMiles,
@@ -36,7 +36,7 @@ internal sealed record class CreateJourneyQuery(
 	public CreateJourneyQuery(SaveJourneyQuery query) :
 		this(
 			UserId: query.UserId,
-			Date: query.Date,
+			Day: query.Day,
 			CarId: query.CarId,
 			StartMiles: query.StartMiles,
 			EndMiles: query.EndMiles,
@@ -49,5 +49,5 @@ internal sealed record class CreateJourneyQuery(
 	/// <summary>
 	/// Allows quick creation in testing
 	/// </summary>
-	internal CreateJourneyQuery() : this(new(), Rnd.Date, new(), Rnd.UInt, null, new(), null, null) { }
+	internal CreateJourneyQuery() : this(new(), Rnd.DateTime, new(), Rnd.UInt, null, new(), null, null) { }
 }

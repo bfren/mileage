@@ -79,7 +79,7 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 			{
 				var (start, end) = mileage[i];
 				_ = await Dispatcher.DispatchAsync(
-					new CreateJourneyQuery(userId, Rnd.Date, carId, start, (Rnd.Flip || Rnd.Flip) ? end : null, fromPlaceId, toPlaceIds, rateId)
+					new CreateJourneyQuery(userId, Rnd.DateTime, carId, start, (Rnd.Flip || Rnd.Flip) ? end : null, fromPlaceId, toPlaceIds, rateId)
 				).IfSomeAsync(
 					x => journeyIds.Add(x)
 				);
