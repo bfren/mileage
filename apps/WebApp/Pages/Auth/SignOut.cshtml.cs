@@ -20,6 +20,6 @@ public sealed class SignOutModel : PageModel
 			HttpContext.SignOutAsync
 		));
 
-		return RedirectToPage("/index");
+		return RedirectToPage("/Index");
 	}
 }

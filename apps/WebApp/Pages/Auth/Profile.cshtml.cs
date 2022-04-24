@@ -39,7 +39,7 @@ public sealed partial class ProfileModel : PageModel
 			return Page();
 		}
 
-		return RedirectToPage("SignOut");
+		return RedirectToPage("./SignOut");
 	}
 
 	public async Task<IActionResult> OnPostAsync(SaveUserProfileCommand profile)
