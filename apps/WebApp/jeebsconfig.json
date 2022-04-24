@@ -5,10 +5,10 @@
       "suite": "Mileage"
     },
     "db": {
-      "default": "rpi",
-      "authentication": "rpi",
+      "default": "rpi-docker",
+      "authentication": "rpi-docker",
       "connections": {
-        "rpi": {
+        "rpi-docker": {
           "connectionString": ""
         }
       }

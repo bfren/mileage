@@ -1,0 +1,11 @@
+{
+  "jeebs": {
+    "db": {
+      "default": "galadriel-docker",
+      "authentication": "galadriel-docker"
+    },
+    "logging": {
+      "minimum": "Warning"
+    }
+  }
+}
