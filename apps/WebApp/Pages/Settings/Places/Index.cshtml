@@ -2,7 +2,6 @@
 @using Mileage.Persistence.Common.StrongIds
 @model Mileage.WebApp.Pages.Settings.Places.IndexModel
 @{
-	Layout = null;
 	string? updateLink(PlaceId? placeId) =>
 		Url.Page(pageName: "Index", pageHandler: "Form", values: new { placeId = placeId?.Value });
 

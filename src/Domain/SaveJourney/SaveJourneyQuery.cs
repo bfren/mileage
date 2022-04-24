@@ -13,7 +13,7 @@ namespace Mileage.Domain.SaveJourney;
 /// <param name="UserId">User ID</param>
 /// <param name="JourneyId">Journey ID</param>
 /// <param name="Version">Entity Version</param>
-/// <param name="Date">Journey Date</param>
+/// <param name="Day">Journey Date</param>
 /// <param name="CarId">Car ID</param>
 /// <param name="StartMiles">Starting miles</param>
 /// <param name="EndMiles">Ending miles</param>
@@ -24,7 +24,7 @@ public sealed record class SaveJourneyQuery(
 	AuthUserId UserId,
 	JourneyId? JourneyId,
 	long? Version,
-	DateOnly Date,
+	DateTime Day,
 	CarId CarId,
 	uint StartMiles,
 	uint? EndMiles,
@@ -45,7 +45,7 @@ public sealed record class SaveJourneyQuery(
 			UserId: userId,
 			JourneyId: null,
 			Version: null,
-			Date: DateOnly.FromDateTime(DateTime.Today),
+			Day: DateTime.Today,
 			CarId: carId,
 			StartMiles: startMiles,
 			EndMiles: null,

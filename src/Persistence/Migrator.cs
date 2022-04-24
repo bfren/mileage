@@ -58,13 +58,10 @@ public abstract class Migrator
 		if (version is long specificVersion)
 		{
 			migrator.MigrateTo(specificVersion);
-		}
-		else
-		{
-			migrator.MigrateToLatest();
+			return migrator.CurrentMigration.Version == specificVersion;
 		}
 
-		// Ensure the migration succeeded
-		return migrator.LatestMigration.Version == version;
+		migrator.MigrateToLatest();
+		return migrator.CurrentMigration.Version == migrator.LatestMigration.Version;
 	}
 }

@@ -11,18 +11,13 @@ public sealed class Menu
 
 	public IList<Item> Items { get; init; } = new List<Item>();
 
-	public Menu(bool isSignedIn)
-	{
-		if (isSignedIn)
+	public Menu() =>
+		Items = new List<Item>
 		{
-			Items = new List<Item>
-			{
-				{ new("Settings", "/settings/index") },
-				{ new("Profile", "/auth/profile") },
-				{ new("Sign Out", "/auth/signout") }
-			};
-		}
-	}
+			{ new("Settings", "/Settings/Index") },
+			{ new("Profile", "/Auth/Profile") },
+			{ new("Sign Out", "/Auth/Signout") }
+		};
 }
 
 public sealed record class HeaderModel(Menu Menu);
@@ -30,7 +25,5 @@ public sealed record class HeaderModel(Menu Menu);
 public sealed class HeaderViewComponent : ViewComponent
 {
 	public IViewComponentResult Invoke() =>
-		View(new HeaderModel(
-			Menu: new(User.Identity?.IsAuthenticated == true)
-		));
+		View(new HeaderModel(new()));
 }

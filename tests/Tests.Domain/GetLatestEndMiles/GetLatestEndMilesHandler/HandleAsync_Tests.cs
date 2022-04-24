@@ -46,6 +46,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var userId = LongId<AuthUserId>();
 		var carId = LongId<CarId>();
 		var query = new GetLatestEndMilesQuery(userId, carId);
+		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
+			.Returns(Create.None<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -132,7 +134,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async Task Calls_FluentQuery_ExecuteAsync__Receives_None__Returns_Result()
+	public async Task Calls_FluentQuery_ExecuteAsync__Receives_None__Returns_Zero()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
@@ -149,8 +151,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var none = result.AssertNone();
-		Assert.Same(msg, none);
+		var some = result.AssertSome();
+		Assert.Equal(0u, some);
 	}
 
 	[Theory]

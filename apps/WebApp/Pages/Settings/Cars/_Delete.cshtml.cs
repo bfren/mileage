@@ -11,7 +11,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Cars;
 
-public sealed class DeleteModel : DeleteModalModel
+public sealed class DeleteModel : ModalModel
 {
 	public GetCarModel Car { get; set; } = new();
 

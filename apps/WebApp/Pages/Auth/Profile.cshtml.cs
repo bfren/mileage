@@ -5,7 +5,6 @@ using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
-using Jeebs.Mvc.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -39,7 +38,7 @@ public sealed partial class ProfileModel : PageModel
 			return Page();
 		}
 
-		return RedirectToPage("SignOut");
+		return RedirectToPage("./SignOut");
 	}
 
 	public async Task<IActionResult> OnPostAsync(SaveUserProfileCommand profile)
@@ -51,10 +50,10 @@ public sealed partial class ProfileModel : PageModel
 		return await query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => x switch
+				some: async x => x switch
 				{
 					true =>
-						Result.Create(true, Alert.Success("Profile saved, reloading...")) with { RedirectTo = Url.Page("Profile") },
+						await OnGetAsync(),
 
 					false =>
 						Result.Error("Unable to save profile, please try again.")

@@ -11,7 +11,7 @@ using Q = Mileage.Domain;
 //  CONFIGURE
 // ==========================================
 
-var (app, log) = Jeebs.Apps.Host.Create(args, (ctx, services) => services.AddData());
+var (app, log) = Jeebs.Apps.Host.Create(args, (_, services) => services.AddData());
 
 // ==========================================
 //  BEGIN
@@ -152,7 +152,7 @@ for (var i = 0; i < number; i++)
 {
 	var (start, end) = mileage[i];
 	_ = await dispatcher.DispatchAsync(
-		new Q.SaveJourney.SaveJourneyQuery(userId, null, null, Rnd.Date, carId, start, end, placeId, null, rateId)
+		new Q.SaveJourney.SaveJourneyQuery(userId, null, null, Rnd.DateTime, carId, start, end, placeId, null, rateId)
 	);
 }
 

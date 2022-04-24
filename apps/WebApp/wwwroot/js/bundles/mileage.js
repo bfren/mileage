@@ -97,6 +97,73 @@ function setupDatepickerDefaults() {
 }
 ready(setupDatepickerDefaults);
 
+/**
+ * Load a page into the main content block.
+ * 
+ * @param {any} url
+ */
+function loadPage(url) {
+	showAlert(alertTypes.info, "Loading page, please wait...", true);
+	$.ajax({ url: url, method: "GET" })
+
+		.done(function (data, status, xhr) {
+			// close loading alert
+			closeAlert();
+
+			// handle JSON response
+			if (xhr.responseJSON) {
+				handleResult(xhr.responseJSON);
+				return;
+			}
+
+			// replace HTML
+			$("#content").html(data);
+		})
+
+		.fail(function (xhr) {
+			// close loading alert
+			closeAlert();
+
+			// handle unauthorised
+			if (xhr.status == 401) {
+				$("#content").load("/Auth/SignIn");
+				return;
+			}
+
+			// the response is a JSON result
+			if (xhr && xhr.responseJSON) {
+				handleResult(xhr.responseJSON);
+				return;
+			}
+
+			// something else has gone wrong
+			showAlert(alertTypes.error, "Something went wrong, please try again.");
+		});;
+}
+
+/**
+ * Capture link clicks and use AJAX to load pages.
+ *
+ */
+function setupLinks() {
+	$("body").on("click", "a", function (e) {
+		// get hyperlink
+		var href = $(this).attr("href");
+
+		// ignore javascript links
+		if (href == "javascript:void(0)") {
+			return;
+		}
+
+		// stop default behaviour
+		e.preventDefault();
+
+		// load URL
+		loadPage(href);
+	})
+}
+ready(setupLinks);
+
 var modal;
 
 /**
@@ -110,7 +177,12 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	showPleaseWaitAlert();
 
 	// load modal HTML and then show modal
-	$(selector).load(url, function () {
+	$(selector).load(url, function (response, status, xhr) {
+		// handle unauthorised
+		if (xhr.status == 401) {
+			showAlert(alertTypes.error, "You are not authorised to do this, please sign in.");
+		}
+
 		// save replaceId
 		var form = $(this).find("form");
 		if (replaceId) {
@@ -136,8 +208,15 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
 
-		// fade in background and show modal
+		// fade in background
 		wrapper.fadeIn("fast", () => closeAlert());
+
+		// close modal when wrapped is clicked
+		$("body").on("click", (e) => {
+			if ($(e.target).is(".modal")) {
+				modal.hide();
+			}
+		});
 
 		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
@@ -290,7 +369,7 @@ function checkDeleteItem(el, e) {
  *
  */
 function setupChangePasswordUpdateModal() {
-	$(".change-password").click(function (e) {
+	$("body").on("click", ".change-password", function (e) {
 		e.preventDefault();
 		var changeUrl = $(this).data("change");
 		openUpdateModal(changeUrl, null);
@@ -384,18 +463,28 @@ function setupTokenUpdateModals() {
 ready(setupTokenUpdateModals);
 
 /**
+ * With responsive design the navbar needs to be closed when links are clicked.
+ *
+ */
+function closeNavWhenClicked() {
+	$(".navbar-nav .nav-item a").click(function () {
+		$(".navbar-toggler:visible").click();
+	})
+}
+ready(closeNavWhenClicked);
+
+/**
  * Handle a JSON Result object.
  * 
  * @param {any} r
  */
 function handleResult(r) {
-	// show alert
-	showAlert(r.message.type, r.message.text);
-
-	// redirect
+	// redirect or show alert
 	if (r.redirectTo) {
-		showAlert(alertTypes.info, "Redirecting...", true);
-		window.location.href = r.redirectTo;
+		loadPage(r.redirectTo);
+	} else {
+		// show alert
+		showAlert(r.message.type, r.message.text);
 	}
 }
 
@@ -404,7 +493,7 @@ function handleResult(r) {
  *
  */
 function setupSettingsTabs() {
-	$("#settingsButtons .nav-link").click(function () {
+	$("body").on("click", "#settingsButtons .nav-link", function () {
 		var tabId = $(this).data("bs-target");
 		loadSettingsTab(tabId);
 	});

@@ -1,11 +1,12 @@
 /// <reference path="mileage" />
 
 .statusbar {
-  min-height: 40px;
+  min-height: 47px;
 
   .message {
     background-color: #ffffcc;
     border: 1px solid shade-color(#ffffcc, 10%);
+    margin-top: 7px;
     max-height: 150px;
     max-width: calc(100% - 55px);
     overflow-y: auto;
@@ -30,5 +31,12 @@
     .manual {
       color: red;
     }
+  }
+
+  .btn-create {
+    cursor: pointer;
+    float: right;
+    max-height: 40px;
+    font-size: 35px;
   }
 }

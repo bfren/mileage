@@ -17,7 +17,7 @@ public enum JourneyList
 	Recent = 1 << 1
 }
 
-public sealed class DeleteModel : DeleteModalModel
+public sealed class DeleteModel : ModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 

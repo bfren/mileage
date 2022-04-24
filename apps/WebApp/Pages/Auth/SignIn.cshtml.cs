@@ -31,10 +31,10 @@ public sealed class SignInModel : PageModel
 		return Page();
 	}
 
-	public Task<AuthResult> OnPostAsync()
+	public async Task<AuthResult> OnPostAsync()
 	{
 		Log.Dbg("{@Form}", Form);
-		return AuthF.DoSignInAsync(new(
+		var result = await AuthF.DoSignInAsync(new(
 			Model: Form,
 			Auth: Auth,
 			Log: Log,
@@ -44,5 +44,12 @@ public sealed class SignInModel : PageModel
 			SignInAsync: HttpContext.SignInAsync,
 			ValidateUserAsync: AuthF.ValidateUserAsync
 		));
+
+		if (result is AuthResult.SignedIn success)
+		{
+			return success with { RedirectTo = Url.Page("/Journeys/Index", "Lists") };
+		}
+
+		return result;
 	}
 }

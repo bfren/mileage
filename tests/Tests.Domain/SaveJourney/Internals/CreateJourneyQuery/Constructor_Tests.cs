@@ -13,21 +13,21 @@ public class Constructor_Tests
 	{
 		// Arrange
 		var userId = LongId<AuthUserId>();
-		var date = Rnd.Date;
+		var day = Rnd.DateTime;
 		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
 		var endMiles = Rnd.UInt;
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var saveJourneyQuery = new SaveJourneyQuery(userId, null, null, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var saveJourneyQuery = new SaveJourneyQuery(userId, null, null, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
 		var result = new CreateJourneyQuery(saveJourneyQuery);
 
 		// Assert
 		Assert.Equal(userId, result.UserId);
-		Assert.Equal(date, result.Date);
+		Assert.Equal(day, result.Day);
 		Assert.Equal(carId, result.CarId);
 		Assert.Equal(startMiles, result.StartMiles);
 		Assert.Equal(endMiles, result.EndMiles);

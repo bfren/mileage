@@ -12,7 +12,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public sealed class ChangePasswordModel : UpdateModalModel
+public sealed class ChangePasswordModel : ModalModel
 {
 	public AuthChangePasswordModel Password { get; set; }
 

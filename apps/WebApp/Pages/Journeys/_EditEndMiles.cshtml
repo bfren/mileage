@@ -13,6 +13,7 @@
 		id="@Html.NameFor(x => x.Journey.EndMiles).Normalise()"
 		min="@Model.Journey.StartMiles"
 		value="@Model.Journey.StartMiles"
+		pattern="[0-9]*"
 		required
 	/>
 	<div class="invalid-feedback">Please enter a valid number.</div>

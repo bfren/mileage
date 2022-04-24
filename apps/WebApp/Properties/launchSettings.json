@@ -14,7 +14,10 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5284",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MILEAGE_USER_EMAIL": "info@bfren.dev",
+        "MILEAGE_USER_PASS": "fred",
+        "MILEAGE_USER_NAME": "Ben"
       }
     },
     "WebApp (Truncate)": {
@@ -23,7 +26,8 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5284",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Truncate"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TRUNCATE": "true"
       }
     },
     "dotnet watch run": {

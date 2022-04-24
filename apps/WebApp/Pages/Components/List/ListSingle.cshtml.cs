@@ -29,7 +29,10 @@ public abstract class ListSingleViewComponent<TModel, TId> : ViewComponent
 
 	public IViewComponentResult Invoke(string listName, bool allowNull, List<TModel> items, TId? selected)
 	{
-		var models = items.Select(x => new ListSingleItemModel(x.Id.Value, GetText(x)));
+		var models = from i in items
+					 orderby i.Id == selected descending
+					 select new ListSingleItemModel(i.Id.Value, GetText(i));
+
 		return View(
 			"~/Pages/Components/List/ListSingle.cshtml",
 			new ListSingleModel(listName, Singular, allowNull, models.ToList(), selected?.Value)

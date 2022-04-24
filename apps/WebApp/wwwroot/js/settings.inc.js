@@ -3,7 +3,7 @@
  *
  */
 function setupSettingsTabs() {
-	$("#settingsButtons .nav-link").click(function () {
+	$("body").on("click", "#settingsButtons .nav-link", function () {
 		var tabId = $(this).data("bs-target");
 		loadSettingsTab(tabId);
 	});

@@ -24,7 +24,7 @@ public class Constructor_Tests
 		Assert.Equal(userId, result.UserId);
 		Assert.Null(result.JourneyId);
 		Assert.Null(result.Version);
-		Assert.Equal(DateOnly.FromDateTime(DateTime.Today), result.Date);
+		Assert.Equal(DateTime.Today, result.Day);
 		Assert.Equal(carId, result.CarId);
 		Assert.Equal(startMiles, result.StartMiles);
 		Assert.Null(result.EndMiles);

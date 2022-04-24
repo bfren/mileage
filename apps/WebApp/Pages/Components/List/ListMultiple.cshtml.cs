@@ -29,7 +29,7 @@ public abstract class ListMultipleViewComponent<TModel, TId> : ViewComponent
 	{
 		var models = from i in items
 					 let s = selected.Contains(i.Id)
-					 orderby s ascending
+					 orderby s descending
 					 select new ListMultipleItemModel(i.Id.Value, GetText(i), s);
 
 		return View(

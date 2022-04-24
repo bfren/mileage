@@ -12,7 +12,7 @@ namespace Mileage.Domain.SaveJourney;
 /// <param name="UserId"></param>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
-/// <param name="RateId"></param>
+/// <param name="EndMiles"></param>
 public sealed record class UpdateJourneyEndMilesCommand(
 	AuthUserId UserId,
 	JourneyId Id,

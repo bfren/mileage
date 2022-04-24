@@ -14,7 +14,7 @@ public sealed class EditToPlacesModel : EditJourneyModalModel
 
 	public PlaceId[] Selected { get; set; } = Array.Empty<PlaceId>();
 
-	public EditToPlacesModel() : base("Destinations") { }
+	public EditToPlacesModel() : base("Destinations", "lg") { }
 }
 
 public sealed partial class IndexModel

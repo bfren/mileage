@@ -25,6 +25,8 @@
 
 </div>
 
+<script type="text/javascript">loadSettingsTab("#defaults");</script>
+
 @functions {
 	void TabButton(string text)
 	{
@@ -54,8 +56,4 @@
 
 		<div id="@name" class="@css" role="tabpanel" aria-labelledby="@name-tab" data-src="@src"></div>
 	}
-}
-
-@section Script {
-	<script type="text/javascript">ready(() => loadSettingsTab("#defaults"));</script>
 }

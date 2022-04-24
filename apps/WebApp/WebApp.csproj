@@ -12,12 +12,24 @@
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\img\app-icon.afdesign" />
+  </ItemGroup>
+  <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-Galadriel.pubxml" />
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-RPi.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
+    <None Include="wwwroot\img\app-icon.afdesign" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="jeebsconfig.Production.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="jeebsconfig-secrets.Production.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="jeebsconfig-secrets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -26,8 +38,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220423.2" />
-    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220423.2" />
+    <PackageReference Include="Azure.Identity" Version="1.6.0" />
+    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220424.12" />
+    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220424.12" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
   </ItemGroup>

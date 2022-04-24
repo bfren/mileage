@@ -1,0 +1,18 @@
+@model Mileage.WebApp.Pages.Journeys.ListsModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
+
+<div class="container">
+
+	<h2>Incomplete Journeys</h2>
+	<div id="incomplete-journeys">
+		@await Html.PartialAsync("Journeys/_Incomplete", Model.IncompleteJourneys)
+	</div>
+
+	<h2 class="mt-4">Recent Journeys</h2>
+	<div id="recent-journeys">
+		@await Html.PartialAsync("Journeys/_Recent", Model.RecentJourneys)
+	</div>
+
+</div>

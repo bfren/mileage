@@ -11,8 +11,8 @@ namespace Mileage.Domain.SaveUserPassword;
 /// <param name="Id"></param>
 /// <param name="Version"></param>
 /// <param name="CurrentPassword"></param>
-/// <param name="NewPassword0"></param>
-/// <param name="NewPassword1"></param>
+/// <param name="NewPassword"></param>
+/// <param name="CheckPassword"></param>
 public sealed record class SaveUserPasswordCommand(
 	AuthUserId Id,
 	long Version,

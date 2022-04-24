@@ -205,14 +205,14 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var userId = LongId<AuthUserId>();
 		var journeyId = LongId<JourneyId>();
 		var version = Rnd.Lng;
-		var date = Rnd.DateF.Get();
+		var day = Rnd.DateTime;
 		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
 		var endMiles = startMiles + Rnd.UInt;
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var query = new SaveJourneyQuery(userId, journeyId, version, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var query = new SaveJourneyQuery(userId, journeyId, version, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -227,7 +227,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 			Arg.Is<UpdateJourneyCommand>(x =>
 				x.JourneyId == journeyId
 				&& x.Version == version
-				&& x.Date == date
+				&& x.Day == day
 				&& x.CarId == carId
 				&& x.StartMiles == startMiles
 				&& x.EndMiles == endMiles
@@ -269,14 +269,14 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
-		var date = Rnd.DateF.Get();
+		var day = Rnd.DateTime;
 		var carId = LongId<CarId>();
 		var startMiles = Rnd.UInt;
 		var endMiles = startMiles + Rnd.UInt;
 		var fromPlaceId = LongId<PlaceId>();
 		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
 		var rateId = LongId<RateId>();
-		var query = new SaveJourneyQuery(userId, null, null, date, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
+		var query = new SaveJourneyQuery(userId, null, null, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -290,7 +290,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await v.Dispatcher.Received().DispatchAsync(
 			Arg.Is<CreateJourneyQuery>(x =>
 				x.UserId == userId
-				&& x.Date == date
+				&& x.Day == day
 				&& x.CarId == carId
 				&& x.StartMiles == startMiles
 				&& x.EndMiles == endMiles
