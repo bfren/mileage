@@ -11,7 +11,12 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 	showPleaseWaitAlert();
 
 	// load modal HTML and then show modal
-	$(selector).load(url, function () {
+	$(selector).load(url, function (response, status, xhr) {
+		// handle unauthorised
+		if (xhr.status == 401) {
+			showAlert(alertTypes.error, "You are not authorised to do this, please sign in.");
+		}
+
 		// save replaceId
 		var form = $(this).find("form");
 		if (replaceId) {
@@ -37,8 +42,15 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		// fade out background when modal is closed
 		modalEl.addEventListener("hide.bs.modal", () => wrapper.fadeOut("fast"));
 
-		// fade in background and show modal
+		// fade in background
 		wrapper.fadeIn("fast", () => closeAlert());
+
+		// close modal when wrapped is clicked
+		$("body").on("click", (e) => {
+			if ($(e.target).is(".modal")) {
+				modal.hide();
+			}
+		});
 
 		// create and show modal
 		modal = new bootstrap.Modal(modalEl);
