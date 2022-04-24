@@ -1,0 +1,7 @@
+@model MaybeF.IMsg
+@{
+	var text = Model?.ToString() ?? "Unknown error";
+}
+
+<h2 class="modal-title text-danger">Error</h2>
+<div>@text</div>
