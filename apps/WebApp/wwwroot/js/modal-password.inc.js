@@ -3,7 +3,7 @@
  *
  */
 function setupChangePasswordUpdateModal() {
-	$(".change-password").click(function (e) {
+	$("body").on("click", ".change-password", function (e) {
 		e.preventDefault();
 		var changeUrl = $(this).data("change");
 		openUpdateModal(changeUrl, null);
