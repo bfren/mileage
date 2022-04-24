@@ -4,12 +4,9 @@
 
 <div class="container statusbar">
 
-	@if (User.Identity?.IsAuthenticated == true)
-	{
-		<div class="btn-create text-primary fs-1" data-create="@newLink">
-			<i class="fa-solid fa-circle-plus"></i>
-		</div>
-	}
+	<div class="btn-create text-primary" data-create="@newLink">
+		<i class="fa-solid fa-circle-plus"></i>
+	</div>
 
 	<div class="message hide rounded-2">
 		<div class="d-flex justify-content-between">
