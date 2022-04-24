@@ -11151,7 +11151,7 @@ a {
 }
 
 body {
-  background-color: #eee;
+  background-color: #fff;
   margin: 0 auto;
 }
 
@@ -11169,17 +11169,21 @@ body {
   background-color: #333;
 }
 
+footer {
+  background-color: #eee;
+}
 footer div {
   font-size: 0.8rem;
   text-align: center;
 }
 
 .statusbar {
-  min-height: 40px;
+  min-height: 47px;
 }
 .statusbar .message {
   background-color: #ffffcc;
   border: 1px solid #e6e6b8;
+  margin-top: 7px;
   max-height: 150px;
   max-width: calc(100% - 55px);
   overflow-y: auto;
@@ -11199,6 +11203,11 @@ footer div {
 }
 .statusbar .message .manual {
   color: red;
+}
+.statusbar .btn-create {
+  cursor: pointer;
+  float: right;
+  max-height: 40px;
 }
 
 main {
@@ -11233,10 +11242,6 @@ main {
 
 #create .list-items .list-item, #update .list-items .list-item {
   display: inline;
-}
-
-.btn-new {
-  float: right;
 }
 
 .btn.btn-xs {

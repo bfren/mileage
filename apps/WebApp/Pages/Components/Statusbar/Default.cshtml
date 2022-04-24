@@ -6,12 +6,8 @@
 
 	@if (User.Identity?.IsAuthenticated == true)
 	{
-		<div class="btn-new">
-			<button type="button"
-				class="btn btn-primary btn-create btn-lg rounded-circle"
-				data-create="@newLink">
-				<i class="fa-solid fa-plus"></i>
-			</button>
+		<div class="btn-create text-primary fs-1" data-create="@newLink">
+			<i class="fa-solid fa-circle-plus"></i>
 		</div>
 	}
 
