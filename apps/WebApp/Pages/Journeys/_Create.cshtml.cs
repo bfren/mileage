@@ -17,7 +17,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class CreateJourneyModel
 {
-	public DateTime Day { get; set; } = DateTime.Today;
+	public DateTime Day { get; set; }
 
 	public CarId? CarId { get; set; } = new();
 
@@ -32,7 +32,7 @@ public sealed class CreateJourneyModel
 	public RateId? RateId { get; set; }
 }
 
-public sealed class CreateModel : CreateModalModel
+public sealed class CreateModel : ModalModel
 {
 	public CreateJourneyModel Journey { get; set; } = new();
 
@@ -42,7 +42,7 @@ public sealed class CreateModel : CreateModalModel
 
 	public List<GetRatesModel> Rates { get; set; } = new();
 
-	public CreateModel() : base("Journey") { }
+	public CreateModel() : base("Journey", "lg") { }
 }
 
 public sealed partial class IndexModel
@@ -64,6 +64,7 @@ public sealed partial class IndexModel
 				{
 					Journey = new()
 					{
+						Day = DateTime.Today,
 						CarId = x.settings.DefaultCarId,
 						FromPlaceId = x.settings.DefaultFromPlaceId,
 						RateId = x.settings.DefaultRateId,
