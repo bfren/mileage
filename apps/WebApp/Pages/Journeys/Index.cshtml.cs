@@ -17,11 +17,13 @@ using StrongId;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public abstract class EditJourneyModalModel : UpdateModalModel
+public abstract class EditJourneyModalModel : ModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 
 	protected EditJourneyModalModel(string title) : base(title) { }
+
+	protected EditJourneyModalModel(string title, string size) : base(title, size) { }
 }
 
 [Authorize]
