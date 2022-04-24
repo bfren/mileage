@@ -7,7 +7,11 @@
 
 	<div>
 		@Model?.Journey.Day.ToString("yyyy-MM-dd")
-		from @Model?.Journey.StartMiles to @Model?.Journey.EndMiles
+		from @Model?.Journey.StartMiles
+		@if (Model?.Journey.EndMiles is int end)
+		{
+			<text> to @end</text>
+		}
 	</div>
 
 	@Html.AntiForgeryToken()
