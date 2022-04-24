@@ -45,6 +45,7 @@ internal sealed class GetLatestEndMilesHandler : QueryHandler<GetLatestEndMilesQ
 			.Where(x => x.CarId, Compare.Equal, query.CarId)
 			.Sort(x => x.StartMiles, SortOrder.Descending)
 			.ExecuteAsync(x => x.EndMiles)
+			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => (uint?)x ?? 0u,
 				none: 0u
