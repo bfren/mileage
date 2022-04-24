@@ -13,13 +13,13 @@ namespace Mileage.WebApp.Pages.Auth;
 [Authorize]
 public sealed class SignOutModel : PageModel
 {
-	public async Task<IActionResult> OnGet()
+	public async Task<IActionResult> OnGetAsync()
 	{
 		_ = await AuthF.DoSignOutAsync(new(
 			TempData.AddInfoAlert,
 			HttpContext.SignOutAsync
 		));
 
-		return RedirectToPage("/Index");
+		return Result.Create(true) with { RedirectTo = Url.Page("./SignIn") };
 	}
 }

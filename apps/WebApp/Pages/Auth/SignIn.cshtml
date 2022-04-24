@@ -6,7 +6,7 @@
 	<h2>Sign In</h2>
 
 	<!-- SignIn Form -->
-	<form method="post" action="@Url.Page("SignIn", new { returnUrl = Model.Form.ReturnUrl })">
+	<form class="needs-validation" method="post" action="@Url.Page("./SignIn")" novalidate>
 
 		<!-- Sign In details -->
 		<div class="mb-3">
@@ -17,6 +17,7 @@
 				   name="@nameof(Model.Form.Email)"
 				   placeholder="Please enter your email address"
 				   required />
+			<div class="invalid-feedback">Please enter your email address.</div>
 		</div>
 		<div class="mb-3">
 			<label for="@nameof(Model.Form.Password)" class="form-label">Password</label>
@@ -26,6 +27,7 @@
 				   name="@nameof(Model.Form.Password)"
 				   placeholder="Please enter your password"
 				   required />
+			<div class="invalid-feedback">Please enter your password.</div>
 		</div>
 		<div class="mb3">
 			<input type="checkbox"
