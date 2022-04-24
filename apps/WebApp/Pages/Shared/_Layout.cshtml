@@ -33,10 +33,10 @@
 	<!-- Header -->
 	<vc:header />
 
-	<main role="main" id="content" class="flex-grow-1 shadow-sm">
+	<!-- Status Bar -->
+	<vc:status-bar />
 
-		<!-- Status Bar -->
-		<vc:status-bar />
+	<main role="main" id="content" class="flex-grow-1 shadow-sm">
 
 		<!-- Body -->
 		@RenderBody()
@@ -61,7 +61,7 @@
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
 	</script>
-	<jwt />
+	
 	<div id="create" class="fixed-bottom"></div>
 	<div id="update" class="fixed-bottom"></div>
 	<div id="delete" class="fixed-bottom"></div>
