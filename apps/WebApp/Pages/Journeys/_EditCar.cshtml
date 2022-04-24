@@ -8,7 +8,7 @@
 
 <form method="post" action="@Url.Page("Index", "EditCar")">
 	<vc:car-list
-		list-name="@Html.LabelFor(x => x.Journey.CarId)"
+		list-name="@Html.NameFor(x => x.Journey.CarId)"
 		allow-null="false"
 		items="@Model.Cars"
 		selected="@Model.Journey.CarId"
