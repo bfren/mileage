@@ -21,5 +21,8 @@ public sealed record class UserProfileModel(
 	string? FamilyName
 )
 {
+	/// <summary>
+	/// Create empty for model binding
+	/// </summary>
 	public UserProfileModel() : this(new(), 0L, string.Empty, null, null) { }
 }
