@@ -20,7 +20,7 @@ public sealed class App : RazorApp
 		_ = services.AddData();
 
 		_ = services.AddAuthentication(ctx.Configuration)
-			.WithData<PostgreSqlDbClient>(false)
+			.WithData<PostgreSqlDbClient>(true)
 			.WithJwt();
 	}
 
