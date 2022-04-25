@@ -16,16 +16,16 @@
 <ul id="place-list" class="list-group w-100">
 	@foreach (var p in Model.Places)
 	{
-		var description = p.Description;
-		if (p.Postcode is string postcode)
-		{
-			description += $" ({postcode})";
-		}
-
 		<li class="list-group-item item-update" data-update="@updateLink(p.Id.Value)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@p.Id.Value</div>
-				<div class="me-auto mb-1 mb-sm-0">@description</div>
+				<div class="me-auto mb-1 mb-sm-0">
+					@p.Description
+					@if (p.Postcode is string postcode)
+					{
+						<br/><text>@postcode</text>
+					}
+				</div>
 				<modal-update class="me-2" link="@updateLink(p.Id.Value)" replace="places" />
 				<modal-delete link="@deleteLink(p.Id.Value)" replace="places" />
 			</div>
