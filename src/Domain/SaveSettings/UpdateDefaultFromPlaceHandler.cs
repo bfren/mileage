@@ -30,7 +30,7 @@ internal sealed class UpdateDefaultFromPlaceHandler : CommandHandler<UpdateDefau
 		(Dispatcher, Settings, Log) = (dispatcher, settings, log);
 
 	/// <summary>
-	/// Update default car for user specified in <paramref name="command"/>
+	/// Update default from place for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
 	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultFromPlaceCommand command)
