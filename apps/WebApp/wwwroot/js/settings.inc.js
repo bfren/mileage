@@ -52,19 +52,6 @@ function loadSaveForm(item, el, e) {
 }
 
 /**
- * Reload the form when the cancel button is clicked.
- * 
- * @param {any} form Form selector
- * @param {any} item The name of the item being saved
- * @param {any} el The element to be reloaded
- */
-function setupReloadFormOnCancel(form, item, el) {
-	$(form).on("click", ".btn-cancel", function (e) {
-		loadSaveForm(item, el, e);
-	});
-}
-
-/**
  * Submit the form when the enter key is pressed.
  * 
  * @param {any} form Form selector

@@ -1,0 +1,46 @@
+@using Jeebs.Extensions
+@model Mileage.WebApp.Pages.Settings.Places.EditModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Model.Title += " " + Model.Place.Id.Value;
+	Layout = "Modals/UpdateModal";
+}
+
+<form class="needs-validation"
+	  action="@Url.Page("Index")"
+	  method="post"
+	  data-replace="places"
+	  data-replace-contents="true"
+	  novalidate>
+
+	<!-- Place Details -->
+	<div class="mb-3">
+		@Html.LabelFor(m => m.Place.Description, new { @class = "visually-hidden" })
+		<input type="text"
+			   class="form-control modal-focus"
+			   name="@Html.NameFor(m => m.Place.Description)"
+			   id="@Html.NameFor(m => m.Place.Description)"
+			   placeholder="@nameof(Model.Place.Description)"
+			   value="@Model.Place.Description"
+			   required />
+		<div class="invalid-feedback">Please enter a description.</div>
+	</div>
+
+	<div class="mb-3">
+		@Html.LabelFor(m => m.Place.Postcode, new { @class = "visually-hidden" })
+		<div class="input-group">
+			<input type="text" class="form-control"
+				   name="@Html.NameFor(m => m.Place.Postcode)"
+				   id="@Html.NameFor(m => m.Place.Postcode)"
+				   placeholder="@nameof(Model.Place.Postcode)"
+				   value="@Model.Place.Postcode" />
+		</div>
+	</div>
+
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m.Place.Id)
+	@Html.HiddenFor(m => m.Place.Version)
+
+</form>

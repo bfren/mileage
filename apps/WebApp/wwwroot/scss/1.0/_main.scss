@@ -2,17 +2,11 @@
 
 main {
   background-color: #fff;
-  padding: 5px 0 70px;
+  padding: 10px 0 70px;
 }
 
 .list-group-item:hover {
   background-color: $gray-100;
-}
-
-#settingsPanes {
-  .list-group-item {
-    cursor: pointer;
-  }
 }
 
 .token {
@@ -23,4 +17,8 @@ main {
     padding: 0.1rem 0.2rem;
     text-decoration: none;
   }
+}
+
+input[type=number] {
+  width: 200px;
 }

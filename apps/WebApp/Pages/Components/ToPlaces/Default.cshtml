@@ -16,13 +16,7 @@
 
 	@foreach (var p in Model.Places)
 	{
-		var text = p.Description;
-		if (p.Postcode is string postcode)
-		{
-			text += $" ({postcode})";
-		}
-
-		Place(Model.UpdateUrl, tokenId, p.Id.Value, Model.JourneyId.Value, text);
+		Place(Model.UpdateUrl, tokenId, p.Id.Value, Model.JourneyId.Value, p.Description);
 	}
 
 </span>

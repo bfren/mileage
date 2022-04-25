@@ -7,7 +7,7 @@ using Mileage.Domain.SaveSettings;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public sealed class EditCarModel : EditSettingsModalModel
+public sealed class EditCarModel : EditSettingsModel
 {
 	public List<GetCarsModel> Cars { get; set; } = new();
 
@@ -22,6 +22,6 @@ public sealed partial class IndexModel
 			(s, v) => new EditCarModel { Settings = s, Cars = v.ToList() }
 		);
 
-	public Task<IActionResult> OnPostEditCarAsync(SaveSettingsCommand form) =>
-		PostFieldAsync("Car", "Default Car", form, x => x.DefaultCarId);
+	public Task<IActionResult> OnPostEditCarAsync(UpdateDefaultCarCommand settings) =>
+		PostFieldAsync("Car", "Default Car", settings, x => x.DefaultCarId);
 }

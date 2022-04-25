@@ -40,10 +40,7 @@
 						<vc:rate label="Rate" update-url="@updateLink(j, "Rate")" value="@j.RateId" journey-id="@j.Id" />
 					</div>
 				</div>
-				<button type="button"
-					class="btn btn-danger btn-delete-check"
-					data-delete="@deleteLink(j)"
-					data-replace="recent-journeys"><i class="fa-solid fa-circle-minus"></i></button>
+				<modal-delete link="@deleteLink(j)" replace="recent-journeys"/>
 			</div>
 			<div class="places">
 				<vc:from-place label="From" update-url="@updateLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />

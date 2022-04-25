@@ -1,0 +1,54 @@
+@using Jeebs.Extensions
+@model Domain.GetRate.GetRateModel?
+@{
+	var formId = Rnd.Str;
+
+	var min = 0.01;
+	var max = 2;
+}
+
+<form id="@formId"
+	class="row row-cols-md-auto g-3 align-items-center needs-validation"
+	action="@Url.Page("Index")"
+	method="post"
+	data-replace="rates"
+	data-replace-contents="true"
+	novalidate>
+
+	<!-- Rate Details -->
+	<div class="col-12 fw-bold">
+		New Rate
+	</div>
+
+	<div class="col-12 position-relative">
+		@Html.LabelFor(m => m!.AmountPerMileGBP, new { @class = "visually-hidden" })
+		<input type="number"
+			   class="form-control select-on-load"
+			   name="@Html.NameFor(m => m!.AmountPerMileGBP)"
+			   id="@Html.NameFor(m => m!.AmountPerMileGBP)"
+			   placeholder="Amount Per Mile in GBP"
+			   value="@Model?.AmountPerMileGBP.ToString("0.00")"
+			   min="@min"
+			   max="@max"
+			   step="0.01"
+			   pattern="[0-9\.]*"
+			   required />
+		<div class="invalid-tooltip">Please enter an amount (in GBP) between @min.ToString("0.00") and @max.ToString("0.00").</div>
+	</div>
+
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+
+	<!-- Buttons -->
+	<div class="col-12">
+		<button type="reset" class="btn btn-secondary btn-cancel">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-save">Create</button>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	selectInputOnLoad();
+	setupSaveFormOnEnter("#@formId");
+	setupReloadFormOnCancel("#@formId", "rate", $("#save-rate"));
+</script>

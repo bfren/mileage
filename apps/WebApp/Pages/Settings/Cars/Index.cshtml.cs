@@ -3,11 +3,13 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetCars;
+using Mileage.Domain.SaveCar;
 
 namespace Mileage.WebApp.Pages.Settings.Cars;
 
@@ -36,5 +38,19 @@ public sealed partial class IndexModel : PageModel
 		}
 
 		return Page();
+	}
+
+	public Task<IActionResult> OnPostAsync(SaveCarQuery car)
+	{
+		var query = from u in User.GetUserId()
+					from r in Dispatcher.DispatchAsync(car with { UserId = u })
+					select r;
+
+		return query
+			.AuditAsync(none: Log.Msg)
+			.SwitchAsync(
+				some: _ => OnGetAsync(),
+				none: r => Result.Error(r)
+			);
 	}
 }

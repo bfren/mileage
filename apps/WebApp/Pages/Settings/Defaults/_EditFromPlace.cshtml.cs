@@ -7,7 +7,7 @@ using Mileage.Domain.SaveSettings;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public sealed class EditFromPlaceModel : EditSettingsModalModel
+public sealed class EditFromPlaceModel : EditSettingsModel
 {
 	public List<GetPlacesModel> Places { get; set; } = new();
 
@@ -22,6 +22,6 @@ public sealed partial class IndexModel
 			(s, v) => new EditFromPlaceModel { Settings = s, Places = v.ToList() }
 		);
 
-	public Task<IActionResult> OnPostEditFromPlaceAsync(SaveSettingsCommand form) =>
-		PostFieldAsync("FromPlace", "Default Starting Place", form, x => x.DefaultFromPlaceId);
+	public Task<IActionResult> OnPostEditFromPlaceAsync(UpdateDefaultFromPlaceCommand settings) =>
+		PostFieldAsync("FromPlace", "Default Starting Place", settings, x => x.DefaultFromPlaceId);
 }

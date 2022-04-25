@@ -12,7 +12,7 @@
 	<!-- iOS meta -->
 	<meta name="theme-color" content="#333" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<link rel="apple-touch-icon" href="/img/app-icon.png" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon-bg-white.png" />
 
 	<!-- Style -->
 	<environment names="Development">
@@ -28,19 +28,24 @@
 	<script type="text/javascript" csp-add-nonce="true">
 		var readyF = [];
 		var ready = (f) => readyF.push(f);
+		var home = "@Url.Page("Journeys/Index", "Lists")";
 	</script>
 
 </head>
 <body class="d-flex flex-column h-100">
 
-	<!-- Header -->
-	<vc:header />
+	<div class="sticky-top">
 
-	<!-- Status Bar -->
-	<vc:status-bar />
+		<!-- Header -->
+		<vc:header />
+
+		<!-- Status Bar -->
+		<vc:status-bar />
+
+	</div>
 	
 	<!-- Content -->
-	<main role="main" id="content" class="flex-grow-1 shadow-sm"></main>
+	<main role="main" id="content" class="flex-grow-1"></main>
 
 	<!-- Footer -->
 	<vc:footer />
@@ -58,7 +63,6 @@
 	</environment>
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
-		loadPage("@Url.Page("Journeys/Index", "Lists")");
 	</script>
 	
 	<div id="create" class="fixed-bottom"></div>

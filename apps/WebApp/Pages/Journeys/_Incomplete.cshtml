@@ -37,14 +37,8 @@
 						<vc:rate label="Rate" update-url="@updateLink(j, "Rate")" value="@j.RateId" journey-id="@j.Id" />
 					</div>
 				</div>
-				<button type="button"
-					class="btn btn-danger btn-delete-check me-2"
-					data-delete="@deleteLink(j)"
-					data-replace="incomplete-journeys"><i class="fa-solid fa-circle-minus"></i></button>
-				<button type="button"
-					class="btn btn-success btn-complete"
-					data-update="@updateLink(j, "EndMiles")"
-					data-replace="incomplete-journeys"><i class="fa-solid fa-circle-check"></i></button>
+				<modal-delete class="me-2" link="@deleteLink(j)" replace="incomplete-journeys"/>
+				<modal-complete link="@updateLink(j, "EndMiles")" replace="incomplete-journeys"/>
 			</div>
 			<div class="places">
 				<vc:from-place label="From" update-url="@updateLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />

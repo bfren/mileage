@@ -33,7 +33,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var carId = LongId<CarId>();
-		var settings = new Settings(Rnd.Lng, carId, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, carId, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -57,7 +57,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var placeId = LongId<PlaceId>();
-		var settings = new Settings(Rnd.Lng, null, placeId, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, placeId, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -81,7 +81,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var rateId = LongId<RateId>();
-		var settings = new Settings(Rnd.Lng, null, null, rateId);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, rateId);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -103,7 +103,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, LongId<CarId>(), null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), null, null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
@@ -122,7 +122,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, LongId<PlaceId>(), null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, LongId<PlaceId>(), null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
@@ -141,7 +141,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, null, LongId<RateId>());
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, LongId<RateId>());
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.DispatchAsync(Arg.Any<CheckRateBelongsToUserQuery>())
@@ -161,7 +161,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
-		var settings = new Settings(Rnd.Lng, null, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -185,7 +185,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var existingSettings = new SettingsEntity();
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
@@ -210,7 +210,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
@@ -236,7 +236,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
-		var settings = new Settings(Rnd.Lng, null, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -260,7 +260,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(Rnd.Lng, null, null, null);
+		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
