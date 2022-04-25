@@ -1,6 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
@@ -61,17 +62,22 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 		async Task<Maybe<IEnumerable<JourneyId>>> insertJourneys(AuthUserId userId, CarId carId, PlaceId fromPlaceId, PlaceId[] toPlaceIds, RateId rateId)
 		{
 			Log.Inf("Inserting test journeys.");
-			var mileage = new List<(uint start, uint end)>();
-			const int number = 10;
+			var mileage = new List<(uint start, uint? end)>();
+
+			var miles = Rnd.NumberF.GetUInt32(20000, 30000);
+			var date = DateTime.Today;
+			const int number = 50;
+
+			// Incomplete journey
+			mileage.Add((miles, null));
 
 			// Generate random mileage numbers
 			for (var i = 0; i < number; i++)
 			{
-				var start = Rnd.UInt;
-				var end = start + Rnd.UInt;
-				mileage.Add((start, end));
+				var start = miles - Rnd.NumberF.GetUInt32(5, 50);
+				mileage.Add((start, miles));
+				miles = start;
 			}
-			mileage.Sort((a, b) => a.start.CompareTo(b.start));
 
 			// Create each journey
 			var journeyIds = new List<JourneyId>();
@@ -79,10 +85,12 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 			{
 				var (start, end) = mileage[i];
 				_ = await Dispatcher.DispatchAsync(
-					new CreateJourneyQuery(userId, Rnd.DateTime, carId, start, (Rnd.Flip || Rnd.Flip) ? end : null, fromPlaceId, toPlaceIds, rateId)
+					new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId)
 				).IfSomeAsync(
 					x => journeyIds.Add(x)
 				);
+
+				date = date.AddDays(Rnd.NumberF.GetInt32(0, 3) * -1);
 			}
 
 			return journeyIds;
