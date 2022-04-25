@@ -6,6 +6,7 @@ using Jeebs.Logging;
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Jeebs.Mvc.Auth.Functions;
+using Jeebs.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -47,7 +48,11 @@ public sealed class SignInModel : PageModel
 
 		if (result is AuthResult.SignedIn success)
 		{
-			return success with { RedirectTo = Url.Page("/Journeys/Index", "Lists") };
+			return success with
+			{
+				Message = Alert.Success("You were signed in, redirecting..."),
+				RedirectTo = Url.Page("/Journeys/Index", "Lists")
+			};
 		}
 
 		return result;
