@@ -22,7 +22,7 @@
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@r.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@amount</div>
-				<button type="button" class="btn btn-danger btn-delete-check" data-delete="@deleteLink(r.Id)" data-replace="rates"><i class="fa-solid fa-circle-minus"></i></button>
+				<modal-delete link="@deleteLink(r.Id)" replace="rates"/>
 			</div>
 		</li>
 	}

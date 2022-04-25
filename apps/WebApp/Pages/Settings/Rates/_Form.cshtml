@@ -3,6 +3,8 @@
 @{
 	Layout = null;
 	var formId = Rnd.Str;
+	var min = 0.01;
+	var max = 2;
 }
 
 <form id="@formId" class="row row-cols-md-auto g-3 align-items-center needs-validation" action="@Url.Page("Index", "Form")" method="post" data-replace="rates" data-replace-contents="true" novalidate>
@@ -19,16 +21,18 @@
 
 	<div class="col-12 position-relative">
 		@Html.LabelFor(m => m!.AmountPerMileGBP, new { @class = "visually-hidden" })
-		<input type="number" class="form-control select-on-load"
+		<input type="number"
+			   class="form-control select-on-load"
 			   name="@Html.NameFor(m => m!.AmountPerMileGBP)"
 			   id="@Html.NameFor(m => m!.AmountPerMileGBP)"
 			   placeholder="Amount Per Mile in GBP"
 			   value="@Model?.AmountPerMileGBP.ToString("0.00")"
-			   min="0"
-			   max="2"
+			   min="@min"
+			   max="@max"
 			   step="0.01"
+			   pattern="[0-9\.]*"
 			   required />
-		<div class="invalid-tooltip">Please enter a description.</div>
+		<div class="invalid-tooltip">Please enter an amount (in GBP) between @min.ToString("0.00") and @max.ToString("0.00").</div>
 	</div>
 
 	<!-- Buttons -->
