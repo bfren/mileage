@@ -28,6 +28,7 @@
 	<script type="text/javascript" csp-add-nonce="true">
 		var readyF = [];
 		var ready = (f) => readyF.push(f);
+		var home = "@Url.Page("Journeys/Index", "Lists")";
 	</script>
 
 </head>
@@ -58,7 +59,6 @@
 	</environment>
 	<script type="text/javascript" csp-add-nonce="true">
 		$.each(readyF, (_, f) => f());
-		loadPage("@Url.Page("Journeys/Index", "Lists")");
 	</script>
 	
 	<div id="create" class="fixed-bottom"></div>
