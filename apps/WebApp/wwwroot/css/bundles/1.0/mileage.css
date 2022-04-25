@@ -11232,6 +11232,10 @@ main {
   text-decoration: none;
 }
 
+input[type=number] {
+  width: 200px;
+}
+
 #create, #update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
