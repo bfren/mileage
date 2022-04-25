@@ -10,7 +10,7 @@ function loadPage(url) {
 	$.ajax({ url: url, method: "GET" })
 
 		.done(function (data, status, xhr) {
-			// close loading alert
+			// close info alert
 			closeAlert();
 
 			// handle JSON response
@@ -24,7 +24,7 @@ function loadPage(url) {
 		})
 
 		.fail(function (xhr) {
-			// close loading alert
+			// close info alert
 			closeAlert();
 
 			// handle unauthorised
