@@ -4,6 +4,7 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditFromPlace")">
+
 	<p>Please select a default starting place:</p>
 	<vc:from-place-list
 		list-name="Settings.DefaultFromPlaceId"
@@ -11,9 +12,9 @@
 		items="@Model?.Places"
 		selected="@Model?.Settings.DefaultFromPlaceId"
 	/>
-
-	@Html.HiddenForId(x => x.Settings.DefaultCarId)
-	@Html.HiddenForId(x => x.Settings.DefaultRateId)
+	
+	@Html.HiddenForId(x => x.Settings.Id)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
+
 </form>

@@ -1,0 +1,42 @@
+@using Jeebs.Extensions
+@model Mileage.WebApp.Pages.Settings.Rates.EditModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Model.Title += " " + Model.Rate.Id.Value;
+	Layout = "Modals/UpdateModal";
+
+	var min = 0.01;
+	var max = 2;
+}
+
+<form class="needs-validation"
+	  action="@Url.Page("Index")"
+	  method="post"
+	  data-replace="rates"
+	  data-replace-contents="true"
+	  novalidate>
+
+	<!-- Rate Details -->
+	<div class="mb-3">
+		@Html.LabelFor(m => m.Rate.AmountPerMileGBP, new { @class = "visually-hidden" })
+		<input type="number"
+			   class="form-control select-on-load"
+			   name="@Html.NameFor(m => m.Rate.AmountPerMileGBP)"
+			   id="@Html.NameFor(m => m.Rate.AmountPerMileGBP)"
+			   placeholder="Amount Per Mile in GBP"
+			   value="@Model.Rate.AmountPerMileGBP.ToString("0.00")"
+			   min="@min"
+			   max="@max"
+			   step="0.01"
+			   pattern="[0-9\.]*"
+			   required />
+		<div class="invalid-tooltip">Please enter an amount (in GBP) between @min.ToString("0.00") and @max.ToString("0.00").</div>
+	</div>
+
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+	@Html.HiddenForId(m => m.Rate.Id)
+	@Html.HiddenFor(m => m.Rate.Version)
+
+</form>

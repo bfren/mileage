@@ -4,6 +4,7 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditRate")">
+
 	<p>Please select a default rate:</p>
 	<vc:rate-list
 		list-name="Settings.DefaultRateId"
@@ -11,9 +12,9 @@
 		items="@Model?.Rates"
 		selected="@Model?.Settings.DefaultRateId"
 	/>
-	
-	@Html.HiddenForId(x => x.Settings.DefaultCarId)
-	@Html.HiddenForId(x => x.Settings.DefaultFromPlaceId)
+
+	@Html.HiddenForId(x => x.Settings.Id)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
+
 </form>

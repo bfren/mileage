@@ -2,15 +2,15 @@
 @using Mileage.Persistence.Common.StrongIds
 @model Mileage.WebApp.Pages.Settings.Cars.IndexModel
 @{
-	string? updateLink(CarId? carId) =>
-		Url.Page(pageName: "Index", pageHandler: "Form", values: new { carId = carId?.Value });
+	string? updateLink(long carId) =>
+		Url.Page(pageName: "Index", pageHandler: "Edit", values: new { carId });
 
-	string? deleteLink(CarId carId) =>
-		Url.Page(pageName: "Index", pageHandler: "Delete", values: new { carId = carId.Value });
+	string? deleteLink(long carId) =>
+		Url.Page(pageName: "Index", pageHandler: "Delete", values: new { carId });
 }
 
-<div id="save-car" class="mt-3 mb-3" data-load="@updateLink(null)">
-	@await Html.PartialAsync("_Form", model: null, ViewData)
+<div id="save-car" class="mt-3 mb-3">
+	@await Html.PartialAsync("_Create", model: null)
 </div>
 
 <ul id="car-list" class="list-group w-100">
@@ -22,11 +22,12 @@
 			description += $" ({plate})";
 		}
 
-		<li class="list-group-item" data-id="@c.Id.Value" data-load="@updateLink(c.Id)">
+		<li class="list-group-item" data-id="@c.Id.Value" data-load="@updateLink(c.Id.Value)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@c.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@description</div>
-				<modal-delete link="@deleteLink(c.Id)" replace="cars"/>
+				<modal-update class="me-2" link="@updateLink(c.Id.Value)" replace="cars" />
+				<modal-delete link="@deleteLink(c.Id.Value)" replace="cars" />
 			</div>
 		</li>
 	}
@@ -34,5 +35,4 @@
 
 <script type="text/javascript">
 	selectInputOnLoad();
-	$("#car-list .list-group-item").click(function(e) { loadSaveForm("car", $(this), e); });
 </script>

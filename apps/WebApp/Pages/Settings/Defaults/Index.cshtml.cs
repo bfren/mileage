@@ -9,17 +9,17 @@ using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mileage.Domain;
 using Mileage.Domain.LoadSettings;
-using Mileage.Domain.SaveSettings;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public abstract class EditSettingsModalModel : ModalModel
+public abstract class EditSettingsModel : ModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
-	protected EditSettingsModalModel(string title) : base(title) { }
+	protected EditSettingsModel(string title) : base(title) { }
 }
 
 [Authorize]
@@ -53,7 +53,7 @@ public sealed partial class IndexModel : PageModel
 		string partial,
 		Func<AuthUserId, Task<Maybe<TValue>>> getValue,
 		Func<Persistence.Common.Settings, TValue, TModel> getModel
-	) where TModel : EditSettingsModalModel
+	) where TModel : EditSettingsModel
 	{
 		// Build query
 		var query = from u in User.GetUserId()
@@ -70,23 +70,24 @@ public sealed partial class IndexModel : PageModel
 			);
 	}
 
-	private Task<IActionResult> PostFieldAsync<TValue>(
+	private Task<IActionResult> PostFieldAsync<TCommand, TValue>(
 		string component,
 		string label,
-		SaveSettingsCommand form,
-		Func<Persistence.Common.Settings, TValue> getValue
+		TCommand command,
+		Func<TCommand, TValue> getValue
 	)
+		where TCommand : WithUserId, ICommand
 	{
 		// Get values
 		var updateUrl = Url.Page("Index", "Edit" + component);
-		var value = getValue(form.Settings);
+		var value = getValue(command);
 
 		// Log operation
 		Log.Vrb("Saving {Setting} for {User}.", component, User.GetUserId());
 
 		// Build query
 		var query = from userId in User.GetUserId()
-					from result in Dispatcher.DispatchAsync(form with { UserId = userId })
+					from result in Dispatcher.DispatchAsync(command with { UserId = userId })
 					select result;
 
 		return query

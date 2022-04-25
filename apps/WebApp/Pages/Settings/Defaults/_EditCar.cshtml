@@ -4,6 +4,7 @@
 }
 
 <form method="post" action="@Url.Page("Index", "EditCar")">
+
 	<p>Please select a default car:</p>
 	<vc:car-list
 		list-name="Settings.DefaultCarId"
@@ -12,8 +13,8 @@
 		selected="@Model?.Settings.DefaultCarId"
 	/>
 	
-	@Html.HiddenForId(x => x.Settings.DefaultFromPlaceId)
-	@Html.HiddenForId(x => x.Settings.DefaultRateId)
+	@Html.HiddenForId(x => x.Settings.Id)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
+
 </form>

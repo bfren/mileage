@@ -1,22 +1,23 @@
 @using Jeebs.Extensions
 @model Domain.GetRate.GetRateModel?
 @{
-	Layout = null;
 	var formId = Rnd.Str;
+
 	var min = 0.01;
 	var max = 2;
 }
 
-<form id="@formId" class="row row-cols-md-auto g-3 align-items-center needs-validation" action="@Url.Page("Index", "Form")" method="post" data-replace="rates" data-replace-contents="true" novalidate>
+<form id="@formId"
+	class="row row-cols-md-auto g-3 align-items-center needs-validation"
+	action="@Url.Page("Index")"
+	method="post"
+	data-replace="rates"
+	data-replace-contents="true"
+	novalidate>
 
-	<!-- Hidden Values -->
-	@Html.AntiForgeryToken()
-	@Html.HiddenForId(m => m!.Id)
-	@Html.HiddenFor(m => m!.Version)
-
-	<!-- Car Details -->
-	<div class="col-12">
-		@Html.LabelFor(m => m!.Id, Model is null ? "New" : Model.Id.Value.ToString(), new { @class = "fw-bold" })
+	<!-- Rate Details -->
+	<div class="col-12 fw-bold">
+		New Rate
 	</div>
 
 	<div class="col-12 position-relative">
@@ -35,10 +36,13 @@
 		<div class="invalid-tooltip">Please enter an amount (in GBP) between @min.ToString("0.00") and @max.ToString("0.00").</div>
 	</div>
 
+	<!-- Hidden Values -->
+	@Html.AntiForgeryToken()
+
 	<!-- Buttons -->
 	<div class="col-12">
-		<button class="btn btn-secondary btn-cancel">Cancel</button>
-		<button type="submit" class="btn btn-primary btn-save">Save</button>
+		<button type="reset" class="btn btn-secondary btn-cancel">Cancel</button>
+		<button type="submit" class="btn btn-primary btn-save">Create</button>
 	</div>
 
 </form>
