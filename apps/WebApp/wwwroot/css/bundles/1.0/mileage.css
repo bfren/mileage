@@ -11241,7 +11241,7 @@ footer div {
 
 .statusbar {
   background-color: #fff;
-  min-height: 47px;
+  min-height: 50px;
 }
 .statusbar .message-wrapper {
   padding-top: 6px;
@@ -11251,7 +11251,7 @@ footer div {
   border: 1px solid #e6e6b8;
   max-height: 150px;
   padding: 5px 8px;
-  width: calc(100% - 10px);
+  width: calc(100% - 5rem);
 }
 .statusbar .message .fa-check {
   color: forestgreen;
@@ -11270,8 +11270,14 @@ footer div {
 }
 .statusbar .btn-create {
   cursor: pointer;
-  font-size: 35px;
-  line-height: 1em;
+  font-size: 4.5rem;
+  line-height: 1rem;
+  margin-top: -1rem;
+  text-shadow: 0 0 3px #fff;
+}
+.statusbar .btn-create .fa-circle-plus path {
+  stroke: white;
+  stroke-width: 20px;
 }
 
 main {

@@ -2,7 +2,7 @@
 
 .statusbar {
   background-color: #fff;
-  min-height: 47px;
+  min-height: 50px;
 
   .message-wrapper {
     padding-top: 6px;
@@ -13,7 +13,7 @@
     border: 1px solid shade-color(#ffffcc, 10%);
     max-height: 150px;
     padding: 5px 8px;
-    width: calc(100% - 10px);
+    width: calc(100% - 5rem);
 
     .fa-check {
       color: forestgreen;
@@ -38,7 +38,14 @@
 
   .btn-create {
     cursor: pointer;
-    font-size: 35px;
-    line-height: 1em;
+    font-size: 4.5rem;
+    line-height: 1rem;
+    margin-top: -1rem;
+    text-shadow: 0 0 3px #fff;
+
+    .fa-circle-plus path {
+      stroke: white;
+      stroke-width: 20px;
+    }
   }
 }

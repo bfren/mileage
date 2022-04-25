@@ -72,19 +72,20 @@ public abstract class ModalActionTagHelper : TagHelper
 		}
 
 		// Add the CSS and links
+		const string fs = "fs-1";
 		if (Action == ModalAction.Complete)
 		{
-			a.AddCssClass("btn-complete text-success fs-1");
+			a.AddCssClass($"btn-complete text-success {fs}");
 			a.MergeAttribute("data-update", Link);
 		}
 		else if (Action == ModalAction.Delete)
 		{
-			a.AddCssClass("btn-delete-check text-danger fs-1");
+			a.AddCssClass($"btn-delete-check text-danger {fs}");
 			a.MergeAttribute("data-delete", Link);
 		}
 		else if (Action == ModalAction.Update)
 		{
-			a.AddCssClass("btn-update text-warning fs-1");
+			a.AddCssClass($"btn-update text-warning {fs}");
 			a.MergeAttribute("data-update", Link);
 		}
 
