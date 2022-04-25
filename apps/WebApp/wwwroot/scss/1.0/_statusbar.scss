@@ -8,9 +8,8 @@
     border: 1px solid shade-color(#ffffcc, 10%);
     margin-top: 7px;
     max-height: 150px;
-    max-width: calc(100% - 55px);
-    overflow-y: auto;
     padding: 5px 8px;
+    width: calc(100% - 40px);
 
     .fa-check {
       color: forestgreen;
