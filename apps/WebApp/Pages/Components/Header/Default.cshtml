@@ -14,18 +14,12 @@
 					</button>
 				</div>
 			</div>
-			<div class="collapse navbar-collapse justify-content-end text-end" id="navbarMain" navbar>
-				<ul class="navbar-nav ms-auto flex-nowrap">
+			<div class="collapse navbar-collapse" id="navbarMain" navbar>
+				<ul class="navbar-nav ms-auto flex-nowrap flex-row justify-content-end">
 					@foreach (var item in Model.Menu.Items)
 					{
-						string css = "";
-						if (this.Context.IsChildOf(item.Page))
-						{
-							css = "active";
-						}
-
 						<li class="nav-item">
-							<a class="nav-link @css pl-3" asp-page="@item.Page" title="@item.Text">@item.Text</a>
+							<a class="nav-link ps-3" asp-page="@item.Page" title="@item.Text">@item.Text</a>
 						</li>
 					}
 				</ul>
