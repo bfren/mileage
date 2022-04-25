@@ -11178,15 +11178,18 @@ footer div {
 }
 
 .statusbar {
+  background-color: #fff;
   min-height: 47px;
+}
+.statusbar .message-wrapper {
+  padding-top: 6px;
 }
 .statusbar .message {
   background-color: #ffffcc;
   border: 1px solid #e6e6b8;
-  margin-top: 7px;
   max-height: 150px;
   padding: 5px 8px;
-  width: calc(100% - 40px);
+  width: calc(100% - 10px);
 }
 .statusbar .message .fa-check {
   color: forestgreen;
@@ -11205,14 +11208,12 @@ footer div {
 }
 .statusbar .btn-create {
   cursor: pointer;
-  float: right;
-  max-height: 40px;
   font-size: 35px;
+  line-height: 1em;
 }
 
 main {
   background-color: #fff;
-  overflow-y: scroll;
   padding: 5px 0 70px;
 }
 

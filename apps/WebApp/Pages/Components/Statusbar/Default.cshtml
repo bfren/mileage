@@ -1,21 +1,27 @@
 @{
-	var newLink = Url.Page(pageName: "/Journeys/Index", pageHandler: "Create");
+	var newLink = Url.Page("/Journeys/Index", "Create");
 }
 
-<div class="container statusbar">
+<div class="statusbar border-bottom">
 
-	<div class="btn-create text-primary" data-create="@newLink">
-		<i class="fa-solid fa-circle-plus"></i>
-	</div>
+	<div class="container d-flex message-wrapper">
 
-	<div class="message hide rounded-2">
-		<div class="d-flex justify-content-between">
-			<div class="icon align-content-start pe-2"></div>
-			<div class="text flex-grow-1"></div>
-			<div class="close align-content-end">
-				<span class="countdown pe-1"></span>
+		<div class="align-self-start flex-grow-1">
+			<div class="message rounded-2">
+				<div class="d-flex justify-content-between">
+					<div class="icon align-content-start pe-2"></div>
+					<div class="text flex-grow-1"></div>
+					<div class="close align-content-end">
+						<span class="countdown pe-1"></span>
+					</div>
+				</div>
 			</div>
 		</div>
+
+		<div class="btn-create text-primary align-self-end" data-create="@newLink">
+			<i class="fa-solid fa-circle-plus"></i>
+		</div>
+
 	</div>
 
 </div>
