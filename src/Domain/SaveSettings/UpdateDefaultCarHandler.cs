@@ -38,7 +38,7 @@ internal sealed class UpdateDefaultCarHandler : CommandHandler<UpdateDefaultCarC
 		if (command.DefaultCarId is not null)
 		{
 			var check = await Dispatcher.DispatchAsync(new CheckCarBelongsToUserQuery(command.UserId, command.DefaultCarId));
-			if (!check.IsSome(out var value) || !value)
+			if (check.IsNone(out var _) || (check.IsSome(out var value) && !value))
 			{
 				return F.None<bool, Messages.SaveSettingsCheckFailedMsg>();
 			}

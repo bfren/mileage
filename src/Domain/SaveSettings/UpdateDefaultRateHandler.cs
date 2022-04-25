@@ -30,7 +30,7 @@ internal sealed class UpdateDefaultRateHandler : CommandHandler<UpdateDefaultRat
 		(Dispatcher, Settings, Log) = (dispatcher, settings, log);
 
 	/// <summary>
-	/// Update default car for user specified in <paramref name="command"/>
+	/// Update default rate for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
 	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultRateCommand command)
@@ -44,7 +44,7 @@ internal sealed class UpdateDefaultRateHandler : CommandHandler<UpdateDefaultRat
 			}
 		}
 
-		Log.Vrb("Updating Rate for {User}.", command.UserId.Value);
+		Log.Vrb("Updating Default Rate for {User}.", command.UserId.Value);
 		return await Settings.UpdateAsync(command);
 	}
 }
