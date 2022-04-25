@@ -47,7 +47,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var carId = LongId<CarId>();
 		var placeId = LongId<PlaceId>();
 		var rateId = LongId<RateId>();
-		var command = new CreateSettingsCommand(userId, new(0L, carId, placeId, rateId));
+		var command = new CreateSettingsCommand(userId, new(new(), 0L, carId, placeId, rateId));
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
 
