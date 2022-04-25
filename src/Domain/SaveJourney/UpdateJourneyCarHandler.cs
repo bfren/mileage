@@ -9,7 +9,7 @@ using Mileage.Persistence.Repositories;
 namespace Mileage.Domain.SaveJourney;
 
 /// <summary>
-/// Save a journey - create if it doesn't exist, or update if it does
+/// Update journey Car
 /// </summary>
 internal sealed class UpdateJourneyCarHandler : CommandHandler<UpdateJourneyCarCommand>
 {
@@ -26,7 +26,7 @@ internal sealed class UpdateJourneyCarHandler : CommandHandler<UpdateJourneyCarC
 		(Journey, Log) = (journey, log);
 
 	/// <summary>
-	/// Save the journey belonging to user specified in <paramref name="command"/>
+	/// Update journey Car belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
 	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyCarCommand command)
