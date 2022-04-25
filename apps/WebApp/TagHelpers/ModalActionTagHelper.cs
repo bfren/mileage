@@ -13,6 +13,7 @@ public enum ModalAction
 {
 	Complete = 1 << 0,
 	Delete = 1 << 1,
+	Update = 1 << 2,
 }
 
 /// <summary>
@@ -31,6 +32,15 @@ public sealed class CompleteModalTagHelper : ModalActionTagHelper
 public sealed class DeleteModalTagHelper : ModalActionTagHelper
 {
 	public DeleteModalTagHelper() : base(ModalAction.Delete) { }
+}
+
+/// <summary>
+/// Output a link to open an Update modal
+/// </summary>
+[HtmlTargetElement("modal-update", TagStructure = TagStructure.WithoutEndTag)]
+public sealed class UpdateModalTagHelper : ModalActionTagHelper
+{
+	public UpdateModalTagHelper() : base(ModalAction.Update) { }
 }
 
 /// <summary>
@@ -64,13 +74,18 @@ public abstract class ModalActionTagHelper : TagHelper
 		// Add the CSS and links
 		if (Action == ModalAction.Complete)
 		{
-			a.AddCssClass("btn-complete text-success fs-2");
+			a.AddCssClass("btn-complete text-success fs-1");
 			a.MergeAttribute("data-update", Link);
 		}
 		else if (Action == ModalAction.Delete)
 		{
-			a.AddCssClass("btn-delete-check text-danger fs-2");
+			a.AddCssClass("btn-delete-check text-danger fs-1");
 			a.MergeAttribute("data-delete", Link);
+		}
+		else if (Action == ModalAction.Update)
+		{
+			a.AddCssClass("btn-update text-warning fs-1");
+			a.MergeAttribute("data-update", Link);
 		}
 
 		// Create the button content
@@ -84,6 +99,10 @@ public abstract class ModalActionTagHelper : TagHelper
 		else if (Action == ModalAction.Delete)
 		{
 			i.AddCssClass("fa-circle-minus");
+		}
+		else if (Action == ModalAction.Update)
+		{
+			i.AddCssClass("fa-circle-dot");
 		}
 
 		// Add button to hyperlink
