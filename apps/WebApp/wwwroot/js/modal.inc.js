@@ -37,6 +37,13 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 			} else {
 				s.first().select();
 			}
+
+			var f = $(".modal-focus");
+			if (f.length == 1) {
+				f.focus();
+			} else {
+				f.first().focus();
+			}
 		});
 
 		// fade out background when modal is closed

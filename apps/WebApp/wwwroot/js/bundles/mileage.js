@@ -220,6 +220,13 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 			} else {
 				s.first().select();
 			}
+
+			var f = $(".modal-focus");
+			if (f.length == 1) {
+				f.focus();
+			} else {
+				f.first().focus();
+			}
 		});
 
 		// fade out background when modal is closed
@@ -397,12 +404,32 @@ ready(setupChangePasswordUpdateModal);
 /**
  * Open the update modal.
  * 
- * @param {any} url
- * @param {any} replaceId
+ * @param {string} url
+ * @param {string} replaceId
+ * @param {boolean} replaceContents
  */
-function openUpdateModal(url, replaceId) {
-	openModal("#update", url, replaceId, false, () => setupUpdateModalSearch());
+function openUpdateModal(url, replaceId, replaceContents) {
+	openModal("#update", url, replaceId, replaceContents, () => setupUpdateModalSearch());
 }
+
+/**
+ * Open delete modal when delete buttons are clicked.
+ *
+ */
+function setupUpdateModalOpen() {
+	$("body").on("click", ".btn-update", function (e) {
+		// don't do whatever the link / button was going to do
+		e.preventDefault();
+
+		// get info
+		var updateUrl = $(this).data("update");
+		var replaceId = $(this).data("replace");
+
+		// open modal
+		openUpdateModal(updateUrl, replaceId, true);
+	});
+}
+ready(setupUpdateModalOpen);
 
 /**
  * Filter list elements based on search field entry.
@@ -474,7 +501,7 @@ function setupTokenUpdateModals() {
 	$("body").on("click", ".token > a, .btn-complete", function () {
 		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
-		openUpdateModal(updateUrl, replaceId);
+		openUpdateModal(updateUrl, replaceId, false);
 	});
 }
 ready(setupTokenUpdateModals);
@@ -556,19 +583,6 @@ function loadSaveForm(item, el, e) {
 	// show alert and load URL
 	showPleaseWaitAlert();
 	$("#save-" + item).load(url, () => closeAlert());
-}
-
-/**
- * Reload the form when the cancel button is clicked.
- * 
- * @param {any} form Form selector
- * @param {any} item The name of the item being saved
- * @param {any} el The element to be reloaded
- */
-function setupReloadFormOnCancel(form, item, el) {
-	$(form).on("click", ".btn-cancel", function (e) {
-		loadSaveForm(item, el, e);
-	});
 }
 
 /**
