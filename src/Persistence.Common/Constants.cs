@@ -12,4 +12,15 @@ public static class Constants
 	/// Database schema name
 	/// </summary>
 	public static string Schema { get; } = "mileage";
+
+	/// <summary>
+	/// Function names
+	/// </summary>
+	public static class Functions
+	{
+		/// <summary>
+		/// Get expenses report recent months
+		/// </summary>
+		public static string GetExpensesReportRecentMonths { get; } = $"{Schema}.get_expenses_report_recent_months";
+	}
 }
