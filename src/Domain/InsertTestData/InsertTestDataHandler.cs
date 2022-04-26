@@ -48,10 +48,10 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 				from p0 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
 				from p1 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
 				from p2 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p3 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
 				from r0 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
 				from r1 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
-				from j0 in insertJourneys(u0, c0, p0, new[] { p1, p2 }, r0)
-				from j1 in insertJourneys(u0, c1, p0, new[] { p1, p2 }, r1)
+				from _ in insertJourneys(u0, c0, c1, p0, p1, new[] { p2, p3 }, r0, r1)
 				from s0 in Dispatcher.DispatchAsync(new SaveSettingsCommand(u0, new(new(), 0L, c0, null, null)))
 				select true;
 
@@ -59,14 +59,20 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 			none: r => Log.Msg(r, LogLevel.Error)
 		);
 
-		async Task<Maybe<IEnumerable<JourneyId>>> insertJourneys(AuthUserId userId, CarId carId, PlaceId fromPlaceId, PlaceId[] toPlaceIds, RateId rateId)
+		async Task<Maybe<IEnumerable<JourneyId>>> insertJourneys(
+			AuthUserId userId,
+			CarId carId0, CarId carId1,
+			PlaceId fromPlaceId0, PlaceId fromPlaceId1,
+			PlaceId[] toPlaceIds,
+			RateId rateId0, RateId rateId1
+		)
 		{
 			Log.Inf("Inserting test journeys.");
 			var mileage = new List<(uint start, uint? end)>();
 
 			var miles = Rnd.NumberF.GetUInt32(20000, 30000);
 			var date = DateTime.Today;
-			const int number = 50;
+			const int number = 100;
 
 			// Incomplete journey
 			mileage.Add((miles, null));
@@ -83,12 +89,14 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 			var journeyIds = new List<JourneyId>();
 			for (var i = 0; i < number; i++)
 			{
+				var carId = Rnd.Flip ? carId0 : carId1;
+				var fromPlaceId = Rnd.Flip ? fromPlaceId0 : fromPlaceId1;
+				var rateId = Rnd.Flip ? rateId0 : rateId1;
 				var (start, end) = mileage[i];
-				_ = await Dispatcher.DispatchAsync(
-					new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId)
-				).IfSomeAsync(
-					x => journeyIds.Add(x)
-				);
+
+				_ = await Dispatcher
+					.DispatchAsync(new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId))
+					.IfSomeAsync(x => journeyIds.Add(x));
 
 				date = date.AddDays(Rnd.NumberF.GetInt32(0, 3) * -1);
 			}
