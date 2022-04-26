@@ -50,7 +50,7 @@ public sealed class SignInModel : PageModel
 		{
 			return success with
 			{
-				Message = Alert.Success("You were signed in, redirecting..."),
+				Message = Alert.Success("You were signed in."),
 				RedirectTo = Url.Page("/Journeys/Index", "Lists")
 			};
 		}
