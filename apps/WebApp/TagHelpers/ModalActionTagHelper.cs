@@ -19,7 +19,7 @@ public enum ModalAction
 /// <summary>
 /// Output a link to open a Complete Journey modal
 /// </summary>
-[HtmlTargetElement("modal-complete", TagStructure = TagStructure.WithoutEndTag)]
+[HtmlTargetElement("modal-complete", TagStructure = TagStructure.NormalOrSelfClosing)]
 public sealed class CompleteModalTagHelper : ModalActionTagHelper
 {
 	public CompleteModalTagHelper() : base(ModalAction.Complete) { }
@@ -28,7 +28,7 @@ public sealed class CompleteModalTagHelper : ModalActionTagHelper
 /// <summary>
 /// Output a link to open a Delete modal
 /// </summary>
-[HtmlTargetElement("modal-delete", TagStructure = TagStructure.WithoutEndTag)]
+[HtmlTargetElement("modal-delete", TagStructure = TagStructure.NormalOrSelfClosing)]
 public sealed class DeleteModalTagHelper : ModalActionTagHelper
 {
 	public DeleteModalTagHelper() : base(ModalAction.Delete) { }
@@ -37,7 +37,7 @@ public sealed class DeleteModalTagHelper : ModalActionTagHelper
 /// <summary>
 /// Output a link to open an Update modal
 /// </summary>
-[HtmlTargetElement("modal-update", TagStructure = TagStructure.WithoutEndTag)]
+[HtmlTargetElement("modal-update", TagStructure = TagStructure.NormalOrSelfClosing)]
 public sealed class UpdateModalTagHelper : ModalActionTagHelper
 {
 	public UpdateModalTagHelper() : base(ModalAction.Update) { }
@@ -56,11 +56,16 @@ public abstract class ModalActionTagHelper : TagHelper
 
 	public string Replace { get; set; } = string.Empty;
 
+	public bool ReplaceContents { get; set; } = true;
+
 	protected ModalActionTagHelper(ModalAction action) =>
 		Action = action;
 
-	public override void Process(TagHelperContext context, TagHelperOutput output)
+	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{
+		// Set output options
+		output.TagMode = TagMode.StartTagAndEndTag;
+
 		// Create the hyperlink tag with common options
 		var a = new TagBuilder("a");
 		a.MergeAttribute("href", "javascript:void(0)");
@@ -72,45 +77,59 @@ public abstract class ModalActionTagHelper : TagHelper
 		}
 
 		// Add the CSS and links
-		const string fs = "fs-1";
 		if (Action == ModalAction.Complete)
 		{
-			a.AddCssClass($"btn-complete text-success {fs}");
+			a.AddCssClass("btn-complete");
 			a.MergeAttribute("data-update", Link);
 		}
 		else if (Action == ModalAction.Delete)
 		{
-			a.AddCssClass($"btn-delete-check text-danger {fs}");
+			a.AddCssClass("btn-delete-check");
 			a.MergeAttribute("data-delete", Link);
 		}
 		else if (Action == ModalAction.Update)
 		{
-			a.AddCssClass($"btn-update text-warning {fs}");
+			a.AddCssClass("btn-update");
 			a.MergeAttribute("data-update", Link);
 		}
 
+		// Look for any child content
+		var child = await output.GetChildContentAsync();
+		var content = child.GetContent();
+
 		// Create the button content
-		var i = new TagBuilder("i");
-		i.AddCssClass("fa-solid");
+		if (string.IsNullOrEmpty(content))
+		{
+			const string fs = "fs-1";
 
-		if (Action == ModalAction.Complete)
-		{
-			i.AddCssClass("fa-circle-check");
-		}
-		else if (Action == ModalAction.Delete)
-		{
-			i.AddCssClass("fa-circle-minus");
-		}
-		else if (Action == ModalAction.Update)
-		{
-			i.AddCssClass("fa-circle-dot");
-		}
+			var i = new TagBuilder("i");
+			i.AddCssClass("fa-solid");
 
-		// Add button to hyperlink
-		_ = a.InnerHtml.AppendHtml(i);
+			if (Action == ModalAction.Complete)
+			{
+				a.AddCssClass($"btn-complete text-success {fs}");
+				i.AddCssClass("fa-circle-check");
+			}
+			else if (Action == ModalAction.Delete)
+			{
+				a.AddCssClass($"btn-delete-check text-danger {fs}");
+				i.AddCssClass("fa-circle-minus");
+			}
+			else if (Action == ModalAction.Update)
+			{
+				a.AddCssClass($"text-warning {fs}");
+				i.AddCssClass("fa-circle-dot");
+			}
+
+			// Add button to hyperlink
+			_ = a.InnerHtml.AppendHtml(i);
+		}
+		else
+		{
+			_ = a.InnerHtml.Append(content);
+		}
 
 		// Set output content
 		_ = output.Content.SetHtmlContent(a);
-		output.TagMode = TagMode.StartTagAndEndTag;
 	}
 }
