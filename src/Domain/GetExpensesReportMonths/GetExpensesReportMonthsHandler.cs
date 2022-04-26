@@ -22,10 +22,14 @@ internal sealed class GetExpensesReportMonthsHandler : QueryHandler<GetExpensesR
 	public GetExpensesReportMonthsHandler(IDb db, ILog<GetExpensesReportMonthsHandler> log) =>
 		(Db, Log) = (db, log);
 
+	/// <summary>
+	/// Get list of recent months for the expenses report
+	/// </summary>
+	/// <param name="query"></param>
 	public override Task<Maybe<IEnumerable<MonthModel>>> HandleAsync(GetExpensesReportMonthsQuery query)
 	{
 		var userId = query.UserId.Value;
-		var months = 6;
+		var months = Constants.ExpensesReportMonths;
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportRecentMonths}(@{nameof(userId)}, @{nameof(months)});";
 		return Db.QueryAsync<MonthModel>(sql, new { userId, months }, System.Data.CommandType.Text);
 	}
