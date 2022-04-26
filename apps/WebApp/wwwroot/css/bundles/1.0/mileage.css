@@ -11221,6 +11221,15 @@ body {
   display: none;
 }
 
+@media print {
+  body {
+    font-size: 1rem;
+  }
+
+  .container {
+    max-width: 100% !important;
+  }
+}
 .navbar-brand {
   font-family: -apple-system, Roboto, Arial, sans-serif;
   font-size: 1.5rem;
@@ -11316,4 +11325,8 @@ input[type=number] {
 
 .btn.btn-xs {
   padding: 0.1rem 0.3rem;
+}
+
+.report-summary {
+  max-width: 520px !important;
 }
