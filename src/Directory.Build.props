@@ -12,7 +12,7 @@
 
   <!-- Common Packages -->
   <ItemGroup>
-    <PackageReference Include="MaybeF" Version="8.3.0"/>
+    <PackageReference Include="MaybeF" Version="9.0.0"/>
   </ItemGroup>
   <ItemGroup>
     <Using Include="MaybeF"/>
