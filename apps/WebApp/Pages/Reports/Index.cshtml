@@ -1,0 +1,29 @@
+@page
+@model WebApp.Pages.Reports.IndexModel
+
+<div class="container">
+
+	<h2>Reports</h2>
+
+	<hr />
+	<div class="d-flex align-items-center">
+		<div class="fs-4 fw-bold">Expenses:</div>
+		<div class="dropdown ms-2">
+			<button class="btn btn-secondary dropdown-toggle"
+					type="button"
+					id="month-dropdown"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
+				Month
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="month-dropdown">
+				@foreach (var item in Model.ExpensesMonths)
+				{
+					var (year, month) = (item.Year, item.Month);
+					<li><a class="dropdown-item" href="@Url.Page("Expenses", new { year, month })">@item.ToString("MMMM yyyy")</a></li>
+				}
+			</ul>
+		</div>
+	</div>
+
+</div>

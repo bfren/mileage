@@ -11,12 +11,14 @@ namespace Mileage.Domain.SaveUserProfile;
 /// <param name="Id"></param>
 /// <param name="Version"></param>
 /// <param name="EmailAddress"></param>
+/// <param name="FriendlyName"></param>
 /// <param name="GivenName"></param>
 /// <param name="FamilyName"></param>
 public sealed record class SaveUserProfileCommand(
 	AuthUserId Id,
 	long Version,
 	string EmailAddress,
+	string FriendlyName,
 	string? GivenName,
 	string? FamilyName
 ) : ICommand, IWithVersion<AuthUserId>;

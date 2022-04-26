@@ -3,6 +3,7 @@
 
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth.Functions;
+using Jeebs.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,6 @@ public sealed class SignOutModel : PageModel
 			HttpContext.SignOutAsync
 		));
 
-		return Result.Create(true) with { RedirectTo = Url.Page("./SignIn") };
+		return Result.Create(true, Alert.Success("You were signed out.")) with { RedirectTo = Url.Page("./SignIn") };
 	}
 }

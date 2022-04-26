@@ -1,0 +1,121 @@
+@page
+@using Mileage.Persistence.Common.Reports
+@model Mileage.WebApp.Pages.Reports.ExpensesModel
+
+@{
+	var summary =
+		from j in Model.Journeys
+		group j by j.Car into g
+		orderby g.Key
+		select new
+		{
+			Car = g.Key,
+			Journeys = g.ToList()
+		};
+
+	var totalMiles = 0;
+	var totalAmount = 0f;
+
+	float amount(float rate, int? distance) =>
+		rate * (distance ?? 0);
+
+	string place(ExpensesReportPlace p)
+	{
+		var text = p.Description;
+		if (p.Postcode is string postcode)
+		{
+			text += $" ({postcode})";
+		}
+
+		return text;
+	}
+}
+
+<div class="container">
+
+	<h2 class="d-print-none"><a asp-page="Index">Reports</a>: Mileage for @Model.Month</h2>
+	<h2 class="d-none d-print-block">Mileage for @Model.Month</h2>
+	<h3 class="d-none d-print-block">Generated for @User.Identity.Name</h3>
+
+	<hr />
+
+	<h3>Summary</h3>
+	<table class="table table-borderless report-summary">
+		<thead>
+			<tr class="border-start-0 border-end-0 border-top-0 border-2 border-dark">
+				<th>Car</th>
+				<th class="text-end">Rate</th>
+				<th class="text-end">Miles</th>
+				<th class="text-end">Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var s in summary)
+			{
+				var rates = s.Journeys.Select(j => j.Rate).OrderBy(r => r).Distinct().ToList();
+
+				@foreach (var r in rates)
+				{
+					var first = rates.IndexOf(r) == 0;
+
+					var distance = s.Journeys.Where(j => j.Rate == r).Sum(j => j.Distance);
+					totalMiles += distance ?? 0;
+					totalAmount += amount(r, distance);
+
+					var css = first ? "border-top" : string.Empty;
+
+					<tr class="@css">
+						@if (first)
+						{
+							<td rowspan="@rates.Count()">@s.Car</td>
+						}
+
+						<td class="text-end">@r.ToString("0.00")</td>
+						<td class="text-end">@distance</td>
+						<td class="text-end">@amount(r, distance).ToString("0.00")</td>
+					</tr>
+				}
+			}
+		</tbody>
+		<tfoot>
+			<tr class="border-start-0 border-end-0 border-bottom-0 border-2 border-dark fw-bold">
+				<td colspan="2"></td>
+				<td class="text-end">@totalMiles</td>
+				<td class="text-end">@totalAmount.ToString("0.00")</td>
+			</tr>
+		</tfoot>
+	</table>
+
+	<h3>Detail</h3>
+	<table class="table table-sm table-striped small report-detail">
+		<thead>
+			<tr>
+				<th scope="col">Date</th>
+				<th scope="col">Mileage</th>
+				<th scope="col">Car</th>
+				<th scope="col">Rate</th>
+				<th scope="col">Total</th>
+				<th scope="col">From</th>
+				<th scope="col">To</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var j in Model.Journeys)
+			{
+				var css = j.Distance is null ? "table-danger" : string.Empty;
+				var mileage = j.Start + (j.Distance is null ? " - incomplete" : $" - {j.End} ({j.Distance})");
+
+				<tr class="@css" id="journey-@j.Id.Value">
+					<td>@j.Day.ToString("dd/MM/yyyy")</td>
+					<td>@mileage</td>
+					<td>@j.Car</td>
+					<td class="text-end">@j.Rate.ToString("0.00")</td>
+					<td class="text-end">@amount(j.Rate, j.Distance).ToString("0.00")</td>
+					<td>@place(j.From)</td>
+					<td>@string.Join(", ", j.To.Select(place))</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+</div>

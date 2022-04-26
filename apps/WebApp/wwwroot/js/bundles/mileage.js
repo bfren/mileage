@@ -18,32 +18,57 @@ const alertTypes = {
 }
 
 const message = $(".statusbar .message");
+const alertCountdown = 3;
 var alertTimeout = 0;
+
+/**
+ * Returns true if there is currently a visible message.
+ *
+ */
+function isAlert() {
+	return message.is(":visible");
+}
+
+/**
+ * Returns true if there is currently a visible message and it's sticky.
+ *
+ */
+function isAlertSticky() {
+	return isAlert() && message.data("sticky");
+}
 
 /**
  * Show an alert.
  * 
  * @param {string} type Alert type - see alertIcons for valid values
  * @param {string} text Alert text
+ * @param {boolean} sticky If true the alert will not be automatically closed
  */
 function showAlert(type, text, sticky) {
+	if (type == alertTypes.info && isAlertSticky()) {
+		return;
+	}
+
 	// set alert values
 	message.find(".icon").html(alertIcons[type]);
 	message.find(".text").text(text);
 	message.find(".countdown").text("");
-	//message.find(".manual").html(alertIcons["close"]);
+	message.data("type", type);
+	message.data("sticky", sticky ? "true" : "false");
 
 	// show alert and clear any existing timeouts
-	message.show();
+	message.stop().show();
 	clearTimeout(alertTimeout);
 
 	// make error alerts sticky
 	if (type == alertTypes.error || sticky) {
+		message.find(".close").show();
 		return;
 	}
 
 	// start countdown to hide other alerts automatically
-	updateAlert(5);
+	message.find(".close").hide();
+	updateAlert(alertCountdown);
 }
 
 /**
@@ -61,7 +86,7 @@ function showPleaseWaitAlert() {
  */
 function updateAlert(seconds) {
 	if (seconds == 0) {
-		closeAlert();
+		closeAlert(true);
 		return;
 	}
 
@@ -70,21 +95,18 @@ function updateAlert(seconds) {
 }
 
 /**
- * Close the alert.
+ * Close the alert, if it is an info alert - or force is true.
  * 
+ * @param {string} force If true the alert will be closed whatever type it is
  */
-function closeAlert() {
-	message.fadeOut();
+function closeAlert(force) {
+	if (force || message.data("type") == alertTypes.info) {
+		message.fadeOut();
+	}
 }
-ready(() => message.click(() => closeAlert()));
-
-/**
- * Show any alerts on page load.
- * 
- */
-function showAlertsOnLoad() {
-}
-ready(showAlertsOnLoad);
+ready(() => message.click(
+	() => closeAlert(true)
+));
 
 /**
  * Setup date picker defaults
@@ -109,7 +131,7 @@ function loadPage(url) {
 	$.ajax({ url: url, method: "GET" })
 
 		.done(function (data, status, xhr) {
-			// close loading alert
+			// close info alert
 			closeAlert();
 
 			// handle JSON response
@@ -123,7 +145,7 @@ function loadPage(url) {
 		})
 
 		.fail(function (xhr) {
-			// close loading alert
+			// close info alert
 			closeAlert();
 
 			// handle unauthorised
@@ -424,9 +446,10 @@ function setupUpdateModalOpen() {
 		// get info
 		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
+		var replaceContents = $(this).data("replace-contents");
 
 		// open modal
-		openUpdateModal(updateUrl, replaceId, true);
+		openUpdateModal(updateUrl, replaceId, replaceContents);
 	});
 }
 ready(setupUpdateModalOpen);
@@ -523,12 +546,13 @@ ready(closeNavWhenClicked);
  * @param {any} r
  */
 function handleResult(r) {
+	// show alert
+	var sticky = r.message.type == alertTypes.warning || r.message.type == alertTypes.error;
+	showAlert(r.message.type, r.message.text, sticky);
+
 	// redirect or show alert
 	if (r.redirectTo) {
 		loadPage(r.redirectTo);
-	} else {
-		// show alert
-		showAlert(r.message.type, r.message.text);
 	}
 }
 

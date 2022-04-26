@@ -11,12 +11,14 @@ namespace Mileage.Domain.GetUserProfile;
 /// <param name="Id"></param>
 /// <param name="Version"></param>
 /// <param name="EmailAddress"></param>
+/// <param name="FriendlyName"></param>
 /// <param name="GivenName"></param>
 /// <param name="FamilyName"></param>
 public sealed record class UserProfileModel(
 	AuthUserId Id,
 	long Version,
 	string EmailAddress,
+	string FriendlyName,
 	string? GivenName,
 	string? FamilyName
 )
@@ -24,5 +26,5 @@ public sealed record class UserProfileModel(
 	/// <summary>
 	/// Create empty for model binding
 	/// </summary>
-	public UserProfileModel() : this(new(), 0L, string.Empty, null, null) { }
+	public UserProfileModel() : this(new(), 0L, string.Empty, string.Empty, null, null) { }
 }

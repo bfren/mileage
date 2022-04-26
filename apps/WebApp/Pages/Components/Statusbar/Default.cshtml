@@ -2,17 +2,18 @@
 	var newLink = Url.Page("/Journeys/Index", "Create");
 }
 
-<div class="statusbar border-bottom">
+<div class="statusbar border-bottom d-print-none">
 
 	<div class="container d-flex message-wrapper">
 
 		<div class="align-self-start flex-grow-1">
-			<div class="message rounded-2">
+			<div class="message hide rounded-2">
 				<div class="d-flex justify-content-between">
 					<div class="icon align-content-start pe-2"></div>
 					<div class="text flex-grow-1"></div>
-					<div class="close align-content-end">
+					<div class="align-content-end">
 						<span class="countdown pe-1"></span>
+						<span class="close pe-1"><i class="fa-solid fa-xmark"></i></span>
 					</div>
 				</div>
 			</div>

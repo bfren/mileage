@@ -1,0 +1,67 @@
+@model Mileage.WebApp.Pages.Auth.EditProfileModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	Layout = "Modals/UpdateModal";
+
+	var emailName = Html.NameFor(x => x.Profile.EmailAddress);
+	var name = Html.NameFor(x => x.Profile.FriendlyName);
+	var givenName = Html.NameFor(x => x.Profile.GivenName);
+	var surname = Html.NameFor(x => x.Profile.FamilyName);
+}
+
+<form method="post" action="@Url.Page("Profile", "Edit")">
+
+	<div class="row mb-3">
+		<label class="col-12 col-form-label" for="@emailName.Normalise()">Email Address</label>
+		<div class="col-12">
+			<input type="email"
+				   class="form-control"
+				   name="@emailName"
+				   id="@emailName.Normalise()"
+				   value="@Model.Profile.EmailAddress"
+				   required />
+			<div class="invalid-feedback">Please enter a valid email address.</div>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<label class="col-12 col-form-label" for="@name.Normalise()">Name for Reports</label>
+		<div class="col-12">
+			<input type="text"
+				   class="form-control"
+				   name="@name"
+				   id="@name.Normalise()"
+				   value="@Model.Profile.FriendlyName"
+				   required />
+			<div class="form-text">After changing you must sign out and back in for it to take effect.</div>
+			<div class="invalid-feedback">Please enter a name.</div>
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<label class="col-12 col-form-label" for="@givenName.Normalise()">Given Name</label>
+		<div class="col-12">
+			<input type="text"
+				   class="form-control"
+				   name="@givenName"
+				   id="@givenName.Normalise()"
+				   value="@Model.Profile.GivenName" />
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<label class="col-12 col-form-label" for="@surname.Normalise()">Family Name</label>
+		<div class="col-12">
+			<input type="text"
+				   class="form-control"
+				   name="@surname"
+				   id="@surname.Normalise()"
+				   value="@Model.Profile.FamilyName" />
+		</div>
+	</div>
+
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(x => x.Profile.Version)
+
+</form>

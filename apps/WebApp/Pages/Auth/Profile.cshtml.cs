@@ -3,13 +3,11 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetUserProfile;
-using Mileage.Domain.SaveUserProfile;
 
 namespace Mileage.WebApp.Pages.Auth;
 
@@ -39,26 +37,5 @@ public sealed partial class ProfileModel : PageModel
 		}
 
 		return RedirectToPage("./SignOut");
-	}
-
-	public async Task<IActionResult> OnPostAsync(SaveUserProfileCommand profile)
-	{
-		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(profile with { Id = u })
-					select r;
-
-		return await query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: async x => x switch
-				{
-					true =>
-						await OnGetAsync(),
-
-					false =>
-						Result.Error("Unable to save profile, please try again.")
-				},
-				none: r => Result.Error(r)
-			);
 	}
 }
