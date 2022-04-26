@@ -8,12 +8,18 @@ using SimpleMigrations;
 
 namespace Mileage.Persistence.Clients.PostgreSql.Migrations;
 
+/// <summary>
+/// Migration 0007: Add function to get expenses report months
+/// </summary>
 [Migration(7, "Add function to get expenses report months")]
 public sealed class AddGetExpensesReportMonths : Migration
 {
 	private string Col(Func<JourneyTable, string> selector) =>
 		$"{Constants.Schema}.{JourneyTable.TableName}.{selector(new())}";
 
+	/// <summary>
+	/// 7: Up
+	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE OR REPLACE FUNCTION {Constants.Schema}.{Constants.Functions.GetExpensesReportRecentMonths}(
 			user_id bigint,
@@ -48,6 +54,9 @@ public sealed class AddGetExpensesReportMonths : Migration
 		$BODY$;
 	");
 
+	/// <summary>
+	/// 7: Down
+	/// </summary>
 	protected override void Down() => Execute($@"
 		DROP FUNCTION IF EXISTS {Constants.Schema}.{Constants.Functions.GetExpensesReportRecentMonths}(bigint, integer)
 		;
