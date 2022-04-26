@@ -28,6 +28,8 @@ internal sealed class GetExpensesReportMonthsHandler : QueryHandler<GetExpensesR
 	/// <param name="query"></param>
 	public override Task<Maybe<IEnumerable<MonthModel>>> HandleAsync(GetExpensesReportMonthsQuery query)
 	{
+		Log.Vrb("Getting expenses report months for {User}.", query.UserId);
+
 		var userId = query.UserId.Value;
 		var months = Constants.ExpensesReportMonths;
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportRecentMonths}(@{nameof(userId)}, @{nameof(months)});";
