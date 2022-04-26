@@ -21,9 +21,10 @@ function setupUpdateModalOpen() {
 		// get info
 		var updateUrl = $(this).data("update");
 		var replaceId = $(this).data("replace");
+		var replaceContents = $(this).data("replace-contents");
 
 		// open modal
-		openUpdateModal(updateUrl, replaceId, true);
+		openUpdateModal(updateUrl, replaceId, replaceContents);
 	});
 }
 ready(setupUpdateModalOpen);
