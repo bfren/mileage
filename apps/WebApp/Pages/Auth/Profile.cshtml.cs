@@ -3,11 +3,13 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
+using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetUserProfile;
+using Mileage.Domain.InsertTestData;
 
 namespace Mileage.WebApp.Pages.Auth;
 
@@ -37,5 +39,18 @@ public sealed partial class ProfileModel : PageModel
 		}
 
 		return RedirectToPage("./SignOut");
+	}
+
+	public async Task<IActionResult> OnGetInsertTestDataAsync()
+	{
+		var query = from r in Dispatcher.DispatchAsync(new InsertTestDataCommand())
+					select r;
+
+		return await query
+			.AuditAsync(none: Log.Msg)
+			.SwitchAsync(
+				some: x => Result.Create(x),
+				none: r => Result.Error(r)
+			);
 	}
 }
