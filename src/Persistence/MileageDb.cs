@@ -5,6 +5,7 @@ using Jeebs.Config.Db;
 using Jeebs.Data;
 using Jeebs.Logging;
 using Microsoft.Extensions.Options;
+using Mileage.Persistence.Common.Reports;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Tables;
@@ -59,6 +60,8 @@ public sealed class MileageDb : Db
 
 		// Add type handlers
 		client.Types.AddStrongIdTypeHandlers();
+		client.Types.AddJsonTypeHandler<ExpensesReportPlace>();
 		client.Types.AddListTypeHandlers<PlaceId>();
+		client.Types.AddListTypeHandlers<ExpensesReportPlace>();
 	}
 }
