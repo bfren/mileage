@@ -6,7 +6,7 @@ using StrongId;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
-public sealed record class ListSingleItemModel(long Id, string Text);
+public sealed record class ListSingleItemModel(long Id, string Value, string Text);
 
 public sealed record class ListSingleModel(
 	string ListName,
@@ -20,18 +20,26 @@ public abstract class ListSingleViewComponent<TModel, TId> : ViewComponent
 	where TModel : IWithId<TId>
 	where TId : LongId, new()
 {
+	public delegate string GetString(TModel model);
+
 	private string Singular { get; }
 
-	private Func<TModel, string> GetText { get; }
+	private GetString GetValue { get; }
 
-	protected ListSingleViewComponent(string singular, Func<TModel, string> getText) =>
-		(Singular, GetText) = (singular, getText);
+	private GetString? GetText { get; }
+
+	protected ListSingleViewComponent(string singular, GetString getValue) =>
+		(Singular, GetValue) = (singular, getValue);
+
+	protected ListSingleViewComponent(string singular, GetString getValue, GetString? getText) :
+		this(singular, getValue) =>
+		GetText = getText;
 
 	public IViewComponentResult Invoke(string listName, bool allowNull, List<TModel> items, TId? selected)
 	{
 		var models = from i in items
 					 orderby i.Id == selected descending
-					 select new ListSingleItemModel(i.Id.Value, GetText(i));
+					 select new ListSingleItemModel(i.Id.Value, GetValue(i), (GetText ?? GetValue).Invoke(i));
 
 		return View(
 			"~/Pages/Components/List/ListSingle.cshtml",

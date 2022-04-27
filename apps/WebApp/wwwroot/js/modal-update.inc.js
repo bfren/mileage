@@ -63,10 +63,23 @@ function setupUpdateModalSearch() {
 		// get item list id
 		var filterItems = $(this).data("filter-for");
 
+		// holds whether or not there is an exact match
+		var exactMatch = false;
+
 		// filter items that match the input value
 		$("#" + filterItems + " label").filter(function () {
-			var show = $(this).data("text").toString().indexOf(value.toLowerCase()) > -1;
+			// get text values as lowercase for comparison
+			var itemText = $(this).data("text").toString().toLowerCase();
+			var searchText = value.toLowerCase();
+
+			// if the item contains the search text, show it
+			var show = itemText.indexOf(searchText) > -1;
 			$(this).toggle(show);
+
+			// if the search text exactly matches an item, hide the add item button
+			if (itemText == searchText) {
+				exactMatch = true;
+			}
 		});
 
 		// if the add item button is disabled, stop
@@ -75,7 +88,7 @@ function setupUpdateModalSearch() {
 		}
 
 		// show add item button
-		if (value) {
+		if (value && !exactMatch) {
 			addItem.text("Add: " + value).show();
 		} else {
 			addItem.text("").hide();
