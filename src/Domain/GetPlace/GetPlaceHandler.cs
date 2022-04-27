@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using MaybeF.Caching;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetPlace;
 
 /// <summary>
-/// Get a 'from' place
+/// Get a place
 /// </summary>
 internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceModel>
 {
+	private IMaybeCache<PlaceId> Cache { get; init; }
+
 	private IPlaceRepository Place { get; init; }
 
 	private ILog<GetPlaceHandler> Log { get; init; }
@@ -21,10 +25,11 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceMode
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
+	/// <param name="cache"></param>
 	/// <param name="place"></param>
 	/// <param name="log"></param>
-	public GetPlaceHandler(IPlaceRepository place, ILog<GetPlaceHandler> log) =>
-		(Place, Log) = (place, log);
+	public GetPlaceHandler(IMaybeCache<PlaceId> cache, IPlaceRepository place, ILog<GetPlaceHandler> log) =>
+		(Cache, Place, Log) = (cache, place, log);
 
 	/// <summary>
 	/// Get the specified place if it belongs to the user
@@ -37,11 +42,22 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceMode
 			return F.None<GetPlaceModel, Messages.PlaceIdIsNullMsg>().AsTask;
 		}
 
-		Log.Vrb("Get Place: {Query}.", query);
-		return Place
-			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, query.PlaceId)
-			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.QuerySingleAsync<GetPlaceModel>();
+		return Cache
+			.GetOrCreateAsync(
+				key: query.PlaceId,
+				valueFactory: () =>
+				{
+					Log.Vrb("Get Place: {Query}.", query);
+					return Place
+						.StartFluentQuery()
+						.Where(x => x.Id, Compare.Equal, query.PlaceId)
+						.Where(x => x.UserId, Compare.Equal, query.UserId)
+						.QuerySingleAsync<GetPlaceModel>();
+				}
+			)
+			.SwitchIfAsync(
+				check: x => x.UserId == query.UserId,
+				ifFalse: _ => F.None<GetPlaceModel, Messages.PlaceDoesNotBelongToUserMsg>()
+			);
 	}
 }
