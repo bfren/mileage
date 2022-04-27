@@ -11317,6 +11317,7 @@ input[type=number] {
 }
 #create .modal-dialog, #update .modal-dialog, #delete .modal-dialog {
   padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 #create .list-items .list-item, #update .list-items .list-item {
