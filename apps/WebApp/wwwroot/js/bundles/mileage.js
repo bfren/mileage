@@ -689,6 +689,7 @@ function setupAjaxSubmit() {
 		e.preventDefault();
 
 		// check validity
+		var form = $(this);
 		if (this.checkValidity() === false) {
 			form.find(":input:visible").not("[formnovalidate]")
 				.parent().addClass("was-validated");
@@ -696,7 +697,7 @@ function setupAjaxSubmit() {
 		}
 
 		// submit form
-		submitForm($(this));
+		submitForm(form);
 	});
 }
 ready(setupAjaxSubmit);
