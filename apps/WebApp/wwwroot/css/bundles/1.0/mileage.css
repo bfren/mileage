@@ -11250,10 +11250,10 @@ footer div {
 
 .statusbar {
   background-color: #fff;
-  min-height: 50px;
+  min-height: 49px;
 }
 .statusbar .message-wrapper {
-  padding-top: 6px;
+  padding-top: 5px;
 }
 .statusbar .message {
   background-color: #ffffcc;
