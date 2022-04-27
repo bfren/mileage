@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.GetPlace;
 
@@ -20,7 +21,7 @@ public sealed record class GetPlaceModel(
 	long Version,
 	string Description,
 	string? Postcode
-)
+) : WithUserId, IWithId<PlaceId>
 {
 	/// <summary>
 	/// Create blank for model binding

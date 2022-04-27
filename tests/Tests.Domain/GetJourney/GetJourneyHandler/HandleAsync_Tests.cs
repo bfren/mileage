@@ -13,7 +13,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
 	private class Setup : GetSingle_Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneyQuery, GetJourneyHandler, GetJourneyModel>
 	{
-		public Setup() : base("Journey") { }
+		public Setup() : base("Journey", false) { }
 
 		internal override GetJourneyHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);
@@ -28,8 +28,10 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<JourneyId>());
 		}
 
-		internal override GetJourneyModel NewModel { get; } = new(LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime, LongId<CarId>(),
-			Rnd.Int, Rnd.Int, LongId<PlaceId>(), ImmutableList.Create(LongId<PlaceId>(), LongId<PlaceId>()), LongId<RateId>());
+		internal override GetJourneyModel NewModel { get; } = new(
+			LongId<AuthUserId>(), LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime, LongId<CarId>(), Rnd.Int, Rnd.Int,
+			LongId<PlaceId>(), ImmutableList.Create(LongId<PlaceId>(), LongId<PlaceId>()), LongId<RateId>()
+		);
 	}
 
 	[Fact]
@@ -57,8 +59,16 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 	}
 
 	[Fact]
-	public override async Task Test04_Calls_FluentQuery_QuerySingleAsync__Returns_Result()
+	public override async Task Test05_Calls_FluentQuery_QuerySingleAsync__Same_UserId__Returns_Result()
 	{
-		await new Setup().Test04((h, q) => h.HandleAsync(q));
+		await new Setup().Test05((h, q) => h.HandleAsync(q));
 	}
+
+	#region Unused
+
+	[Fact]
+	public override Task Test04_Calls_FluentQuery_QuerySingleAsync__Different_UserId__Returns_None_With_DoesNotBelongToUserMsg() =>
+		Task.FromResult(true);
+
+	#endregion Unused
 }

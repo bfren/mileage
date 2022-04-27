@@ -5,6 +5,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Query;
 using Jeebs.Logging;
+using MaybeF.Caching;
 using NSubstitute.Extensions;
 using StrongId;
 
@@ -19,9 +20,10 @@ public abstract class TestHandler
 	{
 		internal abstract THandler GetHandler(Vars v);
 
-		internal (THandler handler, Vars v) GetVars()
+		internal virtual (THandler handler, Vars v) GetVars()
 		{
 			// Create substitutes
+			var cache = Substitute.For<IMaybeCache<TId>>();
 			var dispatcher = Substitute.For<IDispatcher>();
 			var fluent = Substitute.For<IFluentQuery<TEntity, TId>>();
 			var log = Substitute.For<ILog<THandler>>();
@@ -32,7 +34,7 @@ public abstract class TestHandler
 			repo.StartFluentQuery().Returns(fluent);
 
 			// Build handler
-			var v = new Vars(dispatcher, fluent, log, repo);
+			var v = new Vars(cache, dispatcher, fluent, log, repo);
 			var handler = GetHandler(v);
 
 			// Return vars
@@ -40,6 +42,7 @@ public abstract class TestHandler
 		}
 
 		internal sealed record class Vars(
+			IMaybeCache<TId> Cache,
 			IDispatcher Dispatcher,
 			IFluentQuery<TEntity, TId> Fluent,
 			ILog<THandler> Log,

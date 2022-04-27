@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.GetRate;
 
@@ -18,7 +19,7 @@ public sealed record class GetRateModel(
 	RateId Id,
 	long Version,
 	float AmountPerMileGBP
-)
+) : WithUserId, IWithId<RateId>
 {
 	/// <summary>
 	/// Create blank for model binding

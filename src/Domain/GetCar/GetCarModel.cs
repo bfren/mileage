@@ -21,7 +21,7 @@ public sealed record class GetCarModel(
 	long Version,
 	string Description,
 	string? NumberPlate
-) : IWithId<CarId>
+) : WithUserId, IWithId<CarId>
 {
 	/// <summary>
 	/// Create empty - for model binding
