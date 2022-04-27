@@ -37,6 +37,7 @@ function setupUpdateModalSearch() {
 	// hide add item button
 	var addItem = $("#update .btn-add");
 	addItem.hide();
+	addItem.click(addNewItemToJourney);
 
 	// save new item on enter
 	$("#update .list-filter").keydown(function (e) {
@@ -103,3 +104,21 @@ function setupTokenUpdateModals() {
 	});
 }
 ready(setupTokenUpdateModals);
+
+/**
+ * Add a new item to a Journey - called from the search box of an update item modal.
+ *
+ */
+function addNewItemToJourney() {
+	// get values
+	var data = {
+		id: $("#Journey_Id").val(),
+		version: $("#Journey_Version").val(),
+		value: $("#update .list-filter").val(),
+		__requestVerificationToken: $("#update [name=__RequestVerificationToken]").val()
+	};
+	var url = $(this).data("url");
+
+	// submit form
+	submitForm($("#update form"), url, data);
+}
