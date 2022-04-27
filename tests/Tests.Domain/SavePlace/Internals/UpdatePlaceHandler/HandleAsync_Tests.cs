@@ -12,7 +12,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, UpdatePlaceHandler>
 	{
 		internal override UpdatePlaceHandler GetHandler(Vars v) =>
-			new(v.Repo, v.Log);
+			new(v.Cache, v.Repo, v.Log);
 	}
 
 	private (UpdatePlaceHandler, Setup.Vars) GetVars() =>
@@ -48,6 +48,22 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 
 		// Assert
 		await v.Repo.Received().UpdateAsync(command);
+	}
+
+	[Fact]
+	public async void If_Successful__Calls_Cache_RemoveEntry__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		v.Repo.UpdateAsync(command)
+			.Returns(F.True);
+
+		// Act
+		await handler.HandleAsync(command);
+
+		// Assert
+		v.Cache.Received().RemoveValue(command.Id);
 	}
 
 	[Fact]

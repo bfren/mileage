@@ -12,7 +12,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	private class Setup : Setup<IRateRepository, RateEntity, RateId, UpdateRateHandler>
 	{
 		internal override UpdateRateHandler GetHandler(Vars v) =>
-			new(v.Repo, v.Log);
+			new(v.Cache, v.Repo, v.Log);
 	}
 
 	private (UpdateRateHandler, Setup.Vars) GetVars() =>
@@ -47,6 +47,22 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 
 		// Assert
 		await v.Repo.Received().UpdateAsync(command);
+	}
+
+	[Fact]
+	public async void If_Successful__Calls_Cache_RemoveEntry__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+		v.Repo.UpdateAsync(command)
+			.Returns(F.True);
+
+		// Act
+		await handler.HandleAsync(command);
+
+		// Assert
+		v.Cache.Received().RemoveValue(command.Id);
 	}
 
 	[Fact]
