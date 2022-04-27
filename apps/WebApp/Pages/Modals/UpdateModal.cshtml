@@ -1,9 +1,9 @@
-@model Mileage.WebApp.Pages.Modals.ModalModel
+@model Mileage.WebApp.Pages.Modals.UpdateModalModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 }
 
-<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false" data-bs-focus="false">
+<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable @Model.Size">
 		<div class="modal-content shadow">
 			<div class="modal-header">
@@ -14,7 +14,10 @@
 				@RenderBody()
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-info btn-add me-5"></button>
+				@if (Model.AddItemUrl is string url)
+				{
+					<button type="button" class="btn btn-info btn-add me-5" data-url="@url"></button>
+				}
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary btn-save">Save</button>
 			</div>
