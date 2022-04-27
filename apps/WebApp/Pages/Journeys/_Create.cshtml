@@ -62,6 +62,21 @@
 	<!-- Other Values -->
 	<div class="accordion accordion-flush" id="default-values">
 		@{
+			await AccordionItem("Destinations", false, "ToPlacesList", new
+			{
+				listName = Html.NameFor(x => x.Journey.ToPlaceIds),
+				items = Model?.Places,
+				selected = Model?.Journey.ToPlaceIds
+			});
+
+			await AccordionItem("Rate", Model?.Journey.RateId is null, "RateList", new
+			{
+				listName = Html.NameFor(x => x.Journey.RateId),
+				allowNull = false,
+				items = Model?.Rates,
+				selected = Model?.Journey.RateId
+			});
+
 			await AccordionItem("Car", Model?.Journey.CarId is null, "CarList", new
 			{
 				listName = Html.NameFor(x => x.Journey.CarId),
@@ -76,21 +91,6 @@
 				allowNull = false,
 				items = Model?.Places,
 				selected = Model?.Journey.FromPlaceId
-			});
-
-			await AccordionItem("Destinations", false, "ToPlacesList", new
-			{
-				listName = Html.NameFor(x => x.Journey.ToPlaceIds),
-				items = Model?.Places,
-				selected = Model?.Journey.ToPlaceIds
-			});
-
-			await AccordionItem("Rate", Model?.Journey.RateId is null, "RateList", new
-			{
-				listName = Html.NameFor(x => x.Journey.RateId),
-				allowNull = false,
-				items = Model?.Rates,
-				selected = Model?.Journey.RateId
 			});
 		}
 	</div>
