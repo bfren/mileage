@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0-beta.220426.1" />
     <PackageReference Include="Jeebs.Cqrs" Version="8.0.0-beta.220426.1" />
+    <PackageReference Include="MaybeF.Caching" Version="9.0.1"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />
