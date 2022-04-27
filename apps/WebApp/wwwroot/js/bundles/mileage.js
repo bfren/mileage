@@ -465,20 +465,42 @@ function setupUpdateModalSearch() {
 	// hide add item button
 	var addItem = $("#update .btn-add");
 	addItem.hide();
-	addItem.click(addNewItemToJourney);
+
+	// if add item button is not disabled, run save function on click
+	if (addItem.not(":disabled")) {
+		addItem.click(addNewItemToJourney);
+	}
 
 	// save new item on enter
 	$("#update .list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
-			addItem.click();
+
+			// if add item button is not disabled, run click method
+			if (addItem.not(":disabled")) {
+				addItem.click();
+			}
 		}
 	});
 
 	// filter as the user types
 	$("#update .list-filter").keyup(function () {
 		// get value from input
-		var value = $(this).val();
+		var value = $(this).val().toString();
+
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
+		// filter items that match the input value
+		$("#" + filterItems + " label").filter(function () {
+			var show = $(this).data("text").toString().indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
+
+		// if the add item button is disabled, stop
+		if (addItem.is(":disabled")) {
+			return;
+		}
 
 		// show add item button
 		if (value) {
@@ -486,15 +508,6 @@ function setupUpdateModalSearch() {
 		} else {
 			addItem.text("").hide();
 		}
-
-		// get item list id
-		var filterItems = $(this).data("filter-for");
-
-		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
-			$(this).toggle(show);
-		});
 	});
 }
 
