@@ -10,7 +10,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public sealed class EditProfileModel : ModalModel
+public sealed class EditProfileModel : UpdateModalModel
 {
 	public UserProfileModel Profile { get; set; } = new();
 
