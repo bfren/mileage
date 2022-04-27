@@ -8,6 +8,8 @@ namespace Mileage.WebApp.Pages.Components.List;
 
 public sealed class ToPlacesListViewComponent : ListMultipleViewComponent<GetPlacesModel, PlaceId>
 {
-	public ToPlacesListViewComponent()
-		: base("place", x => x.Description + (x.Postcode is string postcode ? $" ({postcode})" : string.Empty)) { }
+	public ToPlacesListViewComponent() : base("place", x => x.Description,
+		x => x.Description + (x.Postcode is string postcode ? $" ({postcode})" : string.Empty)
+	)
+	{ }
 }
