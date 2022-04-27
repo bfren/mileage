@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using MaybeF.Caching;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetRate;
 
 /// <summary>
-/// Get a car
+/// Get a rate
 /// </summary>
 internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 {
+	private IMaybeCache<RateId> Cache { get; init; }
+
 	private IRateRepository Rate { get; init; }
 
 	private ILog<GetRateHandler> Log { get; init; }
@@ -21,13 +25,14 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
-	/// <param name="car"></param>
+	/// <param name="cache"></param>
+	/// <param name="rate"></param>
 	/// <param name="log"></param>
-	public GetRateHandler(IRateRepository car, ILog<GetRateHandler> log) =>
-		(Rate, Log) = (car, log);
+	public GetRateHandler(IMaybeCache<RateId> cache, IRateRepository rate, ILog<GetRateHandler> log) =>
+		(Cache, Rate, Log) = (cache, rate, log);
 
 	/// <summary>
-	/// Get the specified car if it belongs to the user
+	/// Get the specified rate if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
 	public override Task<Maybe<GetRateModel>> HandleAsync(GetRateQuery query)
@@ -37,11 +42,22 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 			return F.None<GetRateModel, Messages.RateIdIsNullMsg>().AsTask;
 		}
 
-		Log.Vrb("Get Rate: {Query}.", query);
-		return Rate
-			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, query.RateId)
-			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.QuerySingleAsync<GetRateModel>();
+		return Cache
+			.GetOrCreateAsync(
+				key: query.RateId,
+				valueFactory: () =>
+				{
+					Log.Vrb("Get Rate: {Query}.", query);
+					return Rate
+						.StartFluentQuery()
+						.Where(x => x.Id, Compare.Equal, query.RateId)
+						.Where(x => x.UserId, Compare.Equal, query.UserId)
+						.QuerySingleAsync<GetRateModel>();
+				}
+			)
+			.SwitchIfAsync(
+				check: x => x.UserId == query.UserId,
+				ifFalse: _ => F.None<GetRateModel, Messages.RateDoesNotBelongToUserMsg>()
+			);
 	}
 }

@@ -1,10 +1,12 @@
-@model Mileage.WebApp.Pages.Modals.ModalModel
+@model Mileage.WebApp.Pages.Modals.UpdateModalModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
+
+	var disableAddItem = Model.AddItemUrl is null ? "disabled" : string.Empty;
 }
 
-<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false" data-bs-focus="false">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable @Model.Size">
+<div id="@Rnd.Str" class="modal fade" data-bs-backdrop="false">
+	<div class="modal-dialog modal-dialog-scrollable @Model.Size">
 		<div class="modal-content shadow">
 			<div class="modal-header">
 				<h5 class="modal-title">Edit @Model.Title</h5>
@@ -14,7 +16,7 @@
 				@RenderBody()
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-info btn-add me-5"></button>
+				<button type="button" class="btn btn-info btn-add me-5" data-url="@Model.AddItemUrl" @disableAddItem></button>
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary btn-save">Save</button>
 			</div>

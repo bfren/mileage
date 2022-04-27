@@ -9,7 +9,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Places;
 
-public sealed class EditModel : ModalModel
+public sealed class EditModel : UpdateModalModel
 {
 	public GetPlaceModel Place { get; set; } = new();
 

@@ -4,8 +4,10 @@
 using Jeebs.Apps.Web;
 using Jeebs.Auth.Data.Clients.PostgreSql;
 using Jeebs.Mvc.Auth;
+using MaybeF.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain;
+using Mileage.Persistence.Common.StrongIds;
 using Serilog;
 using StrongId.Mvc;
 
@@ -22,6 +24,12 @@ public sealed class App : RazorApp
 		_ = services.AddAuthentication(ctx.Configuration)
 			.WithData<PostgreSqlDbClient>(true)
 			.WithJwt();
+
+		_ = services
+			.AddMemoryCache()
+			.AddMaybeCache<CarId>()
+			.AddMaybeCache<PlaceId>()
+			.AddMaybeCache<RateId>();
 	}
 
 	protected override void ConfigureServicesMvcOptions(MvcOptions opt)

@@ -3,6 +3,7 @@
 	ArgumentNullException.ThrowIfNull(Model);
 
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
+	Model.AddItemUrl = Url.Page("Index", "CreateFromPlace");
 	Layout = "Modals/UpdateModal";
 }
 

@@ -11250,10 +11250,10 @@ footer div {
 
 .statusbar {
   background-color: #fff;
-  min-height: 50px;
+  min-height: 49px;
 }
 .statusbar .message-wrapper {
-  padding-top: 6px;
+  padding-top: 5px;
 }
 .statusbar .message {
   background-color: #ffffcc;
@@ -11316,7 +11316,8 @@ input[type=number] {
   height: 100%;
 }
 #create .modal-dialog, #update .modal-dialog, #delete .modal-dialog {
-  padding-top: 3rem;
+  padding-top: 10rem;
+  padding-bottom: 3rem;
 }
 
 #create .list-items .list-item, #update .list-items .list-item {

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using MaybeF.Caching;
+using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetCar;
@@ -14,6 +16,8 @@ namespace Mileage.Domain.GetCar;
 /// </summary>
 internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 {
+	private IMaybeCache<CarId> Cache { get; init; }
+
 	private ICarRepository Car { get; init; }
 
 	private ILog<GetCarHandler> Log { get; init; }
@@ -21,10 +25,11 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
+	/// <param name="cache"></param>
 	/// <param name="car"></param>
 	/// <param name="log"></param>
-	public GetCarHandler(ICarRepository car, ILog<GetCarHandler> log) =>
-		(Car, Log) = (car, log);
+	public GetCarHandler(IMaybeCache<CarId> cache, ICarRepository car, ILog<GetCarHandler> log) =>
+		(Cache, Car, Log) = (cache, car, log);
 
 	/// <summary>
 	/// Get the specified car if it belongs to the user
@@ -37,11 +42,21 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 			return F.None<GetCarModel, Messages.CarIdIsNullMsg>().AsTask;
 		}
 
-		Log.Vrb("Get Car: {Query}.", query);
-		return Car
-			.StartFluentQuery()
-			.Where(x => x.Id, Compare.Equal, query.CarId)
-			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.QuerySingleAsync<GetCarModel>();
+		return Cache
+			.GetOrCreateAsync(
+				key: query.CarId,
+				valueFactory: () =>
+				{
+					Log.Vrb("Get Car: {Query}.", query);
+					return Car.StartFluentQuery()
+						.Where(x => x.Id, Compare.Equal, query.CarId)
+						.Where(x => x.UserId, Compare.Equal, query.UserId)
+						.QuerySingleAsync<GetCarModel>();
+				}
+			)
+			.SwitchIfAsync(
+				check: x => x.UserId == query.UserId,
+				ifFalse: _ => F.None<GetCarModel, Messages.CarDoesNotBelongToUserMsg>()
+			);
 	}
 }

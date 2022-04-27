@@ -142,6 +142,9 @@ function loadPage(url) {
 
 			// replace HTML
 			$("#content").html(data);
+
+			// scroll to top of page
+			window.scrollTo(0, 0);
 		})
 
 		.fail(function (xhr) {
@@ -463,18 +466,41 @@ function setupUpdateModalSearch() {
 	var addItem = $("#update .btn-add");
 	addItem.hide();
 
+	// if add item button is not disabled, run save function on click
+	if (addItem.not(":disabled")) {
+		addItem.click(addNewItemToJourney);
+	}
+
 	// save new item on enter
 	$("#update .list-filter").keydown(function (e) {
 		if (e.keyCode == 13) {
 			e.preventDefault();
-			addItem.click();
+
+			// if add item button is not disabled, run click method
+			if (addItem.not(":disabled")) {
+				addItem.click();
+			}
 		}
 	});
 
 	// filter as the user types
 	$("#update .list-filter").keyup(function () {
 		// get value from input
-		var value = $(this).val();
+		var value = $(this).val().toString();
+
+		// get item list id
+		var filterItems = $(this).data("filter-for");
+
+		// filter items that match the input value
+		$("#" + filterItems + " label").filter(function () {
+			var show = $(this).data("text").toString().indexOf(value.toLowerCase()) > -1;
+			$(this).toggle(show);
+		});
+
+		// if the add item button is disabled, stop
+		if (addItem.is(":disabled")) {
+			return;
+		}
 
 		// show add item button
 		if (value) {
@@ -482,15 +508,6 @@ function setupUpdateModalSearch() {
 		} else {
 			addItem.text("").hide();
 		}
-
-		// get item list id
-		var filterItems = $(this).data("filter-for");
-
-		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
-			$(this).toggle(show);
-		});
 	});
 }
 
@@ -528,6 +545,24 @@ function setupTokenUpdateModals() {
 	});
 }
 ready(setupTokenUpdateModals);
+
+/**
+ * Add a new item to a Journey - called from the search box of an update item modal.
+ *
+ */
+function addNewItemToJourney() {
+	// get values
+	var data = {
+		id: $("#Journey_Id").val(),
+		version: $("#Journey_Version").val(),
+		value: $("#update .list-filter").val(),
+		__requestVerificationToken: $("#update [name=__RequestVerificationToken]").val()
+	};
+	var url = $(this).data("url");
+
+	// submit form
+	submitForm($("#update form"), url, data);
+}
 
 /**
  * With responsive design the navbar needs to be closed when links are clicked.
@@ -640,11 +675,6 @@ function setupAjaxSubmit() {
 		// stop default submit
 		e.preventDefault();
 
-		// get form info
-		var form = $(this);
-		var replaceId = form.data("replace");
-		var replaceContents = form.data("replace-contents");
-
 		// check validity
 		if (this.checkValidity() === false) {
 			form.find(":input:visible").not("[formnovalidate]")
@@ -652,54 +682,76 @@ function setupAjaxSubmit() {
 			return;
 		}
 
-		// hide modal and show please wait message
-		if (modal) {
-			modal.hide();
-		}
-		showPleaseWaitAlert();
-
-		// post data and handle result
-		$.ajax({ url: form.attr("action"), method: "POST", data: form.serialize() })
-
-			.done(function (data, status, xhr) {
-				// handle JSON response
-				if (xhr.responseJSON) {
-					handleResult(xhr.responseJSON);
-					return;
-				}
-
-				// handle HTML response
-				if (data && replaceId) {
-					// get the DOM element to be replaced
-					var replace = $("#" + replaceId);
-
-					// replace contents or the element itself
-					if (replaceContents) {
-						replace.html(data);
-					} else {
-						replace.replaceWith(data);
-					}
-					
-					// show alert
-					showAlert(alertTypes.success, "Done.");
-					return;
-				}
-
-				// something unexpected has happened
-				showAlert(alertTypes.warning, "Something went wrong, refreshing the page...", true);
-				location.reload();
-			})
-
-			.fail(function (xhr) {
-				// the response is a JSON result
-				if (xhr && xhr.responseJSON) {
-					handleResult(xhr.responseJSON);
-					return;
-				}
-
-				// something else has gone wrong
-				showAlert(alertTypes.error, "Something went wrong, please try again.");
-			});
+		// submit form
+		submitForm($(this));
 	});
 }
 ready(setupAjaxSubmit);
+
+/**
+ * Close a modal and submit a form, optionally overriding URL and data
+ * 
+ * @param {JQuery<any>} form Form to submit
+ * @param {string} url Override form action and submit to this URL instead
+ * @param {any} data Override form data and submit this data instead
+ */
+function submitForm(form, url, data) {
+	// get form info
+	var replaceId = form.data("replace");
+	var replaceContents = form.data("replace-contents");
+
+	// hide modal and show please wait message
+	if (modal) {
+		modal.hide();
+	}
+	showPleaseWaitAlert();
+
+	// post data and handle result
+	$.ajax(
+		{
+			method: "POST",
+			url: url || form.attr("action"),
+			data: data || form.serialize()
+		}
+	).done(
+		function (data, status, xhr) {
+			// handle JSON response
+			if (xhr.responseJSON) {
+				handleResult(xhr.responseJSON);
+				return;
+			}
+
+			// handle HTML response
+			if (data && replaceId) {
+				// get the DOM element to be replaced
+				var replace = $("#" + replaceId);
+
+				// replace contents or the element itself
+				if (replaceContents) {
+					replace.html(data);
+				} else {
+					replace.replaceWith(data);
+				}
+
+				// show alert
+				showAlert(alertTypes.success, "Done.");
+				return;
+			}
+
+			// something unexpected has happened
+			showAlert(alertTypes.warning, "Something went wrong, refreshing the page.", true);
+			loadHash();
+		}
+	).fail(
+		function (xhr) {
+			// the response is a JSON result
+			if (xhr && xhr.responseJSON) {
+				handleResult(xhr.responseJSON);
+				return;
+			}
+
+			// something else has gone wrong
+			showAlert(alertTypes.error, "Something went wrong, please try again.");
+		}
+	);
+}

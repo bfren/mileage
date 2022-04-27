@@ -2,6 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
+using Mileage.Domain.GetCar.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -12,10 +13,10 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
 	private class Setup : GetSingle_Setup<ICarRepository, CarEntity, CarId, GetCarQuery, GetCarHandler, GetCarModel>
 	{
-		public Setup() : base("Car") { }
+		public Setup() : base("Car", true) { }
 
 		internal override GetCarHandler GetHandler(Vars v) =>
-			new(v.Repo, v.Log);
+			new(v.Cache, v.Repo, v.Log);
 
 		internal override GetCarQuery GetQuery(AuthUserId? userId = null, CarId? entityId = null)
 		{
@@ -27,13 +28,13 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<CarId>());
 		}
 
-		internal override GetCarModel NewModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		internal override GetCarModel NewModel { get; } = new(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
 	}
 
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<Messages.CarIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00<CarIdIsNullMsg>((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]
@@ -55,8 +56,14 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 	}
 
 	[Fact]
-	public override async Task Test04_Calls_FluentQuery_QuerySingleAsync__Returns_Result()
+	public override async Task Test04_Calls_FluentQuery_QuerySingleAsync__Different_UserId__Returns_None_With_DoesNotBelongToUserMsg()
 	{
-		await new Setup().Test04((h, q) => h.HandleAsync(q));
+		await new Setup().Test04<CarDoesNotBelongToUserMsg>((h, q) => h.HandleAsync(q));
+	}
+
+	[Fact]
+	public override async Task Test05_Calls_FluentQuery_QuerySingleAsync__Same_UserId__Returns_Result()
+	{
+		await new Setup().Test05((h, q) => h.HandleAsync(q));
 	}
 }

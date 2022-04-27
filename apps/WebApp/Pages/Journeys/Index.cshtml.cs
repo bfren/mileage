@@ -17,13 +17,22 @@ using StrongId;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public abstract class EditJourneyModalModel : ModalModel
+public abstract class EditJourneyModalModel : UpdateModalModel
 {
 	public GetJourneyModel Journey { get; set; } = new();
 
 	protected EditJourneyModalModel(string title) : base(title) { }
 
 	protected EditJourneyModalModel(string title, string size) : base(title, size) { }
+}
+
+public sealed class AddNewItemToJourneyModel
+{
+	public JourneyId Id { get; set; } = new();
+
+	public long Version { get; set; }
+
+	public string Value { get; set; } = string.Empty;
 }
 
 [Authorize]
@@ -105,6 +114,21 @@ public sealed partial class IndexModel : PageModel
 				},
 				none: r => Result.Error(r)
 			);
+	}
+
+	private Task<IActionResult> PostCreateItemAsync<TId>(
+		Func<AuthUserId, Task<Maybe<TId>>> saveItem,
+		Func<AuthUserId, TId, Task<IActionResult>> addItemToJourney
+	)
+	{
+		var query = from userId in User.GetUserId()
+					from itemId in saveItem(userId)
+					select new { userId, itemId };
+
+		return query.SwitchAsync(
+			some: x => addItemToJourney(x.userId, x.itemId),
+			none: r => Result.Error(r)
+		);
 	}
 
 	#endregion Update Fields

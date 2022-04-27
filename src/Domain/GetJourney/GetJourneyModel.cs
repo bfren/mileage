@@ -2,14 +2,17 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
+using Jeebs.Auth.Data;
 using Jeebs.Collections;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.GetJourney;
 
 /// <summary>
 /// Journey model
 /// </summary>
+/// <param name="UserId"></param>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
 /// <param name="Day"></param>
@@ -20,6 +23,7 @@ namespace Mileage.Domain.GetJourney;
 /// <param name="ToPlaceIds"></param>
 /// <param name="RateId"></param>
 public sealed record class GetJourneyModel(
+	AuthUserId UserId,
 	JourneyId Id,
 	long Version,
 	DateTime Day,
@@ -29,10 +33,10 @@ public sealed record class GetJourneyModel(
 	PlaceId FromPlaceId,
 	ImmutableList<PlaceId> ToPlaceIds,
 	RateId? RateId
-)
+) : WithUserId, IWithId<JourneyId>
 {
 	/// <summary>
 	/// Create empty model
 	/// </summary>
-	public GetJourneyModel() : this(new(), default, default, new(), default, null, new(), new ImmutableList<PlaceId>(), null) { }
+	public GetJourneyModel() : this(new(), new(), default, default, new(), default, null, new(), new ImmutableList<PlaceId>(), null) { }
 }

@@ -15,7 +15,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Defaults;
 
-public abstract class EditSettingsModel : ModalModel
+public abstract class EditSettingsModel : UpdateModalModel
 {
 	public Persistence.Common.Settings Settings { get; set; } = new();
 
