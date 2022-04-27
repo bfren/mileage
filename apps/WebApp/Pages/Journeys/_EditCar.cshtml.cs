@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCars;
+using Mileage.Domain.SaveCar;
 using Mileage.Domain.SaveJourney;
 using Mileage.Persistence.Common.StrongIds;
 
@@ -25,4 +26,10 @@ public sealed partial class IndexModel
 
 	public Task<IActionResult> OnPostEditCarAsync(UpdateJourneyCarCommand journey) =>
 		PostFieldAsync("Car", "Car", journey, x => x.CarId);
+
+	public Task<IActionResult> OnPostCreateCarAsync(AddNewItemToJourneyModel item) =>
+		PostCreateItemAsync(
+			u => Dispatcher.DispatchAsync(new SaveCarQuery(u, item.Value)),
+			(u, x) => OnPostEditCarAsync(new(u, item.Id, item.Version, x))
+		);
 }

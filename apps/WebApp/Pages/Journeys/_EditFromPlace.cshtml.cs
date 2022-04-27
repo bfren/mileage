@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetPlaces;
 using Mileage.Domain.SaveJourney;
+using Mileage.Domain.SavePlace;
 using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Journeys;
@@ -25,4 +26,10 @@ public sealed partial class IndexModel
 
 	public Task<IActionResult> OnPostEditFromPlaceAsync(UpdateJourneyFromPlaceCommand journey) =>
 		PostFieldAsync("FromPlace", "From", journey, x => x.FromPlaceId);
+
+	public Task<IActionResult> OnPostCreateFromPlaceAsync(AddNewItemToJourneyModel item) =>
+		PostCreateItemAsync(
+			u => Dispatcher.DispatchAsync(new SavePlaceQuery(u, item.Value)),
+			(u, x) => OnPostEditFromPlaceAsync(new(u, item.Id, item.Version, x))
+		);
 }
