@@ -43,8 +43,8 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 		if (query.Id is not null)
 		{
 			var placeBelongsToUser = await Dispatcher
-					.DispatchAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.Id))
-					.IsTrueAsync();
+				.DispatchAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.Id))
+				.IsTrueAsync();
 
 			if (!placeBelongsToUser)
 			{
