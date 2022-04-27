@@ -8,5 +8,6 @@ namespace Mileage.WebApp.Pages.Components.List;
 
 public sealed class CarListViewComponent : ListSingleViewComponent<GetCarsModel, CarId>
 {
-	public CarListViewComponent() : base("car", x => x.Description) { }
+	public CarListViewComponent()
+		: base("car", x => x.Description + (x.NumberPlate is string plate ? $" ({plate})" : string.Empty)) { }
 }
