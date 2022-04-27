@@ -15,12 +15,12 @@
 		<div class="list-items mb-3" id="@itemsId">
 			@if (Model.AllowNull)
 			{
-				Radio(Model.ListName, feedback, "null", "None", Model.Selected is null);
+				Radio(Model.ListName, feedback, "null", "None", "None", Model.Selected is null);
 			}
 
 			@foreach (var item in Model.Items)
 			{
-				Radio(Model.ListName, feedback, item.Id, item.Text, Model.Selected == item.Id);
+				Radio(Model.ListName, feedback, item.Id, item.Value, item.Text, Model.Selected == item.Id);
 			}
 
 			<div class="invalid-feedback" id="@feedback">Please select a @Model.Singular.</div>
@@ -38,16 +38,17 @@
 	/// </summary>
 	/// <param name="name">The List name</param>
 	/// <param name="feedback">Feedback ID</param>
-	/// <param name="value">Item value</param>
+	/// <param name="id">Item ID</param>
+	/// <param name="value">Item value text</param>
 	/// <param name="text">Item display text</param>
 	/// <param name="selected">True if the item should be marked as selected</param>
-	void Radio(string name, string feedback, object value, string text, bool selected)
+	void Radio(string name, string feedback, object id, string value, string text, bool selected)
 	{
-		var id = $"{name.Normalise()}-{value}";
+		var idText = $"{name.Normalise()}-{id}";
 		var check = selected ? "checked" : string.Empty;
 		var required = Model?.AllowNull == false ? "required" : string.Empty;
 
-		<input type="radio" class="btn-check auto-save" id="@id" name="@name" value="@value" autocomplete="off" aria-describedby="@feedback" @check @required />
-		<label class="btn btn-outline-primary mb-1" for="@id" data-text="@text.ToLowerInvariant()">@text</label>
+		<input type="radio" class="btn-check auto-save" id="@idText" name="@name" value="@id" autocomplete="off" aria-describedby="@feedback" @check @required />
+		<label class="btn btn-outline-primary mb-1" for="@idText" data-text="@value">@text</label>
 	}
 }
