@@ -13,6 +13,10 @@ jobs:
       name: Prepare - Checkout Code
       uses: actions/checkout@v3
     -
+      name: Prepare - Remove Config Files
+      run: |
+        rm ./jeebsconfig*.json
+    -
       name: Prepare - Read Version
       uses: bfren/read-file@v1
       with:
