@@ -10,25 +10,23 @@
   "profiles": {
     "WebApp": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5284",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "MILEAGE_USER_NAME": "Ben",
         "MILEAGE_USER_EMAIL": "info@bfren.dev",
-        "MILEAGE_USER_PASS": "fred",
-        "MILEAGE_USER_NAME": "Ben"
-      }
+        "MILEAGE_USER_PASS": "fred"
+      },
+      "applicationUrl": "http://localhost:5284",
+      "dotnetRunMessages": true
     },
     "WebApp (Truncate)": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5284",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TRUNCATE": "true"
-      }
+      },
+      "applicationUrl": "http://localhost:5284",
+      "dotnetRunMessages": true
     },
     "dotnet watch run": {
       "commandName": "Executable",
