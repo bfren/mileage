@@ -65,7 +65,7 @@ jobs:
       run: |
         dotnet publish apps/WebApp/WebApp.csproj \
           --configuration Release \
-          --runtime linux-musl-x64 \
+          --runtime alpine.3.15-x64 \
           --output ./publish \
           --no-self-contained
     -
