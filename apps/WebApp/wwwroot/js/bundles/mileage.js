@@ -125,9 +125,28 @@ ready(setupDatepickerDefaults);
  * @param {any} url
  */
 function loadPage(url) {
-	showAlert(alertTypes.info, "Loading page, please wait...", true);
-	window.location.hash = url;
+	if (getHash() == url) {
+		loadHash();
+	} else {
+		window.location.hash = url;
+	}
+}
 
+/**
+ * Open whatever is in the URL hash on page load.
+ *
+ */
+function loadHash() {
+	// show alert
+	showAlert(alertTypes.info, "Loading page, please wait...", true);
+
+	// get hash
+	var url = getHash();
+	if (!url || url.length == 2) {
+		url = home;
+	}
+
+	// get URL contents
 	$.ajax({ url: url, method: "GET" })
 
 		.done(function (data, status, xhr) {
@@ -153,7 +172,7 @@ function loadPage(url) {
 
 			// handle unauthorised
 			if (xhr.status == 401) {
-				$("#content").load("/Auth/SignIn");
+				$("#content").load(signIn);
 				return;
 			}
 
@@ -167,21 +186,12 @@ function loadPage(url) {
 			showAlert(alertTypes.error, "Something went wrong, please try again.");
 		});;
 }
-
-/**
- * Open whatever is in the URL hash on page load.
- *
- */
-function loadHash() {
-	var hash = window.location.hash;
-	if (hash) {
-		loadPage(hash.replace("#", ""));
-	} else {
-		loadPage(home);
-	}
-}
 ready(loadHash);
 window.onhashchange = loadHash;
+
+function getHash() {
+	return window.location.hash.replace("#", "");
+}
 
 /**
  * Capture link clicks and use AJAX to load pages.
@@ -600,7 +610,11 @@ function handleResult(r) {
 
 	// redirect or show alert
 	if (r.redirectTo) {
-		loadPage(r.redirectTo);
+		if (r.redirectTo = "/") {
+			loadPage(home);
+		} else {
+			loadPage(r.redirectTo);
+		}
 	}
 }
 
