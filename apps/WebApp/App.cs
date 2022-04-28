@@ -32,9 +32,9 @@ public sealed class App : RazorApp
 			.AddMaybeCache<RateId>();
 	}
 
-	protected override void ConfigureServicesMvcOptions(MvcOptions opt)
+	protected override void ConfigureServicesMvcOptions(HostBuilderContext ctx, MvcOptions opt)
 	{
-		base.ConfigureServicesMvcOptions(opt);
+		base.ConfigureServicesMvcOptions(ctx, opt);
 		opt.AddStrongIdModelBinder();
 	}
 

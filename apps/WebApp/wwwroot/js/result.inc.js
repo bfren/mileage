@@ -10,6 +10,10 @@ function handleResult(r) {
 
 	// redirect or show alert
 	if (r.redirectTo) {
-		loadPage(r.redirectTo);
+		if (r.redirectTo = "/") {
+			loadPage(home);
+		} else {
+			loadPage(r.redirectTo);
+		}
 	}
 }
