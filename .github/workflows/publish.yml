@@ -11,7 +11,7 @@ jobs:
     steps:
     -
       name: Prepare - Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     -
       name: Prepare - Read Version
       uses: bfren/read-file@v1
@@ -79,9 +79,9 @@ jobs:
         platforms: linux/amd64
         tags: |
           bfren/mileage:latest
-          bfren/mileage:${{ steps.version.outputs.content }}
+          bfren/mileage:${{ steps.version.outputs.contents }}
           ghcr.io/bfren/mileage:latest
-          ghcr.io/bfren/mileage:${{ steps.version.outputs.content }}
+          ghcr.io/bfren/mileage:${{ steps.version.outputs.contents }}
     -
       if: success()
       name: Finish - Success
@@ -89,7 +89,7 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: Mileage (GitHub)
-        SLACK_MESSAGE: Tests Passed
+        SLACK_MESSAGE: Docker Image Published
         SLACK_COLOR: good
         SLACK_ICON: https://bfren.uk/img/logo-square-500x500.jpg
     -
@@ -99,6 +99,6 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_USERNAME: Mileage (GitHub)
-        SLACK_MESSAGE: Test Failed
+        SLACK_MESSAGE: Failed to Publish Docker Image
         SLACK_COLOR: danger
         SLACK_ICON: https://bfren.uk/img/logo-square-500x500.jpg
