@@ -4,52 +4,6 @@
 <div class="container">
 
 	<h2>Sign In</h2>
-
-	<!-- SignIn Form -->
-	<form class="needs-validation" method="post" action="@Url.Page("./SignIn")" novalidate>
-
-		<!-- Sign In details -->
-		<div class="mb-3">
-			<label for="@nameof(Model.Form.Email)" class="form-label">Email address</label>
-			<input type="email"
-				   class="form-control"
-				   id="@nameof(Model.Form.Email)"
-				   name="@nameof(Model.Form.Email)"
-				   placeholder="Please enter your email address"
-				   required />
-			<div class="invalid-feedback">Please enter your email address.</div>
-		</div>
-		<div class="mb-3">
-			<label for="@nameof(Model.Form.Password)" class="form-label">Password</label>
-			<input type="password"
-				   class="form-control"
-				   id="@nameof(Model.Form.Password)"
-				   name="@nameof(Model.Form.Password)"
-				   placeholder="Please enter your password"
-				   required />
-			<div class="invalid-feedback">Please enter your password.</div>
-		</div>
-		<div class="mb3">
-			<input type="checkbox"
-				   class="form-check-input"
-				   id="@nameof(Model.Form.RememberMe)"
-				   name="@nameof(Model.Form.RememberMe)" />
-			<label for="@nameof(Model.Form.RememberMe)" class="form-label">Keep me signed in</label>
-		</div>
-
-		<!-- Hidden values -->
-		<input type="hidden"
-			   id="@nameof(Model.Form.ReturnUrl)"
-			   name="@nameof(Model.Form.ReturnUrl)"
-			   value="@Model.Form.ReturnUrl" />
-		@Html.AntiForgeryToken()
-
-		<!-- Submit -->
-		<div class="d-flex justify-content-end">
-			<button type="submit" class="btn btn-primary">Sign In</button>
-		</div>
-
-	</form>
-
+	<partial name="_SignInForm" model="@Model.PartialModel"/>
 
 </div>
