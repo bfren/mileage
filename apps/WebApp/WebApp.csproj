@@ -39,8 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
-    <PackageReference Include="Jeebs.Mvc" Version="8.0.0-beta.220427.1" />
-    <PackageReference Include="Jeebs.Mvc.Auth.Razor" Version="8.0.0-beta.220427.1" />
+    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220428.11" />
     <PackageReference Include="MaybeF.Caching" Version="9.0.1" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
