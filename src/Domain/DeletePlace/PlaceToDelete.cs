@@ -11,7 +11,8 @@ namespace Mileage.Domain.DeletePlace;
 /// </summary>
 /// <param name="Id">Place ID</param>
 /// <param name="Version">Concurrency version</param>
-internal sealed record class PlaceToDelete(PlaceId Id, long Version) : IWithVersion<PlaceId>
+/// <param name="IsDisabled"></param>
+internal sealed record class PlaceToDelete(PlaceId Id, long Version, bool IsDisabled) : IWithVersion<PlaceId>
 {
-	public PlaceToDelete() : this(new(), 0L) { }
+	public PlaceToDelete() : this(new(), 0L, false) { }
 }
