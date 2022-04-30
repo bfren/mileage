@@ -4,14 +4,17 @@
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Mileage.Domain.CheckCarCanBeDeleted;
+using Mileage.Domain.CheckCarCanBeDeleted.Messages;
 using Mileage.Domain.DeleteCar;
 using Mileage.Domain.GetCar;
+using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Cars;
 
-public sealed class DeleteModel : ModalModel
+public sealed class DeleteModel : DeleteModalModel
 {
 	public GetCarModel Car { get; set; } = new();
 
@@ -23,15 +26,27 @@ public sealed partial class IndexModel
 	public Task<PartialViewResult> OnGetDeleteAsync(CarId carId)
 	{
 		// Create query
-		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetCarQuery(u, carId))
-					select c;
+		var query = from userId in User.GetUserId()
+					from op in Dispatcher.DispatchAsync(new CheckCarCanBeDeletedQuery(userId, carId))
+					from car in Dispatcher.DispatchAsync(new GetCarQuery(userId, carId))
+					select new { op, car };
 
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("_Delete", new DeleteModel { Car = x }),
-				none: r => Partial("Modals/ErrorModal", r)
+				some: x => Partial("_Delete", new DeleteModel { Car = x.car, Operation = x.op }),
+				none: r => r switch
+				{
+					CarIsDefaultCarMsg =>
+						Partial("_Delete", new DeleteModel
+						{
+							Operation = DeleteOperation.None,
+							Reason = "it is the default car for new journeys"
+						}),
+
+					_ =>
+						Partial("Modals/ErrorModal", r)
+				}
 			);
 	}
 

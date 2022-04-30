@@ -11,7 +11,7 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Places;
 
-public sealed class DeleteModel : ModalModel
+public sealed class DeleteModel : DeleteModalModel
 {
 	public GetPlaceModel Place { get; set; } = new();
 
