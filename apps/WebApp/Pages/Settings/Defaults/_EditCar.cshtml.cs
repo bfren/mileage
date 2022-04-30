@@ -18,7 +18,7 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditCarAsync() =>
 		GetFieldAsync("Car",
-			x => Dispatcher.DispatchAsync(new GetCarsQuery(x)),
+			x => Dispatcher.DispatchAsync(new GetCarsQuery(x, false)),
 			(s, v) => new EditCarModel { Settings = s, Cars = v.ToList() }
 		);
 
