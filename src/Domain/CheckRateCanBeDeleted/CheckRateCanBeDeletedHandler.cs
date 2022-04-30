@@ -74,7 +74,7 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	}
 
 	/// <summary>
-	/// Check whether or not <paramref name="RateId"/> is the default rate in a user's settings
+	/// Check whether or not <paramref name="rateId"/> is the default rate in a user's settings
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
