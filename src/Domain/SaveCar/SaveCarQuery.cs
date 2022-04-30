@@ -13,12 +13,14 @@ namespace Mileage.Domain.SaveCar;
 /// <param name="Version">Entity Verion</param>
 /// <param name="Description">Description</param>
 /// <param name="NumberPlate">Number Plate</param>
+/// <param name="IsDisabled"></param>
 public sealed record class SaveCarQuery(
 	AuthUserId UserId,
 	CarId? Id,
 	long Version,
 	string Description,
-	string? NumberPlate
+	string? NumberPlate,
+	bool IsDisabled
 ) : IQuery<CarId>
 {
 	/// <summary>
@@ -31,7 +33,8 @@ public sealed record class SaveCarQuery(
 		Id: null,
 		Version: 0L,
 		Description: description,
-		NumberPlate: null
+		NumberPlate: null,
+		IsDisabled: false
 	)
 	{ }
 
