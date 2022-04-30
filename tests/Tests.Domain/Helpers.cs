@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Query;
+using Jeebs.Functions;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using NSubstitute.Core;
@@ -156,6 +157,38 @@ internal static class Helpers
 				{
 					Assert.Equal(value!, arg);
 				}
+			}
+		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query where method
+	/// </summary>
+	/// <typeparam name="T">Parameters Type</typeparam>
+	/// <param name="call">Call</param>
+	/// <param name="clause"></param>
+	/// <param name="parameters"></param>
+	public static void AssertWhere<T>(
+		ICall call,
+		string clause,
+		T parameters
+	)
+	{
+		// Check the method
+		Assert.Equal("Where", call.GetMethodInfo().Name);
+
+		// Check each predicate
+		Assert.Collection(call.GetArguments(),
+
+			// Check that the clause is being used
+			arg => Assert.Equal(clause, arg),
+
+			// Check that the correct parameters are being used
+			arg =>
+			{
+				var pJson = JsonF.Serialise(parameters);
+				var aJson = JsonF.Serialise(arg);
+				Assert.Equal(pJson, aJson);
 			}
 		);
 	}
@@ -328,5 +361,18 @@ internal static class Helpers
 				Assert.Equal(property, actual.GetPropertyInfo().UnsafeUnwrap().Name);
 			}
 		);
+	}
+
+	/// <summary>
+	/// Validate a call to the fluent query count method
+	/// </summary>
+	/// <param name="call">Call</param>
+	public static void AssertCount(ICall call)
+	{
+		// Check the method
+		Assert.Equal("CountAsync", call.GetMethodInfo().Name);
+
+		// Check each predicate
+		Assert.Empty(call.GetArguments());
 	}
 }
