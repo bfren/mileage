@@ -4,6 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.DeleteCar.Messages;
 
@@ -11,5 +12,5 @@ namespace Mileage.Domain.DeleteCar.Messages;
 /// The car does not exist, or does not belong to the specified user
 /// </summary>
 /// <param name="UserId">User ID</param>
-/// <param name="CarId">Car ID</param>
-public sealed record class CarDoesNotExistMsg(AuthUserId UserId, CarId CarId) : Msg;
+/// <param name="Id">Car ID</param>
+public sealed record class CarDoesNotExistMsg(AuthUserId UserId, CarId Id) : Msg, IWithUserId, IWithId<CarId>;
