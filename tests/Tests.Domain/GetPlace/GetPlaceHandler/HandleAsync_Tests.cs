@@ -28,7 +28,8 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<PlaceId>());
 		}
 
-		internal override GetPlaceModel NewModel { get; } = new(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		internal override GetPlaceModel NewModel { get; } =
+			new(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 
 	[Fact]
