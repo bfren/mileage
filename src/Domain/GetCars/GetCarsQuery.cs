@@ -9,6 +9,8 @@ namespace Mileage.Domain.GetCars;
 
 /// <inheritdoc cref="GetCarsHandler"/>
 /// <param name="UserId"></param>
+/// <param name="IncludeDisabled">If true, disabled cars will be included</param>
 public sealed record class GetCarsQuery(
-	AuthUserId UserId
+	AuthUserId UserId,
+	bool IncludeDisabled
 ) : IQuery<IEnumerable<GetCarsModel>>;

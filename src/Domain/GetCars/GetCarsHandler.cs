@@ -42,6 +42,7 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ge
 		return Car
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
+			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
 			.Sort(x => x.Description, SortOrder.Ascending)
 			.QueryAsync<GetCarsModel>();
 	}
