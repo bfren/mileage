@@ -11213,7 +11213,6 @@ a {
 }
 
 body {
-  background-color: #fff;
   margin: 0 auto;
 }
 
@@ -11241,7 +11240,8 @@ body {
 }
 
 footer {
-  background-color: #eee;
+  background-color: #f8f9fa;
+  min-height: 70px;
 }
 footer div {
   font-size: 0.8rem;
@@ -11249,7 +11249,7 @@ footer div {
 }
 
 .statusbar {
-  background-color: #fff;
+  background-color: #f8f9fa;
   min-height: 49px;
 }
 .statusbar .message-wrapper {
@@ -11290,8 +11290,8 @@ footer div {
 }
 
 main {
-  background-color: #fff;
-  padding: 10px 0 70px;
+  background-color: #f8f9fa;
+  padding: 10px 0 0;
 }
 
 .list-group-item:hover {
@@ -11315,7 +11315,12 @@ main {
 }
 
 input[type=number] {
-  width: 200px;
+  width: 250px;
+}
+
+#settingsPanes {
+  background-color: #fff;
+  height: calc(100% - 5rem);
 }
 
 #create, #update, #delete {

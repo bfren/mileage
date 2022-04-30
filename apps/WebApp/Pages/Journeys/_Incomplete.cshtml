@@ -22,10 +22,10 @@
 	return;
 }
 
-<ul class="list-group w-100">
+<div class="list-group w-100">
 	@foreach (var j in Model.Journeys)
 	{
-		<li class="list-group-item" data-id="@j.Id" data-version="@j.Version">
+		<div class="list-group-item mt-1 mb-1 border-top rounded-3" data-id="@j.Id" data-version="@j.Version">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="me-auto mb-1">
 					<div class="fs-5 mb-1">
@@ -44,6 +44,6 @@
 				<vc:from-place label="From" update-url="@updateLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />
 				<vc:to-places label="To" update-url="@updateLink(j, "ToPlaces")" value="@j.ToPlaceIds.ToList()" journey-id="@j.Id" />
 			</div>
-		</li>
+		</div>
 	}
-</ul>
+</div>
