@@ -1,8 +1,8 @@
 /// <reference path="mileage" />
 
 main {
-  background-color: #fff;
-  padding: 10px 0 70px;
+  background-color: $gray-100;
+  padding: 10px 0 0;
 }
 
 .list-group-item {
@@ -37,4 +37,8 @@ main {
 
 input[type=number] {
   width: 200px;
+}
+
+#settingsPanes {
+    background-color: #fff;
 }
