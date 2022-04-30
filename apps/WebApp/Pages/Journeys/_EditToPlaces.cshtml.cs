@@ -24,7 +24,7 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditToPlacesAsync(JourneyId journeyId) =>
 		GetFieldAsync("ToPlaces", journeyId,
-			x => Dispatcher.DispatchAsync(new GetPlacesQuery(x)),
+			x => Dispatcher.DispatchAsync(new GetPlacesQuery(x, false)),
 			(j, v) => new EditToPlacesModel { Journey = j, Places = v.ToList(), Selected = j.ToPlaceIds.ToArray() }
 		);
 

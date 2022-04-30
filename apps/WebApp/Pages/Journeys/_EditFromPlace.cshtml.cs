@@ -20,7 +20,7 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditFromPlaceAsync(JourneyId journeyId) =>
 		GetFieldAsync("FromPlace", journeyId,
-			u => Dispatcher.DispatchAsync(new GetPlacesQuery(u)),
+			u => Dispatcher.DispatchAsync(new GetPlacesQuery(u, false)),
 			(j, v) => new EditFromPlaceModel { Journey = j, Places = v.ToList() }
 		);
 
