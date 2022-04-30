@@ -4,14 +4,17 @@
 }
 
 <form action="@Url.Page("Index", "Delete")" method="post">
-
-	<div>
-		@Model?.Car.Description
-		@if (Model?.Car.NumberPlate is string plate)
-		{
-			<text> (@plate)</text>
-		}
-	</div>
+	
+	@if (Model?.Operation != Persistence.Common.DeleteOperation.None)
+	{
+		<div>
+			@Model?.Car.Description
+			@if (Model?.Car.NumberPlate is string plate)
+			{
+				<text> (@plate)</text>
+			}
+		</div>
+	}
 
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Car.Id)

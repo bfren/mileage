@@ -4,10 +4,13 @@
 }
 
 <form action="@Url.Page("Index", "Delete")" method="post">
-
-	<div>
-		@Model?.Rate.AmountPerMileGBP.ToString("0.00")
-	</div>
+	
+	@if(Model?.Operation != Persistence.Common.DeleteOperation.None)
+	{
+		<div>
+			@Model?.Rate.AmountPerMileGBP.ToString("0.00")
+		</div>
+	}
 
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Rate.Id)
