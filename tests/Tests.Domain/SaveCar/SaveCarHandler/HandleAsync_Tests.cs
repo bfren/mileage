@@ -24,6 +24,24 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		new Setup().GetVars();
 
 	[Fact]
+	public async Task Calls_Log_Vrb__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var query = new SaveCarQuery();
+		v.Dispatcher.DispatchAsync<bool>(default!)
+			.ReturnsForAnyArgs(true);
+		v.Fluent.QuerySingleAsync<CarEntity>()
+			.Returns(new CarEntity());
+
+		// Act
+		await handler.HandleAsync(query);
+
+		// Assert
+		v.Log.Received().Vrb("Saving Car {Query}.", query);
+	}
+
+	[Fact]
 	public async Task Checks_Car_Belongs_To_User_With_Correct_Values()
 	{
 		// Arrange
