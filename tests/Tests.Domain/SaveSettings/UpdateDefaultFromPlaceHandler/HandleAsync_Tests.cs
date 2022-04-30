@@ -8,7 +8,7 @@ namespace Mileage.Domain.SaveSettings.UpdateDefaultFromPlaceHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.UpdateSettings.HandleAsync_Tests
 {
-	private class Setup : UpdateSettings_Setup<UpdateDefaultFromPlaceCommand, UpdateDefaultFromPlaceHandler, PlaceId>
+	private class Setup : Setup<UpdateDefaultFromPlaceCommand, UpdateDefaultFromPlaceHandler, PlaceId>
 	{
 		internal override UpdateDefaultFromPlaceCommand GetCommand(AuthUserId? userId = null, PlaceId? itemId = null) =>
 			new(userId ?? LongId<AuthUserId>(), LongId<SettingsId>(), Rnd.Lng, itemId);

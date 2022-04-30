@@ -15,4 +15,16 @@ internal sealed record class CreateCarQuery(
 	AuthUserId UserId,
 	string Description,
 	string? NumberPlate
-) : IQuery<CarId>;
+) : IQuery<CarId>
+{
+	/// <summary>
+	/// Create from <see cref="SaveCarQuery"/>
+	/// </summary>
+	/// <param name="query"></param>
+	public CreateCarQuery(SaveCarQuery query) : this(
+		UserId: query.UserId,
+		Description: query.Description,
+		NumberPlate: query.NumberPlate
+	)
+	{ }
+}

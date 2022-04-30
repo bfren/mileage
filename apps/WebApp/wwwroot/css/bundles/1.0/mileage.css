@@ -11297,6 +11297,14 @@ main {
 .list-group-item:hover {
   background-color: #f8f9fa;
 }
+.list-group-item.item-disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+}
+.list-group-item.item-disabled:hover {
+  background-color: #dee2e6;
+  color: #495057;
+}
 
 .token a {
   background-color: #e9ecef;

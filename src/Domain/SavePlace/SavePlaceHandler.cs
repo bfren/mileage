@@ -39,6 +39,8 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 	/// <param name="query"></param>
 	public override async Task<Maybe<PlaceId>> HandleAsync(SavePlaceQuery query)
 	{
+		Log.Vrb("Saving Place {Query}.", query);
+
 		// Ensure the place belongs to the user
 		if (query.Id is not null)
 		{
@@ -60,10 +62,10 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 			.QuerySingleAsync<PlaceEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdatePlaceCommand(x.Id, query.Version, query.Description, query.Postcode))
+					.DispatchAsync(new Internals.UpdatePlaceCommand(x.Id, query))
 					.BindAsync(_ => F.Some(x.Id)),
 				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreatePlaceQuery(query.UserId, query.Description, query.Postcode))
+					.DispatchAsync(new Internals.CreatePlaceQuery(query))
 			);
 	}
 }

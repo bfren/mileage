@@ -21,7 +21,7 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditRateAsync(JourneyId journeyId) =>
 		GetFieldAsync("Rate", journeyId,
-			u => Dispatcher.DispatchAsync(new GetRatesQuery(u)),
+			u => Dispatcher.DispatchAsync(new GetRatesQuery(u, false)),
 			(j, v) => new EditRateModel { Journey = j, Rates = v.ToList() }
 		);
 

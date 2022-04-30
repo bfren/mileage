@@ -8,7 +8,7 @@ namespace Mileage.Domain.SaveJourney.UpdateJourneyFromPlaceHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 {
-	private class Setup : UpdateJourney_Setup<UpdateJourneyFromPlaceCommand, UpdateJourneyFromPlaceHandler>
+	private class Setup : Setup<UpdateJourneyFromPlaceCommand, UpdateJourneyFromPlaceHandler>
 	{
 		public Setup() : base("From Place") { }
 

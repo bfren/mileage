@@ -12,8 +12,10 @@ namespace Mileage.Domain.GetPlaces;
 /// <param name="Id"></param>
 /// <param name="Description"></param>
 /// <param name="Postcode"></param>
+/// <param name="IsDisabled"></param>
 public sealed record class GetPlacesModel(
 	PlaceId Id,
 	string Description,
-	string? Postcode
+	string? Postcode,
+	bool IsDisabled
 ) : IWithId<PlaceId>;

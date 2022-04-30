@@ -29,7 +29,7 @@ public sealed partial class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetCarsQuery(u))
+					from c in Dispatcher.DispatchAsync(new GetCarsQuery(u, true))
 					select c;
 
 		await foreach (var cars in query)

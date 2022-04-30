@@ -13,6 +13,30 @@ namespace Abstracts;
 
 public abstract class TestHandler
 {
+	internal abstract class Setup<THandler>
+	{
+		internal abstract THandler GetHandler(Vars v);
+
+		internal virtual (THandler handler, Vars v) GetVars()
+		{
+			// Create substitutes
+			var dispatcher = Substitute.For<IDispatcher>();
+			var log = Substitute.For<ILog<THandler>>();
+
+			// Build handler
+			var v = new Vars(dispatcher, log);
+			var handler = GetHandler(v);
+
+			// Return vars
+			return (handler, v);
+		}
+
+		internal sealed record class Vars(
+			IDispatcher Dispatcher,
+			ILog<THandler> Log
+		);
+	}
+
 	internal abstract class Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>

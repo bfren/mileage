@@ -25,7 +25,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test05_Calls_FluentQuery_QuerySingleAsync__Same_UserId__Returns_Result();
 
-	internal abstract class GetSingle_Setup<TRepo, TEntity, TId, TQuery, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
+	internal abstract class Setup<TRepo, TEntity, TId, TQuery, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : LongId, new()
@@ -41,7 +41,7 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TModel NewModel { get; }
 
-		protected GetSingle_Setup(string name, bool enableCache) =>
+		protected Setup(string name, bool enableCache) =>
 			(Name, EnableCache) = (name, enableCache);
 
 		internal override (THandler handler, Vars v) GetVars()

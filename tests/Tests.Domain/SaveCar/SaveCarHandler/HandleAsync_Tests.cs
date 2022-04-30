@@ -24,13 +24,31 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		new Setup().GetVars();
 
 	[Fact]
+	public async Task Calls_Log_Vrb__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var query = new SaveCarQuery();
+		v.Dispatcher.DispatchAsync<bool>(default!)
+			.ReturnsForAnyArgs(true);
+		v.Fluent.QuerySingleAsync<CarEntity>()
+			.Returns(new CarEntity());
+
+		// Act
+		await handler.HandleAsync(query);
+
+		// Assert
+		v.Log.Received().Vrb("Saving Car {Query}.", query);
+	}
+
+	[Fact]
 	public async Task Checks_Car_Belongs_To_User_With_Correct_Values()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -51,7 +69,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
@@ -70,7 +88,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -99,7 +117,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var version = Rnd.Lng;
 		var description = Rnd.Str;
 		var plate = Rnd.Str;
-		var query = new SaveCarQuery(userId, carId, version, description, plate);
+		var disabled = Rnd.Flip;
+		var query = new SaveCarQuery(userId, carId, version, description, plate, disabled);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -116,6 +135,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 				&& c.Version == version
 				&& c.Description == description
 				&& c.NumberPlate == plate
+				&& c.IsDisabled == disabled
 			)
 		);
 	}
@@ -126,7 +146,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -153,7 +173,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var userId = LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var plate = Rnd.Str;
-		var query = new SaveCarQuery(userId, null, 0L, description, plate);
+		var query = new SaveCarQuery(userId, null, 0L, description, plate, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -179,7 +199,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);

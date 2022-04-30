@@ -18,7 +18,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test02_Calls_Repo_Update_Async__Returns_Result();
 
-	internal abstract class UpdateJourney_Setup<TCommand, THandler> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
+	internal abstract class Setup<TCommand, THandler> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
 		where TCommand : ICommand, IWithId<JourneyId>
 		where THandler : CommandHandler<TCommand>
 	{
@@ -26,7 +26,7 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TCommand GetCommand(AuthUserId? userId = null);
 
-		protected UpdateJourney_Setup(string name) =>
+		protected Setup(string name) =>
 			Name = name;
 
 		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)

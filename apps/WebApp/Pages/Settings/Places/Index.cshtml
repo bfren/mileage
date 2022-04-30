@@ -16,7 +16,9 @@
 <ul id="place-list" class="list-group w-100">
 	@foreach (var p in Model.Places)
 	{
-		<li class="list-group-item item-update" data-update="@updateLink(p.Id.Value)">
+		var css = p.IsDisabled ? "item-disabled" : string.Empty;
+
+		<li class="list-group-item @css" data-update="@updateLink(p.Id.Value)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@p.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">
@@ -26,8 +28,11 @@
 						<br/><text>@postcode</text>
 					}
 				</div>
-				<modal-update class="me-2" link="@updateLink(p.Id.Value)" replace="places" />
-				<modal-delete link="@deleteLink(p.Id.Value)" replace="places" />
+				<modal-update link="@updateLink(p.Id.Value)" replace="places" />
+				@if (!p.IsDisabled)
+				{
+					<modal-delete class="ms-2" link="@deleteLink(p.Id.Value)" replace="places" />
+				}
 			</div>
 		</li>
 	}

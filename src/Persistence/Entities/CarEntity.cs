@@ -36,4 +36,9 @@ public sealed record class CarEntity : IWithVersion<CarId>
 	/// Number Plate
 	/// </summary>
 	public string? NumberPlate { get; init; }
+
+	/// <summary>
+	/// Whether or not this car has been disabled
+	/// </summary>
+	public bool IsDisabled { get; init; }
 }

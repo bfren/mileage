@@ -9,6 +9,8 @@ namespace Mileage.Domain.GetPlaces;
 
 /// <inheritdoc cref="GetPlacesHandler"/>
 /// <param name="UserId"></param>
+/// <param name="IncludeDisabled"></param>
 public sealed record class GetPlacesQuery(
-	AuthUserId UserId
+	AuthUserId UserId,
+	bool IncludeDisabled
 ) : IQuery<IEnumerable<GetPlacesModel>>;

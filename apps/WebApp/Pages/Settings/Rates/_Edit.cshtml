@@ -34,6 +34,21 @@
 		<div class="invalid-tooltip">Please enter an amount (in GBP) between @min.ToString("0.00") and @max.ToString("0.00").</div>
 	</div>
 
+	@if (Model.Rate.IsDisabled)
+	{
+		<div class="form-check form-switch mb3">
+			<input type="checkbox"
+				class="form-check-input"
+				name="@Html.NameFor(m => m.Rate.IsDisabled)"
+				id="@Html.NameFor(m => m.Rate.IsDisabled)"
+				checked="checked"
+				/>
+			<label class="form-check-label" for="@Html.NameFor(m => m.Rate.IsDisabled)">
+				Disabled (can't be selected for new journeys)
+			</label>
+		</div>
+	}
+
 	<!-- Hidden Values -->
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Rate.Id)

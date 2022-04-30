@@ -15,4 +15,16 @@ internal sealed record class CreatePlaceQuery(
 	AuthUserId UserId,
 	string Description,
 	string? Postcode
-) : IQuery<PlaceId>;
+) : IQuery<PlaceId>
+{
+	/// <summary>
+	/// Create from <see cref="SavePlaceQuery"/>
+	/// </summary>
+	/// <param name="query"></param>
+	public CreatePlaceQuery(SavePlaceQuery query) : this(
+		UserId: query.UserId,
+		Description: query.Description,
+		Postcode: query.Postcode
+	)
+	{ }
+}

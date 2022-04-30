@@ -16,18 +16,23 @@
 <ul id="car-list" class="list-group w-100">
 	@foreach (var c in Model.Cars)
 	{
+		var css = c.IsDisabled ? "item-disabled" : string.Empty;
+
 		var description = c.Description;
 		if (c.NumberPlate is string plate)
 		{
 			description += $" ({plate})";
 		}
 
-		<li class="list-group-item" data-id="@c.Id.Value" data-load="@updateLink(c.Id.Value)">
+		<li class="list-group-item @css" data-id="@c.Id.Value" data-load="@updateLink(c.Id.Value)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@c.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@description</div>
-				<modal-update class="me-2" link="@updateLink(c.Id.Value)" replace="cars" />
-				<modal-delete link="@deleteLink(c.Id.Value)" replace="cars" />
+				<modal-update link="@updateLink(c.Id.Value)" replace="cars" />
+				@if (!c.IsDisabled)
+				{
+					<modal-delete class="ms-2" link="@deleteLink(c.Id.Value)" replace="cars" />
+				}
 			</div>
 		</li>
 	}

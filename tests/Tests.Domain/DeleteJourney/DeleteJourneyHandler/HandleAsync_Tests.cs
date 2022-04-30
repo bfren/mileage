@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Delete_Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDelete>
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDelete>
 	{
 		public Setup() : base("Journey") { }
 

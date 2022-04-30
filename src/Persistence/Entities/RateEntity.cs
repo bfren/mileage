@@ -31,4 +31,9 @@ public sealed record class RateEntity : IWithVersion<RateId>
 	/// Mileate rate amount per mile (GBP)
 	/// </summary>
 	public float AmountPerMileGBP { get; init; }
+
+	/// <summary>
+	/// Whether or not this rate has been disabled
+	/// </summary>
+	public bool IsDisabled { get; init; }
 }

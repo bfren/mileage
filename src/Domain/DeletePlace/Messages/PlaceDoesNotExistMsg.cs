@@ -4,6 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.DeletePlace.Messages;
 
@@ -11,5 +12,5 @@ namespace Mileage.Domain.DeletePlace.Messages;
 /// The place does not exist, or does not belong to the specified user
 /// </summary>
 /// <param name="UserId">User ID</param>
-/// <param name="PlaceId">Place ID</param>
-public sealed record class PlaceDoesNotExistMsg(AuthUserId UserId, PlaceId PlaceId) : Msg;
+/// <param name="Id">Place ID</param>
+public sealed record class PlaceDoesNotExistMsg(AuthUserId UserId, PlaceId Id) : Msg, IWithId<PlaceId>, IWithUserId;

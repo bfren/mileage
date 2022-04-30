@@ -12,11 +12,13 @@ namespace Mileage.Domain.SaveRate;
 /// <param name="Id">Rate ID</param>
 /// <param name="Version">Entity Verion</param>
 /// <param name="AmountPerMileGBP">Amount per Mile (in GBP)</param>
+/// <param name="IsDisabled"></param>
 public sealed record class SaveRateQuery(
 	AuthUserId UserId,
 	RateId? Id,
 	long Version,
-	float AmountPerMileGBP
+	float AmountPerMileGBP,
+	bool IsDisabled
 ) : IQuery<RateId>
 {
 	/// <summary>
@@ -28,7 +30,8 @@ public sealed record class SaveRateQuery(
 		UserId: userId,
 		Id: null,
 		Version: 0L,
-		AmountPerMileGBP: amountPerMileGBP
+		AmountPerMileGBP: amountPerMileGBP,
+		IsDisabled: false
 	)
 	{ }
 

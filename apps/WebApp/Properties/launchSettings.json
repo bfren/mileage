@@ -33,6 +33,11 @@
       "executablePath": "dotnet",
       "commandLineArgs": "watch run",
       "workingDirectory": "$(ProjectDir)"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true
     }
   }
 }

@@ -16,14 +16,18 @@
 <ul id="rate-list" class="list-group w-100">
 	@foreach (var r in Model.Rates)
 	{
+		var css = r.IsDisabled ? "item-disabled" : string.Empty;
 		var amount = r.AmountPerMileGBP.ToString("0.00");
 
-		<li class="list-group-item" data-id="@r.Id.Value" data-load="@updateLink(r.Id.Value)">
+		<li class="list-group-item @css" data-id="@r.Id.Value" data-load="@updateLink(r.Id.Value)">
 			<div class="d-flex justify-content-between align-items-start">
 				<div class="mb-1 mb-sm-0 me-3 fw-bold col-1">@r.Id.Value</div>
 				<div class="me-auto mb-1 mb-sm-0">@amount</div>
-				<modal-update class="me-2" link="@updateLink(r.Id.Value)" replace="rates" />
-				<modal-delete link="@deleteLink(r.Id.Value)" replace="rates" />
+				<modal-update link="@updateLink(r.Id.Value)" replace="rates" />
+				@if (!r.IsDisabled)
+				{
+					<modal-delete class="ms-2" link="@deleteLink(r.Id.Value)" replace="rates" />
+				}
 			</div>
 		</li>
 	}

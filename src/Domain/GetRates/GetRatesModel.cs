@@ -11,13 +11,15 @@ namespace Mileage.Domain.GetRates;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="AmountPerMileGBP"></param>
+/// <param name="IsDisabled"></param>
 public sealed record class GetRatesModel(
 	RateId Id,
-	float AmountPerMileGBP
+	float AmountPerMileGBP,
+	bool IsDisabled
 ) : IWithId<RateId>
 {
 	/// <summary>
 	/// Create blank for model binding
 	/// </summary>
-	public GetRatesModel() : this(new(), 0f) { }
+	public GetRatesModel() : this(new(), 0f, false) { }
 }

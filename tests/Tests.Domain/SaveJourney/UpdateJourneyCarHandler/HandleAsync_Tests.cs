@@ -8,7 +8,7 @@ namespace Mileage.Domain.SaveJourney.UpdateJourneyCarHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 {
-	private class Setup : UpdateJourney_Setup<UpdateJourneyCarCommand, UpdateJourneyCarHandler>
+	private class Setup : Setup<UpdateJourneyCarCommand, UpdateJourneyCarHandler>
 	{
 		public Setup() : base("Car") { }
 

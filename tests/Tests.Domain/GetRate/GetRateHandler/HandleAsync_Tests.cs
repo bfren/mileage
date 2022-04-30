@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetRate.GetRate_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<IRateRepository, RateEntity, RateId, GetRateQuery, GetRateHandler, GetRateModel>
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, GetRateQuery, GetRateHandler, GetRateModel>
 	{
 		public Setup() : base("Rate", true) { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<RateId>());
 		}
 
-		internal override GetRateModel NewModel { get; } = new(LongId<AuthUserId>(), LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+		internal override GetRateModel NewModel { get; } = new(LongId<AuthUserId>(), LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 	}
 
 	[Fact]

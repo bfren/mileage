@@ -48,4 +48,10 @@ public sealed record class PlaceTable() : Table(Constants.Schema, TableName)
 	/// </summary>
 	public string Postcode =>
 		"place_postcode";
+
+	/// <summary>
+	/// Place Is Disabled
+	/// </summary>
+	public string IsDisabled =>
+		"place_is_disabled";
 }

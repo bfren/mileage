@@ -20,7 +20,7 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditCarAsync(JourneyId journeyId) =>
 		GetFieldAsync<IEnumerable<GetCarsModel>, EditCarModel>("Car", journeyId,
-			u => Dispatcher.DispatchAsync(new GetCarsQuery(u)),
+			u => Dispatcher.DispatchAsync(new GetCarsQuery(u, false)),
 			(j, v) => new() { Journey = j, Cars = v.ToList() }
 		);
 

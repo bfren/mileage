@@ -3,18 +3,18 @@
 	Layout = "Modals/DeleteModal";
 }
 
-<form action="@Url.Page("Index", "Delete")"
-	  method="post"
-	  data-replace="places"
-	  data-replace-contents="true">
+<form action="@Url.Page("Index", "Delete")" method="post">
 
-	<div>
-		@Model?.Place.Description
-		@if (Model?.Place.Postcode is string postcode)
-		{
-			<text> (@postcode)</text>
-		}
-	</div>
+	@if(Model?.Operation != Persistence.Common.DeleteOperation.None)
+	{
+		<div>
+			@Model?.Place.Description
+			@if (Model?.Place.Postcode is string postcode)
+			{
+				<text> (@postcode)</text>
+			}
+		</div>
+	}
 
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Place.Id)

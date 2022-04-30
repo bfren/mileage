@@ -25,7 +25,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test05_Calls_FluentQuery_QueryAsync__Returns_Result();
 
-	internal abstract class GetSingle_Setup<TRepo, TEntity, TId, TQuery, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
+	internal abstract class Setup<TRepo, TEntity, TId, TQuery, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : LongId, new()
@@ -38,7 +38,7 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TModel NewModel { get; }
 
-		protected GetSingle_Setup(string name) =>
+		protected Setup(string name) =>
 			Name = name;
 
 		internal async Task Test00<TIdIsNullMsg>(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
@@ -87,6 +87,28 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
+		internal async Task Test02_WithIsDisabled(Func<AuthUserId, bool, TQuery> getQuery, Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		{
+			// Arrange
+			var (handler, v) = GetVars();
+			var userId = LongId<AuthUserId>();
+			var includeDisabled = Rnd.Flip;
+			var disabledMatch = includeDisabled ? new[] { true, false } : new[] { false };
+			var query = getQuery(userId, includeDisabled);
+
+			// Act
+			_ = await handle(handler, query);
+
+			// Assert
+			var calls = v.Fluent.ReceivedCalls();
+			Assert.Collection(calls,
+				c => Helpers.AssertWhere<TEntity, AuthUserId>(c, "UserId", Compare.Equal, userId),
+				c => Helpers.AssertWhereIn<TEntity, bool>(c, "IsDisabled", disabledMatch),
+				_ => { },
+				_ => { }
+			);
+		}
+
 		internal async Task Test03<TSort>(
 			Expression<Func<TEntity, TSort>> sortBy,
 			SortOrder sortOrder,
@@ -103,6 +125,29 @@ public abstract class HandleAsync_Tests
 			// Assert
 			var calls = v.Fluent.ReceivedCalls();
 			Assert.Collection(calls,
+				_ => { },
+				c => Helpers.AssertSort(c, sortBy, sortOrder),
+				_ => { }
+			);
+		}
+
+		internal async Task Test03_WithIsDisabled<TSort>(
+			Expression<Func<TEntity, TSort>> sortBy,
+			SortOrder sortOrder,
+			Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle
+		)
+		{
+			// Arrange
+			var (handler, v) = GetVars();
+			var (query, _) = GetQuery();
+
+			// Act
+			_ = await handle(handler, query);
+
+			// Assert
+			var calls = v.Fluent.ReceivedCalls();
+			Assert.Collection(calls,
+				_ => { },
 				_ => { },
 				c => Helpers.AssertSort(c, sortBy, sortOrder),
 				_ => { }

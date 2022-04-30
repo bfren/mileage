@@ -15,16 +15,18 @@ namespace Mileage.Domain.GetCar;
 /// <param name="Version"></param>
 /// <param name="Description"></param>
 /// <param name="NumberPlate"></param>
+/// <param name="IsDisabled"></param>
 public sealed record class GetCarModel(
 	AuthUserId UserId,
 	CarId Id,
 	long Version,
 	string Description,
-	string? NumberPlate
+	string? NumberPlate,
+	bool IsDisabled
 ) : WithUserId, IWithId<CarId>
 {
 	/// <summary>
 	/// Create empty - for model binding
 	/// </summary>
-	public GetCarModel() : this(new(), new(), 0L, string.Empty, null) { }
+	public GetCarModel() : this(new(), new(), 0L, string.Empty, null, false) { }
 }

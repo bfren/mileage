@@ -8,10 +8,17 @@ namespace Mileage.Domain;
 /// <summary>
 /// Specifies a class has a 'UserId' property
 /// </summary>
-public abstract record class WithUserId
+public interface IWithUserId
 {
 	/// <summary>
 	/// User ID
 	/// </summary>
+	AuthUserId UserId { get; init; }
+}
+
+/// <inheritdoc cref="IWithUserId"/>
+public abstract record class WithUserId : IWithUserId
+{
+	/// <inheritdoc/>
 	public abstract AuthUserId UserId { get; init; }
 }

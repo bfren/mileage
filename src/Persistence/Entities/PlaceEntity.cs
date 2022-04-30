@@ -36,4 +36,9 @@ public sealed record class PlaceEntity : IWithVersion<PlaceId>
 	/// [Optional] Postcode
 	/// </summary>
 	public string? Postcode { get; init; }
+
+	/// <summary>
+	/// Whether or not this place has been disabled
+	/// </summary>
+	public bool IsDisabled { get; init; }
 }

@@ -31,7 +31,7 @@ public sealed class ToPlacesViewComponent : ViewComponent
 		Log.Dbg("Get places {PlaceIds}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlacesQuery(x)))
+			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlacesQuery(x, false)))
 			.MapAsync(
 				x => x.Where(p => value?.Contains(p.Id) == true).ToList(),
 				e => new M.UnableToGetToPlacesMsg(e)

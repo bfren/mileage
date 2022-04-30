@@ -11,7 +11,8 @@ namespace Mileage.Domain.DeleteCar;
 /// </summary>
 /// <param name="Id">Car ID</param>
 /// <param name="Version">Concurrency version</param>
-internal sealed record class CarToDelete(CarId Id, long Version) : IWithVersion<CarId>
+/// <param name="IsDisabled"></param>
+internal sealed record class CarToDelete(CarId Id, long Version, bool IsDisabled) : IWithVersion<CarId>
 {
-	public CarToDelete() : this(new(), 0L) { }
+	public CarToDelete() : this(new(), 0L, false) { }
 }

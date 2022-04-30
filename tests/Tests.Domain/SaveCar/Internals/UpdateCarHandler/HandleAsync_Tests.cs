@@ -23,7 +23,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -41,7 +41,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var version = Rnd.Lng;
 		var description = Rnd.Str;
 		var plate = Rnd.Str;
-		var command = new UpdateCarCommand(carId, version, description, plate);
+		var disabled = Rnd.Flip;
+		var command = new UpdateCarCommand(carId, version, description, plate, disabled);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -55,7 +56,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		v.Repo.UpdateAsync(command)
 			.Returns(F.True);
 
@@ -74,7 +75,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.UpdateAsync<UpdateCarCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdateCarCommand(LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		var result = await handler.HandleAsync(command);
