@@ -4,6 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
+using StrongId;
 
 namespace Mileage.Domain.DeleteRate.Messages;
 
@@ -11,5 +12,5 @@ namespace Mileage.Domain.DeleteRate.Messages;
 /// The rate does not exist, or does not belong to the specified user
 /// </summary>
 /// <param name="UserId">User ID</param>
-/// <param name="RateId">Rate ID</param>
-public sealed record class RateDoesNotExistMsg(AuthUserId UserId, RateId RateId) : Msg;
+/// <param name="Id">Rate ID</param>
+public sealed record class RateDoesNotExistMsg(AuthUserId UserId, RateId Id) : Msg, IWithUserId, IWithId<RateId>;
