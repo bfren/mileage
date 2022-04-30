@@ -3,10 +3,7 @@
 	Layout = "Modals/DeleteModal";
 }
 
-<form action="@Url.Page("Index", "Delete")"
-	  method="post"
-	  data-replace="places"
-	  data-replace-contents="true">
+<form action="@Url.Page("Index", "Delete")" method="post">
 
 	<div>
 		@Model?.Place.Description
