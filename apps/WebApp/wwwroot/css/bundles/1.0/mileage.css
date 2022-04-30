@@ -11240,7 +11240,8 @@ body {
 }
 
 footer {
-  background-color: #e9ecef;
+  background-color: #f8f9fa;
+  min-height: 70px;
 }
 footer div {
   font-size: 0.8rem;
@@ -11314,11 +11315,12 @@ main {
 }
 
 input[type=number] {
-  width: 200px;
+  width: 250px;
 }
 
 #settingsPanes {
   background-color: #fff;
+  height: calc(100% - 5rem);
 }
 
 #create, #update, #delete {

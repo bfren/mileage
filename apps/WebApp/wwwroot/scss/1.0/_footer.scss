@@ -1,7 +1,8 @@
 /// <reference path="mileage" />
 
 footer {
-  background-color: $gray-200;
+  background-color: $gray-100;
+  min-height: 70px;
 
   div {
     font-size: 0.8rem;

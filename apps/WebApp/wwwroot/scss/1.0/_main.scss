@@ -36,9 +36,10 @@ main {
 }
 
 input[type=number] {
-  width: 200px;
+  width: 250px;
 }
 
 #settingsPanes {
-    background-color: #fff;
+  background-color: #fff;
+  height: calc(100% - 5rem);
 }
