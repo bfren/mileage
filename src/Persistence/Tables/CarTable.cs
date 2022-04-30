@@ -48,4 +48,10 @@ public sealed record class CarTable() : Table(Constants.Schema, TableName)
 	/// </summary>
 	public string NumberPlate =>
 		"car_number_plate";
+
+	/// <summary>
+	/// Car Is Disabled
+	/// </summary>
+	public string IsDisabled =>
+		"car_is_disabled";
 }
