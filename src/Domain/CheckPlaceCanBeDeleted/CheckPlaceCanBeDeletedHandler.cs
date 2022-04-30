@@ -37,12 +37,19 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 	/// Check whether or not the car defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<DeleteOperation>> HandleAsync(CheckPlaceCanBeDeletedQuery query)
+	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckPlaceCanBeDeletedQuery query) =>
+		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
+
+	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+		CheckPlaceCanBeDeletedQuery query,
+		CheckIsDefault<PlaceId> checkIsDefault,
+		CountJourneysWith<PlaceId> countJourneysWith
+	)
 	{
 		Log.Vrb("Checking whether or not Place {PlaceId} can be deleted.", query.Id.Value);
 
 		// Check whether or not it is the default from place for the user
-		var defaultFromPlaceQuery = await CheckPlaceIsDefault(query.UserId, query.Id);
+		var defaultFromPlaceQuery = await checkIsDefault(query.UserId, query.Id);
 		if (defaultFromPlaceQuery.IsSome(out var isDefaultFromPlace) && isDefaultFromPlace)
 		{
 			return F.None<DeleteOperation, Messages.PlaceIsDefaultFromPlaceMsg>();
@@ -53,7 +60,7 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 		}
 
 		// Check whether or not the place is used in one of the user's journeys
-		var journeysWithPlaceQuery = await CountJourneysWithPlace(query.UserId, query.Id);
+		var journeysWithPlaceQuery = await countJourneysWith(query.UserId, query.Id);
 		return journeysWithPlaceQuery.Bind(x => x switch
 		{
 			> 0 =>
@@ -72,7 +79,7 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
-	internal Task<Maybe<bool>> CheckPlaceIsDefault(AuthUserId userId, PlaceId placeId) =>
+	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, PlaceId placeId) =>
 		Settings.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultFromPlaceId)
@@ -83,7 +90,7 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
-	internal Task<Maybe<long>> CountJourneysWithPlace(AuthUserId userId, PlaceId placeId)
+	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, PlaceId placeId)
 	{
 		var j = new JourneyTable();
 		return Journey.StartFluentQuery()

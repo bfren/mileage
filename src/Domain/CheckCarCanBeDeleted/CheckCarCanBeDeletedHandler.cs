@@ -36,12 +36,19 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 	/// Check whether or not the car defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<DeleteOperation>> HandleAsync(CheckCarCanBeDeletedQuery query)
+	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckCarCanBeDeletedQuery query) =>
+		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
+
+	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+		CheckCarCanBeDeletedQuery query,
+		CheckIsDefault<CarId> checkIsDefault,
+		CountJourneysWith<CarId> countJourneysWith
+	)
 	{
 		Log.Vrb("Checking whether or not Car {CarId} can be deleted.", query.Id.Value);
 
 		// Check whether or not it is the default car for the user
-		var defaultCarQuery = await CheckCarIsDefault(query.UserId, query.Id);
+		var defaultCarQuery = await checkIsDefault(query.UserId, query.Id);
 		if (defaultCarQuery.IsSome(out var isDefaultCar) && isDefaultCar)
 		{
 			return F.None<DeleteOperation, Messages.CarIsDefaultCarMsg>();
@@ -52,7 +59,7 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 		}
 
 		// Check whether or not the car is used in one of the user's journeys
-		var journeysWithCarQuery = await CountJourneysWithCar(query.UserId, query.Id);
+		var journeysWithCarQuery = await countJourneysWith(query.UserId, query.Id);
 		return journeysWithCarQuery.Bind(x => x switch
 		{
 			> 0 =>
@@ -71,7 +78,7 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>
-	internal Task<Maybe<bool>> CheckCarIsDefault(AuthUserId userId, CarId carId) =>
+	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, CarId carId) =>
 		Settings.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultCarId)
@@ -82,7 +89,7 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>
-	internal Task<Maybe<long>> CountJourneysWithCar(AuthUserId userId, CarId carId) =>
+	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, CarId carId) =>
 		Journey.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.Where(x => x.CarId, Compare.Equal, carId)

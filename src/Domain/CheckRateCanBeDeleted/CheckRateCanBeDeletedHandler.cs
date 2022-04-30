@@ -36,12 +36,19 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	/// Check whether or not the rate defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<DeleteOperation>> HandleAsync(CheckRateCanBeDeletedQuery query)
+	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckRateCanBeDeletedQuery query) =>
+		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
+
+	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+		CheckRateCanBeDeletedQuery query,
+		CheckIsDefault<RateId> checkIsDefault,
+		CountJourneysWith<RateId> countJourneysWith
+	)
 	{
 		Log.Vrb("Checking whether or not Rate {RateId} can be deleted.", query.Id.Value);
 
 		// Check whether or not it is the default rate for the user
-		var defaultRateQuery = await CheckRateIsDefault(query.UserId, query.Id);
+		var defaultRateQuery = await checkIsDefault(query.UserId, query.Id);
 		if (defaultRateQuery.IsSome(out var isDefaultRate) && isDefaultRate)
 		{
 			return F.None<DeleteOperation, Messages.RateIsDefaultRateMsg>();
@@ -52,7 +59,7 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 		}
 
 		// Check whether or not the rate is used in one of the user's journeys
-		var journeysWithRateQuery = await CountJourneysWithRate(query.UserId, query.Id);
+		var journeysWithRateQuery = await countJourneysWith(query.UserId, query.Id);
 		return journeysWithRateQuery.Bind(x => x switch
 		{
 			> 0 =>
@@ -71,7 +78,7 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
-	internal Task<Maybe<bool>> CheckRateIsDefault(AuthUserId userId, RateId rateId) =>
+	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, RateId rateId) =>
 		Settings.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultRateId)
@@ -82,7 +89,7 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
-	internal Task<Maybe<long>> CountJourneysWithRate(AuthUserId userId, RateId rateId) =>
+	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, RateId rateId) =>
 		Journey.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.Where(x => x.RateId, Compare.Equal, rateId)
