@@ -53,7 +53,7 @@ public sealed partial class IndexModel
 					from settings in Dispatcher.DispatchAsync(new LoadSettingsQuery(u))
 					from cars in Dispatcher.DispatchAsync(new GetCarsQuery(u, false))
 					from places in Dispatcher.DispatchAsync(new GetPlacesQuery(u, false))
-					from rates in Dispatcher.DispatchAsync(new GetRatesQuery(u))
+					from rates in Dispatcher.DispatchAsync(new GetRatesQuery(u, false))
 					from miles in Dispatcher.DispatchAsync(new GetLatestEndMilesQuery(u, settings.DefaultCarId))
 					select new { settings, cars, places, rates, miles };
 
