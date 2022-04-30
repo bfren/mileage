@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetJourney.GetJourney_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneyQuery, GetJourneyHandler, GetJourneyModel>
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneyQuery, GetJourneyHandler, GetJourneyModel>
 	{
 		public Setup() : base("Journey", false) { }
 

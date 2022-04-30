@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeletePlace.DeletePlaceHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Delete_Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDelete>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDelete>
 	{
 		public Setup() : base("Place") { }
 

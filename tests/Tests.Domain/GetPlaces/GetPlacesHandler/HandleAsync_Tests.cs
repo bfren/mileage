@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetPlaces.GetPlaces_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, GetPlacesModel>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, GetPlacesModel>
 	{
 		public Setup() : base("Places") { }
 

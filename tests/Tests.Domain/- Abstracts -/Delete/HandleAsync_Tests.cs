@@ -25,7 +25,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test05_Calls_FluentQuery_WhereSingleAsync__Receives_Some__Calls_Repo_DeleteAsync__Returns_Result();
 
-	internal abstract class Delete_Setup<TRepo, TEntity, TId, TCommand, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
+	internal abstract class Setup<TRepo, TEntity, TId, TCommand, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : LongId, new()
@@ -39,7 +39,7 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TModel EmptyModel { get; }
 
-		protected Delete_Setup(string name) =>
+		protected Setup(string name) =>
 			Name = name;
 
 		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
@@ -125,9 +125,9 @@ public abstract class HandleAsync_Tests
 			// Arrange
 			var (handler, v) = GetVars();
 			var userId = LongId<AuthUserId>();
-			var carId = LongId<TId>();
-			var command = GetCommand(userId, carId);
-			var model = getModel(carId, Rnd.Lng);
+			var entityId = LongId<TId>();
+			var command = GetCommand(userId, entityId);
+			var model = getModel(entityId, Rnd.Lng);
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(model);
 

@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetRates.GetRates_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<IRateRepository, RateEntity, RateId, GetRatesQuery, GetRatesHandler, GetRatesModel>
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, GetRatesQuery, GetRatesHandler, GetRatesModel>
 	{
 		public Setup() : base("Rates") { }
 

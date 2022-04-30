@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Delete_Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDelete>
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDelete>
 	{
 		public Setup() : base("Rate") { }
 

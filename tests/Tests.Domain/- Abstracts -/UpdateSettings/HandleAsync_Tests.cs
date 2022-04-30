@@ -26,7 +26,7 @@ public abstract class HandleAsync_Tests
 
 	public abstract Task Test05_ItemId_Is_Null__Calls_Settings_UpdateAsync__With_Correct_Values();
 
-	internal abstract class UpdateSettings_Setup<TCommand, THandler, TItemId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
+	internal abstract class Setup<TCommand, THandler, TItemId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
 		where TCommand : WithUserId, ICommand, IWithId<SettingsId>
 		where THandler : CommandHandler<TCommand>
 		where TItemId : LongId, new()
@@ -35,7 +35,7 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TCommand GetCommand(AuthUserId? userId = null, TItemId? itemId = null);
 
-		protected UpdateSettings_Setup(string name) =>
+		protected Setup(string name) =>
 			Name = name;
 
 		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)

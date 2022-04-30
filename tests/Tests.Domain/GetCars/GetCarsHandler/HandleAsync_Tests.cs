@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetCars.GetCars_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : GetSingle_Setup<ICarRepository, CarEntity, CarId, GetCarsQuery, GetCarsHandler, GetCarsModel>
+	private class Setup : Setup<ICarRepository, CarEntity, CarId, GetCarsQuery, GetCarsHandler, GetCarsModel>
 	{
 		public Setup() : base("Cars") { }
 
@@ -25,10 +25,10 @@ public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 				userId = LongId<AuthUserId>();
 			}
 
-			return (new(userId), userId);
+			return (new(userId, true), userId);
 		}
 
-		internal override GetCarsModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str, Rnd.Str);
+		internal override GetCarsModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 
 	[Fact]

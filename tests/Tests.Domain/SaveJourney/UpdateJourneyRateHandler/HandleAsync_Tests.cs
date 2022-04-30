@@ -8,7 +8,7 @@ namespace Mileage.Domain.SaveJourney.UpdateJourneyRateHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 {
-	private class Setup : UpdateJourney_Setup<UpdateJourneyRateCommand, UpdateJourneyRateHandler>
+	private class Setup : Setup<UpdateJourneyRateCommand, UpdateJourneyRateHandler>
 	{
 		public Setup() : base("Rate") { }
 
