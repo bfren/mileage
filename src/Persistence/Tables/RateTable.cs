@@ -42,4 +42,10 @@ public sealed record class RateTable() : Table(Constants.Schema, TableName)
 	/// </summary>
 	public string AmountPerMileGBP =>
 		"rate_amount";
+
+	/// <summary>
+	/// Rate Is Disabled
+	/// </summary>
+	public string IsDisabled =>
+		"rate_is_disabled";
 }
