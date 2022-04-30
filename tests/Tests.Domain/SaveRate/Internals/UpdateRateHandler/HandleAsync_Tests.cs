@@ -23,7 +23,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -37,10 +37,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var rateId = LongId<RateId>();
-		var version = Rnd.Lng;
-		var amountPerMileGBP = Rnd.Flt;
-		var command = new UpdateRateCommand(rateId, version, amountPerMileGBP);
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -54,7 +51,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 		v.Repo.UpdateAsync(command)
 			.Returns(F.True);
 
@@ -73,7 +70,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.UpdateAsync<UpdateRateCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt);
+		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		var result = await handler.HandleAsync(command);

@@ -39,6 +39,8 @@ internal sealed class SaveRateHandler : QueryHandler<SaveRateQuery, RateId>
 	/// <param name="query"></param>
 	public override async Task<Maybe<RateId>> HandleAsync(SaveRateQuery query)
 	{
+		Log.Vrb("Saving Rate {Query}.", query);
+
 		// Ensure the rate belongs to the user
 		if (query.Id is not null)
 		{
@@ -60,10 +62,10 @@ internal sealed class SaveRateHandler : QueryHandler<SaveRateQuery, RateId>
 			.QuerySingleAsync<RateEntity>()
 			.SwitchAsync(
 				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateRateCommand(x.Id, query.Version, query.AmountPerMileGBP))
+					.DispatchAsync(new Internals.UpdateRateCommand(x.Id, query))
 					.BindAsync(_ => F.Some(x.Id)),
 				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateRateQuery(query.UserId, query.AmountPerMileGBP))
+					.DispatchAsync(new Internals.CreateRateQuery(query))
 			);
 	}
 }
