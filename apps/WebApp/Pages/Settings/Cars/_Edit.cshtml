@@ -18,7 +18,8 @@
 
 	<div class="mb-3">
 		@Html.LabelFor(m => m.Car.Description, new { @class = "visually-hidden" })
-		<input type="text" class="form-control modal-focus"
+		<input type="text"
+			   class="form-control modal-focus"
 			   name="@Html.NameFor(m => m.Car.Description)"
 			   id="@Html.NameFor(m => m.Car.Description)"
 			   placeholder="@nameof(Model.Car.Description)"
@@ -29,14 +30,28 @@
 
 	<div class="mb-3">
 		@Html.LabelFor(m => m.Car.NumberPlate, new { @class = "visually-hidden" })
-		<div class="input-group">
-			<input type="text" class="form-control"
-				   name="@Html.NameFor(m => m.Car.NumberPlate)"
-				   id="@Html.NameFor(m => m.Car.NumberPlate)"
-				   placeholder="@nameof(Model.Car.NumberPlate).SplitByCapitals()"
-				   value="@Model.Car.NumberPlate" />
-		</div>
+		<input type="text"
+			   class="form-control"
+			   name="@Html.NameFor(m => m.Car.NumberPlate)"
+			   id="@Html.NameFor(m => m.Car.NumberPlate)"
+			   placeholder="@nameof(Model.Car.NumberPlate).SplitByCapitals()"
+			   value="@Model.Car.NumberPlate" />
 	</div>
+
+	@if (Model.Car.IsDisabled)
+	{
+		<div class="form-check form-switch mb3">
+			<input type="checkbox"
+				class="form-check-input"
+				name="@Html.NameFor(m => m.Car.IsDisabled)"
+				id="@Html.NameFor(m => m.Car.IsDisabled)"
+				checked="checked"
+				/>
+			<label class="form-check-label" for="@Html.NameFor(m => m.Car.IsDisabled)">
+				Disabled (can't be selected for new journeys)
+			</label>
+		</div>
+	}
 
 	<!-- Hidden Values -->
 	@Html.AntiForgeryToken()

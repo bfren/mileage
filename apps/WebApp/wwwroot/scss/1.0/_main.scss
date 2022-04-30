@@ -5,8 +5,24 @@ main {
   padding: 10px 0 70px;
 }
 
+.list-group-item {
+
+  &:hover {
+    background-color: $gray-100;
+  }
+
+  &.item-disabled {
+    background-color: $gray-200;
+    color: $gray-600;
+
+    &:hover {
+      background-color: $gray-300;
+      color: $gray-700;
+    }
+  }
+}
+
 .list-group-item:hover {
-  background-color: $gray-100;
 }
 
 .token {
