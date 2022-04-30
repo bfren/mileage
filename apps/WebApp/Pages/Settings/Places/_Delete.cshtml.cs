@@ -4,8 +4,11 @@
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Mileage.Domain.CheckPlaceCanBeDeleted;
+using Mileage.Domain.CheckPlaceCanBeDeleted.Messages;
 using Mileage.Domain.DeletePlace;
 using Mileage.Domain.GetPlace;
+using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.WebApp.Pages.Modals;
 
@@ -23,15 +26,27 @@ public sealed partial class IndexModel
 	public Task<PartialViewResult> OnGetDeleteAsync(PlaceId placeId)
 	{
 		// Create query
-		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetPlaceQuery(u, placeId))
-					select c;
+		var query = from userId in User.GetUserId()
+					from op in Dispatcher.DispatchAsync(new CheckPlaceCanBeDeletedQuery(userId, placeId))
+					from place in Dispatcher.DispatchAsync(new GetPlaceQuery(userId, placeId))
+					select new { op, place };
 
 		return query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Partial("_Delete", new DeleteModel { Place = x }),
-				none: r => Partial("Modals/ErrorModal", r)
+				some: x => Partial("_Delete", new DeleteModel { Place = x.place, Operation = x.op }),
+				none: r => r switch
+				{
+					PlaceIsDefaultFromPlaceMsg =>
+						Partial("_Delete", new DeleteModel
+						{
+							Operation = DeleteOperation.None,
+							Reason = "it is the default starting place for new journeys"
+						}),
+
+					_ =>
+						Partial("Modals/ErrorModal", r)
+				}
 			);
 	}
 

@@ -38,6 +38,21 @@
 		</div>
 	</div>
 
+	@if (Model.Place.IsDisabled)
+	{
+		<div class="form-check form-switch mb3">
+			<input type="checkbox"
+				class="form-check-input"
+				name="@Html.NameFor(m => m.Place.IsDisabled)"
+				id="@Html.NameFor(m => m.Place.IsDisabled)"
+				checked="checked"
+				/>
+			<label class="form-check-label" for="@Html.NameFor(m => m.Place.IsDisabled)">
+				Disabled (can't be selected for new journeys)
+			</label>
+		</div>
+	}
+
 	<!-- Hidden Values -->
 	@Html.AntiForgeryToken()
 	@Html.HiddenForId(m => m.Place.Id)
