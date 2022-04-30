@@ -55,7 +55,7 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 	}
 
 	/// <summary>
-	/// Peform a delete or disable operation on a car
+	/// Peform a delete or disable operation on a place
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
