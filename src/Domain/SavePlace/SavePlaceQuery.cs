@@ -13,12 +13,14 @@ namespace Mileage.Domain.SavePlace;
 /// <param name="Version">Entity Verion</param>
 /// <param name="Description">Description</param>
 /// <param name="Postcode">Postcode</param>
+/// <param name="IsDisabled"></param>
 public sealed record class SavePlaceQuery(
 	AuthUserId UserId,
 	PlaceId? Id,
 	long Version,
 	string Description,
-	string? Postcode
+	string? Postcode,
+	bool IsDisabled
 ) : IQuery<PlaceId>
 {
 	/// <summary>
@@ -31,7 +33,8 @@ public sealed record class SavePlaceQuery(
 		Id: null,
 		Version: 0L,
 		Description: description,
-		Postcode: null
+		Postcode: null,
+		IsDisabled: false
 	)
 	{ }
 

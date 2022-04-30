@@ -23,7 +23,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -37,11 +37,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var placeId = LongId<PlaceId>();
-		var version = Rnd.Lng;
-		var description = Rnd.Str;
-		var postcode = Rnd.Str;
-		var command = new UpdatePlaceCommand(placeId, version, description, postcode);
+		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -55,7 +51,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		v.Repo.UpdateAsync(command)
 			.Returns(F.True);
 
@@ -74,7 +70,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.UpdateAsync<UpdatePlaceCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		var result = await handler.HandleAsync(command);

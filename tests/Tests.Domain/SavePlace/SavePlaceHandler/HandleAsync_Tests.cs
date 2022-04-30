@@ -24,13 +24,31 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		new Setup().GetVars();
 
 	[Fact]
+	public async Task Calls_Log_Vrb__With_Correct_Values()
+	{
+		// Arrange
+		var (handler, v) = GetVars();
+		var query = new SavePlaceQuery();
+		v.Dispatcher.DispatchAsync<bool>(default!)
+			.ReturnsForAnyArgs(true);
+		v.Fluent.QuerySingleAsync<PlaceEntity>()
+			.Returns(new PlaceEntity());
+
+		// Act
+		await handler.HandleAsync(query);
+
+		// Assert
+		v.Log.Received().Vrb("Saving Place {Query}.", query);
+	}
+
+	[Fact]
 	public async Task Checks_Place_Belongs_To_User_With_Correct_Values()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var placeId = LongId<PlaceId>();
-		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -51,7 +69,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
@@ -70,7 +88,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var userId = LongId<AuthUserId>();
 		var placeId = LongId<PlaceId>();
-		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -99,7 +117,8 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var version = Rnd.Lng;
 		var description = Rnd.Str;
 		var postcode = Rnd.Str;
-		var query = new SavePlaceQuery(userId, placeId, version, description, postcode);
+		var disabled = Rnd.Flip;
+		var query = new SavePlaceQuery(userId, placeId, version, description, postcode, disabled);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -116,6 +135,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 				&& c.Version == version
 				&& c.Description == description
 				&& c.Postcode == postcode
+				&& c.IsDisabled == disabled
 			)
 		);
 	}
@@ -126,7 +146,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var placeId = LongId<PlaceId>();
-		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
@@ -153,7 +173,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		var userId = LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var postcode = Rnd.Str;
-		var query = new SavePlaceQuery(userId, null, 0L, description, postcode);
+		var query = new SavePlaceQuery(userId, null, 0L, description, postcode, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -179,7 +199,7 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var placeId = LongId<PlaceId>();
-		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str);
+		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		v.Dispatcher.DispatchAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
