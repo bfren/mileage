@@ -42,6 +42,7 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 		return Rate
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
+			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
 			.Sort(x => x.AmountPerMileGBP, SortOrder.Ascending)
 			.QueryAsync<GetRatesModel>();
 	}

@@ -25,10 +25,10 @@ public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 				userId = LongId<AuthUserId>();
 			}
 
-			return (new(userId), userId);
+			return (new(userId, true), userId);
 		}
 
-		internal override GetRatesModel NewModel { get; } = new(LongId<RateId>(), Rnd.Flt);
+		internal override GetRatesModel NewModel { get; } = new(LongId<RateId>(), Rnd.Flt, Rnd.Flip);
 	}
 
 	[Fact]
@@ -46,13 +46,13 @@ public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 	[Fact]
 	public override async Task Test02_Calls_FluentQuery_Where__With_Correct_Values()
 	{
-		await new Setup().Test02((h, q) => h.HandleAsync(q));
+		await new Setup().Test02_WithIsDisabled((u, d) => new(u, d), (h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]
 	public override async Task Test03_Calls_FluentQuery_Sort__With_Correct_Values()
 	{
-		await new Setup().Test03(x => x.AmountPerMileGBP, SortOrder.Ascending, (h, q) => h.HandleAsync(q));
+		await new Setup().Test03_WithIsDisabled(x => x.AmountPerMileGBP, SortOrder.Ascending, (h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

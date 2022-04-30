@@ -9,6 +9,8 @@ namespace Mileage.Domain.GetRates;
 
 /// <inheritdoc cref="GetRatesHandler"/>
 /// <param name="UserId"></param>
+/// <param name="IncludeDisabled"></param>
 public sealed record class GetRatesQuery(
-	AuthUserId UserId
+	AuthUserId UserId,
+	bool IncludeDisabled
 ) : IQuery<IEnumerable<GetRatesModel>>;
