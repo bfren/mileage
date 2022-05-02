@@ -2,6 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -21,7 +22,7 @@ public class CountJourneysWithAsync_Tests : Abstracts.CheckCanBeDeleted.CountJou
 	{
 		await new Setup().Test00(
 			h => h.CountJourneysWithAsync,
-			(c, id) => Helpers.AssertWhere<JourneyEntity, CarId?>(c, x => x.CarId, Compare.Equal, id)
+			(c, id) => FluentQueryHelper.AssertWhere<JourneyEntity, CarId?>(c, x => x.CarId, Compare.Equal, id)
 		);
 	}
 

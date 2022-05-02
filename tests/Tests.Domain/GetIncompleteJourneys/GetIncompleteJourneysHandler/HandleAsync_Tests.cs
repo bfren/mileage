@@ -4,6 +4,7 @@
 using System.Linq.Expressions;
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -53,10 +54,9 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
-			c => Helpers.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
-			c => Helpers.AssertWhere<JourneyEntity, int?>(c, x => x.EndMiles, Compare.Is, null),
+		v.Fluent.AssertCalls(
+			c => FluentQueryHelper.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+			c => FluentQueryHelper.AssertWhere<JourneyEntity, int?>(c, x => x.EndMiles, Compare.Is, null),
 			_ => { },
 			_ => { }
 		);
@@ -78,11 +78,10 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
+		v.Fluent.AssertCalls(
 			_ => { },
 			_ => { },
-			c => Helpers.AssertSort<JourneyEntity, int>(c, x => x.StartMiles, SortOrder.Descending),
+			c => FluentQueryHelper.AssertSort<JourneyEntity, int>(c, x => x.StartMiles, SortOrder.Descending),
 			_ => { }
 		);
 	}
