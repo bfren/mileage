@@ -5,6 +5,7 @@ using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Jeebs.Messages;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
@@ -54,10 +55,9 @@ public abstract class DeleteOrDisableAsync_Tests
 			await dOrD(userId, entityId, DeleteOperation.None);
 
 			// Assert
-			var calls = v.Fluent.ReceivedCalls();
-			Assert.Collection(calls,
-				c => Helpers.AssertWhere<TEntity, TId>(c, x => x.Id, Compare.Equal, entityId),
-				c => Helpers.AssertWhere<TEntity, AuthUserId>(c, "UserId", Compare.Equal, userId),
+			v.Fluent.AssertCalls(
+				c => FluentQueryHelper.AssertWhere<TEntity, TId>(c, x => x.Id, Compare.Equal, entityId),
+				c => FluentQueryHelper.AssertWhere<TEntity, AuthUserId>(c, "UserId", Compare.Equal, userId),
 				_ => { }
 			);
 		}

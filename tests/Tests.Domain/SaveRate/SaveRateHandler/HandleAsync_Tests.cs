@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveRate.Internals;
 using Mileage.Domain.SaveRate.Messages;
@@ -99,10 +100,9 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
-			c => Helpers.AssertWhere<RateEntity, RateId>(c, x => x.Id, Compare.Equal, carId),
-			c => Helpers.AssertWhere<RateEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+		v.Fluent.AssertCalls(
+			c => FluentQueryHelper.AssertWhere<RateEntity, RateId>(c, x => x.Id, Compare.Equal, carId),
+			c => FluentQueryHelper.AssertWhere<RateEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 			_ => { }
 		);
 	}

@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Jeebs.Messages;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -52,10 +53,9 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
-			c => Helpers.AssertWhere<CarEntity, CarId>(c, x => x.Id, Compare.Equal, carId),
-			c => Helpers.AssertWhere<CarEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+		v.Fluent.AssertCalls(
+			c => FluentQueryHelper.AssertWhere<CarEntity, CarId>(c, x => x.Id, Compare.Equal, carId),
+			c => FluentQueryHelper.AssertWhere<CarEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 			_ => { }
 		);
 	}

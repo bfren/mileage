@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.SavePlace.Internals;
 using Mileage.Domain.SavePlace.Messages;
@@ -99,10 +100,9 @@ public class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		var calls = v.Fluent.ReceivedCalls();
-		Assert.Collection(calls,
-			c => Helpers.AssertWhere<PlaceEntity, PlaceId>(c, x => x.Id, Compare.Equal, placeId),
-			c => Helpers.AssertWhere<PlaceEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+		v.Fluent.AssertCalls(
+			c => FluentQueryHelper.AssertWhere<PlaceEntity, PlaceId>(c, x => x.Id, Compare.Equal, placeId),
+			c => FluentQueryHelper.AssertWhere<PlaceEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 			_ => { }
 		);
 	}

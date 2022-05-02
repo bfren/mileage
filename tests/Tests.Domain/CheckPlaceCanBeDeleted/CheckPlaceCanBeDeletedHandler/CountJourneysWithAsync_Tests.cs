@@ -1,6 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Data.Testing.Query;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Repositories;
 
@@ -19,10 +20,10 @@ public class CountJourneysWithAsync_Tests : Abstracts.CheckCanBeDeleted.CountJou
 	{
 		await new Setup().Test00(
 			h => h.CountJourneysWithAsync,
-			(c, placeId) => Helpers.AssertWhere(
+			(c, placeId) => FluentQueryHelper.AssertWhere(
 				c,
-				"(journey_from_place_id = @placeId OR journey_to_place_ids ? @placeId::text)", new { placeId }
-
+				"(journey_from_place_id = @placeId OR journey_to_place_ids ? @placeId::text)",
+				new { placeId }
 			)
 		);
 	}

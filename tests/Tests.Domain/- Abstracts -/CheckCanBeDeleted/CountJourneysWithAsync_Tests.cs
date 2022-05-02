@@ -4,6 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
@@ -43,9 +44,8 @@ public abstract class CountJourneysWithAsync_Tests
 			_ = await count(userId, entityId);
 
 			// Assert
-			var calls = v.Fluent.ReceivedCalls();
-			Assert.Collection(calls,
-				c => Helpers.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+			v.Fluent.AssertCalls(
+				c => FluentQueryHelper.AssertWhere<JourneyEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 				c => whereId(c, entityId),
 				_ => { }
 			);
@@ -61,12 +61,7 @@ public abstract class CountJourneysWithAsync_Tests
 			_ = await count(LongId<AuthUserId>(), LongId<TId>());
 
 			// Assert
-			var calls = v.Fluent.ReceivedCalls();
-			Assert.Collection(calls,
-				_ => { },
-				_ => { },
-				c => Helpers.AssertCount(c)
-			);
+			await v.Fluent.Received().CountAsync();
 		}
 
 		internal async Task Test02(CountJourneysWithAsyncMethod countJourneysWith)

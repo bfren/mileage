@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
+using Jeebs.Data.Testing.Query;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
@@ -46,9 +47,8 @@ public abstract class CheckIsDefaultAsync_Tests
 			_ = await check(userId, LongId<TId>());
 
 			// Assert
-			var calls = v.Fluent.ReceivedCalls();
-			Assert.Collection(calls,
-				c => Helpers.AssertWhere<SettingsEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
+			v.Fluent.AssertCalls(
+				c => FluentQueryHelper.AssertWhere<SettingsEntity, AuthUserId>(c, x => x.UserId, Compare.Equal, userId),
 				_ => { }
 			);
 		}
@@ -63,10 +63,9 @@ public abstract class CheckIsDefaultAsync_Tests
 			_ = await check(LongId<AuthUserId>(), LongId<TId>());
 
 			// Assert
-			var calls = v.Fluent.ReceivedCalls();
-			Assert.Collection(calls,
+			v.Fluent.AssertCalls(
 				_ => { },
-				c => Helpers.AssertExecute(c, property)
+				c => FluentQueryHelper.AssertExecute(c, property, false)
 			);
 		}
 
