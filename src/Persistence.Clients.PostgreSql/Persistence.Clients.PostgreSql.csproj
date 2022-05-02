@@ -3,7 +3,7 @@
     <Description>Mileage: PostgreSQL client.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Data.Clients.PostgreSql" Version="8.0.0-beta.220429.3" />
+    <PackageReference Include="Jeebs.Data.Clients.PostgreSql" Version="8.0.0-beta.220502.4" />
     <PackageReference Include="MaybeF" Version="9.0.2" />
   </ItemGroup>
   <ItemGroup>
