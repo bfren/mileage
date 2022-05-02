@@ -25,16 +25,13 @@ function setupCreateModalSearch() {
 	// filter as the user types
 	$("#create .list-filter").keyup(function () {
 		// get value from input
-		var value = $(this).val();
+		var value = $(this).val().toString();
 
 		// get item list id
 		var filterItems = $(this).data("filter-for");
 
 		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
-			$(this).toggle(show);
-		});
+		filterModalItems(filterItems, value);
 	});
 }
 

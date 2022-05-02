@@ -69,3 +69,25 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 		}
 	});
 }
+
+/**
+ * Filter items in a modal based on a value.
+ * 
+ * @param {string} parentId Parent ID holding the list of items
+ * @param {string} value Search value
+ * @returns {boolean} Whether or not there is an exact (case-insensitive) match
+ */
+function filterModalItems(parentId, value) {
+	$("#" + parentId + " label").filter(function () {
+		// get text values as lowercase for comparison
+		var itemText = $(this).data("text").toString().toLowerCase();
+		var searchText = value.toLowerCase();
+
+		// if the item contains the search text, show it
+		var show = itemText.indexOf(searchText) > -1;
+		$(this).toggle(show);
+
+		// return whether or not there is an exact match
+		return itemText == searchText;
+	});
+}
