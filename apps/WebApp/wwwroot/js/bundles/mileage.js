@@ -289,6 +289,28 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
 }
 
 /**
+ * Filter items in a modal based on a value.
+ * 
+ * @param {string} parentId Parent ID holding the list of items
+ * @param {string} value Search value
+ * @returns {boolean} Whether or not there is an exact (case-insensitive) match
+ */
+function filterModalItems(parentId, value) {
+	$("#" + parentId + " label").filter(function () {
+		// get text values as lowercase for comparison
+		var itemText = $(this).data("text").toString().toLowerCase();
+		var searchText = value.toLowerCase();
+
+		// if the item contains the search text, show it
+		var show = itemText.indexOf(searchText) > -1;
+		$(this).toggle(show);
+
+		// return whether or not there is an exact match
+		return itemText == searchText;
+	});
+}
+
+/**
  * Open the create modal.
  * 
  * @param {any} url
@@ -315,16 +337,13 @@ function setupCreateModalSearch() {
 	// filter as the user types
 	$("#create .list-filter").keyup(function () {
 		// get value from input
-		var value = $(this).val();
+		var value = $(this).val().toString();
 
 		// get item list id
 		var filterItems = $(this).data("filter-for");
 
 		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			var show = $(this).data("text").indexOf(value.toLowerCase()) > -1;
-			$(this).toggle(show);
-		});
+		filterModalItems(filterItems, value);
 	});
 }
 
@@ -501,24 +520,9 @@ function setupUpdateModalSearch() {
 		// get item list id
 		var filterItems = $(this).data("filter-for");
 
-		// holds whether or not there is an exact match
-		var exactMatch = false;
-
-		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			// get text values as lowercase for comparison
-			var itemText = $(this).data("text").toString().toLowerCase();
-			var searchText = value.toLowerCase();
-
-			// if the item contains the search text, show it
-			var show = itemText.indexOf(searchText) > -1;
-			$(this).toggle(show);
-
-			// if the search text exactly matches an item, hide the add item button
-			if (itemText == searchText) {
-				exactMatch = true;
-			}
-		});
+		// filter items and store whether or not there is an exact match -
+		// if there is, we need to hide the add item button
+		var exactMatch = filterModalItems(filterItems, value);
 
 		// if the add item button is disabled, stop
 		if (addItem.is(":disabled")) {

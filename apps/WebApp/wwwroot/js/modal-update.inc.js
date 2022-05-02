@@ -63,24 +63,9 @@ function setupUpdateModalSearch() {
 		// get item list id
 		var filterItems = $(this).data("filter-for");
 
-		// holds whether or not there is an exact match
-		var exactMatch = false;
-
-		// filter items that match the input value
-		$("#" + filterItems + " label").filter(function () {
-			// get text values as lowercase for comparison
-			var itemText = $(this).data("text").toString().toLowerCase();
-			var searchText = value.toLowerCase();
-
-			// if the item contains the search text, show it
-			var show = itemText.indexOf(searchText) > -1;
-			$(this).toggle(show);
-
-			// if the search text exactly matches an item, hide the add item button
-			if (itemText == searchText) {
-				exactMatch = true;
-			}
-		});
+		// filter items and store whether or not there is an exact match -
+		// if there is, we need to hide the add item button
+		var exactMatch = filterModalItems(filterItems, value);
 
 		// if the add item button is disabled, stop
 		if (addItem.is(":disabled")) {
