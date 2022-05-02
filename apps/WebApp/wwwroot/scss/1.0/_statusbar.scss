@@ -37,6 +37,7 @@
   }
 
   .btn-create {
+    color: #fff;
     cursor: pointer;
     font-size: 4.5rem;
     line-height: 1rem;
@@ -44,7 +45,7 @@
     text-shadow: 0 0 3px #fff;
 
     .fa-circle-plus path {
-      stroke: white;
+      stroke: $gray-100;
       stroke-width: 20px;
     }
   }

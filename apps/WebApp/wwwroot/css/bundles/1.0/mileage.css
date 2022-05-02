@@ -11278,6 +11278,7 @@ footer div {
   color: red;
 }
 .statusbar .btn-create {
+  color: #fff;
   cursor: pointer;
   font-size: 4.5rem;
   line-height: 1rem;
@@ -11285,7 +11286,7 @@ footer div {
   text-shadow: 0 0 3px #fff;
 }
 .statusbar .btn-create .fa-circle-plus path {
-  stroke: white;
+  stroke: #f8f9fa;
   stroke-width: 20px;
 }
 
