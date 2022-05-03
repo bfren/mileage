@@ -189,6 +189,10 @@ function loadHash() {
 ready(loadHash);
 window.onhashchange = loadHash;
 
+/**
+ * Get the current window hash without the actual #.
+ *
+ */
 function getHash() {
 	return window.location.hash.replace("#", "");
 }
@@ -201,6 +205,11 @@ function setupLinks() {
 	$("body").on("click", "a", function (e) {
 		// get hyperlink
 		var href = $(this).attr("href");
+
+		// ignore absolute links
+		if (href.startsWith("http")) {
+			return;
+		}
 
 		// ignore javascript links
 		if (href == "javascript:void(0)") {
@@ -296,7 +305,7 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
  * @returns {boolean} Whether or not there is an exact (case-insensitive) match
  */
 function filterModalItems(parentId, value) {
-	$("#" + parentId + " label").filter(function () {
+	$("#" + parentId + " .with-data").filter(function () {
 		// get text values as lowercase for comparison
 		var itemText = $(this).data("text").toString().toLowerCase();
 		var searchText = value.toLowerCase();
