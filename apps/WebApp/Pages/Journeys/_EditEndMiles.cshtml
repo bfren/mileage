@@ -4,6 +4,7 @@
 
 	Model.Title += $" (Journey {Model.Journey.Id.Value})";
 	Layout = "Modals/UpdateModal";
+	var value = Model.Journey.EndMiles ?? Model.Journey.StartMiles;
 }
 
 <form method="post" action="@Url.Page("Index", "EditEndMiles")">
@@ -12,11 +13,11 @@
 		name="@Html.NameFor(x => x.Journey.EndMiles)"
 		id="@Html.NameFor(x => x.Journey.EndMiles).Normalise()"
 		min="@Model.Journey.StartMiles"
-		value="@Model.Journey.StartMiles"
+		value="@value"
 		pattern="[0-9]*"
 		required
 	/>
-	<div class="invalid-feedback">Please enter a valid number.</div>
+	<div class="invalid-feedback">Please enter a valid number greater than the starting miles (@Model.Journey.StartMiles).</div>
 
 	@Html.HiddenForId(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)

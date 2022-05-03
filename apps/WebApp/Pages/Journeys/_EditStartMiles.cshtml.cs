@@ -18,5 +18,5 @@ public sealed partial class IndexModel
 		GetFieldAsync("StartMiles", journeyId, x => new EditStartMilesModel { Journey = x });
 
 	public Task<IActionResult> OnPostEditStartMilesAsync(UpdateJourneyStartMilesCommand journey) =>
-		PostFieldAsync("Miles", "Start", journey, x => x.StartMiles);
+		PostFieldAsync("Miles", "Start", journey, x => x.StartMiles, "StartMiles");
 }
