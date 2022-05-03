@@ -95,7 +95,7 @@ jobs:
         SLACK_USERNAME: Mileage (GitHub)
         SLACK_MESSAGE: Docker Image Published
         SLACK_COLOR: good
-        SLACK_ICON: https://bfren.uk/img/logo-square-500x500.jpg
+        SLACK_ICON: https://bfren.dev/img/logo-square-500x500.jpg
     -
       if: failure()
       name: Finish - Failure
@@ -105,4 +105,4 @@ jobs:
         SLACK_USERNAME: Mileage (GitHub)
         SLACK_MESSAGE: Failed to Publish Docker Image
         SLACK_COLOR: danger
-        SLACK_ICON: https://bfren.uk/img/logo-square-500x500.jpg
+        SLACK_ICON: https://bfren.dev/img/logo-square-500x500.jpg
