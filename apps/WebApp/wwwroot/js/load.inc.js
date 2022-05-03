@@ -68,6 +68,10 @@ function loadHash() {
 ready(loadHash);
 window.onhashchange = loadHash;
 
+/**
+ * Get the current window hash without the actual #.
+ *
+ */
 function getHash() {
 	return window.location.hash.replace("#", "");
 }
@@ -80,6 +84,11 @@ function setupLinks() {
 	$("body").on("click", "a", function (e) {
 		// get hyperlink
 		var href = $(this).attr("href");
+
+		// ignore absolute links
+		if (href.startsWith("http")) {
+			return;
+		}
 
 		// ignore javascript links
 		if (href == "javascript:void(0)") {

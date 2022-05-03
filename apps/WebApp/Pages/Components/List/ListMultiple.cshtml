@@ -36,7 +36,9 @@
 	{
 		string idText = $"{name.Normalise()}-{id}";
 		var check = selected ? "checked" : string.Empty;
-		<input type="checkbox" class="btn-check" id="@idText" name="@name" value="@id" autocomplete="off" @check />
-		<label class="btn btn-outline-primary mb-1" for="@idText" data-text="@value">@text</label>
+		<div class="form-check-inline p-2 mb-1 with-data border border-primary text-primary rounded-2" data-text="@value">
+			<input type="checkbox" class="form-check-input" id="@idText" name="@name" value="@id" autocomplete="off" @check />
+			<label class="form-check-label" for="@idText">@text</label>
+		</div>
 	}
 }

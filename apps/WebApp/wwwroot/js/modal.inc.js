@@ -78,7 +78,7 @@ function openModal(selector, url, replaceId, replaceContents, setup) {
  * @returns {boolean} Whether or not there is an exact (case-insensitive) match
  */
 function filterModalItems(parentId, value) {
-	$("#" + parentId + " label").filter(function () {
+	$("#" + parentId + " .with-data").filter(function () {
 		// get text values as lowercase for comparison
 		var itemText = $(this).data("text").toString().toLowerCase();
 		var searchText = value.toLowerCase();

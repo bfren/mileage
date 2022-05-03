@@ -49,6 +49,6 @@
 		var required = Model?.AllowNull == false ? "required" : string.Empty;
 
 		<input type="radio" class="btn-check auto-save" id="@idText" name="@name" value="@id" autocomplete="off" aria-describedby="@feedback" @check @required />
-		<label class="btn btn-outline-primary mb-1" for="@idText" data-text="@value">@text</label>
+		<label class="btn btn-outline-primary mb-1 with-data" for="@idText" data-text="@value">@text</label>
 	}
 }
