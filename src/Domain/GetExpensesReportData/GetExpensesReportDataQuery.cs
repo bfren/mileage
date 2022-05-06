@@ -17,4 +17,4 @@ public sealed record class GetExpensesReportDataQuery(
 	AuthUserId UserId,
 	DateTime From,
 	DateTime To
-) : IQuery<IEnumerable<ExpensesReportJourney>>;
+) : Query<IEnumerable<ExpensesReportJourney>>;

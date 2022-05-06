@@ -23,7 +23,7 @@ public sealed record class GetPlaceModel(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : WithUserId, IWithId<PlaceId>
+) : IWithUserId, IWithId<PlaceId>
 {
 	/// <summary>
 	/// Create blank for model binding

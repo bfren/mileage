@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckRateBelongsToUser;
 public sealed record class CheckRateBelongsToUserQuery(
 	AuthUserId UserId,
 	RateId RateId
-) : IQuery<bool>;
+) : Query<bool>;

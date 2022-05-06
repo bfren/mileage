@@ -6,4 +6,4 @@ using Jeebs.Cqrs;
 namespace Mileage.Domain.InsertTestData;
 
 /// <inheritdoc cref="InsertTestDataHandler"/>
-public sealed record class InsertTestDataCommand : ICommand;
+public sealed record class InsertTestDataCommand : Command;

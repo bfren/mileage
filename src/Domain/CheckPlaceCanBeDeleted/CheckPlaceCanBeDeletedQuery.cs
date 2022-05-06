@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckPlaceCanBeDeleted;
 public sealed record class CheckPlaceCanBeDeletedQuery(
 	AuthUserId UserId,
 	PlaceId Id
-) : WithUserId, IQuery<DeleteOperation>, IWithId<PlaceId>;
+) : Query<DeleteOperation>, IWithId<PlaceId>, IWithUserId;

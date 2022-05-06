@@ -32,7 +32,7 @@ public abstract class HandleAsync_Tests
 		where TCommand : ICommand
 		where THandler : CommandHandler<TCommand>
 		where TModel : IWithId<TId>
-		where TCheckQuery : WithUserId, IQuery<DeleteOperation>, IWithId<TId>
+		where TCheckQuery : IWithUserId, IQuery<DeleteOperation>, IWithId<TId>
 	{
 		internal string Name { get; }
 

@@ -28,7 +28,7 @@ internal sealed record class UpdateJourneyCommand(
 	PlaceId FromPlaceId,
 	PlaceId[]? ToPlaceIds,
 	RateId? RateId
-) : ICommand
+) : Command
 {
 	/// <summary>
 	/// Update from a <see cref="SaveJourneyQuery"/>

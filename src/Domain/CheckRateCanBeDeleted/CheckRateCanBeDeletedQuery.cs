@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckRateCanBeDeleted;
 public sealed record class CheckRateCanBeDeletedQuery(
 	AuthUserId UserId,
 	RateId Id
-) : WithUserId, IQuery<DeleteOperation>, IWithId<RateId>;
+) : Query<DeleteOperation>, IWithId<RateId>, IWithUserId;

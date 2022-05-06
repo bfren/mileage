@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetCars;
 public sealed record class GetCarsQuery(
 	AuthUserId UserId,
 	bool IncludeDisabled
-) : IQuery<IEnumerable<GetCarsModel>>;
+) : Query<IEnumerable<GetCarsModel>>;

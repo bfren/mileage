@@ -19,4 +19,4 @@ public sealed record class SaveUserPasswordCommand(
 	string CurrentPassword,
 	string NewPassword,
 	string CheckPassword
-) : ICommand, IWithVersion<AuthUserId>;
+) : Command, IWithVersion<AuthUserId>;

@@ -13,4 +13,4 @@ namespace Mileage.Domain.DeleteRate;
 public sealed record class DeleteRateCommand(
 	AuthUserId UserId,
 	RateId Id
-) : ICommand;
+) : Command;

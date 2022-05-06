@@ -21,7 +21,7 @@ public sealed record class GetRateModel(
 	long Version,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : WithUserId, IWithId<RateId>
+) : IWithUserId, IWithId<RateId>
 {
 	/// <summary>
 	/// Create blank for model binding

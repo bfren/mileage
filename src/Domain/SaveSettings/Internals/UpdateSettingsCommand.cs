@@ -13,4 +13,4 @@ namespace Mileage.Domain.SaveSettings.Internals;
 internal sealed record class UpdateSettingsCommand(
 	SettingsEntity ExistingSettings,
 	Settings UpdatedSettings
-) : ICommand;
+) : Command;

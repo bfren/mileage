@@ -18,4 +18,4 @@ public sealed record class UpdateDefaultFromPlaceCommand(
 	SettingsId Id,
 	long Version,
 	PlaceId? DefaultFromPlaceId
-) : WithUserId, ICommand, IWithId<SettingsId>;
+) : Command, IWithId<SettingsId>, IWithUserId;

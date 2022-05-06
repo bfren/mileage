@@ -13,4 +13,4 @@ namespace Mileage.Domain.DeletePlace;
 public sealed record class DeletePlaceCommand(
 	AuthUserId UserId,
 	PlaceId Id
-) : ICommand;
+) : Command;

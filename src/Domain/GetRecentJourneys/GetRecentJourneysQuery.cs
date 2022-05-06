@@ -11,4 +11,4 @@ namespace Mileage.Domain.GetRecentJourneys;
 /// <param name="UserId"></param>
 public sealed record class GetRecentJourneysQuery(
 	AuthUserId UserId
-) : IQuery<IEnumerable<RecentJourneyModel>>;
+) : Query<IEnumerable<RecentJourneyModel>>;

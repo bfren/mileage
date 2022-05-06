@@ -21,7 +21,7 @@ public sealed record class SaveCarQuery(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : IQuery<CarId>
+) : Query<CarId>
 {
 	/// <summary>
 	/// Create with minimum required values (for new cars)

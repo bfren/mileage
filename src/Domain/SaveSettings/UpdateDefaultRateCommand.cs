@@ -18,4 +18,4 @@ public sealed record class UpdateDefaultRateCommand(
 	SettingsId Id,
 	long Version,
 	RateId? DefaultRateId
-) : WithUserId, ICommand, IWithId<SettingsId>;
+) : Command, IWithId<SettingsId>, IWithUserId;

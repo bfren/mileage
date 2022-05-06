@@ -33,7 +33,7 @@ public sealed record class GetJourneyModel(
 	PlaceId FromPlaceId,
 	ImmutableList<PlaceId> ToPlaceIds,
 	RateId? RateId
-) : WithUserId, IWithId<JourneyId>
+) : IWithUserId, IWithId<JourneyId>
 {
 	/// <summary>
 	/// Create empty model

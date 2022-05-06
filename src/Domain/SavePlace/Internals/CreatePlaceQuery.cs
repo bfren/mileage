@@ -15,7 +15,7 @@ internal sealed record class CreatePlaceQuery(
 	AuthUserId UserId,
 	string Description,
 	string? Postcode
-) : IQuery<PlaceId>
+) : Query<PlaceId>
 {
 	/// <summary>
 	/// Create from <see cref="SavePlaceQuery"/>

@@ -11,4 +11,4 @@ namespace Mileage.Domain.GetIncompleteJourneys;
 /// <param name="UserId"></param>
 public sealed record class GetIncompleteJourneysQuery(
 	AuthUserId UserId
-) : IQuery<IEnumerable<IncompleteJourneyModel>>;
+) : Query<IEnumerable<IncompleteJourneyModel>>;

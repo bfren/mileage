@@ -27,7 +27,7 @@ internal sealed record class CreateJourneyQuery(
 	PlaceId FromPlaceId,
 	PlaceId[]? ToPlaceIds,
 	RateId? RateId
-) : IQuery<JourneyId>
+) : Query<JourneyId>
 {
 	/// <summary>
 	/// Create from a <see cref="SaveJourneyQuery"/>

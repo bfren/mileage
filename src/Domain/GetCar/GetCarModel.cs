@@ -23,7 +23,7 @@ public sealed record class GetCarModel(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : WithUserId, IWithId<CarId>
+) : IWithUserId, IWithId<CarId>
 {
 	/// <summary>
 	/// Create empty - for model binding

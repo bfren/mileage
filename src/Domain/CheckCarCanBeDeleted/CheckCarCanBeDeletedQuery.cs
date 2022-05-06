@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckCarCanBeDeleted;
 public sealed record class CheckCarCanBeDeletedQuery(
 	AuthUserId UserId,
 	CarId Id
-) : WithUserId, IQuery<DeleteOperation>, IWithId<CarId>;
+) : Query<DeleteOperation>, IWithId<CarId>, IWithUserId;

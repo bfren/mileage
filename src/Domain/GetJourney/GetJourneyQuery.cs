@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetJourney;
 public sealed record class GetJourneyQuery(
 	AuthUserId UserId,
 	JourneyId JourneyId
-) : IQuery<GetJourneyModel>;
+) : Query<GetJourneyModel>;

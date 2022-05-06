@@ -15,7 +15,7 @@ internal sealed record class CreateCarQuery(
 	AuthUserId UserId,
 	string Description,
 	string? NumberPlate
-) : IQuery<CarId>
+) : Query<CarId>
 {
 	/// <summary>
 	/// Create from <see cref="SaveCarQuery"/>

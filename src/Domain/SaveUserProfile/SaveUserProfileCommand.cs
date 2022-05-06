@@ -21,4 +21,4 @@ public sealed record class SaveUserProfileCommand(
 	string FriendlyName,
 	string? GivenName,
 	string? FamilyName
-) : ICommand, IWithVersion<AuthUserId>;
+) : Command, IWithVersion<AuthUserId>;

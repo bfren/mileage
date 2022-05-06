@@ -13,7 +13,7 @@ namespace Mileage.Domain.SaveRate.Internals;
 internal sealed record class CreateRateQuery(
 	AuthUserId UserId,
 	float AmountPerMileGBP
-) : IQuery<RateId>
+) : Query<RateId>
 {
 	/// <summary>
 	/// Create from <see cref="SaveRateQuery"/>

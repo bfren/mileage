@@ -18,4 +18,4 @@ public sealed record class UpdateJourneyEndMilesCommand(
 	JourneyId Id,
 	long Version,
 	int EndMiles
-) : WithUserId, ICommand, IWithId<JourneyId>;
+) : Command, IWithId<JourneyId>, IWithUserId;

@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetRate;
 public sealed record class GetRateQuery(
 	AuthUserId UserId,
 	RateId RateId
-) : IQuery<GetRateModel>;
+) : Query<GetRateModel>;
