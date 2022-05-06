@@ -19,7 +19,7 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test02_Calls_Repo_Update_Async__Returns_Result();
 
 	internal abstract class Setup<TCommand, THandler> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
-		where TCommand : ICommand, IWithId<JourneyId>
+		where TCommand : Command, IWithId<JourneyId>
 		where THandler : CommandHandler<TCommand>
 	{
 		internal string Name { get; }

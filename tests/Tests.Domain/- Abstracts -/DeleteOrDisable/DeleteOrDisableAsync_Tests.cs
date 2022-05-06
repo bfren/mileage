@@ -31,7 +31,7 @@ public abstract class DeleteOrDisableAsync_Tests
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : LongId, new()
-		where TCommand : ICommand
+		where TCommand : Command
 		where THandler : CommandHandler<TCommand>
 		where TModel : IWithId<TId>
 	{

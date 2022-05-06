@@ -26,7 +26,7 @@ public abstract class HandleAsync_Tests
 
 	internal abstract class Setup<TId, TQuery, THandler> : TestHandler.Setup<THandler>
 		where TId : LongId, new()
-		where TQuery : IQuery<DeleteOperation>
+		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
 	{
 		public delegate Func<TQuery, CheckIsDefault<TId>, CountJourneysWith<TId>, Task<Maybe<DeleteOperation>>> HandleAsyncMethod(THandler handler);

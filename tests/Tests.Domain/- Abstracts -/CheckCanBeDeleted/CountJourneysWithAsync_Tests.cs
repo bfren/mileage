@@ -24,7 +24,7 @@ public abstract class CountJourneysWithAsync_Tests
 	public abstract Task Test02_Calls_FluentQuery_CountAsync__Returns_Result();
 
 	internal abstract class Setup<TQuery, THandler, TId> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
-		where TQuery : IQuery<DeleteOperation>
+		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
 		where TId : LongId, new()
 	{

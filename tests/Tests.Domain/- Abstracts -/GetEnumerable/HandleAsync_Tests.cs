@@ -29,7 +29,7 @@ public abstract class HandleAsync_Tests
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId>
 		where TId : LongId, new()
-		where TQuery : IQuery<IEnumerable<TModel>>
+		where TQuery : Query<IEnumerable<TModel>>
 		where THandler : QueryHandler<TQuery, IEnumerable<TModel>>
 	{
 		internal string Name { get; }
