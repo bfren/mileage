@@ -91,8 +91,8 @@
 		<thead>
 			<tr>
 				<th scope="col">Date</th>
-				<th scope="col">Mileage</th>
 				<th scope="col">Car</th>
+				<th scope="col">Mileage</th>
 				<th scope="col">Rate</th>
 				<th scope="col">Total</th>
 				<th scope="col">From</th>
@@ -107,8 +107,8 @@
 
 				<tr class="@css" id="journey-@j.Id.Value">
 					<td>@j.Day.ToString("dd/MM/yyyy")</td>
-					<td>@mileage</td>
 					<td>@j.Car</td>
+					<td>@mileage</td>
 					<td class="text-end">@j.Rate.ToString("0.00")</td>
 					<td class="text-end">@amount(j.Rate, j.Distance).ToString("0.00")</td>
 					<td>@place(j.From)</td>
