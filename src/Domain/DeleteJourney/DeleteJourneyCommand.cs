@@ -13,4 +13,4 @@ namespace Mileage.Domain.DeleteJourney;
 public sealed record class DeleteJourneyCommand(
 	AuthUserId UserId,
 	JourneyId Id
-) : ICommand;
+) : Command;

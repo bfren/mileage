@@ -11,4 +11,4 @@ namespace Mileage.Domain.LoadSettings;
 /// <param name="Id"></param>
 public sealed record class LoadSettingsQuery(
 	AuthUserId Id
-) : IQuery<Settings>;
+) : Query<Settings>;

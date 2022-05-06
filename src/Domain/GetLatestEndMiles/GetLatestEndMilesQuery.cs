@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetLatestEndMiles;
 public sealed record class GetLatestEndMilesQuery(
 	AuthUserId UserId,
 	CarId? CarId
-) : IQuery<uint>;
+) : Query<uint>;

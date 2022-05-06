@@ -19,7 +19,7 @@ public sealed record class SaveRateQuery(
 	long Version,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : IQuery<RateId>
+) : Query<RateId>
 {
 	/// <summary>
 	/// Save with minimum required values (for new rates)

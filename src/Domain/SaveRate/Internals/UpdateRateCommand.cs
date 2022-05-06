@@ -17,7 +17,7 @@ internal sealed record class UpdateRateCommand(
 	long Version,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : ICommand, IWithId<RateId>
+) : Command, IWithId<RateId>
 {
 	public UpdateRateCommand(RateId rateId, SaveRateQuery query) : this(
 		Id: rateId,

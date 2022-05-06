@@ -10,4 +10,4 @@ namespace Mileage.Domain.GetUserProfile;
 /// <param name="Id"></param>
 public sealed record class GetUserProfileQuery(
 	AuthUserId Id
-) : IQuery<UserProfileModel>;
+) : Query<UserProfileModel>;

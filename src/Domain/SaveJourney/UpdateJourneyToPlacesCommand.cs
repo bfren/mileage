@@ -19,4 +19,4 @@ public sealed record class UpdateJourneyToPlacesCommand(
 	JourneyId Id,
 	long Version,
 	List<PlaceId> ToPlaceIds
-) : WithUserId, ICommand, IWithId<JourneyId>;
+) : Command, IWithId<JourneyId>, IWithUserId;

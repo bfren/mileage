@@ -19,7 +19,7 @@ internal sealed record class UpdateCarCommand(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : ICommand, IWithId<CarId>
+) : Command, IWithId<CarId>
 {
 	/// <summary>
 	/// Create from a <see cref="SaveCarQuery"/>

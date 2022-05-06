@@ -15,10 +15,3 @@ public interface IWithUserId
 	/// </summary>
 	AuthUserId UserId { get; init; }
 }
-
-/// <inheritdoc cref="IWithUserId"/>
-public abstract record class WithUserId : IWithUserId
-{
-	/// <inheritdoc/>
-	public abstract AuthUserId UserId { get; init; }
-}

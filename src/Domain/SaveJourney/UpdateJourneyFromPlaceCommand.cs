@@ -18,4 +18,4 @@ public sealed record class UpdateJourneyFromPlaceCommand(
 	JourneyId Id,
 	long Version,
 	PlaceId FromPlaceId
-) : WithUserId, ICommand, IWithId<JourneyId>;
+) : Command, IWithId<JourneyId>, IWithUserId;

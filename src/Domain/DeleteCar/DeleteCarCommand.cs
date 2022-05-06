@@ -13,4 +13,4 @@ namespace Mileage.Domain.DeleteCar;
 public sealed record class DeleteCarCommand(
 	AuthUserId UserId,
 	CarId Id
-) : ICommand;
+) : Command;

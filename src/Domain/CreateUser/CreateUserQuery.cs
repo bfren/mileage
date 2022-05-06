@@ -14,4 +14,4 @@ public sealed record class CreateUserQuery(
 	string Name,
 	string EmailAddress,
 	string Password
-) : IQuery<AuthUserId>;
+) : Query<AuthUserId>;

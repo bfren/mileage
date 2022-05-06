@@ -76,7 +76,7 @@ public sealed partial class IndexModel : PageModel
 		TCommand command,
 		Func<TCommand, TValue> getValue
 	)
-		where TCommand : WithUserId, ICommand
+		where TCommand : Command, IWithUserId
 	{
 		// Get values
 		var updateUrl = Url.Page("Index", "Edit" + component);

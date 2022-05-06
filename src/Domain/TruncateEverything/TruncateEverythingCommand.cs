@@ -6,4 +6,4 @@ using Jeebs.Cqrs;
 namespace Mileage.Domain.TruncateEverything;
 
 /// <inheritdoc cref="TruncateEverythingHandler"/>
-public sealed record class TruncateEverythingCommand : ICommand;
+public sealed record class TruncateEverythingCommand : Command;

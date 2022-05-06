@@ -19,7 +19,7 @@ internal sealed record class UpdatePlaceCommand(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : ICommand, IWithId<PlaceId>
+) : Command, IWithId<PlaceId>
 {
 	/// <summary>
 	/// Create from <see cref="SavePlaceQuery"/>

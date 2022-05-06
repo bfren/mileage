@@ -18,4 +18,4 @@ public sealed record class UpdateDefaultCarCommand(
 	SettingsId Id,
 	long Version,
 	CarId? DefaultCarId
-) : WithUserId, ICommand, IWithId<SettingsId>;
+) : Command, IWithId<SettingsId>, IWithUserId;

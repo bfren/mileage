@@ -6,4 +6,4 @@ using Jeebs.Cqrs;
 namespace Mileage.Domain.MigrateToLatest;
 
 /// <inheritdoc cref="MigrateToLatestHandler"/>
-public sealed record class MigrateToLatestCommand : ICommand;
+public sealed record class MigrateToLatestCommand : Command;

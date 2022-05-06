@@ -13,4 +13,4 @@ namespace Mileage.Domain.SaveSettings;
 public sealed record class SaveSettingsCommand(
 	AuthUserId UserId,
 	Settings Settings
-) : ICommand;
+) : Command;

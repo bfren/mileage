@@ -21,7 +21,7 @@ public sealed record class SavePlaceQuery(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : IQuery<PlaceId>
+) : Query<PlaceId>
 {
 	/// <summary>
 	/// Save with minimum required values (for new places)

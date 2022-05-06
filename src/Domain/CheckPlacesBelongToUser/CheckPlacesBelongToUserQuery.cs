@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckPlacesBelongToUser;
 public sealed record class CheckPlacesBelongToUserQuery(
 	AuthUserId UserId,
 	params PlaceId[] PlaceIds
-) : IQuery<bool>;
+) : Query<bool>;

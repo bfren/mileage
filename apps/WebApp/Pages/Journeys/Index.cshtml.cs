@@ -85,7 +85,7 @@ public sealed partial class IndexModel : PageModel
 		Func<TCommand, TValue> getValue,
 		string? handler = null
 	)
-		where TCommand : WithUserId, ICommand, IWithId<JourneyId>
+		where TCommand : Command, IWithId<JourneyId>, IWithUserId
 	{
 		// Get values
 		var journeyId = command.Id;

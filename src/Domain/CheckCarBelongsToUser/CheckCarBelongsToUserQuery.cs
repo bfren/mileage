@@ -15,4 +15,4 @@ namespace Mileage.Domain.CheckCarBelongsToUser;
 public sealed record class CheckCarBelongsToUserQuery(
 	AuthUserId UserId,
 	CarId CarId
-) : IQuery<bool>;
+) : Query<bool>;

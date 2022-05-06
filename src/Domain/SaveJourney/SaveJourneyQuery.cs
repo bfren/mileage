@@ -31,7 +31,7 @@ public sealed record class SaveJourneyQuery(
 	PlaceId FromPlaceId,
 	PlaceId[]? ToPlaceIds,
 	RateId? RateId
-) : IQuery<JourneyId>
+) : Query<JourneyId>
 {
 	/// <summary>
 	/// Save with minimum required values (for new journeys)

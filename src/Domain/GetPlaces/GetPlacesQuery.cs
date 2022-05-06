@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetPlaces;
 public sealed record class GetPlacesQuery(
 	AuthUserId UserId,
 	bool IncludeDisabled
-) : IQuery<IEnumerable<GetPlacesModel>>;
+) : Query<IEnumerable<GetPlacesModel>>;

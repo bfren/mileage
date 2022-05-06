@@ -28,7 +28,7 @@ public abstract class CheckIsDefaultAsync_Tests
 	public abstract Task Test04_Calls_FluentQuery_ExecuteAsync__Receives_None__Returns_None();
 
 	internal abstract class Setup<TQuery, THandler, TId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
-		where TQuery : IQuery<DeleteOperation>
+		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
 		where TId : LongId, new()
 	{

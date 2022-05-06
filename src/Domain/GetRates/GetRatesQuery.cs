@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetRates;
 public sealed record class GetRatesQuery(
 	AuthUserId UserId,
 	bool IncludeDisabled
-) : IQuery<IEnumerable<GetRatesModel>>;
+) : Query<IEnumerable<GetRatesModel>>;

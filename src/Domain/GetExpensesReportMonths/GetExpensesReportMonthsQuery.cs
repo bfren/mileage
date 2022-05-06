@@ -11,4 +11,4 @@ namespace Mileage.Domain.GetExpensesReportMonths;
 /// <param name="UserId"></param>
 public sealed record class GetExpensesReportMonthsQuery(
 	AuthUserId UserId
-) : IQuery<IEnumerable<MonthModel>>;
+) : Query<IEnumerable<MonthModel>>;
