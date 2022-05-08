@@ -27,7 +27,6 @@ public sealed class IndexModel : PageModel
 							from m in Dispatcher.DispatchAsync(new GetExpensesReportMonthsQuery(u))
 							select m;
 
-
 		var query = from expenses in expensesQuery
 					select new { expenses };
 
