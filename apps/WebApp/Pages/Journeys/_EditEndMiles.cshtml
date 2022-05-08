@@ -7,7 +7,7 @@
 	var value = Model.Journey.EndMiles ?? Model.Journey.StartMiles;
 }
 
-<form method="post" action="@Url.Page("Index", "EditEndMiles")">
+<form method="post" action="@Url.Page("Index", "EditEndMiles")" novalidate>
 	<input type="number"
 		class="form-control modal-select"
 		name="@Html.NameFor(x => x.Journey.EndMiles)"

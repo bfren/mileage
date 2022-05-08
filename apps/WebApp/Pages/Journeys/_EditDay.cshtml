@@ -6,7 +6,7 @@
 	Layout = "Modals/UpdateModal";
 }
 
-<form method="post" action="@Url.Page("Index", "EditDay")">
+<form method="post" action="@Url.Page("Index", "EditDay")" novalidate>
 	<input type="text"
 		class="form-control auto-save"
 		name="@Html.NameFor(x => x.Journey.Day)"
