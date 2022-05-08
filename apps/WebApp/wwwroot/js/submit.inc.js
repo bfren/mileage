@@ -30,6 +30,7 @@ ready(setupAjaxSubmit);
  */
 function submitForm(form, url, data) {
 	// get form info
+	var method = form.attr("method");
 	var replaceId = form.data("replace");
 	var replaceContents = form.data("replace-contents");
 
@@ -42,7 +43,7 @@ function submitForm(form, url, data) {
 	// post data and handle result
 	$.ajax(
 		{
-			method: "POST",
+			method: method ?? "POST",
 			url: url || form.attr("action"),
 			data: data || form.serialize()
 		}
