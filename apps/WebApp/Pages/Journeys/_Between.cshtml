@@ -1,0 +1,9 @@
+@using Mileage.Domain.GetJourneys
+@model Mileage.WebApp.Pages.Journeys.BetweenModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+
+	var listModel = new ListModel("Between") { Journeys = Model.Journeys };
+}
+
+<partial name="_List" model="@listModel"/>

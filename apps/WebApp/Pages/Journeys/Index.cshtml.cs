@@ -1,6 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
@@ -43,8 +44,23 @@ public sealed partial class IndexModel : PageModel
 
 	public ILog<IndexModel> Log { get; }
 
+	public BetweenModel Between { get; set; } = new();
+
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
+
+	public async Task<IActionResult> OnGetAsync(DateTime? start, DateTime? end)
+	{
+		var now = DateTime.Now;
+		var from = start ?? now.FirstDayOfMonth();
+		var to = end ?? now.LastDayOfMonth();
+		await foreach (var item in GetJourneysBetweenAsync(from, to))
+		{
+			Between = new() { Start = from, End = to, Journeys = item.ToList() };
+		}
+
+		return Page();
+	}
 
 	#region Update Fields
 
