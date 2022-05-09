@@ -14,6 +14,7 @@ public sealed class Menu
 	public Menu() =>
 		Items = new List<Item>
 		{
+			{ new("Journeys", "/Journeys/Index") },
 			{ new("Reports", "/Reports/Index") },
 			{ new("Settings", "/Settings/Index") },
 			{ new("Profile", "/Auth/Profile") },
