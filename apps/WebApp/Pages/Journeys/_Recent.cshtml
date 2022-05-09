@@ -3,7 +3,9 @@
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 
-	var listModel = new ListModel("Recent") { Journeys = Model.Journeys };
+	var listModel = new ListModel("Recent", "recent-journeys") { Journeys = Model.Journeys };
 }
 
-<partial name="_List" model="@listModel"/>
+<div id="recent-journeys">
+	<partial name="_List" model="@listModel"/>
+</div>
