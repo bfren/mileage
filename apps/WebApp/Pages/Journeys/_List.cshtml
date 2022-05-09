@@ -19,7 +19,7 @@
 
 @if (!Model.Journeys.Any())
 {
-	<div>No journeys found.</div>
+	<div class="fst-italic small text-muted">(Empty)</div>
 	return;
 }
 
@@ -41,7 +41,11 @@
 						<vc:rate label="Rate" update-url="@updateLink(j, "Rate")" value="@j.RateId" journey-id="@j.Id" />
 					</div>
 				</div>
-				<modal-delete link="@deleteLink(j)" replace="recent-journeys"/>
+				<modal-delete link="@deleteLink(j)" replace="@Model.ReplaceId" replace-contents="true"/>
+				@if (j.EndMiles is null)
+				{
+					<modal-complete class="ms-2" link="@updateLink(j, "EndMiles")" replace="@Model.ReplaceId"  replace-contents="true"/>
+				}
 			</div>
 			<div class="places">
 				<vc:from-place label="From" update-url="@updateLink(j, "FromPlace")" value="@j.FromPlaceId" journey-id="@j.Id" />

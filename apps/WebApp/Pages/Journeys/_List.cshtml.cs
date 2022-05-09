@@ -7,10 +7,14 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed record class ListModel
 {
-	public IEnumerable<JourneyModel> Journeys { get; init; } = new List<JourneyModel>();
+	public IEnumerable<JourneyModel> Journeys { get; init; }
 
 	public string DeleteHandler { get; init; }
 
-	public ListModel(string deleteHandler) =>
-		DeleteHandler = deleteHandler;
+	public string ReplaceId { get; init; }
+
+	public ListModel(string deleteHandler) : this(deleteHandler, string.Empty) { }
+
+	public ListModel(string deleteHandler, string replaceId) =>
+		(Journeys, DeleteHandler, ReplaceId) = (new List<JourneyModel>(), deleteHandler, replaceId);
 }
