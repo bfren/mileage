@@ -7,9 +7,9 @@ using Mileage.Domain.GetRecentJourneys;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public sealed class RecentModel
+public sealed record class RecentModel
 {
-	public List<RecentJourneyModel> Journeys { get; set; } = new();
+	public List<RecentJourneyModel> Journeys { get; init; } = new();
 }
 
 public sealed partial class IndexModel
