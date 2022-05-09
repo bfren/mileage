@@ -37,7 +37,7 @@ internal sealed class GetJourneysHandler : QueryHandler<GetJourneysQuery, IEnume
 		var start = DateTime.SpecifyKind(query.Start, DateTimeKind.Unspecified);
 		var end = DateTime.SpecifyKind(query.End, DateTimeKind.Unspecified);
 
-		Log.Vrb("Getting Journeys for {User} between {From} and {To}.", query.UserId.Value, start, end);
+		Log.Vrb("Getting Journeys for {User} between {Start} and {End}.", query.UserId.Value, start, end);
 		return Journey
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
