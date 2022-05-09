@@ -7,7 +7,7 @@
 
 	<ul class="nav nav-tabs nav-fill" id="settingsButtons" role="tablist">
 		@{
-			TabButton("Defaults");
+			TabButton("General");
 			TabButton("Cars");
 			TabButton("Places");
 			TabButton("Rates");
@@ -16,7 +16,7 @@
 
 	<div class="tab-content p-3 border-start border-end border-bottom rounded-bottom" id="settingsPanes">
 		@{
-			TabPane("Defaults");
+			TabPane("General");
 			TabPane("Cars");
 			TabPane("Places");
 			TabPane("Rates");
@@ -25,12 +25,12 @@
 
 </div>
 
-<script type="text/javascript">loadSettingsTab("#defaults");</script>
+<script type="text/javascript">loadSettingsTab("#general");</script>
 
 @functions {
 	void TabButton(string text)
 	{
-		var active = text == "Defaults";
+		var active = text == "General";
 		var name = text.ToLowerInvariant();
 		var css = "nav-link" + (active ? " active" : "");
 
@@ -52,7 +52,7 @@
 	{
 		var name = page.ToLowerInvariant();
 		var src = Url.Page($"{page}/Index");
-		var css = "tab-pane face" + (page == "Defaults" ? " show active" : "");
+		var css = "tab-pane face" + (page == "General" ? " show active" : "");
 
 		<div id="@name" class="@css" role="tabpanel" aria-labelledby="@name-tab" data-src="@src"></div>
 	}
