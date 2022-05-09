@@ -26,6 +26,6 @@ public sealed partial class IndexModel
 				r,
 
 			_ =>
-				Result.Create(true, Alert.Success("Done.")) with { RedirectTo = Url.Page("./Index", "Lists") }
+				Result.Create(true, Alert.Success("Done.")) with { RedirectTo = Url.Page("./Index", "Home") }
 		};
 }
