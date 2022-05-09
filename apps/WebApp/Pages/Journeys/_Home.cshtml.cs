@@ -11,7 +11,7 @@ using Mileage.Domain.GetRecentJourneys;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public sealed record class ListsModel
+public sealed record class HomeModel
 {
 	public IncompleteModel IncompleteJourneys { get; set; } = new();
 
@@ -20,16 +20,16 @@ public sealed record class ListsModel
 
 public sealed partial class IndexModel
 {
-	public Task<PartialViewResult> OnGetListsAsync() =>
-		CreateListsModel(
+	public Task<PartialViewResult> OnGetHomeAsync() =>
+		CreateHomeModel(
 			User.GetUserId(), Dispatcher, Log
 		)
 		.SwitchAsync(
-			some: x => Partial("_Lists", x),
+			some: x => Partial("_Home", x),
 			none: r => Partial("_Error", r)
 		);
 
-	internal static Task<Maybe<ListsModel>> CreateListsModel(Maybe<AuthUserId> user, IDispatcher dispatcher, ILog log)
+	internal static Task<Maybe<HomeModel>> CreateHomeModel(Maybe<AuthUserId> user, IDispatcher dispatcher, ILog log)
 	{
 		var query = from u in user
 					from incomplete in dispatcher.DispatchAsync(new GetIncompleteJourneysQuery(u))
@@ -39,7 +39,7 @@ public sealed partial class IndexModel
 		return query
 			.AuditAsync(none: log.Msg)
 			.MapAsync(
-				x => new ListsModel
+				x => new HomeModel
 				{
 					IncompleteJourneys = new() { Journeys = x.incomplete.ToList() },
 					RecentJourneys = new() { Journeys = x.recent.ToList() }
