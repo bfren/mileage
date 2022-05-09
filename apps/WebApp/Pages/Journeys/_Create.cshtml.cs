@@ -87,7 +87,7 @@ public sealed partial class IndexModel
 		return await query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Result.Create(x) with { RedirectTo = Url.Page("./Index", "Home") },
+				some: x => Result.Create(x) with { RedirectTo = "refresh" },
 				none: r => Result.Error(r)
 			);
 	}
