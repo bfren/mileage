@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Settings.Cars;
 
 public sealed class EditModel : UpdateModalModel
 {
-	public GetCarModel Car { get; set; } = new();
+	public CarModel Car { get; set; } = new();
 
 	public EditModel() : base("Car") { }
 }

@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetPlace.GetPlace_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlaceQuery, GetPlaceHandler, GetPlaceModel>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlaceQuery, GetPlaceHandler, PlaceModel>
 	{
 		public Setup() : base("Place", true) { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<PlaceId>());
 		}
 
-		internal override GetPlaceModel NewModel { get; } =
+		internal override PlaceModel NewModel { get; } =
 			new(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 

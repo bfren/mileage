@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDelete>
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDeleteModel>
 	{
 		public Setup() : base("Journey") { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<JourneyId>());
 		}
 
-		internal override JourneyToDelete EmptyModel =>
+		internal override JourneyToDeleteModel EmptyModel =>
 			new(LongId<JourneyId>(), Rnd.Lng);
 	}
 

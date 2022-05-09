@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditCarModel : EditJourneyModalModel
 {
-	public List<GetCarsModel> Cars { get; set; } = new();
+	public List<CarsModel> Cars { get; set; } = new();
 
 	public EditCarModel() : base("Car") { }
 }
@@ -19,7 +19,7 @@ public sealed class EditCarModel : EditJourneyModalModel
 public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditCarAsync(JourneyId journeyId) =>
-		GetFieldAsync<IEnumerable<GetCarsModel>, EditCarModel>("Car", journeyId,
+		GetFieldAsync<IEnumerable<CarsModel>, EditCarModel>("Car", journeyId,
 			u => Dispatcher.DispatchAsync(new GetCarsQuery(u, false)),
 			(j, v) => new() { Journey = j, Cars = v.ToList() }
 		);

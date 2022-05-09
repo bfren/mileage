@@ -16,7 +16,7 @@ namespace Mileage.WebApp.Pages.Settings.Cars;
 
 public sealed class DeleteModel : DeleteModalModel
 {
-	public GetCarModel Car { get; set; } = new();
+	public CarModel Car { get; set; } = new();
 
 	public DeleteModel() : base("Car") { }
 }

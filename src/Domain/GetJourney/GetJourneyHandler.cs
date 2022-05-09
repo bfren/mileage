@@ -12,7 +12,7 @@ namespace Mileage.Domain.GetJourney;
 /// <summary>
 /// Get a journey
 /// </summary>
-internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, GetJourneyModel>
+internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, JourneyModel>
 {
 	private IJourneyRepository Journey { get; init; }
 
@@ -30,11 +30,11 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, GetJourn
 	/// Get the specified journey if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<GetJourneyModel>> HandleAsync(GetJourneyQuery query)
+	public override Task<Maybe<JourneyModel>> HandleAsync(GetJourneyQuery query)
 	{
 		if (query.JourneyId is null || query.JourneyId.Value == 0)
 		{
-			return F.None<GetJourneyModel, Messages.JourneyIdIsNullMsg>().AsTask;
+			return F.None<JourneyModel, Messages.JourneyIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Journey: {Query}.", query);
@@ -42,6 +42,6 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, GetJourn
 			.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, query.JourneyId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.QuerySingleAsync<GetJourneyModel>();
+			.QuerySingleAsync<JourneyModel>();
 	}
 }

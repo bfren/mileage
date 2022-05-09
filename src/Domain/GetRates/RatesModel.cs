@@ -12,7 +12,7 @@ namespace Mileage.Domain.GetRates;
 /// <param name="Id"></param>
 /// <param name="AmountPerMileGBP"></param>
 /// <param name="IsDisabled"></param>
-public sealed record class GetRatesModel(
+public sealed record class RatesModel(
 	RateId Id,
 	float AmountPerMileGBP,
 	bool IsDisabled
@@ -21,5 +21,5 @@ public sealed record class GetRatesModel(
 	/// <summary>
 	/// Create blank for model binding
 	/// </summary>
-	public GetRatesModel() : this(new(), 0f, false) { }
+	public RatesModel() : this(new(), 0f, false) { }
 }

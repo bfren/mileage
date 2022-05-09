@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditFromPlaceModel : EditJourneyModalModel
 {
-	public List<GetPlacesModel> Places { get; set; } = new();
+	public List<PlacesModel> Places { get; set; } = new();
 
 	public EditFromPlaceModel() : base("Starting Place") { }
 }

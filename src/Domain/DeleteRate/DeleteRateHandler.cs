@@ -64,7 +64,7 @@ internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 		Rate.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, rateId)
 			.Where(x => x.UserId, Compare.Equal, userId)
-			.QuerySingleAsync<RateToDelete>()
+			.QuerySingleAsync<RateToDeleteModel>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => operation switch

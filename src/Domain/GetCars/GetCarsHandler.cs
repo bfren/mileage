@@ -13,7 +13,7 @@ namespace Mileage.Domain.GetCars;
 /// <summary>
 /// Get cars
 /// </summary>
-internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<GetCarsModel>>
+internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<CarsModel>>
 {
 	private ICarRepository Car { get; init; }
 
@@ -31,11 +31,11 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ge
 	/// Get cars for the specified user, sorted by description
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<GetCarsModel>>> HandleAsync(GetCarsQuery query)
+	public override Task<Maybe<IEnumerable<CarsModel>>> HandleAsync(GetCarsQuery query)
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<GetCarsModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<CarsModel>, Messages.UserIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Cars for {User}.", query.UserId);
@@ -44,6 +44,6 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ge
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
 			.Sort(x => x.Description, SortOrder.Ascending)
-			.QueryAsync<GetCarsModel>();
+			.QueryAsync<CarsModel>();
 	}
 }

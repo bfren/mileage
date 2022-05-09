@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Settings.Rates;
 
 public sealed class EditModel : UpdateModalModel
 {
-	public GetRateModel Rate { get; set; } = new();
+	public RateModel Rate { get; set; } = new();
 
 	public EditModel() : base("Rate") { }
 }

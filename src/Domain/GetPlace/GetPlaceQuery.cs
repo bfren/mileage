@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetPlace;
 public sealed record class GetPlaceQuery(
 	AuthUserId UserId,
 	PlaceId PlaceId
-) : Query<GetPlaceModel>;
+) : Query<PlaceModel>;

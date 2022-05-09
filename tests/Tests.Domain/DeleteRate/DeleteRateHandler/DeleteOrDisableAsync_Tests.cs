@@ -10,12 +10,12 @@ namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDelete>
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel>
 	{
 		internal override DeleteRateHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Dispatcher, v.Repo, v.Log);
 
-		internal override RateToDelete EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
+		internal override RateToDeleteModel EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]
@@ -39,13 +39,13 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 	[Fact]
 	public override async Task Test03_Is_Delete__Calls_Repo_DeleteAsync__With_Correct_Values()
 	{
-		await new Setup().Test03((i, v, d) => new RateToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test03((i, v, d) => new RateToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]
 	public override async Task Test04_Is_Disable__Calls_Repo_UpdateAsync__With_Correct_Values()
 	{
-		await new Setup().Test04((i, v, d) => new RateToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test04((i, v, d) => new RateToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]

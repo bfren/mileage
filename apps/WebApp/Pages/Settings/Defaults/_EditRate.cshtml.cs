@@ -9,7 +9,7 @@ namespace Mileage.WebApp.Pages.Settings.Defaults;
 
 public sealed class EditRateModel : EditSettingsModel
 {
-	public List<GetRatesModel> Rates { get; set; } = new();
+	public List<RatesModel> Rates { get; set; } = new();
 
 	public EditRateModel() : base("Default Rate") { }
 }

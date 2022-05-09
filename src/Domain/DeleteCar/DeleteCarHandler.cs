@@ -64,7 +64,7 @@ internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 		Car.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, carId)
 			.Where(x => x.UserId, Compare.Equal, userId)
-			.QuerySingleAsync<CarToDelete>()
+			.QuerySingleAsync<CarToDeleteModel>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => operation switch

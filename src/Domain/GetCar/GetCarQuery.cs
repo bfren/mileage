@@ -13,4 +13,4 @@ namespace Mileage.Domain.GetCar;
 public sealed record class GetCarQuery(
 	AuthUserId UserId,
 	CarId CarId
-) : Query<GetCarModel>;
+) : Query<CarModel>;

@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteJourney;
 /// </summary>
 /// <param name="Id">Journey ID</param>
 /// <param name="Version">Concurrency version</param>
-internal sealed record class JourneyToDelete(JourneyId Id, long Version) : IWithVersion<JourneyId>
+internal sealed record class JourneyToDeleteModel(JourneyId Id, long Version) : IWithVersion<JourneyId>
 {
-	public JourneyToDelete() : this(new(), 0L) { }
+	public JourneyToDeleteModel() : this(new(), 0L) { }
 }

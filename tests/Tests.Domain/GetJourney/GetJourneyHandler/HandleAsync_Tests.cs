@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetJourney.GetJourney_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneyQuery, GetJourneyHandler, GetJourneyModel>
+	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneyQuery, GetJourneyHandler, JourneyModel>
 	{
 		public Setup() : base("Journey", false) { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<JourneyId>());
 		}
 
-		internal override GetJourneyModel NewModel { get; } = new(
+		internal override JourneyModel NewModel { get; } = new(
 			LongId<AuthUserId>(), LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime, LongId<CarId>(), Rnd.Int, Rnd.Int,
 			LongId<PlaceId>(), ImmutableList.Create(LongId<PlaceId>(), LongId<PlaceId>()), LongId<RateId>()
 		);
