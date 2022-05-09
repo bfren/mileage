@@ -10,5 +10,5 @@ namespace Mileage.WebApp.Pages.Auth;
 public sealed class SignInModel : Jeebs.Mvc.Razor.Pages.Auth.SignInModel
 {
 	public SignInModel(IAuthDataProvider auth, ILog<SignInModel> log) : base(auth, log) =>
-		SignInRedirect = () => Url.Page("/Journeys/Index", "List");
+		SignInRedirect = () => Url.Page("/Journeys/Index", "Home");
 }
