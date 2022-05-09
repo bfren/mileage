@@ -6,13 +6,12 @@
 <div class="container">
 
 	<h2>Incomplete Journeys</h2>
-	<div id="incomplete-journeys">
-		<partial name="Journeys/_Incomplete" model="@Model.IncompleteJourneys"/>
-	</div>
+	<partial name="Journeys/_Incomplete" model="@Model.IncompleteJourneys"/>
 
-	<h2 class="mt-4">Recent Journeys</h2>
-	<div id="recent-journeys">
-		<partial name="Journeys/_Recent" model="@Model.RecentJourneys"/>
-	</div>
+	<h2 class="mt-4">
+		Recent Journeys
+		<span class="ms-3 fs-4"><a asp-page="/Journeys/Index">more &rsaquo;</a></span>
+	</h2>
+	<partial name="Journeys/_Recent" model="@Model.RecentJourneys"/>
 
 </div>
