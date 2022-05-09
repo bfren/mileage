@@ -21,7 +21,6 @@ function loadSettingsTab(tabId) {
 
 	// show loading alerts
 	tab.html($("<div/>").text("Loading..."));
-	showPleaseWaitAlert();
 
 	// load source
 	var src = tab.data("src");
@@ -47,7 +46,6 @@ function loadSaveForm(item, el, e) {
 	var url = el.data("load");
 
 	// show alert and load URL
-	showPleaseWaitAlert();
 	$("#save-" + item).load(url, () => closeAlert());
 }
 

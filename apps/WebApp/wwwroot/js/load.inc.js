@@ -16,9 +16,6 @@ function loadPage(url) {
  *
  */
 function loadHash() {
-	// show alert
-	showAlert(alertTypes.info, "Loading page, please wait...", true);
-
 	// get hash
 	var url = getHash();
 	if (!url || url.length == 2) {

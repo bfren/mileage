@@ -72,14 +72,6 @@ function showAlert(type, text, sticky) {
 }
 
 /**
- * Show a sticky 'Please wait' alert.
- *
- */
-function showPleaseWaitAlert() {
-	showAlert(alertTypes.info, "Please wait...", true);
-}
-
-/**
  * Update the current alert - remove automatically when seconds gets to 0.
  * 
  * @param {number} seconds
@@ -137,9 +129,6 @@ function loadPage(url) {
  *
  */
 function loadHash() {
-	// show alert
-	showAlert(alertTypes.info, "Loading page, please wait...", true);
-
 	// get hash
 	var url = getHash();
 	if (!url || url.length == 2) {
@@ -234,9 +223,6 @@ var modal;
  * @param {any} replaceId
  */
 function openModal(selector, url, replaceId, replaceContents, setup) {
-	// show messages
-	showPleaseWaitAlert();
-
 	// load modal HTML and then show modal
 	$(selector).load(url, function (response, status, xhr) {
 		// handle unauthorised
@@ -656,7 +642,6 @@ function loadSettingsTab(tabId) {
 
 	// show loading alerts
 	tab.html($("<div/>").text("Loading..."));
-	showPleaseWaitAlert();
 
 	// load source
 	var src = tab.data("src");
@@ -682,7 +667,6 @@ function loadSaveForm(item, el, e) {
 	var url = el.data("load");
 
 	// show alert and load URL
-	showPleaseWaitAlert();
 	$("#save-" + item).load(url, () => closeAlert());
 }
 
@@ -740,7 +724,7 @@ ready(setupAjaxSubmit);
  */
 function submitForm(form, url, data) {
 	// get form info
-	var method = form.attr("method");
+	var method = form.attr("method") ?? "POST";
 	var replaceId = form.data("replace");
 	var replaceContents = form.data("replace-contents");
 
@@ -748,12 +732,11 @@ function submitForm(form, url, data) {
 	if (modal) {
 		modal.hide();
 	}
-	showPleaseWaitAlert();
 
 	// post data and handle result
 	$.ajax(
 		{
-			method: method ?? "POST",
+			method: method,
 			url: url || form.attr("action"),
 			data: data || form.serialize()
 		}
@@ -778,7 +761,10 @@ function submitForm(form, url, data) {
 				}
 
 				// show alert
-				showAlert(alertTypes.success, "Done.");
+				if (method == "POST") {
+					showAlert(alertTypes.success, "Done.");
+				}
+
 				return;
 			}
 
