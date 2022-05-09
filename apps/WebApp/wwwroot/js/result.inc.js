@@ -10,8 +10,10 @@ function handleResult(r) {
 
 	// redirect or show alert
 	if (r.redirectTo) {
-		if (r.redirectTo = "/") {
+		if (r.redirectTo == "/") {
 			loadPage(home);
+		} else if (r.redirectTo == "refresh") {
+			loadHash()
 		} else {
 			loadPage(r.redirectTo);
 		}

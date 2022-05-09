@@ -12,7 +12,7 @@ function loadPage(url) {
 }
 
 /**
- * Open whatever is in the URL hash on page load.
+ * Open whatever is in the URL hash.
  *
  */
 function loadHash() {

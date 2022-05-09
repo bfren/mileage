@@ -133,7 +133,7 @@ function loadPage(url) {
 }
 
 /**
- * Open whatever is in the URL hash on page load.
+ * Open whatever is in the URL hash.
  *
  */
 function loadHash() {
@@ -623,8 +623,10 @@ function handleResult(r) {
 
 	// redirect or show alert
 	if (r.redirectTo) {
-		if (r.redirectTo = "/") {
+		if (r.redirectTo == "/") {
 			loadPage(home);
+		} else if (r.redirectTo == "refresh") {
+			loadHash()
 		} else {
 			loadPage(r.redirectTo);
 		}
