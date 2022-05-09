@@ -16,6 +16,9 @@
 	var totalMiles = 0;
 	var totalAmount = 0f;
 
+	string car(string description) =>
+		string.IsNullOrEmpty(description) ? "Unknown" : description;
+
 	float amount(float rate, int? distance) =>
 		rate * (distance ?? 0);
 
@@ -67,7 +70,7 @@
 					<tr class="@css">
 						@if (first)
 						{
-							<td rowspan="@rates.Count()">@s.Car</td>
+							<td rowspan="@rates.Count()">@car(s.Car)</td>
 						}
 
 						<td class="text-end">@r.ToString("0.00")</td>
@@ -107,7 +110,7 @@
 
 				<tr class="@css" id="journey-@j.Id.Value">
 					<td>@j.Day.ToString("dd/MM/yyyy")</td>
-					<td>@j.Car</td>
+					<td>@car(j.Car)</td>
 					<td>@mileage</td>
 					<td class="text-end">@j.Rate.ToString("0.00")</td>
 					<td class="text-end">@amount(j.Rate, j.Distance).ToString("0.00")</td>

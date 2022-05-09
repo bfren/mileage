@@ -3,6 +3,11 @@
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 
+	if (Model.Miles == 0)
+	{
+		return;
+	}
+
 	var tokenId = Rnd.Str;
 }
 

@@ -7,9 +7,9 @@ using Mileage.Domain.GetIncompleteJourneys;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
-public sealed class IncompleteModel
+public sealed record class IncompleteModel
 {
-	public List<IncompleteJourneyModel> Journeys { get; set; } = new();
+	public List<IncompleteJourneyModel> Journeys { get; init; } = new();
 }
 
 public sealed partial class IndexModel

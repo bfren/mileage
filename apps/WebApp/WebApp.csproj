@@ -14,12 +14,14 @@
     <Content Remove="wwwroot\img\app-icon.afdesign" />
   </ItemGroup>
   <ItemGroup>
+    <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-Elrond.pubxml" />
     <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-Galadriel.pubxml" />
     <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-RPi.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
+    <None Include="Properties\PublishProfiles\StudyPC-Elrond.pubxml.user" />
     <None Include="wwwroot\img\app-icon.afdesign" />
   </ItemGroup>
   <ItemGroup>
@@ -41,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
-    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220506.1" />
+    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220509.5" />
     <PackageReference Include="MaybeF" Version="9.0.2" />
     <PackageReference Include="MaybeF.Caching" Version="9.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />

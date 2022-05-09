@@ -1,4 +1,5 @@
 @page
+@using Jeebs
 @model WebApp.Pages.Reports.IndexModel
 
 <div class="container">
@@ -6,15 +7,17 @@
 	<h2>Reports</h2>
 
 	<hr />
+	<h3>Expenses</h3>
+
 	<div class="d-flex align-items-center">
-		<div class="fs-4 fw-bold">Expenses:</div>
+		<div>For the month of:</div>
 		<div class="dropdown ms-2">
-			<button class="btn btn-secondary dropdown-toggle"
+			<button class="btn btn-primary dropdown-toggle"
 					type="button"
 					id="month-dropdown"
 					data-bs-toggle="dropdown"
 					aria-expanded="false">
-				Month
+				Select Month
 			</button>
 			<ul class="dropdown-menu" aria-labelledby="month-dropdown">
 				@foreach (var item in Model.ExpensesMonths)

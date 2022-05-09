@@ -14,7 +14,8 @@ namespace Mileage.WebApp.Pages.Journeys;
 public enum JourneyList
 {
 	Incomplete = 1 << 0,
-	Recent = 1 << 1
+	Recent = 1 << 1,
+	Between = 1 << 2
 }
 
 public sealed class DeleteModel : DeleteModalModel
@@ -33,6 +34,9 @@ public sealed partial class IndexModel
 
 	public Task<PartialViewResult> OnGetDeleteRecentAsync(JourneyId journeyId) =>
 		GetDeleteAsync(journeyId, JourneyList.Recent);
+
+	public Task<PartialViewResult> OnGetDeleteBetweenAsync(JourneyId journeyId) =>
+		GetDeleteAsync(journeyId, JourneyList.Between);
 
 	private Task<PartialViewResult> GetDeleteAsync(JourneyId journeyId, JourneyList type)
 	{
@@ -66,6 +70,9 @@ public sealed partial class IndexModel
 
 					true when type == JourneyList.Recent =>
 						await OnGetRecentAsync(),
+
+					true when type == JourneyList.Between =>
+						Result.Redirect("refresh"),
 
 					_ =>
 						Result.Error("Unable to delete Journey.")

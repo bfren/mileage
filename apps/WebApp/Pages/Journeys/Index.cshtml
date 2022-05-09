@@ -1,2 +1,82 @@
 @page
+@using Jeebs
 @model Mileage.WebApp.Pages.Journeys.IndexModel
+
+@{
+	(string? href, string text) journeysLink(DateTime start, DateTime end)
+	{
+		var href = Url.Page("Index", new { start = start.ToString("yyyy-MM-dd"), end = end.ToString("yyyy-MM-dd") });
+		var text = start.ToString("MMMM yyyy");
+		return (href, text);
+	}
+
+	var thisMonth = journeysLink(DateTime.Now.FirstDayOfMonth(), DateTime.Now.LastDayOfMonth());
+	var lastMonth = journeysLink(DateTime.Now.AddMonths(-1).FirstDayOfMonth(), DateTime.Now.AddMonths(-1).LastDayOfMonth());
+	var prevMonth = journeysLink(DateTime.Now.AddMonths(-2).FirstDayOfMonth(), DateTime.Now.AddMonths(-2).LastDayOfMonth());
+}
+
+<div class="container">
+
+	<h2>Journeys</h2>
+
+	<div class="d-flex align-items-center">
+		<div>By recent months:</div>
+		<div class="dropdown ms-2">
+			<button class="btn btn-primary dropdown-toggle"
+					type="button"
+					id="journeys-presets-dropdown"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
+				Select Preset
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="journeys-presets-dropdown">
+				<li><a class="dropdown-item" href="@thisMonth.href">This month (@thisMonth.text)</a></li>
+				<li><a class="dropdown-item" href="@lastMonth.href">Last month (@lastMonth.text)</a></li>
+				<li><a class="dropdown-item" href="@prevMonth.href">Previous month (@prevMonth.text)</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="mt-2">
+		Between dates:
+	</div>
+	<div class="d-flex align-items-center">
+		<form action="@Url.Page("Index", "Between")"
+			method="get"
+			data-replace="journeys"
+			data-replace-contents="true"
+			novalidate>
+			<div class="input-group input-daterange position-relative">
+				<input type="text"
+					   class="form-control"
+					   name="start"
+					   id="start"
+					   value="@Model.Between.Start?.ToString("yyyy-MM-dd")"
+					   autocomplete="off"
+					   required />
+				<div class="input-group-text">to</div>
+				<input type="text"
+					   class="form-control"
+					   name="end"
+					   id="end"
+					   value="@Model.Between.End?.ToString("yyyy-MM-dd")"
+					   autocomplete="off"
+					   required />
+				<div class="invalid-tooltip">Please select a start and end date.</div>
+				<button type="submit" class="btn btn-primary show-journeys">Go</button>
+			</div>
+		</form>
+	</div>
+
+	<hr />
+
+	<partial name="_Between" model="@Model.Between" />
+
+</div>
+
+<script type="text/javascript">
+	$(".input-daterange").datepicker({
+		inputs: $("input"),
+		orientation: "bottom"
+	});
+</script>

@@ -133,7 +133,7 @@ function loadPage(url) {
 }
 
 /**
- * Open whatever is in the URL hash on page load.
+ * Open whatever is in the URL hash.
  *
  */
 function loadHash() {
@@ -623,8 +623,10 @@ function handleResult(r) {
 
 	// redirect or show alert
 	if (r.redirectTo) {
-		if (r.redirectTo = "/") {
+		if (r.redirectTo == "/") {
 			loadPage(home);
+		} else if (r.redirectTo == "refresh") {
+			loadHash()
 		} else {
 			loadPage(r.redirectTo);
 		}
@@ -738,6 +740,7 @@ ready(setupAjaxSubmit);
  */
 function submitForm(form, url, data) {
 	// get form info
+	var method = form.attr("method");
 	var replaceId = form.data("replace");
 	var replaceContents = form.data("replace-contents");
 
@@ -750,7 +753,7 @@ function submitForm(form, url, data) {
 	// post data and handle result
 	$.ajax(
 		{
-			method: "POST",
+			method: method ?? "POST",
 			url: url || form.attr("action"),
 			data: data || form.serialize()
 		}
