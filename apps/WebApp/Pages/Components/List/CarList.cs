@@ -6,7 +6,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
-public sealed class CarListViewComponent : ListSingleViewComponent<GetCarsModel, CarId>
+public sealed class CarListViewComponent : ListSingleViewComponent<CarsModel, CarId>
 {
 	public CarListViewComponent() : base("car", x => x.Description,
 		x => x.Description + (x.NumberPlate is string plate ? $" ({plate})" : string.Empty)

@@ -20,7 +20,7 @@ public enum JourneyList
 
 public sealed class DeleteModel : DeleteModalModel
 {
-	public GetJourneyModel Journey { get; set; } = new();
+	public JourneyModel Journey { get; set; } = new();
 
 	public JourneyList Type { get; set; }
 

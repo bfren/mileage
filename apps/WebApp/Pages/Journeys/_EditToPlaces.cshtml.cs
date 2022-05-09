@@ -13,7 +13,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditToPlacesModel : EditJourneyModalModel
 {
-	public List<GetPlacesModel> Places { get; set; } = new();
+	public List<PlacesModel> Places { get; set; } = new();
 
 	public PlaceId[] Selected { get; set; } = Array.Empty<PlaceId>();
 

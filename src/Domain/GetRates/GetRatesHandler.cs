@@ -13,7 +13,7 @@ namespace Mileage.Domain.GetRates;
 /// <summary>
 /// Get rates
 /// </summary>
-internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<GetRatesModel>>
+internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<RatesModel>>
 {
 	private IRateRepository Rate { get; init; }
 
@@ -31,11 +31,11 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 	/// Get rates for the specified user, sorted by amount
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<GetRatesModel>>> HandleAsync(GetRatesQuery query)
+	public override Task<Maybe<IEnumerable<RatesModel>>> HandleAsync(GetRatesQuery query)
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<GetRatesModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<RatesModel>, Messages.UserIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Rates for {User}.", query.UserId);
@@ -44,6 +44,6 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
 			.Sort(x => x.AmountPerMileGBP, SortOrder.Ascending)
-			.QueryAsync<GetRatesModel>();
+			.QueryAsync<RatesModel>();
 	}
 }

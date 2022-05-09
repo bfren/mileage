@@ -14,7 +14,7 @@ namespace Mileage.Domain.GetRate;
 /// <summary>
 /// Get a rate
 /// </summary>
-internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
+internal sealed class GetRateHandler : QueryHandler<GetRateQuery, RateModel>
 {
 	private IMaybeCache<RateId> Cache { get; init; }
 
@@ -35,11 +35,11 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 	/// Get the specified rate if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<GetRateModel>> HandleAsync(GetRateQuery query)
+	public override Task<Maybe<RateModel>> HandleAsync(GetRateQuery query)
 	{
 		if (query.RateId is null || query.RateId.Value == 0)
 		{
-			return F.None<GetRateModel, Messages.RateIdIsNullMsg>().AsTask;
+			return F.None<RateModel, Messages.RateIdIsNullMsg>().AsTask;
 		}
 
 		return Cache
@@ -52,12 +52,12 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, GetRateModel>
 						.StartFluentQuery()
 						.Where(x => x.Id, Compare.Equal, query.RateId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<GetRateModel>();
+						.QuerySingleAsync<RateModel>();
 				}
 			)
 			.SwitchIfAsync(
 				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<GetRateModel, Messages.RateDoesNotBelongToUserMsg>()
+				ifFalse: _ => F.None<RateModel, Messages.RateDoesNotBelongToUserMsg>()
 			);
 	}
 }

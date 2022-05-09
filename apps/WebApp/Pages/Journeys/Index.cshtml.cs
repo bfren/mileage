@@ -20,7 +20,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public abstract class EditJourneyModalModel : UpdateModalModel
 {
-	public GetJourneyModel Journey { get; set; } = new();
+	public JourneyModel Journey { get; set; } = new();
 
 	protected EditJourneyModalModel(string title) : base(title) { }
 
@@ -67,7 +67,7 @@ public sealed partial class IndexModel : PageModel
 	private Task<PartialViewResult> GetFieldAsync<TModel>(
 		string partial,
 		JourneyId journeyId,
-		Func<GetJourneyModel, TModel> getModel
+		Func<JourneyModel, TModel> getModel
 	) where TModel : EditJourneyModalModel =>
 		GetFieldAsync(partial, journeyId, _ => F.True.AsTask, (j, _) => getModel(j));
 
@@ -75,7 +75,7 @@ public sealed partial class IndexModel : PageModel
 		string partial,
 		JourneyId journeyId,
 		Func<AuthUserId, Task<Maybe<TValue>>> getValue,
-		Func<GetJourneyModel, TValue, TModel> getModel
+		Func<JourneyModel, TValue, TModel> getModel
 	) where TModel : EditJourneyModalModel
 	{
 		Log.Vrb("Getting Journey {JourneyId} and {Values}.", journeyId, typeof(TValue));

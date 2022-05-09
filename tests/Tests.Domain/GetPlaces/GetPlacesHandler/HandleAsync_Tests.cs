@@ -11,7 +11,7 @@ namespace Mileage.Domain.GetPlaces.GetPlaces_Tests;
 
 public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, GetPlacesModel>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, PlacesModel>
 	{
 		public Setup() : base("Places") { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 			return (new(userId, true), userId);
 		}
 
-		internal override GetPlacesModel NewModel { get; } = new(LongId<PlaceId>(), Rnd.Str, Rnd.Str, Rnd.Flip);
+		internal override PlacesModel NewModel { get; } = new(LongId<PlaceId>(), Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 
 	[Fact]

@@ -13,7 +13,7 @@ namespace Mileage.Domain.GetPlaces;
 /// <summary>
 /// Get places
 /// </summary>
-internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerable<GetPlacesModel>>
+internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerable<PlacesModel>>
 {
 	private IPlaceRepository Place { get; init; }
 
@@ -31,11 +31,11 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 	/// Get places for the specified user, sorted by description
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<GetPlacesModel>>> HandleAsync(GetPlacesQuery query)
+	public override Task<Maybe<IEnumerable<PlacesModel>>> HandleAsync(GetPlacesQuery query)
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<GetPlacesModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<PlacesModel>, Messages.UserIdIsNullMsg>().AsTask;
 		}
 
 		Log.Vrb("Get Places for {User}.", query.UserId);
@@ -44,6 +44,6 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
 			.Sort(x => x.Description, SortOrder.Ascending)
-			.QueryAsync<GetPlacesModel>();
+			.QueryAsync<PlacesModel>();
 	}
 }

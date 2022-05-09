@@ -14,7 +14,7 @@ namespace Mileage.Domain.GetPlace;
 /// <summary>
 /// Get a place
 /// </summary>
-internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceModel>
+internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, PlaceModel>
 {
 	private IMaybeCache<PlaceId> Cache { get; init; }
 
@@ -35,11 +35,11 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceMode
 	/// Get the specified place if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<GetPlaceModel>> HandleAsync(GetPlaceQuery query)
+	public override Task<Maybe<PlaceModel>> HandleAsync(GetPlaceQuery query)
 	{
 		if (query.PlaceId is null || query.PlaceId.Value == 0)
 		{
-			return F.None<GetPlaceModel, Messages.PlaceIdIsNullMsg>().AsTask;
+			return F.None<PlaceModel, Messages.PlaceIdIsNullMsg>().AsTask;
 		}
 
 		return Cache
@@ -52,12 +52,12 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, GetPlaceMode
 						.StartFluentQuery()
 						.Where(x => x.Id, Compare.Equal, query.PlaceId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<GetPlaceModel>();
+						.QuerySingleAsync<PlaceModel>();
 				}
 			)
 			.SwitchIfAsync(
 				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<GetPlaceModel, Messages.PlaceDoesNotBelongToUserMsg>()
+				ifFalse: _ => F.None<PlaceModel, Messages.PlaceDoesNotBelongToUserMsg>()
 			);
 	}
 }

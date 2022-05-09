@@ -16,7 +16,7 @@ namespace Mileage.WebApp.Pages.Settings.Places;
 
 public sealed class DeleteModel : DeleteModalModel
 {
-	public GetPlaceModel Place { get; set; } = new();
+	public PlaceModel Place { get; set; } = new();
 
 	public DeleteModel() : base("Place") { }
 }

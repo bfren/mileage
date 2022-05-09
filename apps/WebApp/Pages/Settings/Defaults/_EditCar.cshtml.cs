@@ -9,7 +9,7 @@ namespace Mileage.WebApp.Pages.Settings.Defaults;
 
 public sealed class EditCarModel : EditSettingsModel
 {
-	public List<GetCarsModel> Cars { get; set; } = new();
+	public List<CarsModel> Cars { get; set; } = new();
 
 	public EditCarModel() : base("Default Car") { }
 }

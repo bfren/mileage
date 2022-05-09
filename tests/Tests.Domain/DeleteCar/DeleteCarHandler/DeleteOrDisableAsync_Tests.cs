@@ -10,12 +10,12 @@ namespace Mileage.Domain.DeleteCar.DeleteCarHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDelete>
+	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel>
 	{
 		internal override DeleteCarHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Repo, v.Dispatcher, v.Log);
 
-		internal override CarToDelete EmptyModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Flip);
+		internal override CarToDeleteModel EmptyModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]
@@ -39,13 +39,13 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 	[Fact]
 	public override async Task Test03_Is_Delete__Calls_Repo_DeleteAsync__With_Correct_Values()
 	{
-		await new Setup().Test03((i, v, d) => new CarToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test03((i, v, d) => new CarToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]
 	public override async Task Test04_Is_Disable__Calls_Repo_UpdateAsync__With_Correct_Values()
 	{
-		await new Setup().Test04((i, v, d) => new CarToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test04((i, v, d) => new CarToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]

@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteCar.DeleteCarHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDelete, CheckCarCanBeDeletedQuery>
+	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel, CheckCarCanBeDeletedQuery>
 	{
 		public Setup() : base("Car") { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<CarId>());
 		}
 
-		internal override CarToDelete EmptyModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Flip);
+		internal override CarToDeleteModel EmptyModel { get; } = new(LongId<CarId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]

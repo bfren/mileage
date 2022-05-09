@@ -38,7 +38,7 @@ internal sealed class DeleteJourneyHandler : CommandHandler<DeleteJourneyCommand
 			.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
-			.QuerySingleAsync<JourneyToDelete>()
+			.QuerySingleAsync<JourneyToDeleteModel>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => Journey.DeleteAsync(x),

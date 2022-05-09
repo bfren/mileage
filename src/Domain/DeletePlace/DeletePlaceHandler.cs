@@ -64,7 +64,7 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 		Place.StartFluentQuery()
 			.Where(x => x.Id, Compare.Equal, placeId)
 			.Where(x => x.UserId, Compare.Equal, userId)
-			.QuerySingleAsync<PlaceToDelete>()
+			.QuerySingleAsync<PlaceToDeleteModel>()
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
 				some: x => operation switch

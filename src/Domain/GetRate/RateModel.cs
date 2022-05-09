@@ -5,28 +5,26 @@ using Jeebs.Auth.Data;
 using Mileage.Persistence.Common.StrongIds;
 using StrongId;
 
-namespace Mileage.Domain.GetPlace;
+namespace Mileage.Domain.GetRate;
 
 /// <summary>
-/// From Place model
+/// Rate model
 /// </summary>
 /// <param name="UserId"></param>
 /// <param name="Id"></param>
 /// <param name="Version"></param>
-/// <param name="Description"></param>
-/// <param name="Postcode"></param>
+/// <param name="AmountPerMileGBP"></param>
 /// <param name="IsDisabled"></param>
-public sealed record class GetPlaceModel(
+public sealed record class RateModel(
 	AuthUserId UserId,
-	PlaceId Id,
+	RateId Id,
 	long Version,
-	string Description,
-	string? Postcode,
+	float AmountPerMileGBP,
 	bool IsDisabled
-) : IWithUserId, IWithId<PlaceId>
+) : IWithUserId, IWithId<RateId>
 {
 	/// <summary>
 	/// Create blank for model binding
 	/// </summary>
-	public GetPlaceModel() : this(new(), new(), 0L, string.Empty, null, false) { }
+	public RateModel() : this(new(), new(), 0L, 0f, false) { }
 }

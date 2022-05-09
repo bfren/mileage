@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDelete, CheckRateCanBeDeletedQuery>
+	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel, CheckRateCanBeDeletedQuery>
 	{
 		public Setup() : base("Rate") { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<RateId>());
 		}
 
-		internal override RateToDelete EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
+		internal override RateToDeleteModel EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]

@@ -11,7 +11,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.ToPlaces;
 
-public sealed record class ToPlacesModel(string Label, string? UpdateUrl, List<GetPlacesModel> Places, JourneyId JourneyId)
+public sealed record class ToPlacesModel(string Label, string? UpdateUrl, List<PlacesModel> Places, JourneyId JourneyId)
 {
 	public static ToPlacesModel Blank(string label, string? updateUrl, JourneyId journeyId) =>
 		new(label, updateUrl, new(), journeyId);

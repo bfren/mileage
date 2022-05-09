@@ -14,7 +14,7 @@ namespace Mileage.Domain.GetCar;
 /// <summary>
 /// Get a car
 /// </summary>
-internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
+internal sealed class GetCarHandler : QueryHandler<GetCarQuery, CarModel>
 {
 	private IMaybeCache<CarId> Cache { get; init; }
 
@@ -35,11 +35,11 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 	/// Get the specified car if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<GetCarModel>> HandleAsync(GetCarQuery query)
+	public override Task<Maybe<CarModel>> HandleAsync(GetCarQuery query)
 	{
 		if (query.CarId is null || query.CarId.Value == 0)
 		{
-			return F.None<GetCarModel, Messages.CarIdIsNullMsg>().AsTask;
+			return F.None<CarModel, Messages.CarIdIsNullMsg>().AsTask;
 		}
 
 		return Cache
@@ -51,12 +51,12 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, GetCarModel>
 					return Car.StartFluentQuery()
 						.Where(x => x.Id, Compare.Equal, query.CarId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<GetCarModel>();
+						.QuerySingleAsync<CarModel>();
 				}
 			)
 			.SwitchIfAsync(
 				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<GetCarModel, Messages.CarDoesNotBelongToUserMsg>()
+				ifFalse: _ => F.None<CarModel, Messages.CarDoesNotBelongToUserMsg>()
 			);
 	}
 }

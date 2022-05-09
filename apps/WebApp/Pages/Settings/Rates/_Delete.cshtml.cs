@@ -16,7 +16,7 @@ namespace Mileage.WebApp.Pages.Settings.Rates;
 
 public sealed class DeleteModel : DeleteModalModel
 {
-	public GetRateModel Rate { get; set; } = new();
+	public RateModel Rate { get; set; } = new();
 
 	public DeleteModel() : base("Rate") { }
 }

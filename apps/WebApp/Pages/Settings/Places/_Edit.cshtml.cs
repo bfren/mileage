@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Settings.Places;
 
 public sealed class EditModel : UpdateModalModel
 {
-	public GetPlaceModel Place { get; set; } = new();
+	public PlaceModel Place { get; set; } = new();
 
 	public EditModel() : base("Place") { }
 }

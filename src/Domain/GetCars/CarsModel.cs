@@ -4,18 +4,18 @@
 using Mileage.Persistence.Common.StrongIds;
 using StrongId;
 
-namespace Mileage.Domain.GetPlaces;
+namespace Mileage.Domain.GetCars;
 
 /// <summary>
-/// Place model
+/// Car model
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Description"></param>
-/// <param name="Postcode"></param>
+/// <param name="NumberPlate"></param>
 /// <param name="IsDisabled"></param>
-public sealed record class GetPlacesModel(
-	PlaceId Id,
+public sealed record class CarsModel(
+	CarId Id,
 	string Description,
-	string? Postcode,
+	string? NumberPlate,
 	bool IsDisabled
-) : IWithId<PlaceId>;
+) : IWithId<CarId>;

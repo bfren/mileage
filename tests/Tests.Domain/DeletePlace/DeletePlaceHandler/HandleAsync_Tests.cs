@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeletePlace.DeletePlaceHandler_Tests;
 
 public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDelete, CheckPlaceCanBeDeletedQuery>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel, CheckPlaceCanBeDeletedQuery>
 	{
 		public Setup() : base("Place") { }
 
@@ -28,7 +28,7 @@ public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 			return new(LongId<AuthUserId>(), LongId<PlaceId>());
 		}
 
-		internal override PlaceToDelete EmptyModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
+		internal override PlaceToDeleteModel EmptyModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]

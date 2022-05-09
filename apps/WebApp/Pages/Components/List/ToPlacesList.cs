@@ -6,7 +6,7 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
-public sealed class ToPlacesListViewComponent : ListMultipleViewComponent<GetPlacesModel, PlaceId>
+public sealed class ToPlacesListViewComponent : ListMultipleViewComponent<PlacesModel, PlaceId>
 {
 	public ToPlacesListViewComponent() : base("place", x => x.Description,
 		x => x.Description + (x.Postcode is string postcode ? $" ({postcode})" : string.Empty)

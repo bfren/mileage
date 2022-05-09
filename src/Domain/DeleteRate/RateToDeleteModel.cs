@@ -4,15 +4,15 @@
 using Jeebs.Data;
 using Mileage.Persistence.Common.StrongIds;
 
-namespace Mileage.Domain.DeletePlace;
+namespace Mileage.Domain.DeleteRate;
 
 /// <summary>
 /// Used to return a place that is ready to be deleted
 /// </summary>
-/// <param name="Id">Place ID</param>
+/// <param name="Id">Rate ID</param>
 /// <param name="Version">Concurrency version</param>
 /// <param name="IsDisabled"></param>
-internal sealed record class PlaceToDelete(PlaceId Id, long Version, bool IsDisabled) : IWithVersion<PlaceId>
+internal sealed record class RateToDeleteModel(RateId Id, long Version, bool IsDisabled) : IWithVersion<RateId>
 {
-	public PlaceToDelete() : this(new(), 0L, false) { }
+	public RateToDeleteModel() : this(new(), 0L, false) { }
 }

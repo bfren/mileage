@@ -22,7 +22,7 @@ namespace Mileage.Domain.GetJourney;
 /// <param name="FromPlaceId"></param>
 /// <param name="ToPlaceIds"></param>
 /// <param name="RateId"></param>
-public sealed record class GetJourneyModel(
+public sealed record class JourneyModel(
 	AuthUserId UserId,
 	JourneyId Id,
 	long Version,
@@ -38,5 +38,5 @@ public sealed record class GetJourneyModel(
 	/// <summary>
 	/// Create empty model
 	/// </summary>
-	public GetJourneyModel() : this(new(), new(), default, default, new(), default, null, new(), new ImmutableList<PlaceId>(), null) { }
+	public JourneyModel() : this(new(), new(), default, default, new(), default, null, new(), new ImmutableList<PlaceId>(), null) { }
 }

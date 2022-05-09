@@ -10,12 +10,12 @@ namespace Mileage.Domain.DeletePlace.DeletePlaceHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDelete>
+	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel>
 	{
 		internal override DeletePlaceHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Dispatcher, v.Repo, v.Log);
 
-		internal override PlaceToDelete EmptyModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
+		internal override PlaceToDeleteModel EmptyModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]
@@ -39,13 +39,13 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 	[Fact]
 	public override async Task Test03_Is_Delete__Calls_Repo_DeleteAsync__With_Correct_Values()
 	{
-		await new Setup().Test03((i, v, d) => new PlaceToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test03((i, v, d) => new PlaceToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]
 	public override async Task Test04_Is_Disable__Calls_Repo_UpdateAsync__With_Correct_Values()
 	{
-		await new Setup().Test04((i, v, d) => new PlaceToDelete(i, v, d), h => h.DeleteOrDisableAsync);
+		await new Setup().Test04((i, v, d) => new PlaceToDeleteModel(i, v, d), h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]
