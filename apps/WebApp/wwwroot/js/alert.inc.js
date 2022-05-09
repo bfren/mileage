@@ -72,14 +72,6 @@ function showAlert(type, text, sticky) {
 }
 
 /**
- * Show a sticky 'Please wait' alert.
- *
- */
-function showPleaseWaitAlert() {
-	showAlert(alertTypes.info, "Please wait...", true);
-}
-
-/**
  * Update the current alert - remove automatically when seconds gets to 0.
  * 
  * @param {number} seconds

@@ -30,7 +30,7 @@ ready(setupAjaxSubmit);
  */
 function submitForm(form, url, data) {
 	// get form info
-	var method = form.attr("method");
+	var method = form.attr("method") ?? "POST";
 	var replaceId = form.data("replace");
 	var replaceContents = form.data("replace-contents");
 
@@ -38,12 +38,11 @@ function submitForm(form, url, data) {
 	if (modal) {
 		modal.hide();
 	}
-	showPleaseWaitAlert();
 
 	// post data and handle result
 	$.ajax(
 		{
-			method: method ?? "POST",
+			method: method,
 			url: url || form.attr("action"),
 			data: data || form.serialize()
 		}
@@ -68,7 +67,10 @@ function submitForm(form, url, data) {
 				}
 
 				// show alert
-				showAlert(alertTypes.success, "Done.");
+				if (method == "POST") {
+					showAlert(alertTypes.success, "Done.");
+				}
+
 				return;
 			}
 
