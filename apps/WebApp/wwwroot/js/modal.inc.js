@@ -7,9 +7,6 @@ var modal;
  * @param {any} replaceId
  */
 function openModal(selector, url, replaceId, replaceContents, setup) {
-	// show messages
-	showPleaseWaitAlert();
-
 	// load modal HTML and then show modal
 	$(selector).load(url, function (response, status, xhr) {
 		// handle unauthorised
