@@ -13,7 +13,7 @@ function handleResult(r) {
 		if (r.redirectTo == "/") {
 			loadPage(home);
 		} else if (r.redirectTo == "refresh") {
-			loadHash()
+			loadHash();
 		} else {
 			loadPage(r.redirectTo);
 		}

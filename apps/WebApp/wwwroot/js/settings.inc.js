@@ -19,9 +19,6 @@ function loadSettingsTab(tabId) {
 	// get tab target
 	var tab = $(tabId);
 
-	// show loading alerts
-	tab.html($("<div/>").text("Loading..."));
-
 	// load source
 	var src = tab.data("src");
 	tab.load(src, () => closeAlert());
