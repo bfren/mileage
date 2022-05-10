@@ -4,7 +4,7 @@
  */
 function setupAjaxSubmit() {
 	$("body").on("submit", "form", function (e) {
-		// stop default submit
+		// stop default submit behaviour
 		e.preventDefault();
 
 		// check validity
@@ -13,6 +13,13 @@ function setupAjaxSubmit() {
 			form.find(":input:visible").not("[formnovalidate]")
 				.parent().addClass("was-validated");
 			return;
+		}
+
+		// support GET requests
+		if (form.attr("method").toLowerCase() == "get") {
+			var data = form.serialize();
+			var url = form.attr("action") + "?" + data;
+			return loadPage(url);
 		}
 
 		// submit form
@@ -34,7 +41,7 @@ function submitForm(form, url, data) {
 	var replaceId = form.data("replace");
 	var replaceContents = form.data("replace-contents");
 
-	// hide modal and show please wait message
+	// hide modal
 	if (modal) {
 		modal.hide();
 	}
