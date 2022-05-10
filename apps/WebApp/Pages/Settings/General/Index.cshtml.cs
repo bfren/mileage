@@ -13,7 +13,7 @@ using Mileage.Domain;
 using Mileage.Domain.LoadSettings;
 using Mileage.WebApp.Pages.Modals;
 
-namespace Mileage.WebApp.Pages.Settings.Defaults;
+namespace Mileage.WebApp.Pages.Settings.General;
 
 public abstract class EditSettingsModel : UpdateModalModel
 {

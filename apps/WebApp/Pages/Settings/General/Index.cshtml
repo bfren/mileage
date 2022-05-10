@@ -1,0 +1,35 @@
+@page
+@model Mileage.WebApp.Pages.Settings.General.IndexModel
+
+<div>
+
+	<h4>Defaults</h4>
+
+	<div class="mt-3">
+		<vc:car
+			label="Default Car"
+			update-url="@Url.Page("Index", "EditCar")"
+			value="@Model.Settings.DefaultCarId"
+			journey-id="null"
+		/>
+	</div>
+
+	<div class="mt-3">
+		<vc:from-place
+			label="Default Starting Place"
+			update-url="@Url.Page("Index", "EditFromPlace")"
+			value="@Model.Settings.DefaultFromPlaceId"
+			journey-id="null"
+		/>
+	</div>
+
+	<div class="mt-3">
+		<vc:rate
+			label="Default Rate"
+			update-url="@Url.Page("Index", "EditRate")"
+			value="@Model.Settings.DefaultRateId"
+			journey-id="null"
+		/>
+	</div>
+
+</div>

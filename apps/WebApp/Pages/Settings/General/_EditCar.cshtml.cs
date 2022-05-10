@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCars;
 using Mileage.Domain.SaveSettings;
 
-namespace Mileage.WebApp.Pages.Settings.Defaults;
+namespace Mileage.WebApp.Pages.Settings.General;
 
 public sealed class EditCarModel : EditSettingsModel
 {
