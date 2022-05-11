@@ -35,7 +35,7 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ca
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<CarsModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<CarsModel>, Messages.UserIdIsNullMsg>().AsTask();
 		}
 
 		Log.Vrb("Get Cars for {User}.", query.UserId);

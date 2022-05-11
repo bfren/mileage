@@ -76,7 +76,7 @@ internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 						Car.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, CarCannotBeDeletedMsg>().AsTask
+						F.None<bool, CarCannotBeDeletedMsg>().AsTask()
 				},
 				none: _ => F.None<bool>(new CarDoesNotExistMsg(userId, carId))
 			);

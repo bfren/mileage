@@ -36,7 +36,7 @@ internal sealed class CheckPlacesBelongToUserHandler : QueryHandler<CheckPlacesB
 	{
 		if (query.PlaceIds.Length == 0)
 		{
-			return F.None<bool, Messages.PlaceIdsIsNullMsg>().AsTask;
+			return F.None<bool, Messages.PlaceIdsIsNullMsg>().AsTask();
 		}
 
 		Log.Vrb("Checking places {PlaceIds} belong to user {UserId}.", query.PlaceIds.Select(p => p.Value), query.UserId.Value);

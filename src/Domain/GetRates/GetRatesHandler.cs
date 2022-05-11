@@ -35,7 +35,7 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<RatesModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<RatesModel>, Messages.UserIdIsNullMsg>().AsTask();
 		}
 
 		Log.Vrb("Get Rates for {User}.", query.UserId);

@@ -35,7 +35,7 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<PlacesModel>, Messages.UserIdIsNullMsg>().AsTask;
+			return F.None<IEnumerable<PlacesModel>, Messages.UserIdIsNullMsg>().AsTask();
 		}
 
 		Log.Vrb("Get Places for {User}.", query.UserId);

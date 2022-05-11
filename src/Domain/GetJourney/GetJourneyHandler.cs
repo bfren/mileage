@@ -34,7 +34,7 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, JourneyM
 	{
 		if (query.JourneyId is null || query.JourneyId.Value == 0)
 		{
-			return F.None<JourneyModel, Messages.JourneyIdIsNullMsg>().AsTask;
+			return F.None<JourneyModel, Messages.JourneyIdIsNullMsg>().AsTask();
 		}
 
 		Log.Vrb("Get Journey: {Query}.", query);

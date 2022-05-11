@@ -39,7 +39,7 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, RateModel>
 	{
 		if (query.RateId is null || query.RateId.Value == 0)
 		{
-			return F.None<RateModel, Messages.RateIdIsNullMsg>().AsTask;
+			return F.None<RateModel, Messages.RateIdIsNullMsg>().AsTask();
 		}
 
 		return Cache

@@ -40,8 +40,8 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 			.Where(s => s.UserId, Compare.Equal, query.Id)
 			.QuerySingleAsync<Settings>()
 			.SwitchAsync(
-				some: x => F.Some(x).AsTask,
-				none: _ => F.Some(new Settings()).AsTask
+				some: x => F.Some(x).AsTask(),
+				none: _ => F.Some(new Settings()).AsTask()
 			);
 	}
 }

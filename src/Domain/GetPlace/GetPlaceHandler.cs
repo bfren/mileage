@@ -39,7 +39,7 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, PlaceModel>
 	{
 		if (query.PlaceId is null || query.PlaceId.Value == 0)
 		{
-			return F.None<PlaceModel, Messages.PlaceIdIsNullMsg>().AsTask;
+			return F.None<PlaceModel, Messages.PlaceIdIsNullMsg>().AsTask();
 		}
 
 		return Cache

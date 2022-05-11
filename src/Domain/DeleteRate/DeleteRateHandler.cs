@@ -76,7 +76,7 @@ internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 						Rate.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, RateCannotBeDeletedMsg>().AsTask
+						F.None<bool, RateCannotBeDeletedMsg>().AsTask()
 				},
 				none: _ => F.None<bool>(new RateDoesNotExistMsg(userId, rateId))
 			);

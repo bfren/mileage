@@ -76,7 +76,7 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 						Place.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, PlaceCannotBeDeletedMsg>().AsTask
+						F.None<bool, PlaceCannotBeDeletedMsg>().AsTask()
 				},
 				none: _ => F.None<bool>(new PlaceDoesNotExistMsg(userId, placeId))
 			);

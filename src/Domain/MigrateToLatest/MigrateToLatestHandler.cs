@@ -43,6 +43,6 @@ internal sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCom
 		AuthDb.MigrateToLatest();
 
 		Log.Dbg("Migrating Mileage database to the latest version.");
-		return F.Some(Migrator.MigrateToLatest(Db.Config.ConnectionString)).AsTask;
+		return F.Some(Migrator.MigrateToLatest(Db.Config.ConnectionString)).AsTask();
 	}
 }

@@ -40,7 +40,7 @@ public class CheckRateBelongsToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var value = Rnd.Flip;
 		v.Dispatcher.DispatchAsync<bool>(default!)
-			.ReturnsForAnyArgs(F.Some(value).AsTask);
+			.ReturnsForAnyArgs(F.Some(value).AsTask());
 
 		// Act
 		var result = await handler.CheckRateBelongsToUser(LongId<AuthUserId>(), LongId<RateId>());

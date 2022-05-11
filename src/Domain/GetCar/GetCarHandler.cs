@@ -39,7 +39,7 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, CarModel>
 	{
 		if (query.CarId is null || query.CarId.Value == 0)
 		{
-			return F.None<CarModel, Messages.CarIdIsNullMsg>().AsTask;
+			return F.None<CarModel, Messages.CarIdIsNullMsg>().AsTask();
 		}
 
 		return Cache

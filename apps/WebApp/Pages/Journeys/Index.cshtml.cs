@@ -69,7 +69,7 @@ public sealed partial class IndexModel : PageModel
 		JourneyId journeyId,
 		Func<JourneyModel, TModel> getModel
 	) where TModel : EditJourneyModalModel =>
-		GetFieldAsync(partial, journeyId, _ => F.True.AsTask, (j, _) => getModel(j));
+		GetFieldAsync(partial, journeyId, _ => F.True.AsTask(), (j, _) => getModel(j));
 
 	private Task<PartialViewResult> GetFieldAsync<TValue, TModel>(
 		string partial,
