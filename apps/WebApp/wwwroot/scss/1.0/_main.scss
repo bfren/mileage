@@ -43,3 +43,9 @@ input[type=number] {
   background-color: #fff;
   height: calc(100% - 5rem);
 }
+
+.sign-in-form {
+    form > div:nth-child(3) {
+        display: none;
+    }
+}

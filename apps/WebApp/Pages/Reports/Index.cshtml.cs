@@ -4,12 +4,14 @@
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetExpensesReportMonths;
 
 namespace Mileage.WebApp.Pages.Reports;
 
+[Authorize]
 public sealed class IndexModel : PageModel
 {
 	private IDispatcher Dispatcher { get; init; }

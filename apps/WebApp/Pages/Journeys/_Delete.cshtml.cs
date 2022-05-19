@@ -72,7 +72,7 @@ public sealed partial class IndexModel
 						await OnGetRecentAsync(),
 
 					true when type == JourneyList.Between =>
-						Result.Redirect("refresh"),
+						Result.Create("refresh"),
 
 					_ =>
 						Result.Error("Unable to delete Journey.")

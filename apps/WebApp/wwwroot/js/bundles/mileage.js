@@ -1,3 +1,31 @@
+const auth = "jwt";
+
+/**
+ * Set authorization token using local storage for persistence.
+ *
+ * @param {any} token Token value.
+ */
+function setAuth(token) {
+	if (token) {
+		localStorage.setItem(auth, "Bearer " + token);
+		setupAjaxAuth();
+	} else {
+		localStorage.clear();
+	}
+}
+
+/**
+ * Add authorization header to the next AJAX request.
+ *
+ */
+function setupAjaxAuth() {
+	$.ajaxSetup({
+		beforeSend: (xhr) => {
+			xhr.setRequestHeader("Authorization", localStorage.getItem(auth))
+		}
+	});
+}
+
 const alertIcons = {
 	close: $("<i/>").addClass("fa-solid fa-xmark"),
 	info: $("<i/>").addClass("fa-solid fa-circle-info"),
@@ -112,6 +140,14 @@ function setupDatepickerDefaults() {
 ready(setupDatepickerDefaults);
 
 /**
+ * Load the home page.
+ * 
+ */
+function loadHome() {
+	loadPage(home);
+}
+
+/**
  * Load a page into the main content block.
  * 
  * @param {any} url
@@ -136,7 +172,12 @@ function loadHash() {
 	}
 
 	// get URL contents
-	$.ajax({ url: url, method: "GET" })
+	setupAjaxAuth();
+	$.ajax(
+		{
+			url: url,
+			method: "GET"
+		})
 
 		.done(function (data, status, xhr) {
 			// close info alert
@@ -161,6 +202,7 @@ function loadHash() {
 
 			// handle unauthorised
 			if (xhr.status == 401) {
+				setupAjaxAuth();
 				$("#content").load(signIn);
 				return;
 			}
@@ -224,6 +266,7 @@ var modal;
  */
 function openModal(selector, url, replaceId, replaceContents, setup) {
 	// load modal HTML and then show modal
+	setupAjaxAuth();
 	$(selector).load(url, function (response, status, xhr) {
 		// handle unauthorised
 		if (xhr.status == 401) {
@@ -607,14 +650,20 @@ function handleResult(r) {
 	var sticky = r.message.type == alertTypes.warning || r.message.type == alertTypes.error;
 	showAlert(r.message.type, r.message.text, sticky);
 
-	// redirect or show alert
-	if (r.redirectTo) {
-		if (r.redirectTo == "/") {
-			loadPage(home);
-		} else if (r.redirectTo == "refresh") {
-			loadHash();
-		} else {
-			loadPage(r.redirectTo);
+	// if message is sign in, set JWT and load home page
+	if (r.message.text == "You were signed in." && r.value) {
+		setAuth(r.value);
+		return loadPage(home);
+	}
+
+	// redirect if value is a URL	
+	if (r.value) {
+		if (r.value == "/") {
+			return loadPage(home);
+		} else if (r.value == "refresh") {
+			return loadHash();
+		} else if (v.value.startsWith("/")) {
+			return loadPage(r.redirectTo);
 		}
 	}
 }
@@ -642,6 +691,7 @@ function loadSettingsTab(tabId) {
 
 	// load source
 	var src = tab.data("src");
+	setupAjaxAuth();
 	tab.load(src, () => closeAlert());
 }
 
@@ -664,6 +714,7 @@ function loadSaveForm(item, el, e) {
 	var url = el.data("load");
 
 	// show alert and load URL
+	setupAjaxAuth();
 	$("#save-" + item).load(url, () => closeAlert());
 }
 
@@ -738,14 +789,15 @@ function submitForm(form, url, data) {
 	}
 
 	// post data and handle result
+	setupAjaxAuth();
 	$.ajax(
 		{
 			method: method,
 			url: url || form.attr("action"),
 			data: data || form.serialize()
-		}
-	).done(
-		function (data, status, xhr) {
+		})
+
+		.done(function (data, status, xhr) {
 			// handle JSON response
 			if (xhr.responseJSON) {
 				handleResult(xhr.responseJSON);
@@ -775,9 +827,9 @@ function submitForm(form, url, data) {
 			// something unexpected has happened
 			showAlert(alertTypes.warning, "Something went wrong, refreshing the page.", true);
 			loadHash();
-		}
-	).fail(
-		function (xhr) {
+		})
+
+		.fail(function (xhr) {
 			// the response is a JSON result
 			if (xhr && xhr.responseJSON) {
 				handleResult(xhr.responseJSON);
@@ -786,6 +838,5 @@ function submitForm(form, url, data) {
 
 			// something else has gone wrong
 			showAlert(alertTypes.error, "Something went wrong, please try again.");
-		}
-	);
+		});
 }

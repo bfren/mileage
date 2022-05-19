@@ -47,14 +47,15 @@ function submitForm(form, url, data) {
 	}
 
 	// post data and handle result
+	setupAjaxAuth();
 	$.ajax(
 		{
 			method: method,
 			url: url || form.attr("action"),
 			data: data || form.serialize()
-		}
-	).done(
-		function (data, status, xhr) {
+		})
+
+		.done(function (data, status, xhr) {
 			// handle JSON response
 			if (xhr.responseJSON) {
 				handleResult(xhr.responseJSON);
@@ -84,9 +85,9 @@ function submitForm(form, url, data) {
 			// something unexpected has happened
 			showAlert(alertTypes.warning, "Something went wrong, refreshing the page.", true);
 			loadHash();
-		}
-	).fail(
-		function (xhr) {
+		})
+
+		.fail(function (xhr) {
 			// the response is a JSON result
 			if (xhr && xhr.responseJSON) {
 				handleResult(xhr.responseJSON);
@@ -95,6 +96,5 @@ function submitForm(form, url, data) {
 
 			// something else has gone wrong
 			showAlert(alertTypes.error, "Something went wrong, please try again.");
-		}
-	);
+		});
 }

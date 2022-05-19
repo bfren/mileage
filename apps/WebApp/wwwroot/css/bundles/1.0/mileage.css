@@ -11324,6 +11324,10 @@ input[type=number] {
   height: calc(100% - 5rem);
 }
 
+.sign-in-form form > div:nth-child(3) {
+  display: none;
+}
+
 #create, #update, #delete {
   background-color: rgba(0, 0, 0, 0.2);
   display: none;

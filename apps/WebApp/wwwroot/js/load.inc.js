@@ -1,4 +1,12 @@
 /**
+ * Load the home page.
+ * 
+ */
+function loadHome() {
+	loadPage(home);
+}
+
+/**
  * Load a page into the main content block.
  * 
  * @param {any} url
@@ -23,7 +31,12 @@ function loadHash() {
 	}
 
 	// get URL contents
-	$.ajax({ url: url, method: "GET" })
+	setupAjaxAuth();
+	$.ajax(
+		{
+			url: url,
+			method: "GET"
+		})
 
 		.done(function (data, status, xhr) {
 			// close info alert
@@ -48,6 +61,7 @@ function loadHash() {
 
 			// handle unauthorised
 			if (xhr.status == 401) {
+				setupAjaxAuth();
 				$("#content").load(signIn);
 				return;
 			}

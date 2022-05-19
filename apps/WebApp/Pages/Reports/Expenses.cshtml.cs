@@ -6,6 +6,7 @@ using Jeebs;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetExpensesReportData;
@@ -13,6 +14,7 @@ using Mileage.Persistence.Common.Reports;
 
 namespace Mileage.WebApp.Pages.Reports;
 
+[Authorize]
 public sealed class ExpensesModel : PageModel
 {
 	private IDispatcher Dispatcher { get; init; }

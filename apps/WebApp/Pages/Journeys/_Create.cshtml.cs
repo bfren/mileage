@@ -3,6 +3,7 @@
 
 using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
+using Jeebs.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCars;
 using Mileage.Domain.GetLatestEndMiles;
@@ -87,7 +88,7 @@ public sealed partial class IndexModel
 		return await query
 			.AuditAsync(none: Log.Msg)
 			.SwitchAsync(
-				some: x => Result.Create(x) with { RedirectTo = "refresh" },
+				some: x => Result.Create("refresh", Alert.Success($"Created Journey {x}.")),
 				none: r => Result.Error(r)
 			);
 	}

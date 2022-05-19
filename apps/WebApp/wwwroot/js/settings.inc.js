@@ -21,6 +21,7 @@ function loadSettingsTab(tabId) {
 
 	// load source
 	var src = tab.data("src");
+	setupAjaxAuth();
 	tab.load(src, () => closeAlert());
 }
 
@@ -43,6 +44,7 @@ function loadSaveForm(item, el, e) {
 	var url = el.data("load");
 
 	// show alert and load URL
+	setupAjaxAuth();
 	$("#save-" + item).load(url, () => closeAlert());
 }
 
