@@ -8,6 +8,7 @@ var modal;
  */
 function openModal(selector, url, replaceId, replaceContents, setup) {
 	// load modal HTML and then show modal
+	setupAjaxAuth();
 	$(selector).load(url, function (response, status, xhr) {
 		// handle unauthorised
 		if (xhr.status == 401) {
