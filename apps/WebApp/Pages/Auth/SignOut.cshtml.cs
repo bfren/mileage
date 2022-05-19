@@ -1,11 +1,8 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Logging;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public sealed class SignOutModel : Jeebs.Mvc.Razor.Pages.Auth.SignOutModel
-{
-	public SignOutModel(ILog<SignOutModel> log) : base(log) { }
-}
+public sealed class SignOutModel : PageModel { }
