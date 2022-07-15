@@ -46,7 +46,7 @@
     <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220618.1" />
     <PackageReference Include="MaybeF" Version="9.1.1" />
     <PackageReference Include="MaybeF.Caching" Version="9.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
   </ItemGroup>
