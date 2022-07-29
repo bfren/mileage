@@ -3,7 +3,7 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "bootstrap@5.1.3",
+      "library": "bootstrap@5.2.0",
       "destination": "wwwroot/lib/bootstrap"
     },
     {
@@ -11,7 +11,7 @@
       "destination": "wwwroot/lib/bootstrap-datepicker"
     },
     {
-      "library": "font-awesome@6.1.1",
+      "library": "font-awesome@6.1.2",
       "destination": "wwwroot/lib/font-awesome"
     },
     {
