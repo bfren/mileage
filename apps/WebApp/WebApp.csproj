@@ -42,10 +42,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.6.0" />
-    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220714.1" />
-    <PackageReference Include="MaybeF" Version="9.1.1" />
-    <PackageReference Include="MaybeF.Caching" Version="9.1.1" />
+    <PackageReference Include="Azure.Identity" Version="1.6.1" />
+    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.0-beta.220814.1" />
+    <PackageReference Include="MaybeF" Version="9.1.2" />
+    <PackageReference Include="MaybeF.Caching" Version="9.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
