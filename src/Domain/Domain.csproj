@@ -5,8 +5,8 @@
     <RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.0" />
-    <PackageReference Include="Jeebs.Cqrs" Version="8.0.0" />
+    <PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.0.1" />
+    <PackageReference Include="Jeebs.Cqrs" Version="8.0.1" />
     <PackageReference Include="MaybeF" Version="9.1.2" />
     <PackageReference Include="MaybeF.Caching" Version="9.1.2" />
   </ItemGroup>
