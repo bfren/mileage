@@ -34,7 +34,7 @@
 	/// <param name="selected">True if the item should be marked as selected</param>
 	void Check(string name, object id, string value, string text, bool selected)
 	{
-		string idText = $"{name.Normalise()}-{id}";
+		string idText = $"{name.Normalise()}{id}";
 		var check = selected ? "checked" : string.Empty;
 		<div class="form-check-inline p-2 mb-1 with-data border border-primary text-primary rounded-2" data-text="@value">
 			<input type="checkbox" class="form-check-input" id="@idText" name="@name" value="@id" autocomplete="off" @check />

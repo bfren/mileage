@@ -10,7 +10,7 @@ function openUpdateModal(url, replaceId, replaceContents) {
 }
 
 /**
- * Open delete modal when delete buttons are clicked.
+ * Open update modal when update buttons are clicked.
  *
  */
 function setupUpdateModalOpen() {
@@ -99,7 +99,7 @@ function setupUpdateModalSave() {
 		if (e.keyCode == 13) {
 			submit(e);
 		}
-	})
+	});
 }
 ready(setupUpdateModalSave);
 
