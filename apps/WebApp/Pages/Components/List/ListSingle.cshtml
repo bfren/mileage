@@ -6,7 +6,7 @@
 	if (Model.Items.Any())
 	{
 		var itemsId = Rnd.Str;
-		var feedback = $"{Model.ListName}-feedback";
+		var feedback = $"{Model.ListName}feedback";
 
 		<div class="mb-2">
 			<input type="text" class="form-control modal-select list-filter" placeholder="Search @Model.Singular.Pluralise(2)..." autocomplete="off" data-filter-for="@itemsId" aria-describedby="@feedback" formnovalidate />
@@ -44,7 +44,7 @@
 	/// <param name="selected">True if the item should be marked as selected</param>
 	void Radio(string name, string feedback, object id, string value, string text, bool selected)
 	{
-		var idText = $"{name.Normalise()}-{id}";
+		var idText = $"{name.Normalise()}{id}";
 		var check = selected ? "checked" : string.Empty;
 		var required = Model?.AllowNull == false ? "required" : string.Empty;
 
