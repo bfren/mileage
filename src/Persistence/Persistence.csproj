@@ -3,8 +3,8 @@
     <Description>Mileage: Persistence library.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Auth.Data" Version="8.0.4" />
-    <PackageReference Include="Jeebs.Data" Version="8.0.4" />
+    <PackageReference Include="Jeebs.Auth.Data" Version="8.0.5" />
+    <PackageReference Include="Jeebs.Data" Version="8.0.5" />
     <PackageReference Include="MaybeF" Version="9.1.2" />
     <PackageReference Include="Simple.Migrations" Version="0.9.21" />
   </ItemGroup>
