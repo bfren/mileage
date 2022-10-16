@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
-    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.5" />
+    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.6" />
     <PackageReference Include="MaybeF" Version="9.1.2" />
     <PackageReference Include="MaybeF.Caching" Version="9.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
