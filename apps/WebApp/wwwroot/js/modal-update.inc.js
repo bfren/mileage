@@ -87,19 +87,15 @@ function setupUpdateModalSearch() {
  */
 function setupUpdateModalSave() {
 	// submit function
-	var submit = function (e) {
+	var submit = (e) => {
 		e.preventDefault();
 		$("#update form").submit();
 	}
 
 	// submit on button click, auto-save input change, and enter
-	$("body").on("click", "#update .btn-save", (e) => submit(e));
-	$("body").on("change", "#update .auto-save", (e) => submit(e));
-	$("body").on("keypress", "#update input", function (e) {
-		if (e.keyCode == 13) {
-			submit(e);
-		}
-	});
+	$("body").on("click", "#update .btn-save", submit);
+	$("body").on("change", "#update .auto-save", submit);
+	$("body").on("keypress", "#update input", (e) => e.keyCode == 13 && submit(e));
 }
 ready(setupUpdateModalSave);
 

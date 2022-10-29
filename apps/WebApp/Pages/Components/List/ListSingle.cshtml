@@ -44,7 +44,7 @@
 	/// <param name="selected">True if the item should be marked as selected</param>
 	void Radio(string name, string feedback, object id, string value, string text, bool selected)
 	{
-		var idText = $"{name.Normalise()}{id}";
+		var idText = Rnd.Str;
 		var check = selected ? "checked" : string.Empty;
 		var required = Model?.AllowNull == false ? "required" : string.Empty;
 

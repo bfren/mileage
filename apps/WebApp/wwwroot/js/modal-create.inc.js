@@ -73,8 +73,6 @@ ready(setupCreateModalOpen);
  *
  */
 function setupCreateModalSave() {
-	$("body").on("click", "#create .btn-save", function () {
-		$("#create form").submit();
-	});
+	$("body").on("click", "#create .btn-save", () => $("#create form").submit());
 }
 ready(setupCreateModalSave);
