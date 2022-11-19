@@ -3,8 +3,8 @@
     <Description>Mileage: PostgreSQL client.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Data.Clients.PostgreSql" Version="8.0.6" />
-    <PackageReference Include="MaybeF" Version="9.1.2" />
+    <PackageReference Include="Jeebs.Data.Clients.PostgreSql" Version="8.1.0-beta.22111601" />
+    <PackageReference Include="MaybeF" Version="9.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persistence\Persistence.csproj" PrivateAssets="All" />

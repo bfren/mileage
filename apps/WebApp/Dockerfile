@@ -1,4 +1,4 @@
-FROM bfren/aspnet:net6.0
+FROM bfren/aspnet:net7.0
 
 COPY ./publish /app/live
 

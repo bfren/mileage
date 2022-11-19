@@ -42,17 +42,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.7.0" />
-    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.0.6" />
-    <PackageReference Include="MaybeF" Version="9.1.2" />
-    <PackageReference Include="MaybeF.Caching" Version="9.1.2" />
+    <PackageReference Include="Azure.Identity" Version="1.8.0" />
+    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.1.0-beta.22111601" />
+    <PackageReference Include="MaybeF" Version="9.2.0" />
+    <PackageReference Include="MaybeF.Caching" Version="9.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties jeebsconfig_1json__JsonSchema="https://raw.githubusercontent.com/bfren/jeebs/main/src/Jeebs.Config/schema.json" />
+      <UserProperties jeebsconfig_1json__JsonSchema="https://schemas.bfren.dev/jeebs/application/config/2022-06.json" jeebsconfig_1production_1json__JsonSchema="https://schemas.bfren.dev/jeebs/application/config/2022-06.json" jeebsconfig-secrets_1docker_1json__JsonSchema="https://schemas.bfren.dev/jeebs/application/config/2022-06.json" jeebsconfig-secrets_1json__JsonSchema="https://schemas.bfren.dev/jeebs/application/config/2022-06.json" jeebsconfig-secrets_1production_1json__JsonSchema="https://schemas.bfren.dev/jeebs/application/config/2022-06.json" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
