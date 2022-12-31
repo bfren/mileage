@@ -3,13 +3,10 @@
     <RootNamespace>Mileage.Domain</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Data.Testing" Version="8.1.3" />
+    <PackageReference Include="Jeebs.Data.Testing" Version="8.1.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\src\Persistence\Persistence.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="StrongId.Testing" Version="8.3.2" />
   </ItemGroup>
 </Project>
