@@ -13,9 +13,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveRate.SaveRateHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, SaveRateHandler>
+	private sealed class Setup : Setup<IRateRepository, RateEntity, RateId, SaveRateHandler>
 	{
 		internal override SaveRateHandler GetHandler(Vars v) =>
 			new(v.Dispatcher, v.Repo, v.Log);

@@ -7,7 +7,7 @@ using Jeebs.Logging;
 
 namespace Mileage.Domain.SaveUserPassword.SaveUserPassword_Tests;
 
-public class HandleAsync_Tests
+public sealed class HandleAsync_Tests
 {
 	[Fact]
 	public async Task Calls_Log_Vrb__With_Correct_Values()

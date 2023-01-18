@@ -13,9 +13,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveCar.SaveCarHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, SaveCarHandler>
+	private sealed class Setup : Setup<ICarRepository, CarEntity, CarId, SaveCarHandler>
 	{
 		internal override SaveCarHandler GetHandler(Vars v) =>
 			new(v.Dispatcher, v.Repo, v.Log);

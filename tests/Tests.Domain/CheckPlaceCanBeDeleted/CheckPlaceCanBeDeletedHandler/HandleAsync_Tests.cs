@@ -8,9 +8,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckPlaceCanBeDeleted.CheckPlaceCanBeDeletedHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_Tests
 {
-	private class Setup : Setup<PlaceId, CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler>
+	private sealed class Setup : Setup<PlaceId, CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler>
 	{
 		public Setup() : base("Place") { }
 

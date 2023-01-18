@@ -11,9 +11,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetJourneys.GetJourneysHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneysHandler>
+	private sealed class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetJourneysHandler>
 	{
 		internal override GetJourneysHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

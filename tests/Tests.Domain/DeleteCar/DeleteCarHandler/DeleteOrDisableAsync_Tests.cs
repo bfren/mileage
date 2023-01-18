@@ -10,7 +10,7 @@ namespace Mileage.Domain.DeleteCar.DeleteCarHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel>
+	private sealed class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel>
 	{
 		internal override DeleteCarHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Repo, v.Dispatcher, v.Log);

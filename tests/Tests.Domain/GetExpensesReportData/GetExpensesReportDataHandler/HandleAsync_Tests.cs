@@ -8,7 +8,7 @@ using Mileage.Persistence.Common.Reports;
 
 namespace Mileage.Domain.GetExpensesReportData.GetExpensesReportDataHandler_Tests;
 
-public class HandleAsync_Tests
+public sealed class HandleAsync_Tests
 {
 	private Vars Setup()
 	{

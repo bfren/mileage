@@ -7,9 +7,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveRate.Internals.UpdateRateHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, UpdateRateHandler>
+	private sealed class Setup : Setup<IRateRepository, RateEntity, RateId, UpdateRateHandler>
 	{
 		internal override UpdateRateHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Repo, v.Log);

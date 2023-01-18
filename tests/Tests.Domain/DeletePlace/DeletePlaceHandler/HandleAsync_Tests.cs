@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeletePlace.DeletePlaceHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel, CheckPlaceCanBeDeletedQuery>
+	private sealed class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel, CheckPlaceCanBeDeletedQuery>
 	{
 		public Setup() : base("Place") { }
 

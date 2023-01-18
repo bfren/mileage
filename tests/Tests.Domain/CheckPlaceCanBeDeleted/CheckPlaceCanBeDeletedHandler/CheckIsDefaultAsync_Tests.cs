@@ -8,7 +8,7 @@ namespace Mileage.Domain.CheckPlaceCanBeDeleted.CheckPlaceCanBeDeletedHandler_Te
 
 public class CheckIsDefaultAsync_Tests : Abstracts.CheckCanBeDeleted.CheckIsDefaultAsync_Tests
 {
-	private class Setup : Setup<CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler, PlaceId>
+	private sealed class Setup : Setup<CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler, PlaceId>
 	{
 		internal override CheckPlaceCanBeDeletedHandler GetHandler(Vars v) =>
 			new(Substitute.For<IJourneyRepository>(), v.Repo, v.Log);

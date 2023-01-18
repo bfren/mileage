@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteCar.DeleteCarHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel, CheckCarCanBeDeletedQuery>
+	private sealed class Setup : Setup<ICarRepository, CarEntity, CarId, DeleteCarCommand, DeleteCarHandler, CarToDeleteModel, CheckCarCanBeDeletedQuery>
 	{
 		public Setup() : base("Car") { }
 
