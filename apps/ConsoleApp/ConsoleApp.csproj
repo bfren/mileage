@@ -11,9 +11,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Apps" Version="8.1.4" />
-    <PackageReference Include="Jeebs.Auth.Data" Version="8.1.4" />
-    <PackageReference Include="Rnd" Version="8.4.1" />
+    <PackageReference Include="Jeebs.Apps" />
+    <PackageReference Include="Jeebs.Auth.Data" />
+    <PackageReference Include="Rnd" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

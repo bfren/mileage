@@ -40,7 +40,7 @@ internal sealed class TruncateEverythingHandler : CommandHandler<TruncateEveryth
 			return Db.ExecuteAsync($"TRUNCATE TABLE {table};", null, CommandType.Text, transaction);
 		}
 
-		using var w = Db.UnitOfWork;
+		using var w = await Db.StartWorkAsync();
 		await truncate("auth.user", w.Transaction);
 		await truncate("mileage.car", w.Transaction);
 		await truncate("mileage.journey", w.Transaction);

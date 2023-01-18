@@ -3,7 +3,6 @@
     <Description>Mileage: Common Persistence types.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs" Version="8.1.4" />
-    <PackageReference Include="MaybeF" Version="9.2.1" />
+    <PackageReference Include="Jeebs" />
   </ItemGroup>
 </Project>

@@ -3,10 +3,9 @@
     <Description>Mileage: Persistence library.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jeebs.Auth.Data" Version="8.1.4" />
-    <PackageReference Include="Jeebs.Data" Version="8.1.4" />
-    <PackageReference Include="MaybeF" Version="9.2.1" />
-    <PackageReference Include="Simple.Migrations" Version="0.9.21" />
+    <PackageReference Include="Jeebs.Auth.Data" />
+    <PackageReference Include="Jeebs.Data" />
+    <PackageReference Include="Simple.Migrations" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persistence.Common\Persistence.Common.csproj" />

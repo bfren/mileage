@@ -42,13 +42,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.8.0" />
-    <PackageReference Include="Jeebs.Mvc.Razor" Version="8.1.4" />
-    <PackageReference Include="MaybeF" Version="9.2.1" />
-    <PackageReference Include="MaybeF.Caching" Version="9.2.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-    <PackageReference Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Jeebs.Mvc.Razor" />
+    <PackageReference Include="MaybeF.Caching" />
+    <PackageReference Include="NWebsec.AspNetCore.Middleware" />
+    <PackageReference Include="NWebsec.AspNetCore.Mvc" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Azure.Identity" Version="1.8.1" />
+    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
+    <PackageVersion Include="Jeebs" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Apps" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Auth.Data" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Cqrs" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Data" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Data.Testing" Version="8.2.0" />
+    <PackageVersion Include="Jeebs.Mvc.Razor" Version="8.2.0" />
+    <PackageVersion Include="MaybeF" Version="9.3.1" />
+    <PackageVersion Include="MaybeF.Caching" Version="9.3.1" />
+    <PackageVersion Include="MaybeF.Testing" Version="9.3.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+    <PackageVersion Include="NSubstitute" Version="4.4.0" />
+    <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.15" />
+    <PackageVersion Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+    <PackageVersion Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
+    <PackageVersion Include="Rnd" Version="8.4.3" />
+    <PackageVersion Include="Simple.Migrations" Version="0.9.21" />
+    <PackageVersion Include="StrongId.Testing" Version="8.3.4" />
+    <PackageVersion Include="xunit" Version="2.4.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+  </ItemGroup>
+</Project>
