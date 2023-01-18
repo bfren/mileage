@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetRates.GetRates_Tests;
 
-public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, GetRatesQuery, GetRatesHandler, RatesModel>
+	private sealed class Setup : Setup<IRateRepository, RateEntity, RateId, GetRatesQuery, GetRatesHandler, RatesModel>
 	{
 		public Setup() : base("Rates") { }
 

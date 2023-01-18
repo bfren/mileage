@@ -6,9 +6,9 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.SaveSettings.UpdateDefaultCarHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.UpdateSettings.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.UpdateSettings.HandleAsync_Tests
 {
-	private class Setup : Setup<UpdateDefaultCarCommand, UpdateDefaultCarHandler, CarId>
+	private sealed class Setup : Setup<UpdateDefaultCarCommand, UpdateDefaultCarHandler, CarId>
 	{
 		internal override UpdateDefaultCarCommand GetCommand(AuthUserId? userId = null, CarId? itemId = null) =>
 			new(userId ?? LongId<AuthUserId>(), LongId<SettingsId>(), Rnd.Lng, itemId);

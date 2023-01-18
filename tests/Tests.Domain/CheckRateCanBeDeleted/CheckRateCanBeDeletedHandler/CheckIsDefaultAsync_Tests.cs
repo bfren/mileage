@@ -8,7 +8,7 @@ namespace Mileage.Domain.CheckRateCanBeDeleted.CheckRateCanBeDeletedHandler_Test
 
 public class CheckIsDefaultAsync_Tests : Abstracts.CheckCanBeDeleted.CheckIsDefaultAsync_Tests
 {
-	private class Setup : Setup<CheckRateCanBeDeletedQuery, CheckRateCanBeDeletedHandler, RateId>
+	private sealed class Setup : Setup<CheckRateCanBeDeletedQuery, CheckRateCanBeDeletedHandler, RateId>
 	{
 		internal override CheckRateCanBeDeletedHandler GetHandler(Vars v) =>
 			new(Substitute.For<IJourneyRepository>(), v.Repo, v.Log);

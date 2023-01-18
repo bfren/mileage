@@ -10,7 +10,7 @@ namespace Mileage.Domain.SaveSettings.SaveSettingsHandler_Tests;
 
 public class CheckPlaceBelongsToUser_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
+	private sealed class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
 	{
 		internal override SaveSettingsHandler GetHandler(Vars v) =>
 			new(v.Dispatcher, v.Repo, v.Log);

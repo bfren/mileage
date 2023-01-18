@@ -8,9 +8,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SavePlace.Internals.CreatePlaceHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CreatePlaceHandler>
+	private sealed class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CreatePlaceHandler>
 	{
 		internal override CreatePlaceHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

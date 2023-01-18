@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveSettings.Internals.UpdateSettingsHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
+	private sealed class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, UpdateSettingsHandler>
 	{
 		internal override UpdateSettingsHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

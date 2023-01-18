@@ -11,9 +11,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckPlacesBelongToUser.CheckPlacesBelongToUserHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlacesBelongToUserHandler>
+	private sealed class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, CheckPlacesBelongToUserHandler>
 	{
 		internal override CheckPlacesBelongToUserHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

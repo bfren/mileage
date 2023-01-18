@@ -9,7 +9,7 @@ namespace Mileage.Domain.CheckPlaceCanBeDeleted.CheckPlaceCanBeDeletedHandler_Te
 
 public class CountJourneysWithAsync_Tests : Abstracts.CheckCanBeDeleted.CountJourneysWithAsync_Tests
 {
-	private class Setup : Setup<CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler, PlaceId>
+	private sealed class Setup : Setup<CheckPlaceCanBeDeletedQuery, CheckPlaceCanBeDeletedHandler, PlaceId>
 	{
 		internal override CheckPlaceCanBeDeletedHandler GetHandler(Vars v) =>
 			new(v.Repo, Substitute.For<ISettingsRepository>(), v.Log);

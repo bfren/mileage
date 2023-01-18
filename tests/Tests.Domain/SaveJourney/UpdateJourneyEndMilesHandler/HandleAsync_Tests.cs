@@ -6,9 +6,9 @@ using Mileage.Persistence.Common.StrongIds;
 
 namespace Mileage.Domain.SaveJourney.UpdateJourneyEndMilesHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Tests
 {
-	private class Setup : Setup<UpdateJourneyEndMilesCommand, UpdateJourneyEndMilesHandler>
+	private sealed class Setup : Setup<UpdateJourneyEndMilesCommand, UpdateJourneyEndMilesHandler>
 	{
 		public Setup() : base("End Miles") { }
 

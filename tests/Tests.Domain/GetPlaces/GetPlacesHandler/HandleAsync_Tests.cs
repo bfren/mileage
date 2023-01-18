@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetPlaces.GetPlaces_Tests;
 
-public class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, PlacesModel>
+	private sealed class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, GetPlacesQuery, GetPlacesHandler, PlacesModel>
 	{
 		public Setup() : base("Places") { }
 

@@ -8,7 +8,7 @@ namespace Mileage.Domain.CheckCarCanBeDeleted.CheckCarCanBeDeletedHandler_Tests;
 
 public class CheckIsDefaultAsync_Tests : Abstracts.CheckCanBeDeleted.CheckIsDefaultAsync_Tests
 {
-	private class Setup : Setup<CheckCarCanBeDeletedQuery, CheckCarCanBeDeletedHandler, CarId>
+	private sealed class Setup : Setup<CheckCarCanBeDeletedQuery, CheckCarCanBeDeletedHandler, CarId>
 	{
 		internal override CheckCarCanBeDeletedHandler GetHandler(Vars v) =>
 			new(Substitute.For<IJourneyRepository>(), v.Repo, v.Log);

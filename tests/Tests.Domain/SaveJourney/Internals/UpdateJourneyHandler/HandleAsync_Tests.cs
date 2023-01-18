@@ -7,9 +7,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveJourney.Internals.UpdateJourneyHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, UpdateJourneyHandler>
+	private sealed class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, UpdateJourneyHandler>
 	{
 		internal override UpdateJourneyHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

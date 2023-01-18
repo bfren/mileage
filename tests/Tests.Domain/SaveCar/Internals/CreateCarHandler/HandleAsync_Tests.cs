@@ -8,9 +8,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveCar.Internals.CreateCarHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, CreateCarHandler>
+	private sealed class Setup : Setup<ICarRepository, CarEntity, CarId, CreateCarHandler>
 	{
 		internal override CreateCarHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

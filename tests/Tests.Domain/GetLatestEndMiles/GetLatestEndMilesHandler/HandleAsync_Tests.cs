@@ -12,9 +12,9 @@ using static MaybeF.F.M;
 
 namespace Mileage.Domain.GetLatestEndMiles.GetLatestEndMilesHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetLatestEndMilesHandler>
+	private sealed class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, GetLatestEndMilesHandler>
 	{
 		internal override GetLatestEndMilesHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Tests
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel, CheckRateCanBeDeletedQuery>
+	private sealed class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel, CheckRateCanBeDeletedQuery>
 	{
 		public Setup() : base("Rate") { }
 

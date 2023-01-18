@@ -11,7 +11,7 @@ namespace Mileage.Domain.CheckRateCanBeDeleted.CheckRateCanBeDeletedHandler_Test
 
 public class CountJourneysWithAsync_Tests : Abstracts.CheckCanBeDeleted.CountJourneysWithAsync_Tests
 {
-	private class Setup : Setup<CheckRateCanBeDeletedQuery, CheckRateCanBeDeletedHandler, RateId>
+	private sealed class Setup : Setup<CheckRateCanBeDeletedQuery, CheckRateCanBeDeletedHandler, RateId>
 	{
 		internal override CheckRateCanBeDeletedHandler GetHandler(Vars v) =>
 			new(v.Repo, Substitute.For<ISettingsRepository>(), v.Log);

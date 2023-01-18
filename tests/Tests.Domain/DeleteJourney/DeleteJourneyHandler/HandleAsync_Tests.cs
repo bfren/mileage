@@ -9,9 +9,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteJourney.DeleteJourneyHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
+public sealed class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 {
-	private class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDeleteModel>
+	private sealed class Setup : Setup<IJourneyRepository, JourneyEntity, JourneyId, DeleteJourneyCommand, DeleteJourneyHandler, JourneyToDeleteModel>
 	{
 		public Setup() : base("Journey") { }
 

@@ -11,9 +11,9 @@ using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckCarBelongsToUser.CheckCarBelongsToUserHandler_Tests;
 
-public class HandleAsync_Tests : Abstracts.TestHandler
+public sealed class HandleAsync_Tests : Abstracts.TestHandler
 {
-	private class Setup : Setup<ICarRepository, CarEntity, CarId, CheckCarBelongsToUserHandler>
+	private sealed class Setup : Setup<ICarRepository, CarEntity, CarId, CheckCarBelongsToUserHandler>
 	{
 		internal override CheckCarBelongsToUserHandler GetHandler(Vars v) =>
 			new(v.Repo, v.Log);

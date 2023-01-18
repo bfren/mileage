@@ -14,6 +14,7 @@
 
   <!-- Common Packages -->
   <ItemGroup>
+    <PackageReference Include="MaybeF" />
     <Using Include="MaybeF"/>
     <Using Include="MaybeF.Linq"/>
   </ItemGroup>

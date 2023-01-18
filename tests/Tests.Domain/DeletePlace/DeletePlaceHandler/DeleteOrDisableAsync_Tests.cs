@@ -10,7 +10,7 @@ namespace Mileage.Domain.DeletePlace.DeletePlaceHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel>
+	private sealed class Setup : Setup<IPlaceRepository, PlaceEntity, PlaceId, DeletePlaceCommand, DeletePlaceHandler, PlaceToDeleteModel>
 	{
 		internal override DeletePlaceHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Dispatcher, v.Repo, v.Log);

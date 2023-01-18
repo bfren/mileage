@@ -10,7 +10,7 @@ namespace Mileage.Domain.DeleteRate.DeleteRateHandler_Tests;
 
 public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisableAsync_Tests
 {
-	private class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel>
+	private sealed class Setup : Setup<IRateRepository, RateEntity, RateId, DeleteRateCommand, DeleteRateHandler, RateToDeleteModel>
 	{
 		internal override DeleteRateHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Dispatcher, v.Repo, v.Log);
