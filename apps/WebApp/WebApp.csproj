@@ -46,7 +46,6 @@
     <PackageReference Include="BuildWebCompiler2022" />
     <PackageReference Include="Jeebs.Mvc.Razor" />
     <PackageReference Include="MaybeF.Caching" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" />
   </ItemGroup>
