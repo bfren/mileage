@@ -1,8 +1,8 @@
 {
   "jeebs": {
     "db": {
-      "default": "galadriel-docker",
-      "authentication": "galadriel-docker"
+      "default": "elrond-docker",
+      "authentication": "elrond-docker"
     },
     "logging": {
       "minimum": "Warning"
