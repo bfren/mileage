@@ -8,12 +8,12 @@ using Mileage.Persistence.Common.StrongIds;
 namespace Mileage.Persistence.Entities;
 
 /// <summary>
-/// Config entity
+/// Settings entity
 /// </summary>
 public sealed record class SettingsEntity : IWithVersion<SettingsId>
 {
 	/// <summary>
-	/// Config ID
+	/// Settings ID
 	/// </summary>
 	public SettingsId Id { get; init; } = new();
 

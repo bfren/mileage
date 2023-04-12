@@ -96,7 +96,7 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 
 				_ = await Dispatcher
 					.DispatchAsync(new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId))
-					.IfSomeAsync(x => journeyIds.Add(x));
+					.IfSomeAsync(journeyIds.Add);
 
 				date = date.AddDays(Rnd.NumberF.GetInt32(0, 3) * -1);
 			}
