@@ -35,6 +35,11 @@ internal sealed class UpdateDefaultFromPlaceHandler : CommandHandler<UpdateDefau
 	/// <param name="command"></param>
 	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultFromPlaceCommand command)
 	{
+		if (command.DefaultFromPlaceId?.Value == 0)
+		{
+			command = command with { DefaultFromPlaceId = null };
+		}
+
 		if (command.DefaultFromPlaceId is not null)
 		{
 			var check = await Dispatcher.DispatchAsync(new CheckPlacesBelongToUserQuery(command.UserId, command.DefaultFromPlaceId));

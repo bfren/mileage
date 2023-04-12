@@ -35,6 +35,11 @@ internal sealed class UpdateDefaultCarHandler : CommandHandler<UpdateDefaultCarC
 	/// <param name="command"></param>
 	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultCarCommand command)
 	{
+		if (command.DefaultCarId?.Value == 0)
+		{
+			command = command with { DefaultCarId = null };
+		}
+
 		if (command.DefaultCarId is not null)
 		{
 			var check = await Dispatcher.DispatchAsync(new CheckCarBelongsToUserQuery(command.UserId, command.DefaultCarId));
