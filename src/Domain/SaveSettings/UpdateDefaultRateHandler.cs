@@ -35,6 +35,11 @@ internal sealed class UpdateDefaultRateHandler : CommandHandler<UpdateDefaultRat
 	/// <param name="command"></param>
 	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultRateCommand command)
 	{
+		if (command.DefaultRateId?.Value == 0)
+		{
+			command = command with { DefaultRateId = null };
+		}
+
 		if (command.DefaultRateId is not null)
 		{
 			var check = await Dispatcher.DispatchAsync(new CheckRateBelongsToUserQuery(command.UserId, command.DefaultRateId));
