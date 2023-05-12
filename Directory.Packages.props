@@ -4,7 +4,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Azure.Identity" Version="1.8.2" />
+    <PackageVersion Include="Azure.Identity" Version="1.9.0" />
     <PackageVersion Include="BuildWebCompiler2022" Version="1.14.10" />
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
     <PackageVersion Include="Jeebs" Version="8.3.2" />
