@@ -3,11 +3,11 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "bootstrap@5.2.3",
+      "library": "bootstrap@5.3.0",
       "destination": "wwwroot/lib/bootstrap"
     },
     {
-      "library": "bootstrap-datepicker@1.9.0",
+      "library": "bootstrap-datepicker@1.10.0",
       "destination": "wwwroot/lib/bootstrap-datepicker"
     },
     {
