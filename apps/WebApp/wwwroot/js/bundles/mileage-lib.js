@@ -17780,9 +17780,9 @@ return jQuery;
 } );
 
 /*!
- * Datepicker for Bootstrap v1.9.0 (https://github.com/uxsolutions/bootstrap-datepicker)
+ * Datepicker for Bootstrap v1.10.0 (https://github.com/uxsolutions/bootstrap-datepicker)
  *
- * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ * Licensed under the Apache License v2.0 (https://www.apache.org/licenses/LICENSE-2.0)
  */
 
 (function(factory){
@@ -17842,7 +17842,7 @@ return jQuery;
 			replace: function(new_array){
 				if (!new_array)
 					return;
-				if (!$.isArray(new_array))
+				if (!Array.isArray(new_array))
 					new_array = [new_array];
 				this.clear();
 				this.push.apply(this, new_array);
@@ -17884,9 +17884,15 @@ return jQuery;
 		this.isInput = this.element.is('input');
 		this.inputField = this.isInput ? this.element : this.element.find('input');
 		this.component = this.element.hasClass('date') ? this.element.find('.add-on, .input-group-addon, .input-group-append, .input-group-prepend, .btn') : false;
-		if (this.component && this.component.length === 0)
+		if (this.component && this.component.length === 0){
 			this.component = false;
-		this.isInline = !this.component && this.element.is('div');
+    }
+
+		if (this.o.isInline === null){
+			this.isInline = !this.component && !this.isInput;
+		} else {
+			this.isInline = this.o.isInline;
+		}
 
 		this.picker = $(DPGlobal.template);
 
@@ -17957,7 +17963,7 @@ return jQuery;
 		},
 
 		_resolveDaysOfWeek: function(daysOfWeek){
-			if (!$.isArray(daysOfWeek))
+			if (!Array.isArray(daysOfWeek))
 				daysOfWeek = daysOfWeek.split(/[,\s]*/);
 			return $.map(daysOfWeek, Number);
 		},
@@ -18044,7 +18050,7 @@ return jQuery;
 			o.daysOfWeekHighlighted = this._resolveDaysOfWeek(o.daysOfWeekHighlighted||[]);
 
 			o.datesDisabled = o.datesDisabled||[];
-			if (!$.isArray(o.datesDisabled)) {
+			if (!Array.isArray(o.datesDisabled)) {
 				o.datesDisabled = o.datesDisabled.split(',');
 			}
 			o.datesDisabled = $.map(o.datesDisabled, function(d){
@@ -18351,16 +18357,15 @@ return jQuery;
 
 		clearDates: function(){
 			this.inputField.val('');
-			this.update();
 			this._trigger('changeDate');
-
+			this.update();
 			if (this.o.autoclose) {
 				this.hide();
 			}
 		},
 
 		setDates: function(){
-			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+			var args = Array.isArray(arguments[0]) ? arguments[0] : arguments;
 			this.update.apply(this, args);
 			this._trigger('changeDate');
 			this.setValue();
@@ -18368,7 +18373,7 @@ return jQuery;
 		},
 
 		setUTCDates: function(){
-			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
+			var args = Array.isArray(arguments[0]) ? arguments[0] : arguments;
 			this.setDates.apply(this, $.map(args, this._utc_to_local));
 			return this;
 		},
@@ -18820,7 +18825,7 @@ return jQuery;
 
 				//Check if uniqueSort exists (supported by jquery >=1.12 and >=2.2)
 				//Fallback to unique function for older jquery versions
-				if ($.isFunction($.uniqueSort)) {
+				if (typeof $.uniqueSort === "function") {
 					clsName = $.uniqueSort(clsName);
 				} else {
 					clsName = $.unique(clsName);
@@ -19352,12 +19357,12 @@ return jQuery;
 
 			if (new_date < this.dates[j]){
 				// Date being moved earlier/left
-				while (j >= 0 && new_date < this.dates[j]){
+				while (j >= 0 && new_date < this.dates[j] && (this.pickers[j].element.val() || "").length > 0) {
 					this.pickers[j--].setUTCDate(new_date);
 				}
 			} else if (new_date > this.dates[k]){
 				// Date being moved later/right
-				while (k < l && new_date > this.dates[k]){
+				while (k < l && new_date > this.dates[k] && (this.pickers[k].element.val() || "").length > 0) {
 					this.pickers[k++].setUTCDate(new_date);
 				}
 			}
@@ -19471,6 +19476,7 @@ return jQuery;
 		endDate: Infinity,
 		forceParse: true,
 		format: 'mm/dd/yyyy',
+		isInline: null,
 		keepEmptyValues: false,
 		keyboardNavigation: true,
 		language: 'en',
@@ -19788,7 +19794,7 @@ return jQuery;
 
 	/* DATEPICKER VERSION
 	 * =================== */
-	$.fn.datepicker.version = '1.9.0';
+	$.fn.datepicker.version = '1.10.0';
 
 	$.fn.datepicker.deprecated = function(msg){
 		var console = window.console;
