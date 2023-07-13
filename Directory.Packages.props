@@ -7,18 +7,18 @@
     <PackageVersion Include="Azure.Identity" Version="1.9.0" />
     <PackageVersion Include="BuildWebCompiler2022" Version="1.14.10" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
-    <PackageVersion Include="Jeebs" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Apps" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Auth.Data" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Cqrs" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Data" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Data.Testing" Version="8.3.5" />
-    <PackageVersion Include="Jeebs.Mvc.Razor" Version="8.3.5" />
-    <PackageVersion Include="MaybeF" Version="9.3.3" />
-    <PackageVersion Include="MaybeF.Caching" Version="9.3.3" />
-    <PackageVersion Include="MaybeF.Testing" Version="9.3.3" />
+    <PackageVersion Include="Jeebs" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Apps" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Auth.Data" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Cqrs" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Data" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Data.Testing" Version="8.3.6" />
+    <PackageVersion Include="Jeebs.Mvc.Razor" Version="8.3.6" />
+    <PackageVersion Include="MaybeF" Version="9.3.4" />
+    <PackageVersion Include="MaybeF.Caching" Version="9.3.4" />
+    <PackageVersion Include="MaybeF.Testing" Version="9.3.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageVersion Include="NSubstitute" Version="5.0.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.16" />
