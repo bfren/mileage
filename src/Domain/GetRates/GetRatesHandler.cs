@@ -19,6 +19,10 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 
 	private ILog<GetRatesHandler> Log { get; init; }
 
+	private readonly bool[] trueAndFalse = [true, false];
+
+	private readonly bool[] falseOnly = [false];
+
 	/// <summary>
 	/// Inject dependency
 	/// </summary>
@@ -42,7 +46,7 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 		return Rate
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
+			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? trueAndFalse : falseOnly)
 			.Sort(x => x.AmountPerMileGBP, SortOrder.Ascending)
 			.QueryAsync<RatesModel>();
 	}

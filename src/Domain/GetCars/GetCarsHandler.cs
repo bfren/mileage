@@ -19,6 +19,10 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ca
 
 	private ILog<GetCarsHandler> Log { get; init; }
 
+	private readonly bool[] trueAndFalse = [true, false];
+
+	private readonly bool[] falseOnly = [false];
+
 	/// <summary>
 	/// Inject dependency
 	/// </summary>
@@ -42,7 +46,7 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ca
 		return Car
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
+			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? trueAndFalse : falseOnly)
 			.Sort(x => x.Description, SortOrder.Ascending)
 			.QueryAsync<CarsModel>();
 	}
