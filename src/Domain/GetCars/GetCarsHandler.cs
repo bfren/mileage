@@ -19,9 +19,9 @@ internal sealed class GetCarsHandler : QueryHandler<GetCarsQuery, IEnumerable<Ca
 
 	private ILog<GetCarsHandler> Log { get; init; }
 
-	private readonly bool[] trueAndFalse = new[] { true, false };
+	private readonly bool[] trueAndFalse = [true, false];
 
-	private readonly bool[] falseOnly = new[] { false };
+	private readonly bool[] falseOnly = [false];
 
 	/// <summary>
 	/// Inject dependency

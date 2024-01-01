@@ -19,9 +19,9 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 
 	private ILog<GetPlacesHandler> Log { get; init; }
 
-	private readonly bool[] trueAndFalse = new[] { true, false };
+	private readonly bool[] trueAndFalse = [true, false];
 
-	private readonly bool[] falseOnly = new[] { false };
+	private readonly bool[] falseOnly = [false];
 
 	/// <summary>
 	/// Inject dependencies

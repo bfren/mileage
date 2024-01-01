@@ -92,7 +92,7 @@ public abstract class HandleAsync_Tests
 			var (handler, v) = GetVars();
 			var userId = LongId<AuthUserId>();
 			var includeDisabled = Rnd.Flip;
-			var disabledMatch = includeDisabled ? new[] { true, false } : new[] { false };
+			var disabledMatch = includeDisabled ? [true, false] : [false];
 			var query = getQuery(userId, includeDisabled);
 
 			// Act

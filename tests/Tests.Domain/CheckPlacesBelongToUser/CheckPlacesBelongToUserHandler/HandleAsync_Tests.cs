@@ -88,7 +88,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var msg = new TestMsg();
 		v.Fluent.QueryAsync<PlaceEntity>()
 			.Returns(F.None<IEnumerable<PlaceEntity>>(msg));
-		var query = new CheckPlacesBelongToUserQuery(new(), new[] { LongId<PlaceId>(), LongId<PlaceId>() });
+		var query = new CheckPlacesBelongToUserQuery(new(), [LongId<PlaceId>(), LongId<PlaceId>()]);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -104,7 +104,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
 				.Returns(Create.None<IEnumerable<PlaceEntity>>());
-		var query = new CheckPlacesBelongToUserQuery(new(), new[] { LongId<PlaceId>(), LongId<PlaceId>() });
+		var query = new CheckPlacesBelongToUserQuery(new(), [LongId<PlaceId>(), LongId<PlaceId>()]);
 
 		// Act
 		var result = await handler.HandleAsync(query);
