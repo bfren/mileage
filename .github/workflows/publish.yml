@@ -27,7 +27,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
-          7.0.x
+          8.0.x
     -
       name: Prepare - Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -69,7 +69,7 @@ jobs:
       run: |
         dotnet publish apps/WebApp/WebApp.csproj \
           --configuration Release \
-          --runtime alpine.3.17-x64 \
+          --runtime linux-musl-x64 \
           --output ./publish \
           --no-self-contained
     -
