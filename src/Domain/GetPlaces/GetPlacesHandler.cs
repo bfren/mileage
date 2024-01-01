@@ -19,6 +19,10 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 
 	private ILog<GetPlacesHandler> Log { get; init; }
 
+	private readonly bool[] trueAndFalse = new[] { true, false };
+
+	private readonly bool[] falseOnly = new[] { false };
+
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
@@ -42,7 +46,7 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 		return Place
 			.StartFluentQuery()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
-			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? new[] { true, false } : new[] { false })
+			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? trueAndFalse : falseOnly)
 			.Sort(x => x.Description, SortOrder.Ascending)
 			.QueryAsync<PlacesModel>();
 	}
