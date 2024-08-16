@@ -5,27 +5,27 @@
       "suite": "Mileage"
     },
     "db": {
-      "default": "rpi",
+      "default": "arwen",
       "connections": {
-        "rpi": {
+        "arwen": {
           "connectionString": ""
         }
       }
     },
-		"logging": {
-			"minimum": "Debug",
-			"providers": {
-				"console.serilog": {
-					"enabled": true
-				}
-			}
-		},
-		"services": {
-			"console": {
-				"serilog": {
-					"addPrefix": false
-				}
-			}
-		}
+    "logging": {
+      "minimum": "Debug",
+      "providers": {
+        "console.serilog": {
+          "enabled": true
+        }
+      }
+    },
+    "services": {
+      "console": {
+        "serilog": {
+          "addPrefix": false
+        }
+      }
+    }
   }
 }
