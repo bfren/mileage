@@ -33,7 +33,7 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 	/// <param name="query"></param>
 	public override async Task<Maybe<IOrderedEnumerable<TaxYearModel>>> HandleAsync(GetAnnualMileageReportYearsQuery query)
 	{
-		Log.Vrb("Getting tax years for which journeys exist.");
+		Log.Vrb("Getting annual mileage report tax years for {User}.", query.UserId);
 
 		// Select days from journey repo
 		var days = await Journey
@@ -42,11 +42,9 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 			.QueryAsync<DayModel>();
 
 		// Convert days to tax year values
-		var (month, day) = (4, 6);
 		return days.Map(
 			x => from model in x
-				 let year = model.Day.Year
-				 let taxYear = new TaxYearModel(model.Day < new DateTime(year, month, day) ? year - 1 : year)
+				 let taxYear = GetTaxYear(model.Day)
 				 group taxYear by taxYear.StartYear into grp
 				 select grp.First() into unique
 				 orderby unique.StartYear descending
@@ -54,4 +52,19 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 			F.DefaultHandler
 		);
 	}
+
+	/// <summary>
+	/// Tax years begin on 6 April each year
+	/// </summary>
+	/// <param name="date">The date to check</param>
+	/// <returns></returns>
+	internal TaxYearModel GetTaxYear(DateTime date) =>
+		(date < new DateTime(date.Year, 4, 6)) switch
+		{
+			true => // date is before the start of a new tax year
+				new(date.Year - 1),
+
+			false => // date is in the new tax year
+				new(date.Year)
+		};
 }
