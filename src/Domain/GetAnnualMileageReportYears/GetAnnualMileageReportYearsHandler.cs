@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
@@ -14,7 +13,7 @@ namespace Mileage.Domain.GetGetAnnualMileageReportYears;
 /// <summary>
 /// Get tax years
 /// </summary>
-internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnualMileageReportYearsQuery, IEnumerable<TaxYearModel>>
+internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnualMileageReportYearsQuery, IOrderedEnumerable<TaxYearModel>>
 {
 	private IJourneyRepository Journey { get; init; }
 
@@ -32,7 +31,7 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 	/// Get tax years for which journeys exist
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<IEnumerable<TaxYearModel>>> HandleAsync(GetAnnualMileageReportYearsQuery query)
+	public override async Task<Maybe<IOrderedEnumerable<TaxYearModel>>> HandleAsync(GetAnnualMileageReportYearsQuery query)
 	{
 		Log.Vrb("Getting tax years for which journeys exist.");
 
@@ -45,11 +44,13 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 		// Convert days to tax year values
 		var (month, day) = (4, 6);
 		return days.Map(
-			x => from d in x
-				 let year = d.Day.Year
-				 let taxYear = new TaxYearModel(d.Day < new DateTime(year, month, day) ? year - 1 : year)
-				 group taxYear by taxYear.StartYear into g
-				 select g.First(),
+			x => from model in x
+				 let year = model.Day.Year
+				 let taxYear = new TaxYearModel(model.Day < new DateTime(year, month, day) ? year - 1 : year)
+				 group taxYear by taxYear.StartYear into grp
+				 select grp.First() into unique
+				 orderby unique.StartYear descending
+				 select unique,
 			F.DefaultHandler
 		);
 	}
