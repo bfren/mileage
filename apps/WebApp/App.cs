@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Apps.Web;
-using Jeebs.Auth.Data.Clients.PostgreSql;
 using Jeebs.Mvc.Auth;
 using MaybeF.Caching;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +19,7 @@ public sealed class App : RazorApp
 		base.ConfigureServices(ctx, services);
 
 		_ = services.AddData();
-
-		_ = services.AddAuthentication(ctx.Configuration)
-			.WithData<PostgreSqlDbClient>(true);
+		_ = services.AddAuthentication(ctx.Configuration);
 
 		_ = services
 			.AddMemoryCache()
