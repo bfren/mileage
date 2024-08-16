@@ -24,6 +24,11 @@ public static class Constants
 	public static class Functions
 	{
 		/// <summary>
+		/// Get annual mileage report data
+		/// </summary>
+		public static string GetAnnualMileageReportData { get; } = $"{Schema}.get_annual_mileage_report_data";
+
+		/// <summary>
 		/// Get expenses report recent months
 		/// </summary>
 		public static string GetExpensesReportRecentMonths { get; } = $"{Schema}.get_expenses_report_recent_months";
