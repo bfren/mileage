@@ -11,7 +11,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditCarModel : EditJourneyModalModel
 {
-	public List<CarsModel> Cars { get; set; } = new();
+	public List<CarsModel> Cars { get; set; } = [];
 
 	public EditCarModel() : base("Car") { }
 }

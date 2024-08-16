@@ -37,11 +37,11 @@ public sealed class CreateModel : ModalModel
 {
 	public CreateJourneyModel Journey { get; set; } = new();
 
-	public List<CarsModel> Cars { get; set; } = new();
+	public List<CarsModel> Cars { get; set; } = [];
 
-	public List<PlacesModel> Places { get; set; } = new();
+	public List<PlacesModel> Places { get; set; } = [];
 
-	public List<RatesModel> Rates { get; set; } = new();
+	public List<RatesModel> Rates { get; set; } = [];
 
 	public CreateModel() : base("Journey", "lg") { }
 }

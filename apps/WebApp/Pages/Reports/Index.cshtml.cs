@@ -18,7 +18,7 @@ public sealed class IndexModel : PageModel
 
 	private ILog<IndexModel> Log { get; init; }
 
-	public List<DateTime> ExpensesMonths { get; set; } = new();
+	public List<DateTime> ExpensesMonths { get; set; } = [];
 
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);

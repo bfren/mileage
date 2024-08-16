@@ -21,7 +21,7 @@ public sealed partial class IndexModel : PageModel
 
 	private ILog<IndexModel> Log { get; }
 
-	public List<CarsModel> Cars { get; set; } = new();
+	public List<CarsModel> Cars { get; set; } = [];
 
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);

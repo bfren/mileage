@@ -55,5 +55,5 @@ public sealed record class ExpensesReportJourney
 	/// <summary>
 	/// Journey Destinations
 	/// </summary>
-	public List<ExpensesReportPlace> To { get; init; } = new();
+	public List<ExpensesReportPlace> To { get; init; } = [];
 }
