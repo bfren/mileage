@@ -12,7 +12,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed class EditRateModel : EditJourneyModalModel
 {
-	public List<RatesModel> Rates { get; set; } = new();
+	public List<RatesModel> Rates { get; set; } = [];
 
 	public EditRateModel() : base("Rate") { }
 }

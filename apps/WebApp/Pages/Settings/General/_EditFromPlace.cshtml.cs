@@ -9,7 +9,7 @@ namespace Mileage.WebApp.Pages.Settings.General;
 
 public sealed class EditFromPlaceModel : EditSettingsModel
 {
-	public List<PlacesModel> Places { get; set; } = new();
+	public List<PlacesModel> Places { get; set; } = [];
 
 	public EditFromPlaceModel() : base("Default Starting Place") { }
 }

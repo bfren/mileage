@@ -13,7 +13,7 @@ public sealed record class BetweenModel
 
 	public DateTime? End { get; init; }
 
-	public List<JourneyModel> Journeys { get; init; } = new();
+	public List<JourneyModel> Journeys { get; init; } = [];
 }
 
 public sealed partial class IndexModel

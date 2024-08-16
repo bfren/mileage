@@ -9,7 +9,7 @@ public sealed class Menu
 {
 	public readonly record struct Item(string Text, string Page);
 
-	public IList<Item> Items { get; init; } = new List<Item>();
+	public IList<Item> Items { get; init; } = [];
 
 	public Menu() =>
 		Items = new List<Item>

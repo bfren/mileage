@@ -23,7 +23,7 @@ public sealed class ExpensesModel : PageModel
 
 	public string Month { get; set; } = string.Empty;
 
-	public List<ExpensesReportJourney> Journeys { get; set; } = new();
+	public List<ExpensesReportJourney> Journeys { get; set; } = [];
 
 	public ExpensesModel(IDispatcher dispatcher, ILog<ExpensesModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);

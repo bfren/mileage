@@ -9,7 +9,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed record class IncompleteModel
 {
-	public List<IncompleteJourneyModel> Journeys { get; init; } = new();
+	public List<IncompleteJourneyModel> Journeys { get; init; } = [];
 }
 
 public sealed partial class IndexModel

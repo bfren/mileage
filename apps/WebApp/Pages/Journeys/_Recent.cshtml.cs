@@ -9,7 +9,7 @@ namespace Mileage.WebApp.Pages.Journeys;
 
 public sealed record class RecentModel
 {
-	public List<RecentJourneyModel> Journeys { get; init; } = new();
+	public List<RecentJourneyModel> Journeys { get; init; } = [];
 }
 
 public sealed partial class IndexModel
