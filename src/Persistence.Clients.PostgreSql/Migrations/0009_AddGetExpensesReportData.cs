@@ -31,7 +31,7 @@ public sealed class AddGetExpensesReportDataWithCarNumberPlate : Migration
 		$"{A.Tbl.To}.{selector(new())}";
 
 	/// <summary>
-	/// 8: Up
+	/// 9: Up
 	/// </summary>
 	protected override void Up() => Execute($@"
 		CREATE OR REPLACE FUNCTION {Constants.Schema}.{Constants.Functions.GetExpensesReportData}(

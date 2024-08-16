@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain.GetExpensesReportMonths;
+using Mileage.Domain.GetGetAnnualMileageReportYears;
 
 namespace Mileage.WebApp.Pages.Reports;
 
@@ -20,6 +21,8 @@ public sealed class IndexModel : PageModel
 
 	public List<DateTime> ExpensesMonths { get; set; } = [];
 
+	public List<int> TaxYears { get; set; } = [];
+
 	public IndexModel(IDispatcher dispatcher, ILog<IndexModel> log) =>
 		(Dispatcher, Log) = (dispatcher, log);
 
@@ -29,8 +32,13 @@ public sealed class IndexModel : PageModel
 							from m in Dispatcher.DispatchAsync(new GetExpensesReportMonthsQuery(u))
 							select m;
 
+		var taxYearsQuery = from u in User.GetUserId()
+							from t in Dispatcher.DispatchAsync(new GetAnnualMileageReportYearsQuery(u))
+							select t;
+
 		var query = from expenses in expensesQuery
-					select new { expenses };
+					from taxYears in taxYearsQuery
+					select new { expenses, taxYears };
 
 		_ = await query
 			.AuditAsync(none: Log.Msg)
@@ -38,6 +46,7 @@ public sealed class IndexModel : PageModel
 				x =>
 				{
 					ExpensesMonths = x.expenses.Select(y => new DateTime(y.Year, y.Month, 1)).ToList();
+					TaxYears = x.taxYears.Select(z => z.StartYear).ToList();
 				}
 			);
 

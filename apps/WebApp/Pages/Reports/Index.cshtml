@@ -29,4 +29,27 @@
 		</div>
 	</div>
 
+    <hr />
+    <h3>Annual Mileage</h3>
+
+	<div class="d-flex align-items-center">
+		<div>For the tax year:</div>
+		<div class="dropdown ms-2">
+			<button class="btn btn-primary dropdown-toggle"
+					type="button"
+                    id="taxyear-dropdown"
+					data-bs-toggle="dropdown"
+					aria-expanded="false">
+				Select Year
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="taxyear-dropdown">
+				@foreach (var item in Model.TaxYears)
+				{
+					var (start, range) = (item, $"{item}-{item + 1}");
+                    <li><a class="dropdown-item" href="@Url.Page("AnnualMileage", new { start })">@range</a></li>
+				}
+			</ul>
+		</div>
+	</div>
+
 </div>

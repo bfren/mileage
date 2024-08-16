@@ -1,0 +1,97 @@
+@page
+@using Mileage.Persistence.Common.Reports
+@model Mileage.WebApp.Pages.Reports.AnnualMileageModel
+
+@{
+    var summary =
+        from j in Model.Journeys
+        group j by j.Rate into g
+        orderby g.Key
+        select new
+        {
+            Rate = g.Key,
+            Journeys = g.ToList()
+        };
+
+    var totalMiles = 0;
+    var totalAmount = 0f;
+
+    string car(string description) =>
+        string.IsNullOrEmpty(description) ? "Unknown" : description;
+
+    float amount(float rate, int? distance) =>
+        rate * (distance ?? 0);
+}
+
+<div class="container">
+
+    <h2 class="d-print-none"><a asp-page="Index">Reports</a>: Annual Mileage for Tax Year @Model.TaxYear.StartYear-@Model.TaxYear.EndYear</h2>
+    <h3 class="d-none d-print-block">Generated for @User.Identity?.Name</h3>
+
+    <hr />
+
+    <h3>Summary</h3>
+    <table class="table table-borderless report-summary">
+        <thead>
+            <tr class="border-start-0 border-end-0 border-top-0 border-2 border-dark">
+                <th>Rate</th>
+                <th class="text-end">Car</th>
+                <th class="text-end">Miles</th>
+                <th class="text-end">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in summary)
+            {
+                var cars = s.Journeys.Select(j => j.Car).OrderBy(c => c).Distinct().ToList();
+
+                var subMiles = 0;
+                var subAmount = 0f;
+
+                @foreach (var c in cars)
+                {
+                    var first = cars.IndexOf(c) == 0;
+                    var last = cars.IndexOf(c) == cars.Count - 1;
+
+                    var distance = s.Journeys.Where(j => j.Car == c).Sum(j => j.Distance);
+                    subMiles += distance ?? 0;
+                    subAmount += amount(s.Rate, distance);
+
+                    var css = first ? "border-top" : string.Empty;
+
+                    <tr class="@css">
+                        @if (first)
+                        {
+                            <td rowspan="@cars.Count()">@s.Rate.ToString("0.00")</td>
+                        }
+
+                        <td class="text-end">@car(c)</td>
+                        <td class="text-end">@distance</td>
+                        <td class="text-end">@amount(s.Rate, distance).ToString("0.00")</td>
+                    </tr>
+
+                    if (last)
+                    {
+                        <tr class="border-top">
+                            <td colspan="2"></td>
+                            <td class="text-end">@subMiles.ToString("0")</td>
+                            <td class="text-end">@subAmount.ToString("0.00")</td>
+                        </tr>
+                    }
+                }
+
+                totalMiles += subMiles;
+                totalAmount += subAmount;
+            }
+        </tbody>
+        <tfoot>
+            <tr class="border-start-0 border-end-0 border-bottom-0 border-2 border-dark fw-bold">
+                <td colspan="2"></td>
+                <td class="text-end">@totalMiles</td>
+                <td class="text-end">@totalAmount.ToString("0.00")</td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+</div>
