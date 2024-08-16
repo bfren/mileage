@@ -1,6 +1,8 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Clients.PostgreSql;
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,7 @@ public static class ServiceCollectionExtensions
 	{
 		// Add database
 		_ = services.AddSingleton<IDb, MileageDb>();
+		_ = services.AddAuthData<PostgreSqlDbClient>(true);
 		_ = services.AddTransient<Migrator, PostgreSqlMigrator>();
 
 		// Add repositories
