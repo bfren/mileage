@@ -2,8 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Cqrs;
+using MaybeF.Caching;
 using Microsoft.Extensions.DependencyInjection;
 using Mileage.Domain;
+using Mileage.Persistence.Common.StrongIds;
 using RndF;
 using Q = Mileage.Domain;
 
@@ -11,7 +13,14 @@ using Q = Mileage.Domain;
 //  CONFIGURE
 // ==========================================
 
-var (app, log) = Jeebs.Apps.Host.Create(args, (_, services) => services.AddData());
+var (app, log) = Jeebs.Apps.Host.Create(args, (ctx, services) =>
+{
+	_ = services.AddData();
+	_ = services.AddMemoryCache()
+		.AddMaybeCache<CarId>()
+		.AddMaybeCache<PlaceId>()
+		.AddMaybeCache<RateId>();
+});
 
 // ==========================================
 //  BEGIN
