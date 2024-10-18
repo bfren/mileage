@@ -16,7 +16,7 @@ public sealed record class AnnualMileageReportJourney
 	public JourneyId Id { get; init; } = new();
 
 	/// <summary>
-	/// Journey calculated distance (null if <see cref="End"/> is zero)
+	/// Journey calculated distance (null if journey end distance is not set)
 	/// </summary>
 	public int? Distance { get; init; }
 

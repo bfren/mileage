@@ -9,7 +9,7 @@ using Mileage.Persistence.Common.Reports;
 
 namespace Mileage.Domain.GetAnnualMileageReportData;
 
-/// <inheritdoc cref="GetExpensesReportDataHandler"/>
+/// <inheritdoc cref="GetAnnualMileageReportDataHandler"/>
 /// <param name="UserId"></param>
 /// <param name="From"></param>
 /// <param name="To"></param>
