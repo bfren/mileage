@@ -1,4 +1,4 @@
-FROM bfren/aspnet:net8
+FROM bfren/aspnet:net9
 
 COPY ./publish /app/live
 
