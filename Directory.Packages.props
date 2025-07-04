@@ -5,8 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Azure.Identity" Version="1.14.1" />
-    <PackageVersion Include="BuildBundlerMinifier2022" Version="2.9.11" />
-    <PackageVersion Include="BuildWebCompiler2022" Version="1.14.15" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Jeebs" Version="8.5.4" />
     <PackageVersion Include="Jeebs.Apps" Version="8.5.4" />
