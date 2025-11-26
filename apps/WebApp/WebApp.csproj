@@ -14,14 +14,13 @@
     <Content Remove="wwwroot\img\app-icon.afdesign" />
   </ItemGroup>
   <ItemGroup>
-    <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-Elrond.pubxml" />
     <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-Galadriel.pubxml" />
     <_WebToolingArtifacts Remove="Properties\PublishProfiles\StudyPC-RPi.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\PublishProfiles\StudyPC-Elrond.pubxml.user" />
+    <None Include="Properties\PublishProfiles\StudyPC-Elrond25.pubxml.user" />
     <None Include="wwwroot\img\app-icon.afdesign" />
   </ItemGroup>
   <ItemGroup>
