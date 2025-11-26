@@ -1,10 +1,15 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using Jeebs.Messages;
+using Mileage.Domain.SaveSettings;
+using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Repositories;
 
@@ -19,13 +24,15 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 
 	private ISettingsRepository Settings { get; init; }
 
+	private SaveSettingsHandler SaveSettingsHandler { get; init; }
+
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="settings"></param>
 	/// <param name="log"></param>
-	public LoadSettingsHandler(ISettingsRepository settings, ILog<LoadSettingsHandler> log) =>
-		(Settings, Log) = (settings, log);
+	public LoadSettingsHandler(ISettingsRepository settings, SaveSettingsHandler saveSettingsHandler, ILog<LoadSettingsHandler> log) =>
+		(Settings, SaveSettingsHandler, Log) = (settings, saveSettingsHandler, log);
 
 	/// <summary>
 	/// Retrieve the settings for user specified in <paramref name="query"/> - if none have been
@@ -41,7 +48,26 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 			.QuerySingleAsync<Settings>()
 			.SwitchAsync(
 				some: x => F.Some(x).AsTask(),
-				none: _ => F.Some(new Settings()).AsTask()
+				none: _ => CreateSettings(query.Id)
 			);
 	}
+
+	/// <summary>
+	/// Create settings that do not yet exist for the specified user.
+	/// </summary>
+	/// <param name="userId">User ID</param>
+	private Task<Maybe<Settings>> CreateSettings(AuthUserId userId) =>
+		SaveSettingsHandler
+			.HandleAsync(new SaveSettingsCommand(userId, new()))
+			.BindAsync(x => x switch
+			{
+				true =>
+					Settings
+						.StartFluentQuery()
+						.Where(s => s.UserId, Compare.Equal, userId)
+						.QuerySingleAsync<Settings>(),
+
+				false =>
+					F.None<Settings, FailedToCreateDefaultSettingsForUserMsg>().AsTask()
+			});
 }
