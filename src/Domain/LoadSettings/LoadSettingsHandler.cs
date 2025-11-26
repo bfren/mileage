@@ -20,19 +20,19 @@ namespace Mileage.Domain.LoadSettings;
 /// </summary>
 internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Settings>
 {
+	private IDispatcher Dispatcher { get; init; }
+
 	private ILog<LoadSettingsHandler> Log { get; init; }
 
 	private ISettingsRepository Settings { get; init; }
-
-	private SaveSettingsHandler SaveSettingsHandler { get; init; }
 
 	/// <summary>
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="settings"></param>
 	/// <param name="log"></param>
-	public LoadSettingsHandler(ISettingsRepository settings, SaveSettingsHandler saveSettingsHandler, ILog<LoadSettingsHandler> log) =>
-		(Settings, SaveSettingsHandler, Log) = (settings, saveSettingsHandler, log);
+	public LoadSettingsHandler(ISettingsRepository settings, IDispatcher dispatcher, ILog<LoadSettingsHandler> log) =>
+		(Settings, Dispatcher, Log) = (settings, dispatcher, log);
 
 	/// <summary>
 	/// Retrieve the settings for user specified in <paramref name="query"/> - if none have been
@@ -57,8 +57,8 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 	/// </summary>
 	/// <param name="userId">User ID</param>
 	private Task<Maybe<Settings>> CreateSettings(AuthUserId userId) =>
-		SaveSettingsHandler
-			.HandleAsync(new SaveSettingsCommand(userId, new()))
+		Dispatcher
+			.DispatchAsync(new SaveSettingsCommand(userId, new()))
 			.BindAsync(x => x switch
 			{
 				true =>
