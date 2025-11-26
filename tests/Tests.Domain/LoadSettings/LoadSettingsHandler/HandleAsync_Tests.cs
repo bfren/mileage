@@ -4,6 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
+using Mileage.Domain.SaveSettings;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
@@ -16,7 +17,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	private sealed class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, LoadSettingsHandler>
 	{
 		internal override LoadSettingsHandler GetHandler(Vars v) =>
-			new(v.Repo, v.Log);
+			new(v.Repo, v.Dispatcher, v.Log);
 	}
 
 	private (LoadSettingsHandler, Setup.Vars) GetVars() =>
@@ -80,8 +81,11 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
+		var model = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>());
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(Create.None<Settings>());
+			.Returns(Create.None<Settings>(), F.Some(model));
+		v.Dispatcher.DispatchAsync(Arg.Any<SaveSettingsCommand>())
+			.Returns(F.True);
 		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 
 		// Act
@@ -89,6 +93,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 
 		// Assert
 		var some = result.AssertSome();
-		Assert.Equal(new(), some);
+		Assert.Equal(model, some);
 	}
 }
