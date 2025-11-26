@@ -47,7 +47,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async void If_Successful__Calls_Cache_RemoveEntry__With_Correct_Values()
+	public async Task If_Successful__Calls_Cache_RemoveEntry__With_Correct_Values()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
@@ -63,7 +63,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async void Calls_Repo_CreateAsync__Returns_Result()
+	public async Task Calls_Repo_CreateAsync__Returns_Result()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
