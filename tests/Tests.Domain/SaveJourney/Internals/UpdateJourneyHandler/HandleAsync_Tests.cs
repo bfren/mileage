@@ -66,7 +66,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async void Calls_Repo_CreateAsync__Returns_Result()
+	public async Task Calls_Repo_CreateAsync__Returns_Result()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
