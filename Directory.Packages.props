@@ -6,15 +6,15 @@
   <ItemGroup>
     <PackageVersion Include="Azure.Identity" Version="1.17.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <PackageVersion Include="Jeebs" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Apps" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Auth.Data" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Cqrs" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Data" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Data.Testing" Version="8.6.1" />
-    <PackageVersion Include="Jeebs.Mvc.Razor" Version="8.6.1" />
+    <PackageVersion Include="Jeebs" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Apps" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Auth.Data" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Cqrs" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Data" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Data.Testing" Version="8.6.2" />
+    <PackageVersion Include="Jeebs.Mvc.Razor" Version="8.6.2" />
     <PackageVersion Include="MaybeF" Version="10.0.0" />
     <PackageVersion Include="MaybeF.Caching" Version="10.0.0" />
     <PackageVersion Include="MaybeF.Testing" Version="10.0.0" />
