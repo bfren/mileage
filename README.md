@@ -8,5 +8,5 @@ A simple mileage tracker and reporting app, written in C#.
 
 ## Copyright
 
-> Copyright (c) 2022-2025 [bfren](https://bfren.dev)
+> Copyright (c) 2022-2026 [bfren](https://bfren.dev)
 > Unless otherwise stated
