@@ -1,13 +1,11 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Mileage.Domain.SaveSettings;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
@@ -30,6 +28,7 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 	/// Inject dependencies
 	/// </summary>
 	/// <param name="settings"></param>
+	/// <param name="dispatcher"></param>
 	/// <param name="log"></param>
 	public LoadSettingsHandler(ISettingsRepository settings, IDispatcher dispatcher, ILog<LoadSettingsHandler> log) =>
 		(Settings, Dispatcher, Log) = (settings, dispatcher, log);
