@@ -29,12 +29,12 @@ public sealed partial class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetCarsQuery(u, true))
+					from c in Dispatcher.SendAsync(new GetCarsQuery(u, true))
 					select c;
 
-		await foreach (var cars in query)
+		foreach (var cars in await query.Unsafe())
 		{
-			Cars = cars.ToList();
+			Cars = [.. cars];
 		}
 
 		return Page();
@@ -43,14 +43,14 @@ public sealed partial class IndexModel : PageModel
 	public Task<IActionResult> OnPostAsync(SaveCarQuery car)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(car with { UserId = u })
+					from r in Dispatcher.SendAsync(car with { UserId = u })
 					select r;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: _ => OnGetAsync(),
-				none: r => Result.Error(r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: _ => OnGetAsync(),
+				fFail: Op.Error
 			);
 	}
 }

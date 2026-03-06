@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Journeys.EditEndMilesModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -19,7 +20,7 @@
 	/>
 	<div class="invalid-feedback">Please enter a valid number greater than the starting miles (@Model.Journey.StartMiles).</div>
 
-	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenForMonad(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)
 	@Html.AntiForgeryToken()
 </form>

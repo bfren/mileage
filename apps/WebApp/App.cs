@@ -3,12 +3,12 @@
 
 using Jeebs.Apps.Web;
 using Jeebs.Mvc.Auth;
-using MaybeF.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Serilog;
-using StrongId.Mvc;
+using Wrap.Caching;
+using Wrap.Mvc;
 
 namespace Mileage.WebApp;
 
@@ -23,15 +23,15 @@ public sealed class App : RazorApp
 
 		_ = services
 			.AddMemoryCache()
-			.AddMaybeCache<CarId>()
-			.AddMaybeCache<PlaceId>()
-			.AddMaybeCache<RateId>();
+			.AddWrapCache<CarId>()
+			.AddWrapCache<PlaceId>()
+			.AddWrapCache<RateId>();
 	}
 
 	protected override void ConfigureServicesMvcOptions(HostBuilderContext ctx, MvcOptions opt)
 	{
 		base.ConfigureServicesMvcOptions(ctx, opt);
-		opt.AddStrongIdModelBinder();
+		opt.ModelBinderProviders.AddWrapModelBinders();
 	}
 
 	protected override void ConfigureAuth(WebApplication app, IConfiguration config)

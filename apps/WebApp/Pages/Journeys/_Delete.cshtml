@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model WebApp.Pages.Journeys.DeleteModel
 @{
 	Layout = "Modals/DeleteModal";
@@ -15,7 +16,7 @@
 	</div>
 
 	@Html.AntiForgeryToken()
-	@Html.HiddenForId(m => m.Journey.Id)
+	@Html.HiddenForMonad(m => m.Journey.Id)
 	@Html.HiddenFor(m => m.Type)
 
 </form>

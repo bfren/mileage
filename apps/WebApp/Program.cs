@@ -12,7 +12,7 @@ var dispatcher = app.Services.GetRequiredService<IDispatcher>();
 // Migrate to latest database version
 log.Inf("Migrate database to latest version.");
 _ = await dispatcher
-	.DispatchAsync(new Mileage.Domain.MigrateToLatest.MigrateToLatestCommand())
+	.SendAsync(new Mileage.Domain.MigrateToLatest.MigrateToLatestCommand())
 	.LogBoolAsync(log);
 
 // Check for user to insert
@@ -21,10 +21,10 @@ if (env("MILEAGE_USER_EMAIL") is string email && env("MILEAGE_USER_PASS") is str
 	var name = env("MILEAGE_USER_NAME") ?? "Default";
 	log.Inf("Attempting to create user {Name} with {Email}.", name, email);
 	_ = await dispatcher
-		.DispatchAsync(new Mileage.Domain.CreateUser.CreateUserQuery(name, email, pass))
+		.SendAsync(new Mileage.Domain.CreateUser.CreateUserQuery(name, email, pass))
 		.AuditAsync(
-			some: x => log.Inf("Created user {Id}.", x.Value),
-			none: log.Msg
+			fOk: x => log.Inf("Created user {Id}.", x.Value),
+			fFail: log.Failure
 		);
 }
 
@@ -33,12 +33,12 @@ if (env("TRUNCATE") == "true")
 {
 	log.Wrn("Truncating database tables.");
 	_ = await dispatcher
-		.DispatchAsync(new Mileage.Domain.TruncateEverything.TruncateEverythingCommand())
+		.SendAsync(new Mileage.Domain.TruncateEverything.TruncateEverythingCommand())
 		.LogBoolAsync(log);
 
 	log.Inf("Inserting test data.");
 	_ = await dispatcher
-		.DispatchAsync(new Mileage.Domain.InsertTestData.InsertTestDataCommand())
+		.SendAsync(new Mileage.Domain.InsertTestData.InsertTestDataCommand())
 		.LogBoolAsync(log);
 }
 

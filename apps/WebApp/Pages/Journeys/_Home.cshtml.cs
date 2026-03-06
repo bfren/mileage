@@ -1,7 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
@@ -24,27 +24,26 @@ public sealed partial class IndexModel
 		CreateHomeModel(
 			User.GetUserId(), Dispatcher, Log
 		)
-		.SwitchAsync(
-			some: x => Partial("_Home", x),
-			none: r => Partial("_Error", r)
+		.MatchAsync(
+			fOk: x => Partial("_Home", x),
+			fFail: r => Partial("_Error", r)
 		);
 
-	internal static Task<Maybe<HomeModel>> CreateHomeModel(Maybe<AuthUserId> user, IDispatcher dispatcher, ILog log)
+	internal static Task<Result<HomeModel>> CreateHomeModel(Maybe<AuthUserId> user, IDispatcher dispatcher, ILog log)
 	{
 		var query = from u in user
-					from incomplete in dispatcher.DispatchAsync(new GetIncompleteJourneysQuery(u))
-					from recent in dispatcher.DispatchAsync(new GetRecentJourneysQuery(u))
+					from incomplete in dispatcher.SendAsync(new GetIncompleteJourneysQuery(u))
+					from recent in dispatcher.SendAsync(new GetRecentJourneysQuery(u))
 					select new { incomplete, recent };
 
 		return query
-			.AuditAsync(none: log.Msg)
+			.AuditAsync(fFail: log.Failure)
 			.MapAsync(
 				x => new HomeModel
 				{
-					IncompleteJourneys = new() { Journeys = x.incomplete.ToList() },
-					RecentJourneys = new() { Journeys = x.recent.ToList() }
-				},
-				F.DefaultHandler
+					IncompleteJourneys = new() { Journeys = [.. x.incomplete] },
+					RecentJourneys = new() { Journeys = [.. x.recent] }
+				}
 			);
 	}
 }

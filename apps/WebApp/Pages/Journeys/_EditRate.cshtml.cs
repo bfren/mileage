@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetRates;
 using Mileage.Domain.SaveJourney;
 using Mileage.Domain.SaveRate;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
@@ -21,8 +21,8 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditRateAsync(JourneyId journeyId) =>
 		GetFieldAsync("Rate", journeyId,
-			u => Dispatcher.DispatchAsync(new GetRatesQuery(u, false)),
-			(j, v) => new EditRateModel { Journey = j, Rates = v.ToList() }
+			u => Dispatcher.SendAsync(new GetRatesQuery(u, false)),
+			(j, v) => new EditRateModel { Journey = j, Rates = [.. v] }
 		);
 
 	public Task<IActionResult> OnPostEditRateAsync(UpdateJourneyRateCommand journey) =>
@@ -30,7 +30,7 @@ public sealed partial class IndexModel
 
 	public Task<IActionResult> OnPostCreateRateAsync(AddNewItemToJourneyModel item) =>
 		PostCreateItemAsync(
-			u => Dispatcher.DispatchAsync(new SaveRateQuery(u, float.Parse(item.Value, CultureInfo.InvariantCulture))),
+			u => Dispatcher.SendAsync(new SaveRateQuery(u, float.Parse(item.Value, CultureInfo.InvariantCulture))),
 			(u, x) => OnPostEditRateAsync(new(u, item.Id, item.Version, x))
 		);
 }

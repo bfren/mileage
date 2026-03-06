@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Journeys.EditStartMilesModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -26,7 +27,7 @@
 	/>
 	<div class="invalid-feedback">@invalid</div>
 
-	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenForMonad(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)
 	@Html.AntiForgeryToken()
 </form>

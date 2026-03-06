@@ -29,10 +29,10 @@ public sealed partial class ProfileModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from p in Dispatcher.DispatchAsync(new GetUserProfileQuery(u))
+					from p in Dispatcher.SendAsync(new GetUserProfileQuery(u))
 					select p;
 
-		await foreach (var profile in query)
+		foreach (var profile in await query.Unsafe())
 		{
 			Profile = profile;
 			return Page();
@@ -43,14 +43,14 @@ public sealed partial class ProfileModel : PageModel
 
 	public async Task<IActionResult> OnGetInsertTestDataAsync()
 	{
-		var query = from r in Dispatcher.DispatchAsync(new InsertTestDataCommand())
+		var query = from r in Dispatcher.SendAsync(new InsertTestDataCommand())
 					select r;
 
 		return await query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Result.Create(x),
-				none: r => Result.Error(r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Op.Create(x),
+				fFail: r => Op.Error(r)
 			);
 	}
 }

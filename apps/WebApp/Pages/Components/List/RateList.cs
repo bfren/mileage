@@ -3,7 +3,7 @@
 
 using System.Globalization;
 using Mileage.Domain.GetRates;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Components.List;
 

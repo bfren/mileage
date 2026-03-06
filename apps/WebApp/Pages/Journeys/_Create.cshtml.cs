@@ -11,7 +11,7 @@ using Mileage.Domain.GetPlaces;
 using Mileage.Domain.GetRates;
 using Mileage.Domain.LoadSettings;
 using Mileage.Domain.SaveJourney;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Journeys;
@@ -28,7 +28,7 @@ public sealed class CreateJourneyModel
 
 	public PlaceId? FromPlaceId { get; set; } = new();
 
-	public PlaceId[] ToPlaceIds { get; set; } = Array.Empty<PlaceId>();
+	public PlaceId[] ToPlaceIds { get; set; } = [];
 
 	public RateId? RateId { get; set; }
 }
@@ -51,17 +51,17 @@ public sealed partial class IndexModel
 	public Task<PartialViewResult> OnGetCreateAsync()
 	{
 		var query = from u in User.GetUserId()
-					from settings in Dispatcher.DispatchAsync(new LoadSettingsQuery(u))
-					from cars in Dispatcher.DispatchAsync(new GetCarsQuery(u, false))
-					from places in Dispatcher.DispatchAsync(new GetPlacesQuery(u, false))
-					from rates in Dispatcher.DispatchAsync(new GetRatesQuery(u, false))
-					from miles in Dispatcher.DispatchAsync(new GetLatestEndMilesQuery(u, settings.DefaultCarId))
+					from settings in Dispatcher.SendAsync(new LoadSettingsQuery(u))
+					from cars in Dispatcher.SendAsync(new GetCarsQuery(u, false))
+					from places in Dispatcher.SendAsync(new GetPlacesQuery(u, false))
+					from rates in Dispatcher.SendAsync(new GetRatesQuery(u, false))
+					from miles in Dispatcher.SendAsync(new GetLatestEndMilesQuery(u, settings.DefaultCarId))
 					select new { settings, cars, places, rates, miles };
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Create", new CreateModel
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Create", new CreateModel
 				{
 					Journey = new()
 					{
@@ -71,25 +71,25 @@ public sealed partial class IndexModel
 						RateId = x.settings.DefaultRateId,
 						StartMiles = x.miles
 					},
-					Cars = x.cars.ToList(),
-					Places = x.places.ToList(),
-					Rates = x.rates.ToList()
+					Cars = [.. x.cars],
+					Places = [.. x.places],
+					Rates = [.. x.rates]
 				}),
-				none: r => Partial("Modals/ErrorModal", r)
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
 	public async Task<IActionResult> OnPostCreateAsync(SaveJourneyQuery journey)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
+					from r in Dispatcher.SendAsync(journey with { UserId = u })
 					select r;
 
 		return await query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Result.Create("refresh", Alert.Success($"Created Journey {x}.")),
-				none: r => Result.Error(r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Op.Create("refresh", Alert.Success($"Created Journey {x}.")),
+				fFail: r => Op.Error(r)
 			);
 	}
 }

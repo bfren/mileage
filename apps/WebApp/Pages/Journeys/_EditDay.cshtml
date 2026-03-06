@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Journeys.EditDayModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -17,7 +18,7 @@
 	/>
 	<div class="invalid-feedback">Please select a day.</div>
 
-	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenForMonad(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)
 	@Html.AntiForgeryToken()
 </form>

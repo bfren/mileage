@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Microsoft.AspNetCore.Mvc;
-using StrongId;
+using Wrap.Ids;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
@@ -17,8 +17,8 @@ public sealed record class ListSingleModel(
 );
 
 public abstract class ListSingleViewComponent<TModel, TId> : ViewComponent
-	where TModel : IWithId<TId>
-	where TId : LongId, new()
+	where TModel : IWithId<TId, long>
+	where TId : LongId<TId>, new()
 {
 	public delegate string GetString(TModel model);
 
@@ -43,7 +43,7 @@ public abstract class ListSingleViewComponent<TModel, TId> : ViewComponent
 
 		return View(
 			"~/Pages/Components/List/ListSingle.cshtml",
-			new ListSingleModel(listName, Singular, allowNull, models.ToList(), selected?.Value)
+			new ListSingleModel(listName, Singular, allowNull, [.. models], selected?.Value)
 		);
 	}
 }

@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model WebApp.Pages.Settings.Cars.DeleteModel
 @{
 	Layout = "Modals/DeleteModal";
@@ -17,6 +18,6 @@
 	}
 
 	@Html.AntiForgeryToken()
-	@Html.HiddenForId(m => m.Car.Id)
+	@Html.HiddenForMonad(m => m.Car.Id)
 
 </form>

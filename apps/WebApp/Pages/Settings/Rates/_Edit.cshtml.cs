@@ -4,7 +4,7 @@
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetRate;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Rates;
@@ -22,14 +22,14 @@ public sealed partial class IndexModel
 	{
 		// Create query
 		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetRateQuery(u, rateId))
+					from c in Dispatcher.SendAsync(new GetRateQuery(u, rateId))
 					select c;
 
 		return await query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Edit", new EditModel { Rate = x }),
-				none: r => Partial("Modals/ErrorModal", r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Edit", new EditModel { Rate = x }),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 }
