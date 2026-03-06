@@ -22,19 +22,19 @@ public sealed class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Test
 		{
 			if (userId is null)
 			{
-				userId = LongId<AuthUserId>();
+				userId = IdGen.LongId<AuthUserId>();
 			}
 
 			return (new(userId, true), userId);
 		}
 
-		internal override RatesModel NewModel { get; } = new(LongId<RateId>(), Rnd.Flt, Rnd.Flip);
+		internal override RatesModel NewModel { get; } = new(IdGen.LongId<RateId>(), Rnd.Flt, Rnd.Flip);
 	}
 
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<Messages.UserIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

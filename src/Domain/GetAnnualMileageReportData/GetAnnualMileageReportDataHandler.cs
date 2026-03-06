@@ -38,6 +38,6 @@ internal sealed class GetAnnualMileageReportDataHandler : QueryHandler<GetAnnual
 
 		var sql = $"SELECT * FROM {Constants.Functions.GetAnnualMileageReportData}" +
 			$"(@{nameof(query.UserId)}, @{nameof(query.From)}, @{nameof(query.To)});";
-		return Db.QueryAsync<AnnualMileageReportJourney>(sql, query, System.Data.CommandType.Text);
+		return Db.QueryAsync<AnnualMileageReportJourney>(sql, query);
 	}
 }

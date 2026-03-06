@@ -26,7 +26,7 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), null);
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), null);
 
 		// Assert
 		Assert.True(result);
@@ -43,7 +43,7 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 			.ReturnsForAnyArgs(R.Wrap(value).AsTask());
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), LongId<PlaceId>(), LongId<PlaceId>());
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -56,8 +56,8 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
-		var userId = LongId<AuthUserId>();
-		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var userId = IdGen.LongId<AuthUserId>();
+		var placeIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
 		var placeIdValues = placeIds.Select(x => x.Value).ToArray();
 
 		// Act
@@ -77,10 +77,10 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
-			.ReturnsForAnyArgs(Create.None<bool>());
+			.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), LongId<PlaceId>(), LongId<PlaceId>());
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>());
 
 		// Assert
 		Assert.False(result);

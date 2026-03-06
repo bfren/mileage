@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Jeebs.Messages;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -25,10 +24,10 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var command = new CreateSettingsCommand(userId, new());
 		v.Repo.CreateAsync(default!)
-			.ReturnsForAnyArgs(Create.None<SettingsId>());
+			.ReturnsForAnyArgs(FailGen.Create<SettingsId>());
 
 		// Act
 		await handler.HandleAsync(command);
@@ -42,11 +41,11 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var settingsId = LongId<SettingsId>();
-		var carId = LongId<CarId>();
-		var placeId = LongId<PlaceId>();
-		var rateId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var settingsId = IdGen.LongId<SettingsId>();
+		var carId = IdGen.LongId<CarId>();
+		var placeId = IdGen.LongId<PlaceId>();
+		var rateId = IdGen.LongId<RateId>();
 		var command = new CreateSettingsCommand(userId, new(new(), 0L, carId, placeId, rateId));
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
@@ -65,8 +64,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var settingsId = LongId<SettingsId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var settingsId = IdGen.LongId<SettingsId>();
 		var command = new CreateSettingsCommand(userId, new());
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(settingsId);
@@ -85,7 +84,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var command = new CreateSettingsCommand(new(), new());
 		v.Repo.CreateAsync(default!)
-			.ReturnsForAnyArgs(LongId<SettingsId>());
+			.ReturnsForAnyArgs(IdGen.LongId<SettingsId>());
 
 		// Act
 		var result = await handler.HandleAsync(command);
@@ -100,18 +99,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var command = new CreateSettingsCommand(new(), new());
-		var msg = new TestMsg();
-		var failed = F.None<SettingsId>(msg);
+		var failure = FailGen.Create();
 		v.Repo.CreateAsync(default!)
-			.ReturnsForAnyArgs(failed);
+			.ReturnsForAnyArgs(failure);
 
 		// Act
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		var none = result.AssertNone();
-		Assert.Same(msg, none);
+		result.AssertFailure();
 	}
-
-	public sealed record class TestMsg : Msg;
 }

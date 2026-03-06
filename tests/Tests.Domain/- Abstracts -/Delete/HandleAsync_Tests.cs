@@ -3,10 +3,9 @@
 
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Jeebs.Messages;
 using Wrap.Ids;
 
 namespace Abstracts.Delete;
@@ -42,7 +41,7 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -57,14 +56,14 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Delete {Name}: {{Command}}", command);
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(EmptyModel);
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var command = GetCommand(userId, entityId);
 
 			// Act
@@ -78,53 +77,47 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var msg = new TestMsg();
+			var failure = FailGen.Create();
 			v.Fluent.QuerySingleAsync<TModel>()
-				.Returns(F.None<TModel>(msg));
+				.Returns(failure);
 			var command = GetCommand();
 
 			// Act
 			await handle(handler, command);
 
 			// Assert
-			v.Log.Received().Msg(msg);
+			v.Log.Received().Failure(failure.Value);
 		}
 
-		internal async Task Test03<TDoesNotExistMsg>(
-			Func<TDoesNotExistMsg, AuthUserId> getUserId,
-			Func<TDoesNotExistMsg, TId> getEntityId,
-			Func<THandler, TCommand, Task<Maybe<bool>>> handle
+		internal async Task Test03(
+			Func<THandler, TCommand, Task<Result<bool>>> handle
 		)
-			where TDoesNotExistMsg : Msg
 		{
 			// Arrange
 			var (handler, v) = GetVars();
 			v.Fluent.QuerySingleAsync<TModel>()
-				.Returns(Create.None<TModel>());
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+				.Returns(FailGen.Create<TModel>());
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var command = GetCommand(userId, entityId);
 
 			// Act
 			var result = await handle(handler, command);
 
 			// Assert
-			var none = result.AssertNone();
-			var msg = Assert.IsType<TDoesNotExistMsg>(none);
-			Assert.Equal(userId, getUserId(msg));
-			Assert.Equal(entityId, getEntityId(msg));
+			result.AssertFailure();
 		}
 
-		internal async Task Test04(Func<TId, long, TModel> getModel, Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test04(Func<TId, long, TModel> getModel, Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var command = GetCommand(userId, entityId);
 			var model = getModel(entityId, Rnd.Lng);
 			v.Fluent.QuerySingleAsync<TModel>()
@@ -137,7 +130,7 @@ public abstract class HandleAsync_Tests
 			await v.Repo.Received().DeleteAsync(model);
 		}
 
-		internal async Task Test05(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test05(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -153,10 +146,7 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, command);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(expected, some);
+			result.AssertOk(expected);
 		}
-
-		public sealed record class TestMsg : Msg;
 	}
 }

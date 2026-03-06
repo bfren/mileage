@@ -11,7 +11,7 @@ public sealed class HandleAsync_Tests : Abstracts.UpdateSettings.HandleAsync_Tes
 	private sealed class Setup : Setup<UpdateDefaultFromPlaceCommand, UpdateDefaultFromPlaceHandler, PlaceId>
 	{
 		internal override UpdateDefaultFromPlaceCommand GetCommand(AuthUserId? userId = null, PlaceId? itemId = null) =>
-			new(userId ?? LongId<AuthUserId>(), LongId<SettingsId>(), Rnd.Lng, itemId);
+			new(userId ?? IdGen.LongId<AuthUserId>(), IdGen.LongId<SettingsId>(), Rnd.Lng, itemId);
 
 		internal override UpdateDefaultFromPlaceHandler GetHandler(Vars v) =>
 			new(v.Dispatcher, v.Repo, v.Log);

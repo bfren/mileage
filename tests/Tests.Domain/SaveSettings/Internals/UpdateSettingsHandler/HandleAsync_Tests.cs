@@ -25,8 +25,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = LongId<SettingsId>();
-		var userId = LongId<AuthUserId>();
+		var settingsId = IdGen.LongId<SettingsId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var command = new UpdateSettingsCommand(new() { Id = settingsId, UserId = userId }, new());
 		v.Repo.UpdateAsync<SettingsEntity>(default!)
 			.ReturnsForAnyArgs(false);
@@ -43,18 +43,18 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settingsId = LongId<SettingsId>();
+		var settingsId = IdGen.LongId<SettingsId>();
 		var version = Rnd.Lng;
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
-		var placeId = LongId<PlaceId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
+		var placeId = IdGen.LongId<PlaceId>();
 		var existingSettings = new SettingsEntity
 		{
 			Id = settingsId,
 			Version = Rnd.Lng,
 			UserId = userId,
-			DefaultCarId = LongId<CarId>(),
-			DefaultFromPlaceId = LongId<PlaceId>()
+			DefaultCarId = IdGen.LongId<CarId>(),
+			DefaultFromPlaceId = IdGen.LongId<PlaceId>()
 		};
 		var updatedSettings = new Settings
 		{
@@ -93,7 +93,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(value, some);
+		result.AssertOk(value);
 	}
 }

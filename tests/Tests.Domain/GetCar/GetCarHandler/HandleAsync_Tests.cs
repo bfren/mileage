@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Mileage.Domain.GetCar.Messages;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -25,16 +24,16 @@ public sealed class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<CarId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 		}
 
-		internal override CarModel NewModel { get; } = new(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		internal override CarModel NewModel { get; } = new(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<CarIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]
@@ -58,7 +57,7 @@ public sealed class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 	[Fact]
 	public override async Task Test04_Calls_FluentQuery_QuerySingleAsync__Different_UserId__Returns_None_With_DoesNotBelongToUserMsg()
 	{
-		await new Setup().Test04<CarDoesNotBelongToUserMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test04((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

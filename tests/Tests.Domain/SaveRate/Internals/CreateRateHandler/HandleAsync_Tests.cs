@@ -38,7 +38,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var amount = (float)Rnd.Int / 100;
 		var query = new CreateRateQuery(userId, amount);
 
@@ -57,7 +57,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = LongId<RateId>();
+		var expected = IdGen.LongId<RateId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateRateQuery(new(), (float)Rnd.Int / 100);
@@ -66,7 +66,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

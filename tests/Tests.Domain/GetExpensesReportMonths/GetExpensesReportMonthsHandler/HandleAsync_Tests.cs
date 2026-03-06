@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Jeebs.Reflection;
 using Mileage.Persistence.Common;
@@ -16,7 +16,7 @@ public sealed class HandleAsync_Tests
 		var db = Substitute.For<IDb>();
 		var log = Substitute.For<ILog<GetExpensesReportMonthsHandler>>();
 		var handler = new GetExpensesReportMonthsHandler(db, log);
-		var query = new GetExpensesReportMonthsQuery(LongId<AuthUserId>());
+		var query = new GetExpensesReportMonthsQuery(IdGen.LongId<AuthUserId>());
 		return new(db, log, handler, query);
 	}
 
@@ -56,8 +56,7 @@ public sealed class HandleAsync_Tests
 			Arg.Is<object>(x =>
 				x.GetPropertyValue("userId").Equals(v.Query.UserId.Value)
 				&& x.GetPropertyValue("months").Equals(Constants.ExpensesReportMonths)
-			),
-			System.Data.CommandType.Text
+			)
 		);
 	}
 
@@ -67,14 +66,14 @@ public sealed class HandleAsync_Tests
 		// Arrange
 		var v = Setup();
 		var list = Array.Empty<MonthModel>();
-		v.Db.QueryAsync<MonthModel>(default!, default, default)
+		v.Db.QueryAsync<MonthModel>(query: default!, default)
 			.ReturnsForAnyArgs(list);
 
 		// Act
 		var result = await v.Handler.HandleAsync(v.Query);
 
 		// Assert
-		var some = result.AssertSome();
+		var some = result.AssertOk();
 		Assert.Same(list, some);
 	}
 }

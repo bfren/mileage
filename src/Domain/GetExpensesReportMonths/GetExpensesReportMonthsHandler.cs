@@ -33,6 +33,6 @@ internal sealed class GetExpensesReportMonthsHandler : QueryHandler<GetExpensesR
 		var userId = query.UserId.Value;
 		var months = Constants.ExpensesReportMonths;
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportRecentMonths}(@{nameof(userId)}, @{nameof(months)});";
-		return Db.QueryAsync<MonthModel>(sql, new { userId, months }, System.Data.CommandType.Text);
+		return Db.QueryAsync<MonthModel>(sql, new { userId, months });
 	}
 }

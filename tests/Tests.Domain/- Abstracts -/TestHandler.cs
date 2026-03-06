@@ -5,7 +5,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Common;
 using Jeebs.Logging;
 using NSubstitute.Extensions;
-using Wrap;
+using Wrap.Caching;
 
 namespace Abstracts;
 
@@ -38,16 +38,16 @@ public abstract class TestHandler
 	internal abstract class Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
 		where TEntity : IWithId<TId, long>
-		where TId : class, IStrongId, new()
+		where TId : class, IId<TId, long>, new()
 	{
 		internal abstract THandler GetHandler(Vars v);
 
 		internal virtual (THandler handler, Vars v) GetVars()
 		{
 			// Create substitutes
-			var cache = Substitute.For<IMaybeCache<TId>>();
+			var cache = Substitute.For<IWrapCache<TId>>();
 			var dispatcher = Substitute.For<IDispatcher>();
-			var fluent = Substitute.For<IFluentQuery<TEntity, TId>>();
+			var fluent = Substitute.For<Jeebs.Data.Repository.IFluentQuery<TEntity, TId>>();
 			var log = Substitute.For<ILog<THandler>>();
 			var repo = Substitute.For<TRepo>();
 
@@ -64,9 +64,9 @@ public abstract class TestHandler
 		}
 
 		internal sealed record class Vars(
-			IMaybeCache<TId> Cache,
+			IWrapCache<TId> Cache,
 			IDispatcher Dispatcher,
-			IFluentQuery<TEntity, TId> Fluent,
+			Jeebs.Data.Repository.IFluentQuery<TEntity, TId> Fluent,
 			ILog<THandler> Log,
 			TRepo Repo
 		);

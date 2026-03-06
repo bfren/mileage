@@ -84,7 +84,7 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultRateId)
-			.BindAsync(x => R.Wrap(x == rateId));
+			.MapAsync(x => x == rateId);
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="rateId"/>

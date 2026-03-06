@@ -29,7 +29,7 @@ public class CheckCarBelongsToUser_Tests : Abstracts.TestHandler
 			.ReturnsForAnyArgs(R.Wrap(value).AsTask());
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(LongId<AuthUserId>(), LongId<CarId>());
+		var result = await handler.CheckCarBelongsToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -42,8 +42,8 @@ public class CheckCarBelongsToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 
 		// Act
 		await handler.CheckCarBelongsToUser(userId, carId);
@@ -58,10 +58,10 @@ public class CheckCarBelongsToUser_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
-			.ReturnsForAnyArgs(Create.None<bool>());
+			.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 		// Act
-		var result = await handler.CheckCarBelongsToUser(LongId<AuthUserId>(), LongId<CarId>());
+		var result = await handler.CheckCarBelongsToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 
 		// Assert
 		Assert.False(result);

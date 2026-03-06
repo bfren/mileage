@@ -4,7 +4,7 @@
 using System.Linq.Expressions;
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Wrap.Ids;
@@ -41,8 +41,7 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00<TIdIsNullMsg>(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
-			where TIdIsNullMsg : IMsg
+		internal async Task Test00(Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, _) = GetVars();
@@ -52,10 +51,10 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, query);
 
 			// Assert
-			result.AssertNone().AssertType<TIdIsNullMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test01(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		internal async Task Test01(Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -68,11 +67,11 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Get {Name} for {{User}}.", userId);
 		}
 
-		internal async Task Test02(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		internal async Task Test02(Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
+			var userId = IdGen.LongId<AuthUserId>();
 			var (query, _) = GetQuery(userId);
 
 			// Act
@@ -86,11 +85,11 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
-		internal async Task Test02_WithIsDisabled(Func<AuthUserId, bool, TQuery> getQuery, Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		internal async Task Test02_WithIsDisabled(Func<AuthUserId, bool, TQuery> getQuery, Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
+			var userId = IdGen.LongId<AuthUserId>();
 			var includeDisabled = Rnd.Flip;
 			var disabledMatch = includeDisabled ? [true, false] : new[] { false };
 			var query = getQuery(userId, includeDisabled);
@@ -110,7 +109,7 @@ public abstract class HandleAsync_Tests
 		internal async Task Test03<TSort>(
 			Expression<Func<TEntity, TSort>> sortBy,
 			SortOrder sortOrder,
-			Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle
+			Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle
 		)
 		{
 			// Arrange
@@ -131,7 +130,7 @@ public abstract class HandleAsync_Tests
 		internal async Task Test03_WithIsDisabled<TSort>(
 			Expression<Func<TEntity, TSort>> sortBy,
 			SortOrder sortOrder,
-			Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle
+			Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle
 		)
 		{
 			// Arrange
@@ -150,7 +149,7 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
-		internal async Task Test04(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		internal async Task Test04(Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -163,7 +162,7 @@ public abstract class HandleAsync_Tests
 			await v.Fluent.Received().QueryAsync<TModel>();
 		}
 
-		internal async Task Test05(Func<THandler, TQuery, Task<Maybe<IEnumerable<TModel>>>> handle)
+		internal async Task Test05(Func<THandler, TQuery, Task<Result<IEnumerable<TModel>>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -178,8 +177,8 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, query);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Collection(some,
+			var ok = result.AssertOk();
+			Assert.Collection(ok,
 				x => Assert.Equal(m0, x),
 				x => Assert.Equal(m1, x),
 				x => Assert.Equal(m2, x)

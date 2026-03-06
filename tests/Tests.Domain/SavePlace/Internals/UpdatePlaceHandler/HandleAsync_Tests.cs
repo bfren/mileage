@@ -23,7 +23,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var command = new UpdatePlaceCommand(IdGen.LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -37,7 +37,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var command = new UpdatePlaceCommand(IdGen.LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -51,9 +51,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var command = new UpdatePlaceCommand(IdGen.LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		v.Repo.UpdateAsync(command)
-			.Returns(F.True);
+			.Returns(R.True);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -70,13 +70,12 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.UpdateAsync<UpdatePlaceCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdatePlaceCommand(LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var command = new UpdatePlaceCommand(IdGen.LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
 		// Act
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

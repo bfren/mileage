@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Mileage.Domain.DeleteJourney.Messages;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -25,11 +24,11 @@ public sealed class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<JourneyId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<JourneyId>());
 		}
 
 		internal override JourneyToDeleteModel EmptyModel =>
-			new(LongId<JourneyId>(), Rnd.Lng);
+			new(IdGen.LongId<JourneyId>(), Rnd.Lng);
 	}
 
 	[Fact]
@@ -53,7 +52,7 @@ public sealed class HandleAsync_Tests : Abstracts.Delete.HandleAsync_Tests
 	[Fact]
 	public override async Task Test03_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg()
 	{
-		await new Setup().Test03<JourneyDoesNotExistMsg>(msg => msg.UserId, msg => msg.JourneyId, (q, c) => q.HandleAsync(c));
+		await new Setup().Test03((q, c) => q.HandleAsync(c));
 	}
 
 	[Fact]

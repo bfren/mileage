@@ -37,15 +37,15 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = LongId<JourneyId>();
+		var journeyId = IdGen.LongId<JourneyId>();
 		var version = Rnd.Lng;
 		var day = Rnd.DateTime;
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var endMiles = startMiles + Rnd.UInt;
-		var fromPlaceId = LongId<PlaceId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var rateId = LongId<RateId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var endMiles = startMiles + Rnd.UInt32;
+		var fromPlaceId = IdGen.LongId<PlaceId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var rateId = IdGen.LongId<RateId>();
 		var command = new UpdateJourneyCommand(journeyId, version, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
@@ -79,7 +79,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

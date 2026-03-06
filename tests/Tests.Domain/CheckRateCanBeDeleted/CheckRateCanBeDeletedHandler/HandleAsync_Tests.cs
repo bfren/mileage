@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Mileage.Domain.CheckRateCanBeDeleted.Messages;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
@@ -24,7 +23,7 @@ public sealed class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<RateId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>());
 		}
 	}
 
@@ -37,7 +36,7 @@ public sealed class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_
 	[Fact]
 	public override async Task Test01_Checks_Is_Default__Receives_Some_True__Returns_None_With_IsDefaultMsg()
 	{
-		await new Setup().Test01<RateIsDefaultRateMsg>(h => h.HandleAsync);
+		await new Setup().Test01(h => h.HandleAsync);
 	}
 
 	[Fact]

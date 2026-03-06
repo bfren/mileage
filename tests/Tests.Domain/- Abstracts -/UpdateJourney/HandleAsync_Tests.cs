@@ -6,7 +6,6 @@ using Jeebs.Cqrs;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using Wrap.Ids;
 
 namespace Abstracts.UpdateJourney;
 
@@ -29,7 +28,7 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -42,7 +41,7 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating {Name} for {{Journey}}.", command);
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -55,7 +54,7 @@ public abstract class HandleAsync_Tests
 			await v.Repo.Received().UpdateAsync(command);
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();

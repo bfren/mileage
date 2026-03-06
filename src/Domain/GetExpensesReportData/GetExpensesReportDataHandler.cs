@@ -38,6 +38,6 @@ internal sealed class GetExpensesReportDataHandler : QueryHandler<GetExpensesRep
 
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportData}" +
 			$"(@{nameof(query.UserId)}, @{nameof(query.From)}, @{nameof(query.To)});";
-		return Db.QueryAsync<ExpensesReportJourney>(sql, query, System.Data.CommandType.Text);
+		return Db.QueryAsync<ExpensesReportJourney>(sql, query);
 	}
 }

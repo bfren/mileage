@@ -35,8 +35,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetAnnualMileageReportYearsQuery(LongId<AuthUserId>());
-		v.Fluent.QueryAsync<DayModel>().ReturnsForAnyArgs(Create.None<IEnumerable<DayModel>>());
+		var query = new GetAnnualMileageReportYearsQuery(IdGen.LongId<AuthUserId>());
+		v.Fluent.QueryAsync<DayModel>().ReturnsForAnyArgs(FailGen.Create<IEnumerable<DayModel>>());
 
 		// Act
 		_ = await handler.HandleAsync(query);
@@ -50,9 +50,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new GetAnnualMileageReportYearsQuery(userId);
-		v.Fluent.QueryAsync<DayModel>().ReturnsForAnyArgs(Create.None<IEnumerable<DayModel>>());
+		v.Fluent.QueryAsync<DayModel>().ReturnsForAnyArgs(FailGen.Create<IEnumerable<DayModel>>());
 
 		// Act
 		_ = await handler.HandleAsync(query);
@@ -69,7 +69,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new GetAnnualMileageReportYearsQuery(userId);
 		var days = new DayModel[]
 		{
@@ -90,7 +90,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var t = result.AssertSome();
+		var t = result.AssertOk();
 		Assert.Collection(t,
 			x => Assert.Equal(2024, x.StartYear),
 			x => Assert.Equal(2023, x.StartYear),

@@ -12,14 +12,14 @@ public class Constructor_Tests
 	public void Receives_SaveJourneyQuery__Sets_Correct_Values()
 	{
 		// Arrange
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var day = Rnd.DateTime;
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var endMiles = Rnd.UInt;
-		var fromPlaceId = LongId<PlaceId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var rateId = LongId<RateId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var endMiles = Rnd.UInt32;
+		var fromPlaceId = IdGen.LongId<PlaceId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var rateId = IdGen.LongId<RateId>();
 		var saveJourneyQuery = new SaveJourneyQuery(userId, null, null, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act

@@ -38,7 +38,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var postcode = Rnd.Str;
 		var query = new CreatePlaceQuery(userId, description, postcode);
@@ -59,7 +59,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = LongId<PlaceId>();
+		var expected = IdGen.LongId<PlaceId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreatePlaceQuery(new(), Rnd.Str, Rnd.Str);
@@ -68,7 +68,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

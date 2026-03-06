@@ -16,10 +16,10 @@ public sealed class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Test
 		{
 			if (userId is null)
 			{
-				userId = LongId<AuthUserId>();
+				userId = IdGen.LongId<AuthUserId>();
 			}
 
-			return new(userId, LongId<JourneyId>(), Rnd.Lng, LongId<CarId>());
+			return new(userId, IdGen.LongId<JourneyId>(), Rnd.Lng, IdGen.LongId<CarId>());
 		}
 
 		internal override UpdateJourneyCarHandler GetHandler(Vars v) =>

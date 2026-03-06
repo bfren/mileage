@@ -3,8 +3,7 @@
 
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Data;
-using Jeebs.Messages;
+using Jeebs.Data.Common;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
 using Wrap.Ids;
@@ -55,7 +54,7 @@ public abstract class HandleAsync_Tests
 			return (handler, dOrD, v);
 		}
 
-		internal async Task Test00(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, dOrD, v) = GetVars();
@@ -68,12 +67,12 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Delete or Disable {Name}: {{Command}}", command);
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, dOrD, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var command = GetCommand(userId, entityId);
 
 			// Act
@@ -86,12 +85,12 @@ public abstract class HandleAsync_Tests
 			));
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, dOrD, v) = GetVars(dOrDResult: true);
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var command = GetCommand(userId, entityId);
 
 			// Act
@@ -101,7 +100,7 @@ public abstract class HandleAsync_Tests
 			v.Cache.Received().RemoveValue(entityId);
 		}
 
-		internal async Task Test03(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test03(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, dOrD, v) = GetVars(dOrDResult: false);
@@ -114,12 +113,12 @@ public abstract class HandleAsync_Tests
 			v.Cache.DidNotReceiveWithAnyArgs().RemoveValue(default!);
 		}
 
-		internal async Task Test04(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test04(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, dOrD, v) = GetVars();
 			dOrD.Invoke(default!, default!, default)
-				.ReturnsForAnyArgs(Create.None<bool>());
+				.ReturnsForAnyArgs(FailGen.Create<bool>());
 			var command = GetCommand();
 
 			// Act
@@ -129,7 +128,7 @@ public abstract class HandleAsync_Tests
 			v.Cache.DidNotReceiveWithAnyArgs().RemoveValue(default!);
 		}
 
-		internal async Task Test05(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Maybe<bool>>> handle)
+		internal async Task Test05(Func<THandler, TCommand, DeleteOrDisable<TId>, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var value = Rnd.Flip;
@@ -140,10 +139,7 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, command, dOrD);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(value, some);
+			result.AssertOk(value);
 		}
-
-		public sealed record class TestMsg : Msg;
 	}
 }

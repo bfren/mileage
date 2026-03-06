@@ -85,7 +85,7 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultCarId)
-			.BindAsync(x => R.Wrap(x == carId));
+			.MapAsync(x => x == carId);
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="carId"/>

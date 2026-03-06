@@ -36,8 +36,8 @@ public abstract class CountJourneysWithAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var count = countJourneysWith(handler);
 
 			// Act
@@ -58,7 +58,7 @@ public abstract class CountJourneysWithAsync_Tests
 			var count = countJourneysWith(handler);
 
 			// Act
-			_ = await count(LongId<AuthUserId>(), LongId<TId>());
+			_ = await count(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
 			await v.Fluent.Received().CountAsync();
@@ -74,11 +74,10 @@ public abstract class CountJourneysWithAsync_Tests
 			var count = countJourneysWith(handler);
 
 			// Act
-			var result = await count(LongId<AuthUserId>(), LongId<TId>());
+			var result = await count(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(value, some);
+			result.AssertOk(value);
 		}
 	}
 }

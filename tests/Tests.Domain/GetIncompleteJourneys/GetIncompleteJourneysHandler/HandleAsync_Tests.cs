@@ -27,7 +27,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new GetIncompleteJourneysQuery(userId);
 
 		// Act
@@ -42,13 +42,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new GetIncompleteJourneysQuery(userId);
 
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -67,12 +67,12 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetIncompleteJourneysQuery(LongId<AuthUserId>());
+		var query = new GetIncompleteJourneysQuery(IdGen.LongId<AuthUserId>());
 
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);

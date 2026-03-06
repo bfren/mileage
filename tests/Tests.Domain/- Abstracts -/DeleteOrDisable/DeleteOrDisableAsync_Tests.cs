@@ -3,10 +3,9 @@
 
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Jeebs.Messages;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
 using Wrap.Ids;
@@ -47,8 +46,8 @@ public abstract class DeleteOrDisableAsync_Tests
 			var (handler, v) = GetVars();
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(EmptyModel);
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var dOrD = deleteOrDisable(handler);
 
 			// Act
@@ -66,47 +65,43 @@ public abstract class DeleteOrDisableAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var msg = new TestMsg();
+			var failure = FailGen.Create();
 			v.Fluent.QuerySingleAsync<TModel>()
-				.Returns(F.None<TModel>(msg));
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+				.Returns(failure);
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var dOrD = deleteOrDisable(handler);
 
 			// Act
 			await dOrD(userId, entityId, DeleteOperation.None);
 
 			// Assert
-			v.Log.Received().Msg(msg);
+			v.Log.Received().Failure(failure.Value);
 		}
 
-		internal async Task Test02<TDoesNotExistMsg>(DeleteOrDisableAsyncMethod deleteOrDisable)
-			where TDoesNotExistMsg : Msg, IWithId<TId, long>, IWithUserId
+		internal async Task Test02(DeleteOrDisableAsyncMethod deleteOrDisable)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
 			v.Fluent.QuerySingleAsync<TModel>()
-				.Returns(Create.None<TModel>());
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+				.Returns(FailGen.Create<TModel>());
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var dOrD = deleteOrDisable(handler);
 
 			// Act
 			var result = await dOrD(userId, entityId, DeleteOperation.None);
 
 			// Assert
-			var none = result.AssertNone();
-			var msg = Assert.IsType<TDoesNotExistMsg>(none);
-			Assert.Equal(userId, msg.UserId);
-			Assert.Equal(entityId, msg.Id);
+			result.AssertFailure();
 		}
 
 		internal async Task Test03(Func<TId, long, bool, TModel> getModel, DeleteOrDisableAsyncMethod deleteOrDisable)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var model = getModel(entityId, Rnd.Lng, false);
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(model);
@@ -123,8 +118,8 @@ public abstract class DeleteOrDisableAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var model = getModel(entityId, Rnd.Lng, true);
 			v.Fluent.QuerySingleAsync<TModel>()
 				.Returns(model);
@@ -137,8 +132,7 @@ public abstract class DeleteOrDisableAsync_Tests
 			await v.Repo.Received().UpdateAsync(Arg.Is(model));
 		}
 
-		internal async Task Test05<TCannotBeDeletedMsg>(DeleteOrDisableAsyncMethod deleteOrDisable)
-			where TCannotBeDeletedMsg : Msg
+		internal async Task Test05(DeleteOrDisableAsyncMethod deleteOrDisable)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -147,12 +141,10 @@ public abstract class DeleteOrDisableAsync_Tests
 			var dOrD = deleteOrDisable(handler);
 
 			// Act
-			var result = await dOrD(LongId<AuthUserId>(), LongId<TId>(), DeleteOperation.None);
+			var result = await dOrD(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>(), DeleteOperation.None);
 
 			// Assert
-			result.AssertNone().AssertType<TCannotBeDeletedMsg>();
+			result.AssertFailure();
 		}
-
-		public sealed record class TestMsg : Msg;
 	}
 }

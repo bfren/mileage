@@ -4,7 +4,6 @@
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Mileage.Domain;
-using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -29,7 +28,7 @@ public abstract class HandleAsync_Tests
 	internal abstract class Setup<TCommand, THandler, TItemId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
 		where TCommand : Command, IWithId<SettingsId, long>, IWithUserId
 		where THandler : CommandHandler<TCommand>
-		where TItemId : LongId, new()
+		where TItemId : LongId<TItemId>, new()
 	{
 		internal string Name { get; }
 
@@ -38,44 +37,44 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
 			v.Dispatcher.SendAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(Create.None<bool>());
+				.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 			// Act
 			var result = await handle(handler, command);
 
 			// Assert
-			result.AssertNone().AssertType<SaveSettingsCheckFailedMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
 			v.Dispatcher.SendAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.False);
+				.ReturnsForAnyArgs(R.False);
 
 			// Act
 			var result = await handle(handler, command);
 
 			// Assert
-			result.AssertNone().AssertType<SaveSettingsCheckFailedMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var command = GetCommand(userId, LongId<TItemId>());
+			var userId = IdGen.LongId<AuthUserId>();
+			var command = GetCommand(userId, IdGen.LongId<TItemId>());
 			v.Dispatcher.SendAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.True);
+				.ReturnsForAnyArgs(R.True);
 
 			// Act
 			_ = await handle(handler, command);
@@ -84,13 +83,13 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating Default {Name} for {{User}}.", userId.Value);
 		}
 
-		internal async Task Test03(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test03(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
 			v.Dispatcher.SendAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.True);
+				.ReturnsForAnyArgs(R.True);
 
 			// Act
 			_ = await handle(handler, command);
@@ -99,11 +98,11 @@ public abstract class HandleAsync_Tests
 			await v.Repo.Received().UpdateAsync(command);
 		}
 
-		internal async Task Test04(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test04(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
+			var userId = IdGen.LongId<AuthUserId>();
 			var command = GetCommand(userId);
 
 			// Act
@@ -113,7 +112,7 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating Default {Name} for {{User}}.", userId.Value);
 		}
 
-		internal async Task Test05(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test05(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();

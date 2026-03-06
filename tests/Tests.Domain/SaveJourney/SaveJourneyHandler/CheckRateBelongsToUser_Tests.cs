@@ -26,7 +26,7 @@ public class CheckRateBelongsToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 
 		// Act
-		var result = await handler.CheckRateBelongsToUser(LongId<AuthUserId>(), null);
+		var result = await handler.CheckRateBelongsToUser(IdGen.LongId<AuthUserId>(), null);
 
 		// Assert
 		Assert.True(result);
@@ -43,7 +43,7 @@ public class CheckRateBelongsToUser_Tests : Abstracts.TestHandler
 			.ReturnsForAnyArgs(R.Wrap(value).AsTask());
 
 		// Act
-		var result = await handler.CheckRateBelongsToUser(LongId<AuthUserId>(), LongId<RateId>());
+		var result = await handler.CheckRateBelongsToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>());
 
 		// Assert
 		Assert.Equal(value, result);
@@ -56,8 +56,8 @@ public class CheckRateBelongsToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
-		var userId = LongId<AuthUserId>();
-		var rateId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var rateId = IdGen.LongId<RateId>();
 
 		// Act
 		await handler.CheckRateBelongsToUser(userId, rateId);
@@ -72,10 +72,10 @@ public class CheckRateBelongsToUser_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Dispatcher.SendAsync<bool>(default!)
-			.ReturnsForAnyArgs(Create.None<bool>());
+			.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 		// Act
-		var result = await handler.CheckRateBelongsToUser(LongId<AuthUserId>(), LongId<RateId>());
+		var result = await handler.CheckRateBelongsToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>());
 
 		// Assert
 		Assert.False(result);

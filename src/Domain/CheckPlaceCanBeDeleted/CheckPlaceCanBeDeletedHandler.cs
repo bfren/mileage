@@ -85,7 +85,7 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultFromPlaceId)
-			.BindAsync(x => R.Wrap(x == placeId));
+			.MapAsync(x => x == placeId);
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="placeId"/>

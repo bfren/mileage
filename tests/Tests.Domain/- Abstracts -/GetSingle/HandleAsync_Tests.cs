@@ -3,10 +3,9 @@
 
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Jeebs.Messages;
 using Mileage.Domain;
 using Wrap.Ids;
 
@@ -60,21 +59,20 @@ public abstract class HandleAsync_Tests
 			return (handler, v);
 		}
 
-		internal async Task Test00<TIdIsNullMsg>(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
-			where TIdIsNullMsg : IMsg
+		internal async Task Test00(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, _) = GetVars();
-			var query = GetQuery(LongId<AuthUserId>(), new() { Value = 0 });
+			var query = GetQuery(IdGen.LongId<AuthUserId>(), new() { Value = 0 });
 
 			// Act
 			var result = await handle(handler, query);
 
 			// Assert
-			result.AssertNone().AssertType<TIdIsNullMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test01(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
+		internal async Task Test01(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -87,12 +85,12 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Get {Name}: {{Query}}.", query);
 		}
 
-		internal async Task Test02(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
+		internal async Task Test02(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var query = GetQuery(userId, entityId);
 
 			// Act
@@ -106,7 +104,7 @@ public abstract class HandleAsync_Tests
 			);
 		}
 
-		internal async Task Test03(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
+		internal async Task Test03(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -119,8 +117,7 @@ public abstract class HandleAsync_Tests
 			await v.Fluent.Received().QuerySingleAsync<TModel>();
 		}
 
-		internal async Task Test04<TDoesNotBelongToUserMsg>(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
-			where TDoesNotBelongToUserMsg : Msg
+		internal async Task Test04(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -133,10 +130,10 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, query);
 
 			// Assert
-			result.AssertNone().AssertType<TDoesNotBelongToUserMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test05(Func<THandler, TQuery, Task<Maybe<TModel>>> handle)
+		internal async Task Test05(Func<THandler, TQuery, Task<Result<TModel>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -149,8 +146,7 @@ public abstract class HandleAsync_Tests
 			var result = await handle(handler, query);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(model, some);
+			result.AssertOk(model);
 		}
 	}
 }

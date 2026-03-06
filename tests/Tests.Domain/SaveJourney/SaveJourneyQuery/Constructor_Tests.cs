@@ -12,10 +12,10 @@ public class Constructor_Tests
 	public void Sets_Correct_Values()
 	{
 		// Arrange
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var placeId = LongId<PlaceId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var placeId = IdGen.LongId<PlaceId>();
 
 		// Act
 		var result = new SaveJourneyQuery(userId, carId, startMiles, placeId);

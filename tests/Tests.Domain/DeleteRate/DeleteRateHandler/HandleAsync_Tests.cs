@@ -25,10 +25,10 @@ public sealed class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Te
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<RateId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>());
 		}
 
-		internal override RateToDeleteModel EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
+		internal override RateToDeleteModel EmptyModel { get; } = new(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]

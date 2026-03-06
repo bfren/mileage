@@ -8,7 +8,6 @@ using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveSettings.Internals;
-using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
@@ -32,9 +31,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, carId, null, null);
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, carId, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -56,9 +55,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var placeId = LongId<PlaceId>();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, placeId, null);
+		var userId = IdGen.LongId<AuthUserId>();
+		var placeId = IdGen.LongId<PlaceId>();
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, placeId, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -80,9 +79,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var rateId = LongId<RateId>();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, rateId);
+		var userId = IdGen.LongId<AuthUserId>();
+		var rateId = IdGen.LongId<RateId>();
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, rateId);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -104,8 +103,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), null, null);
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, IdGen.LongId<CarId>(), null, null);
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.SendAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
@@ -114,8 +113,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveSettingsCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -123,8 +121,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, LongId<PlaceId>(), null);
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, IdGen.LongId<PlaceId>(), null);
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.SendAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
@@ -133,8 +131,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveSettingsCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -142,8 +139,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, LongId<RateId>());
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, IdGen.LongId<RateId>());
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.SendAsync(Arg.Any<CheckRateBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
@@ -152,8 +149,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveSettingsCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -161,8 +157,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
+		var userId = IdGen.LongId<AuthUserId>();
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -185,9 +181,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var existingSettings = new SettingsEntity();
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
@@ -210,8 +206,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, null);
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -226,8 +222,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 
 		// Assert
 		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdateSettingsCommand>());
-		var some = result.AssertSome();
-		Assert.Equal(updated, some);
+		result.AssertOk(updated);
 	}
 
 	[Fact]
@@ -235,14 +230,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
+		var userId = IdGen.LongId<AuthUserId>();
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
 		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
-			.Returns(Create.None<SettingsEntity>());
+			.Returns(FailGen.Create<SettingsEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -260,8 +255,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
-		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
+		var settings = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, null, null, null);
+		var query = new SaveSettingsCommand(IdGen.LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
 		v.Dispatcher.SendAsync<bool>(default!)
@@ -269,14 +264,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		v.Dispatcher.SendAsync(Arg.Any<CreateSettingsCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
-			.Returns(Create.None<SettingsEntity>());
+			.Returns(FailGen.Create<SettingsEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
 		await v.Dispatcher.Received().SendAsync(Arg.Any<CreateSettingsCommand>());
-		var some = result.AssertSome();
-		Assert.Equal(updated, some);
+		result.AssertOk(updated);
 	}
 }

@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data.Ids;
-using Jeebs.Collections;
+using Jeebs.Functions;
 using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
@@ -25,19 +25,19 @@ public sealed class HandleAsync_Tests : Abstracts.GetSingle.HandleAsync_Tests
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<JourneyId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<JourneyId>());
 		}
 
 		internal override JourneyModel NewModel { get; } = new(
-			LongId<AuthUserId>(), LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime, LongId<CarId>(), Rnd.Int, Rnd.Int,
-			LongId<PlaceId>(), ImmutableList.Create(LongId<PlaceId>(), LongId<PlaceId>()), LongId<RateId>()
+			IdGen.LongId<AuthUserId>(), IdGen.LongId<JourneyId>(), Rnd.Lng, Rnd.DateTime, IdGen.LongId<CarId>(), Rnd.Int, Rnd.Int,
+			IdGen.LongId<PlaceId>(), ListF.Create(IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>()), IdGen.LongId<RateId>()
 		);
 	}
 
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<Messages.JourneyIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]
