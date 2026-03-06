@@ -4,5 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Jeebs" />
+    <PackageReference Include="Wrap.Id" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Persistence.Common;
 
