@@ -2,16 +2,16 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Persistence.Entities;
 
 /// <summary>
 /// Journey entity
 /// </summary>
-public sealed record class JourneyEntity : IWithVersion<JourneyId>
+public sealed record class JourneyEntity : IWithVersion<JourneyId, long>
 {
 	/// <summary>
 	/// Journey ID
@@ -56,7 +56,7 @@ public sealed record class JourneyEntity : IWithVersion<JourneyId>
 	/// <summary>
 	/// To (visited) places
 	/// </summary>
-	public PlaceId[] ToPlaceIds { get; init; } = Array.Empty<PlaceId>();
+	public PlaceId[] ToPlaceIds { get; init; } = [];
 
 	/// <summary>
 	/// The rate used for the journey
