@@ -2,12 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Cqrs;
-using Jeebs.Data;
-using Jeebs.Data.Query;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
-using MaybeF.Caching;
 using NSubstitute.Extensions;
-using StrongId;
+using Wrap;
 
 namespace Abstracts;
 
@@ -39,7 +37,7 @@ public abstract class TestHandler
 
 	internal abstract class Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
-		where TEntity : IWithId<TId>
+		where TEntity : IWithId<TId, long>
 		where TId : class, IStrongId, new()
 	{
 		internal abstract THandler GetHandler(Vars v);
@@ -55,7 +53,7 @@ public abstract class TestHandler
 
 			// Setup substitutes
 			fluent.ReturnsForAll(fluent);
-			repo.StartFluentQuery().Returns(fluent);
+			repo.Fluent().Returns(fluent);
 
 			// Build handler
 			var v = new Vars(cache, dispatcher, fluent, log, repo);

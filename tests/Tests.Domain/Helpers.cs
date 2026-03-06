@@ -5,7 +5,7 @@ using Jeebs.Data;
 using Jeebs.Data.Query;
 using Jeebs.Data.Testing.Query;
 using Jeebs.Logging;
-using StrongId;
+using Wrap.Ids;
 
 namespace Mileage.Domain;
 
@@ -13,7 +13,7 @@ internal static class Helpers
 {
 	public static (TRepo repo, IFluentQuery<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
-		where TEntity : IWithId<TId>
+		where TEntity : IWithId<TId, long>
 		where TId : class, IStrongId, new()
 	{
 		// Create substitutes
@@ -22,7 +22,7 @@ internal static class Helpers
 		var log = Substitute.For<ILog<THandler>>();
 
 		// Setup substitutes
-		repo.StartFluentQuery().Returns(query);
+		repo.Fluent().Returns(query);
 
 		// Return
 		return (repo, query, log);

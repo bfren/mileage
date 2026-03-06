@@ -1,7 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Auth.Data.Entities;
 
 namespace Mileage.Domain.CreateUser.CreateUserHandler_Tests;

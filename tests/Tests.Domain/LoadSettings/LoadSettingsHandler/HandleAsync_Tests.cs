@@ -1,12 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.SaveSettings;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -83,8 +83,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var model = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>());
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(Create.None<Settings>(), F.Some(model));
-		v.Dispatcher.DispatchAsync(Arg.Any<SaveSettingsCommand>())
+			.Returns(Create.None<Settings>(), R.Wrap(model));
+		v.Dispatcher.SendAsync(Arg.Any<SaveSettingsCommand>())
 			.Returns(F.True);
 		var query = new LoadSettingsQuery(LongId<AuthUserId>());
 

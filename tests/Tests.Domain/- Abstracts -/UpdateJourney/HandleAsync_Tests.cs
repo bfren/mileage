@@ -1,12 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.UpdateJourney;
 
@@ -19,7 +19,7 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test02_Calls_Repo_Update_Async__Returns_Result();
 
 	internal abstract class Setup<TCommand, THandler> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
-		where TCommand : Command, IWithId<JourneyId>
+		where TCommand : Command, IWithId<JourneyId, long>
 		where THandler : CommandHandler<TCommand>
 	{
 		internal string Name { get; }

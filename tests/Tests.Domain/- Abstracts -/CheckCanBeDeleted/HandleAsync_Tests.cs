@@ -1,12 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Messages;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.CheckCanBeDeleted;
 
@@ -25,7 +25,7 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test05_Counts_Journeys_With__Receives_Negative__Returns_None();
 
 	internal abstract class Setup<TId, TQuery, THandler> : TestHandler.Setup<THandler>
-		where TId : LongId, new()
+		where TId : LongId<TId>, new()
 		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
 	{

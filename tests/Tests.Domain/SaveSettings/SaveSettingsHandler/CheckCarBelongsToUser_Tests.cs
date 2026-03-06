@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -20,13 +20,13 @@ public class CheckCarBelongsToUser_Tests : Abstracts.TestHandler
 		new Setup().GetVars();
 
 	[Fact]
-	public async Task With_CarId__Calls_Dispatcher_DispatchAsync__Receives_Some__Returns_Value()
+	public async Task With_CarId__Calls_Dispatcher_SendAsync__Receives_Some__Returns_Value()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var value = Rnd.Flip;
-		v.Dispatcher.DispatchAsync<bool>(default!)
-			.ReturnsForAnyArgs(F.Some(value).AsTask());
+		v.Dispatcher.SendAsync<bool>(default!)
+			.ReturnsForAnyArgs(R.Wrap(value).AsTask());
 
 		// Act
 		var result = await handler.CheckCarBelongsToUser(LongId<CarId>(), LongId<AuthUserId>());
@@ -36,11 +36,11 @@ public class CheckCarBelongsToUser_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async Task With_CarId__Calls_Dispatcher_DispatchAsync__Receives_None__Returns_False()
+	public async Task With_CarId__Calls_Dispatcher_SendAsync__Receives_None__Returns_False()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(Create.None<bool>());
 
 		// Act

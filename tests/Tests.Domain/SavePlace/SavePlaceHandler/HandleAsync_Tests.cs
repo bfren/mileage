@@ -1,13 +1,13 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.SavePlace.Internals;
 using Mileage.Domain.SavePlace.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -30,7 +30,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var query = new SavePlaceQuery();
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity());
@@ -51,7 +51,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var placeId = LongId<PlaceId>();
 		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity());
@@ -60,7 +60,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckPlacesBelongToUserQuery>(x => x.UserId == userId && x.PlaceIds.Contains(placeId))
 		);
 	}
@@ -72,7 +72,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -91,7 +91,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var placeId = LongId<PlaceId>();
 		var query = new SavePlaceQuery(userId, placeId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity());
@@ -120,7 +120,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var disabled = Rnd.Flip;
 		var query = new SavePlaceQuery(userId, placeId, version, description, postcode, disabled);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity { Id = placeId });
@@ -129,7 +129,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<UpdatePlaceCommand>(c =>
 				c.Id == placeId
 				&& c.Version == version
@@ -149,9 +149,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<UpdatePlaceCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<UpdatePlaceCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(new PlaceEntity { Id = placeId });
@@ -160,7 +160,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<UpdatePlaceCommand>());
+		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdatePlaceCommand>());
 		var some = result.AssertSome();
 		Assert.Equal(placeId, some);
 	}
@@ -175,7 +175,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var postcode = Rnd.Str;
 		var query = new SavePlaceQuery(userId, null, 0L, description, postcode, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(Create.None<PlaceEntity>());
@@ -184,7 +184,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CreatePlaceQuery>(c =>
 				c.UserId == userId
 				&& c.Description == description
@@ -201,9 +201,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var placeId = LongId<PlaceId>();
 		var query = new SavePlaceQuery(LongId<AuthUserId>(), LongId<PlaceId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<CreatePlaceQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CreatePlaceQuery>())
 			.Returns(placeId);
 		v.Fluent.QuerySingleAsync<PlaceEntity>()
 			.Returns(Create.None<PlaceEntity>());
@@ -212,7 +212,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<CreatePlaceQuery>());
+		await v.Dispatcher.Received().SendAsync(Arg.Any<CreatePlaceQuery>());
 		var some = result.AssertSome();
 		Assert.Equal(placeId, some);
 	}

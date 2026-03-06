@@ -1,11 +1,11 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Jeebs.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -27,7 +27,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, _) = GetVars();
-		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), Array.Empty<PlaceId>());
+		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), []);
 
 		// Act
 		var result = await handler.HandleAsync(query);

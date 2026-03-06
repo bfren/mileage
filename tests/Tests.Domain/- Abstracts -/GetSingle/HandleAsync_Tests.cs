@@ -1,14 +1,14 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Jeebs.Messages;
 using Mileage.Domain;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.GetSingle;
 
@@ -28,11 +28,11 @@ public abstract class HandleAsync_Tests
 
 	internal abstract class Setup<TRepo, TEntity, TId, TQuery, THandler, TModel> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
-		where TEntity : IWithId<TId>
-		where TId : LongId, new()
+		where TEntity : IWithId<TId, long>
+		where TId : LongId<TId>, new()
 		where TQuery : Query<TModel>
 		where THandler : QueryHandler<TQuery, TModel>
-		where TModel : IWithUserId, IWithId<TId>
+		where TModel : IWithUserId, IWithId<TId, long>
 	{
 		internal string Name { get; }
 

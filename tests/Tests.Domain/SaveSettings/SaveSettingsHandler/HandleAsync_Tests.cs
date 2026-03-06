@@ -1,7 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckCarBelongsToUser;
@@ -10,7 +10,7 @@ using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveSettings.Internals;
 using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -37,7 +37,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, carId, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(new SettingsEntity());
@@ -46,7 +46,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckCarBelongsToUserQuery>(x => x.UserId == userId && x.CarId == carId)
 		);
 	}
@@ -61,7 +61,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, placeId, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(new SettingsEntity());
@@ -70,7 +70,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckPlacesBelongToUserQuery>(x => x.UserId == userId && x.PlaceIds[0] == placeId)
 		);
 	}
@@ -85,7 +85,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, rateId);
 		var query = new SaveSettingsCommand(userId, settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(new SettingsEntity());
@@ -94,7 +94,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckRateBelongsToUserQuery>(x => x.UserId == userId && x.RateId == rateId)
 		);
 	}
@@ -107,7 +107,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), null, null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -126,7 +126,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, LongId<PlaceId>(), null);
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -145,7 +145,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, LongId<RateId>());
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckRateBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckRateBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
@@ -165,7 +165,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(new SettingsEntity());
@@ -189,7 +189,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var existingSettings = new SettingsEntity();
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(existingSettings);
@@ -198,7 +198,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<UpdateSettingsCommand>(
 				x => x.ExistingSettings == existingSettings && x.UpdatedSettings == settings
 			)
@@ -214,9 +214,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<UpdateSettingsCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<UpdateSettingsCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(new SettingsEntity());
@@ -225,7 +225,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<UpdateSettingsCommand>());
+		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdateSettingsCommand>());
 		var some = result.AssertSome();
 		Assert.Equal(updated, some);
 	}
@@ -239,7 +239,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var settings = new Settings(LongId<SettingsId>(), Rnd.Lng, null, null, null);
 		var query = new SaveSettingsCommand(userId, settings);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(Create.None<SettingsEntity>());
@@ -248,7 +248,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CreateSettingsCommand>(
 				x => x.UserId == userId && x.Settings == settings
 			)
@@ -264,9 +264,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var query = new SaveSettingsCommand(LongId<AuthUserId>(), settings);
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<CreateSettingsCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<CreateSettingsCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<SettingsEntity>()
 			.Returns(Create.None<SettingsEntity>());
@@ -275,7 +275,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<CreateSettingsCommand>());
+		await v.Dispatcher.Received().SendAsync(Arg.Any<CreateSettingsCommand>());
 		var some = result.AssertSome();
 		Assert.Equal(updated, some);
 	}

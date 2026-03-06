@@ -2,10 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 using static MaybeF.F.M;
@@ -66,7 +66,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var carId = LongId<CarId>();
 		var query = new GetLatestEndMilesQuery(userId, carId);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(Create.None<int?>());
@@ -90,7 +90,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(Create.None<int?>());
@@ -114,7 +114,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(Create.None<int?>());
@@ -140,7 +140,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var msg = Substitute.For<IMsg>();
 		var maybe = F.None<int?>(msg);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(maybe);
@@ -162,7 +162,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(asNone switch
@@ -171,7 +171,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 					F.None<int?, NullValueMsg>(),
 
 				false =>
-					F.Some<int?>(null, true)
+					R.Wrap<int?>(null, true)
 			});
 
 		// Act
@@ -190,7 +190,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
 		var value = Rnd.UInt;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns((int)value);

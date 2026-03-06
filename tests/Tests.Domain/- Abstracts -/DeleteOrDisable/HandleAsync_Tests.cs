@@ -1,13 +1,13 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data;
 using Jeebs.Messages;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.DeleteOrDisable;
 
@@ -27,12 +27,12 @@ public abstract class HandleAsync_Tests
 
 	internal abstract class Setup<TRepo, TEntity, TId, TCommand, THandler, TModel, TCheckQuery> : TestHandler.Setup<TRepo, TEntity, TId, THandler>
 		where TRepo : class, IRepository<TEntity, TId>
-		where TEntity : IWithId<TId>
-		where TId : LongId, new()
+		where TEntity : IWithId<TId, long>
+		where TId : LongId<TId>, new()
 		where TCommand : Command
 		where THandler : CommandHandler<TCommand>
-		where TModel : IWithId<TId>
-		where TCheckQuery : Query<DeleteOperation>, IWithId<TId>, IWithUserId
+		where TModel : IWithId<TId, long>
+		where TCheckQuery : Query<DeleteOperation>, IWithId<TId, long>, IWithUserId
 	{
 		internal string Name { get; }
 
@@ -46,8 +46,8 @@ public abstract class HandleAsync_Tests
 		internal (THandler handler, DeleteOrDisable<TId> dOrD, Vars v) GetVars(bool dOrDResult = true)
 		{
 			var (handler, v) = base.GetVars();
-			v.Dispatcher.DispatchAsync(Arg.Any<TCheckQuery>())
-				.Returns(F.Some(DeleteOperation.None));
+			v.Dispatcher.SendAsync(Arg.Any<TCheckQuery>())
+				.Returns(R.Wrap(DeleteOperation.None));
 			var dOrD = Substitute.For<DeleteOrDisable<TId>>();
 			dOrD.Invoke(default!, default!, default)
 				.ReturnsForAnyArgs(dOrDResult);
@@ -80,7 +80,7 @@ public abstract class HandleAsync_Tests
 			_ = await handle(handler, command, dOrD);
 
 			// Assert
-			await v.Dispatcher.Received().DispatchAsync(Arg.Is<TCheckQuery>(x =>
+			await v.Dispatcher.Received().SendAsync(Arg.Is<TCheckQuery>(x =>
 				x.UserId == userId
 				&& x.Id == entityId
 			));

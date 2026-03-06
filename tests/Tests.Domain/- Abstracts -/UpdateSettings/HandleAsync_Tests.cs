@@ -1,14 +1,14 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Mileage.Domain;
 using Mileage.Domain.SaveSettings.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.UpdateSettings;
 
@@ -27,7 +27,7 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test05_ItemId_Is_Null__Calls_Settings_UpdateAsync__With_Correct_Values();
 
 	internal abstract class Setup<TCommand, THandler, TItemId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
-		where TCommand : Command, IWithId<SettingsId>, IWithUserId
+		where TCommand : Command, IWithId<SettingsId, long>, IWithUserId
 		where THandler : CommandHandler<TCommand>
 		where TItemId : LongId, new()
 	{
@@ -43,7 +43,7 @@ public abstract class HandleAsync_Tests
 			// Arrange
 			var (handler, v) = GetVars();
 			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
+			v.Dispatcher.SendAsync<bool>(query: default!)
 				.ReturnsForAnyArgs(Create.None<bool>());
 
 			// Act
@@ -58,7 +58,7 @@ public abstract class HandleAsync_Tests
 			// Arrange
 			var (handler, v) = GetVars();
 			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
+			v.Dispatcher.SendAsync<bool>(query: default!)
 				.ReturnsForAnyArgs(F.False);
 
 			// Act
@@ -74,7 +74,7 @@ public abstract class HandleAsync_Tests
 			var (handler, v) = GetVars();
 			var userId = LongId<AuthUserId>();
 			var command = GetCommand(userId, LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
+			v.Dispatcher.SendAsync<bool>(query: default!)
 				.ReturnsForAnyArgs(F.True);
 
 			// Act
@@ -89,7 +89,7 @@ public abstract class HandleAsync_Tests
 			// Arrange
 			var (handler, v) = GetVars();
 			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
+			v.Dispatcher.SendAsync<bool>(query: default!)
 				.ReturnsForAnyArgs(F.True);
 
 			// Act

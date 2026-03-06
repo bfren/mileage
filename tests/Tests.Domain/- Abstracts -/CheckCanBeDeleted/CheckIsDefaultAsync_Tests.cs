@@ -2,16 +2,16 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.CheckCanBeDeleted;
 
@@ -30,7 +30,7 @@ public abstract class CheckIsDefaultAsync_Tests
 	internal abstract class Setup<TQuery, THandler, TId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
 		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
-		where TId : LongId, new()
+		where TId : LongId<TId>, new()
 	{
 		public delegate CheckIsDefault<TId> CheckIsDefaultAsyncMethod(THandler handler);
 
