@@ -2,8 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.SaveCar.Internals;
 
@@ -19,7 +19,7 @@ internal sealed record class UpdateCarCommand(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : Command, IWithId<CarId>
+) : Command, IWithId<CarId, long>
 {
 	/// <summary>
 	/// Create from a <see cref="SaveCarQuery"/>

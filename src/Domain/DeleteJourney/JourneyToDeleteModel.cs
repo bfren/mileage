@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.DeleteJourney;
 
@@ -11,7 +11,7 @@ namespace Mileage.Domain.DeleteJourney;
 /// </summary>
 /// <param name="Id">Journey ID</param>
 /// <param name="Version">Concurrency version</param>
-internal sealed record class JourneyToDeleteModel(JourneyId Id, long Version) : IWithVersion<JourneyId>
+internal sealed record class JourneyToDeleteModel(JourneyId Id, long Version) : IWithVersion<JourneyId, long>
 {
 	public JourneyToDeleteModel() : this(new(), 0L) { }
 }

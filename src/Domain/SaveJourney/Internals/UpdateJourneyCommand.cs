@@ -3,7 +3,7 @@
 
 using System;
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using RndF;
 
 namespace Mileage.Domain.SaveJourney.Internals;
@@ -52,5 +52,5 @@ internal sealed record class UpdateJourneyCommand(
 	/// <summary>
 	/// Allows quick creation in testing
 	/// </summary>
-	internal UpdateJourneyCommand() : this(new(), Rnd.Lng, Rnd.DateTime, new(), Rnd.UInt, null, new(), null, null) { }
+	internal UpdateJourneyCommand() : this(new(), Rnd.Lng, Rnd.DateTime, new(), Rnd.UInt32, null, new(), null, null) { }
 }

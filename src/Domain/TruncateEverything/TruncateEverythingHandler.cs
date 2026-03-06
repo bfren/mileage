@@ -4,7 +4,7 @@
 using System.Data;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 
 namespace Mileage.Domain.TruncateEverything;
@@ -30,7 +30,7 @@ internal sealed class TruncateEverythingHandler : CommandHandler<TruncateEveryth
 	/// Truncate all tables
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(TruncateEverythingCommand command)
+	public override async Task<Result<bool>> HandleAsync(TruncateEverythingCommand command)
 	{
 		Log.Inf("Truncating all database tables.");
 

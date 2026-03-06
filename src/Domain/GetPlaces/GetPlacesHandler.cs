@@ -35,16 +35,17 @@ internal sealed class GetPlacesHandler : QueryHandler<GetPlacesQuery, IEnumerabl
 	/// Get places for the specified user, sorted by description
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<PlacesModel>>> HandleAsync(GetPlacesQuery query)
+	public override async Task<Result<IEnumerable<PlacesModel>>> HandleAsync(GetPlacesQuery query)
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<PlacesModel>, Messages.UserIdIsNullMsg>().AsTask();
+			return R.Fail("User ID cannot be null.")
+				.Ctx(nameof(GetPlacesHandler), nameof(HandleAsync));
 		}
 
 		Log.Vrb("Get Places for {User}.", query.UserId);
-		return Place
-			.StartFluentQuery()
+		return await Place
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? trueAndFalse : falseOnly)
 			.Sort(x => x.Description, SortOrder.Ascending)

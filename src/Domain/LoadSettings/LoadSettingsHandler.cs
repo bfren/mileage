@@ -2,12 +2,11 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.SaveSettings;
-using Mileage.Domain.SaveSettings.Messages;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Repositories;
 
@@ -38,16 +37,16 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 	/// saved yet, returns a default object
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<Settings>> HandleAsync(LoadSettingsQuery query)
+	public override Task<Result<Settings>> HandleAsync(LoadSettingsQuery query)
 	{
 		Log.Vrb("Load settings for User {UserId}", query.Id.Value);
 		return Settings
-			.StartFluentQuery()
+			.Fluent()
 			.Where(s => s.UserId, Compare.Equal, query.Id)
 			.QuerySingleAsync<Settings>()
-			.SwitchAsync(
-				some: x => F.Some(x).AsTask(),
-				none: _ => CreateSettings(query.Id)
+			.MatchAsync(
+				fOk: x => R.Wrap(x).AsTask(),
+				fFail: _ => CreateSettings(query.Id)
 			);
 	}
 
@@ -55,18 +54,19 @@ internal sealed class LoadSettingsHandler : QueryHandler<LoadSettingsQuery, Sett
 	/// Create settings that do not yet exist for the specified user.
 	/// </summary>
 	/// <param name="userId">User ID</param>
-	private Task<Maybe<Settings>> CreateSettings(AuthUserId userId) =>
+	private Task<Result<Settings>> CreateSettings(AuthUserId userId) =>
 		Dispatcher
-			.DispatchAsync(new SaveSettingsCommand(userId, new()))
-			.BindAsync(x => x switch
+			.SendAsync(new SaveSettingsCommand(userId, new()))
+			.BindAsync(async x => x switch
 			{
 				true =>
-					Settings
-						.StartFluentQuery()
+					await Settings
+						.Fluent()
 						.Where(s => s.UserId, Compare.Equal, userId)
 						.QuerySingleAsync<Settings>(),
 
 				false =>
-					F.None<Settings, FailedToCreateDefaultSettingsForUserMsg>().AsTask()
+					R.Fail("Failed to create default Settings for user {UserId}.", userId.Value)
+						.Ctx(nameof(LoadSettingsHandler), nameof(CreateSettings))
 			});
 }

@@ -2,15 +2,14 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.CheckRateBelongsToUser;
-using Mileage.Domain.SaveSettings.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -40,7 +39,7 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// Save the settings for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(SaveSettingsCommand command)
+	public override async Task<Result<bool>> HandleAsync(SaveSettingsCommand command)
 	{
 		// Ensure the car belongs to the user (or is null)
 		var carBelongsToUser = await CheckCarBelongsToUser(
@@ -60,19 +59,20 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		// If checks have failed, return with failure message
 		if (!carBelongsToUser || !placeBelongsToUser || !rateBelongsToUser)
 		{
-			return F.None<bool, SaveSettingsCheckFailedMsg>();
+			return R.Fail("Save Settings check failed.")
+				.Ctx(nameof(SaveSettingsHandler), nameof(HandleAsync));
 		}
 
 		// Add or update user settings
 		return await Settings
-			.StartFluentQuery()
+			.Fluent()
 			.Where(s => s.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<SettingsEntity>()
-			.SwitchAsync(
-				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateSettingsCommand(x, command.Settings)),
-				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateSettingsCommand(command.UserId, command.Settings))
+			.MatchAsync(
+				fOk: x => Dispatcher
+					.SendAsync(new Internals.UpdateSettingsCommand(x, command.Settings)),
+				fFail: f => Dispatcher
+					.SendAsync(new Internals.CreateSettingsCommand(command.UserId, command.Settings))
 			);
 	}
 
@@ -86,7 +86,7 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		{
 			CarId x =>
 				Dispatcher
-					.DispatchAsync(new CheckCarBelongsToUserQuery(userId, x))
+					.SendAsync(new CheckCarBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
@@ -103,7 +103,7 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		{
 			PlaceId x =>
 				Dispatcher
-					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, x))
+					.SendAsync(new CheckPlacesBelongToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>
@@ -120,7 +120,7 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 		{
 			RateId x =>
 				Dispatcher
-					.DispatchAsync(new CheckRateBelongsToUserQuery(userId, x))
+					.SendAsync(new CheckRateBelongsToUserQuery(userId, x))
 					.IsTrueAsync(),
 
 			_ =>

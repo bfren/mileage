@@ -29,7 +29,7 @@ internal sealed class UpdateJourneyDayHandler : CommandHandler<UpdateJourneyDayC
 	/// Update journey Day belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyDayCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyDayCommand command)
 	{
 		Log.Vrb("Updating Day for {Journey}.", command);
 		return Journey.UpdateAsync(command);

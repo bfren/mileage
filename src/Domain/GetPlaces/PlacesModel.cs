@@ -1,8 +1,8 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetPlaces;
 
@@ -18,4 +18,4 @@ public sealed record class PlacesModel(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : IWithId<PlaceId>;
+) : IWithId<PlaceId, long>;

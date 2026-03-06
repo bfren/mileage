@@ -31,11 +31,11 @@ internal sealed class GetRecentJourneysHandler : QueryHandler<GetRecentJourneysQ
 	/// Get recent journeys for user in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<RecentJourneyModel>>> HandleAsync(GetRecentJourneysQuery query)
+	public override Task<Result<IEnumerable<RecentJourneyModel>>> HandleAsync(GetRecentJourneysQuery query)
 	{
 		Log.Vrb("Getting recent journeys for user {UserId}.", query.UserId.Value);
 		return Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Where(x => x.EndMiles, Compare.MoreThan, 0)
 			.Sort(x => x.Day, SortOrder.Descending)

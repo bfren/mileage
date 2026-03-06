@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Domain.GetCar;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.GetRate;
 
@@ -16,7 +17,7 @@ namespace Mileage.Domain.GetRate;
 /// </summary>
 internal sealed class GetRateHandler : QueryHandler<GetRateQuery, RateModel>
 {
-	private IMaybeCache<RateId> Cache { get; init; }
+	private IWrapCache<RateId> Cache { get; init; }
 
 	private IRateRepository Rate { get; init; }
 
@@ -28,36 +29,42 @@ internal sealed class GetRateHandler : QueryHandler<GetRateQuery, RateModel>
 	/// <param name="cache"></param>
 	/// <param name="rate"></param>
 	/// <param name="log"></param>
-	public GetRateHandler(IMaybeCache<RateId> cache, IRateRepository rate, ILog<GetRateHandler> log) =>
+	public GetRateHandler(IWrapCache<RateId> cache, IRateRepository rate, ILog<GetRateHandler> log) =>
 		(Cache, Rate, Log) = (cache, rate, log);
 
 	/// <summary>
 	/// Get the specified rate if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<RateModel>> HandleAsync(GetRateQuery query)
+	public override async Task<Result<RateModel>> HandleAsync(GetRateQuery query)
 	{
 		if (query.RateId is null || query.RateId.Value == 0)
 		{
-			return F.None<RateModel, Messages.RateIdIsNullMsg>().AsTask();
+			return R.Fail("Rate ID cannot be null.")
+				.Ctx(nameof(GetCarHandler), nameof(HandleAsync));
 		}
 
-		return Cache
+		return await Cache
 			.GetOrCreateAsync(
 				key: query.RateId,
 				valueFactory: () =>
 				{
 					Log.Vrb("Get Rate: {Query}.", query);
 					return Rate
-						.StartFluentQuery()
+						.Fluent()
 						.Where(x => x.Id, Compare.Equal, query.RateId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<RateModel>();
+						.QuerySingleAsync<RateModel>()
+						.ToMaybeAsync(Log.Failure);
 				}
 			)
-			.SwitchIfAsync(
-				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<RateModel, Messages.RateDoesNotBelongToUserMsg>()
+			.ToResultAsync(
+				nameof(GetCarHandler), nameof(HandleAsync)
+			)
+			.IfNotAsync(
+				fTest: x => x.UserId == query.UserId,
+				fThen: _ => R.Fail("Rate {RateId} does not belong to user {UserId}.", query.RateId.Value, query.UserId.Value)
+					.Ctx(nameof(GetRateHandler), nameof(HandleAsync))
 			);
 	}
 }

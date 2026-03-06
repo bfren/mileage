@@ -29,7 +29,7 @@ internal sealed class CreateSettingsHandler : CommandHandler<CreateSettingsComma
 	/// Create settings for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(CreateSettingsCommand command)
+	public override Task<Result<bool>> HandleAsync(CreateSettingsCommand command)
 	{
 		Log.Vrb("Creating new settings for user {UserId}.", command.UserId.Value);
 		return Settings
@@ -40,7 +40,7 @@ internal sealed class CreateSettingsHandler : CommandHandler<CreateSettingsComma
 				DefaultFromPlaceId = command.Settings.DefaultFromPlaceId,
 				DefaultRateId = command.Settings.DefaultRateId
 			})
-			.AuditAsync(some: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value))
-			.BindAsync(_ => F.True);
+			.AuditAsync(fOk: x => Log.Vrb("Created settings {SettingsId} for user {UserId}.", x.Value, command.UserId.Value))
+			.BindAsync(_ => R.True);
 	}
 }

@@ -2,16 +2,16 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
 using Mileage.Domain.CheckRateCanBeDeleted;
-using Mileage.Domain.DeleteRate.Messages;
+using Mileage.Domain.DeleteJourney;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.DeleteRate;
 
@@ -20,7 +20,7 @@ namespace Mileage.Domain.DeleteRate;
 /// </summary>
 internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 {
-	private IMaybeCache<RateId> Cache { get; init; }
+	private IWrapCache<RateId> Cache { get; init; }
 
 	private IDispatcher Dispatcher { get; init; }
 
@@ -35,23 +35,23 @@ internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 	/// <param name="dispatcher"></param>
 	/// <param name="rate"></param>
 	/// <param name="log"></param>
-	public DeleteRateHandler(IMaybeCache<RateId> cache, IDispatcher dispatcher, IRateRepository rate, ILog<DeleteRateHandler> log) =>
+	public DeleteRateHandler(IWrapCache<RateId> cache, IDispatcher dispatcher, IRateRepository rate, ILog<DeleteRateHandler> log) =>
 		(Cache, Dispatcher, Rate, Log) = (cache, dispatcher, rate, log);
 
 	/// <summary>
 	/// Delete the rate specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(DeleteRateCommand command) =>
+	public override Task<Result<bool>> HandleAsync(DeleteRateCommand command) =>
 		HandleAsync(command, DeleteOrDisableAsync);
 
-	internal Task<Maybe<bool>> HandleAsync(DeleteRateCommand command, DeleteOrDisable<RateId> dOrD)
+	internal Task<Result<bool>> HandleAsync(DeleteRateCommand command, DeleteOrDisable<RateId> dOrD)
 	{
 		Log.Vrb("Delete or Disable Rate: {Command}", command);
 		return Dispatcher
-			.DispatchAsync(new CheckRateCanBeDeletedQuery(command.UserId, command.Id))
+			.SendAsync(new CheckRateCanBeDeletedQuery(command.UserId, command.Id))
 			.BindAsync(x => dOrD(command.UserId, command.Id, x))
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 
 	/// <summary>
@@ -60,24 +60,26 @@ internal sealed class DeleteRateHandler : CommandHandler<DeleteRateCommand>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
 	/// <param name="operation"></param>
-	internal Task<Maybe<bool>> DeleteOrDisableAsync(AuthUserId userId, RateId rateId, DeleteOperation operation) =>
-		Rate.StartFluentQuery()
+	internal Task<Result<bool>> DeleteOrDisableAsync(AuthUserId userId, RateId rateId, DeleteOperation operation) =>
+		Rate.Fluent()
 			.Where(x => x.Id, Compare.Equal, rateId)
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.QuerySingleAsync<RateToDeleteModel>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => operation switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: async x => operation switch
 				{
 					DeleteOperation.Delete =>
-						Rate.DeleteAsync(x),
+						await Rate.DeleteAsync(x),
 
 					DeleteOperation.Disable =>
-						Rate.UpdateAsync(x with { IsDisabled = true }),
+						await Rate.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, RateCannotBeDeletedMsg>().AsTask()
+						 R.Fail("Rate {RateId} does not exist for user {UserId}.", rateId.Value, userId.Value)
+							.Ctx(nameof(DeleteJourneyHandler), nameof(HandleAsync))
 				},
-				none: _ => F.None<bool>(new RateDoesNotExistMsg(userId, rateId))
+				fFail: _ => R.Fail("Rate {RateId} does not exist for user {UserId}.", rateId.Value, userId.Value)
+					.Ctx(nameof(DeleteJourneyHandler), nameof(HandleAsync))
 			);
 }

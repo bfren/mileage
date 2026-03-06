@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Mileage.Persistence;
 
@@ -37,12 +37,12 @@ internal sealed class MigrateToLatestHandler : CommandHandler<MigrateToLatestCom
 	/// Migrate databases to the latest version
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(MigrateToLatestCommand command)
+	public override Task<Result<bool>> HandleAsync(MigrateToLatestCommand command)
 	{
 		Log.Dbg("Migrating Authentication database to the latest version.");
 		AuthDb.MigrateToLatest();
 
 		Log.Dbg("Migrating Mileage database to the latest version.");
-		return F.Some(Migrator.MigrateToLatest(Db.Config.ConnectionString)).AsTask();
+		return R.Wrap(Migrator.MigrateToLatest(Db.Config.ConnectionString)).AsTask();
 	}
 }

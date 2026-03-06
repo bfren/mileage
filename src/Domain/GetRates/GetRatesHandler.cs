@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using Mileage.Domain.GetCars;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.GetRates;
@@ -35,16 +36,17 @@ internal sealed class GetRatesHandler : QueryHandler<GetRatesQuery, IEnumerable<
 	/// Get rates for the specified user, sorted by amount
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<RatesModel>>> HandleAsync(GetRatesQuery query)
+	public override async Task<Result<IEnumerable<RatesModel>>> HandleAsync(GetRatesQuery query)
 	{
 		if (query.UserId is null || query.UserId.Value == 0)
 		{
-			return F.None<IEnumerable<RatesModel>, Messages.UserIdIsNullMsg>().AsTask();
+			return R.Fail("User ID cannot be null.")
+				.Ctx(nameof(GetCarsHandler), nameof(HandleAsync));
 		}
 
 		Log.Vrb("Get Rates for {User}.", query.UserId);
-		return Rate
-			.StartFluentQuery()
+		return await Rate
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.WhereIn(x => x.IsDisabled, query.IncludeDisabled ? trueAndFalse : falseOnly)
 			.Sort(x => x.AmountPerMileGBP, SortOrder.Ascending)

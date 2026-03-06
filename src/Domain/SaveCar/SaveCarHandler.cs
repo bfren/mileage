@@ -6,8 +6,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
-using Mileage.Domain.SaveCar.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -37,7 +36,7 @@ internal sealed class SaveCarHandler : QueryHandler<SaveCarQuery, CarId>
 	/// Save the car belonging to user specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<CarId>> HandleAsync(SaveCarQuery query)
+	public override async Task<Result<CarId>> HandleAsync(SaveCarQuery query)
 	{
 		Log.Vrb("Saving Car {Query}.", query);
 
@@ -45,27 +44,28 @@ internal sealed class SaveCarHandler : QueryHandler<SaveCarQuery, CarId>
 		if (query.Id?.Value > 0)
 		{
 			var carBelongsToUser = await Dispatcher
-					.DispatchAsync(new CheckCarBelongsToUserQuery(query.UserId, query.Id))
+					.SendAsync(new CheckCarBelongsToUserQuery(query.UserId, query.Id))
 					.IsTrueAsync();
 
 			if (!carBelongsToUser)
 			{
-				return F.None<CarId>(new CarDoesNotBelongToUserMsg(query.UserId, query.Id));
+				return R.Fail("Car {CarId} does not belong to user {UserId}.", query.Id.Value, query.UserId.Value)
+					.Ctx(nameof(SaveCarHandler), nameof(HandleAsync));
 			}
 		}
 
 		// Create or update car
 		return await Car
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, query.Id)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<CarEntity>()
-			.SwitchAsync(
-				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateCarCommand(x.Id, query))
-					.BindAsync(_ => F.Some(x.Id)),
-				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateCarQuery(query))
+			.MatchAsync(
+				fOk: x => Dispatcher
+					.SendAsync(new Internals.UpdateCarCommand(x.Id, query))
+					.BindAsync(_ => R.Wrap(x.Id)),
+				fFail: f => Dispatcher
+					.SendAsync(new Internals.CreateCarQuery(query))
 			);
 	}
 }

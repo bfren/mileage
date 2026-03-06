@@ -1,8 +1,8 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetRates;
 
@@ -16,7 +16,7 @@ public sealed record class RatesModel(
 	RateId Id,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : IWithId<RateId>
+) : IWithId<RateId, long>
 {
 	/// <summary>
 	/// Create blank for model binding

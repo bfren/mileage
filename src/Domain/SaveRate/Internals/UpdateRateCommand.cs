@@ -2,8 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.SaveRate.Internals;
 
@@ -17,7 +17,7 @@ internal sealed record class UpdateRateCommand(
 	long Version,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : Command, IWithId<RateId>
+) : Command, IWithId<RateId, long>
 {
 	public UpdateRateCommand(RateId rateId, SaveRateQuery query) : this(
 		Id: rateId,

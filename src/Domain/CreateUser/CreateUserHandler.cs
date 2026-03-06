@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 
@@ -29,7 +30,7 @@ internal sealed class CreateUserHandler : QueryHandler<CreateUserQuery, AuthUser
 	/// Create a new user from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<AuthUserId>> HandleAsync(CreateUserQuery query)
+	public override Task<Result<AuthUserId>> HandleAsync(CreateUserQuery query)
 	{
 		Log.Vrb("Create User: {Query}", query with { Password = "** REDACTED **" });
 		return User

@@ -1,7 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 
 namespace Mileage.Domain.CreateUser;

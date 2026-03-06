@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.GetCar;
 
@@ -16,7 +16,7 @@ namespace Mileage.Domain.GetCar;
 /// </summary>
 internal sealed class GetCarHandler : QueryHandler<GetCarQuery, CarModel>
 {
-	private IMaybeCache<CarId> Cache { get; init; }
+	private IWrapCache<CarId> Cache { get; init; }
 
 	private ICarRepository Car { get; init; }
 
@@ -28,35 +28,41 @@ internal sealed class GetCarHandler : QueryHandler<GetCarQuery, CarModel>
 	/// <param name="cache"></param>
 	/// <param name="car"></param>
 	/// <param name="log"></param>
-	public GetCarHandler(IMaybeCache<CarId> cache, ICarRepository car, ILog<GetCarHandler> log) =>
+	public GetCarHandler(IWrapCache<CarId> cache, ICarRepository car, ILog<GetCarHandler> log) =>
 		(Cache, Car, Log) = (cache, car, log);
 
 	/// <summary>
 	/// Get the specified car if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<CarModel>> HandleAsync(GetCarQuery query)
+	public override async Task<Result<CarModel>> HandleAsync(GetCarQuery query)
 	{
 		if (query.CarId is null || query.CarId.Value == 0)
 		{
-			return F.None<CarModel, Messages.CarIdIsNullMsg>().AsTask();
+			return R.Fail("Car ID cannot be null.")
+				.Ctx(nameof(GetCarHandler), nameof(HandleAsync));
 		}
 
-		return Cache
+		return await Cache
 			.GetOrCreateAsync(
 				key: query.CarId,
 				valueFactory: () =>
 				{
 					Log.Vrb("Get Car: {Query}.", query);
-					return Car.StartFluentQuery()
+					return Car.Fluent()
 						.Where(x => x.Id, Compare.Equal, query.CarId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<CarModel>();
+						.QuerySingleAsync<CarModel>()
+						.ToMaybeAsync(Log.Failure);
 				}
 			)
-			.SwitchIfAsync(
-				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<CarModel, Messages.CarDoesNotBelongToUserMsg>()
+			.ToResultAsync(
+				nameof(GetCarHandler), nameof(HandleAsync)
+			)
+			.IfNotAsync(
+				fTest: x => x.UserId == query.UserId,
+				fThen: _ => R.Fail("Car {CarId} does not belong to user {UserId}.", query.CarId.Value, query.UserId.Value)
+					.Ctx(nameof(GetCarHandler), nameof(HandleAsync))
 			);
 	}
 }

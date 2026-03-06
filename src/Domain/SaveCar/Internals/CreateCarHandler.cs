@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveCar.Internals;
@@ -30,7 +30,7 @@ internal sealed class CreateCarHandler : QueryHandler<CreateCarQuery, CarId>
 	/// Create a new car from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<CarId>> HandleAsync(CreateCarQuery query)
+	public override Task<Result<CarId>> HandleAsync(CreateCarQuery query)
 	{
 		Log.Vrb("Create Car: {Query}", query);
 		return Car

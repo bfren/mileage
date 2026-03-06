@@ -29,7 +29,7 @@ internal sealed class UpdateSettingsHandler : CommandHandler<UpdateSettingsComma
 	/// Update settings for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateSettingsCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateSettingsCommand command)
 	{
 		Log.Vrb("Updating settings {SettingsId} for user {UserId}.", command.ExistingSettings.Id.Value, command.ExistingSettings.UserId.Value);
 		return Settings

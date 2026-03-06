@@ -1,9 +1,9 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetPlace;
 
@@ -23,7 +23,7 @@ public sealed record class PlaceModel(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : IWithUserId, IWithId<PlaceId>
+) : IWithUserId, IWithId<PlaceId, long>
 {
 	/// <summary>
 	/// Create blank for model binding

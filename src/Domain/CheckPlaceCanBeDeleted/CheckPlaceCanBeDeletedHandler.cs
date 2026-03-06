@@ -2,12 +2,12 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 using Mileage.Persistence.Tables;
 
@@ -37,10 +37,10 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 	/// Check whether or not the car defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckPlaceCanBeDeletedQuery query) =>
+	public override Task<Result<DeleteOperation>> HandleAsync(CheckPlaceCanBeDeletedQuery query) =>
 		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
 
-	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+	internal async Task<Result<DeleteOperation>> HandleAsync(
 		CheckPlaceCanBeDeletedQuery query,
 		CheckIsDefault<PlaceId> checkIsDefault,
 		CountJourneysWith<PlaceId> countJourneysWith
@@ -50,13 +50,15 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 
 		// Check whether or not it is the default from place for the user
 		var defaultFromPlaceQuery = await checkIsDefault(query.UserId, query.Id);
-		if (defaultFromPlaceQuery.IsSome(out var isDefaultFromPlace) && isDefaultFromPlace)
+		if (defaultFromPlaceQuery.Unsafe().TryOk(out var isDefaultFromPlace) && isDefaultFromPlace)
 		{
-			return F.None<DeleteOperation, Messages.PlaceIsDefaultFromPlaceMsg>();
+			return R.Fail("Place {PlaceId} cannot be deleted as it is the default for user {UserId}.", query.Id.Value, query.UserId.Value)
+				.Ctx(nameof(CheckPlaceCanBeDeletedHandler), nameof(HandleAsync));
 		}
-		else if (defaultFromPlaceQuery.IsNone(out var reason))
+		else if (defaultFromPlaceQuery.Unsafe().TryFailure(out var failure))
 		{
-			return F.None<DeleteOperation>(reason);
+			return R.Fail(failure)
+				.Ctx(nameof(CheckPlaceCanBeDeletedHandler), nameof(HandleAsync));
 		}
 
 		// Check whether or not the place is used in one of the user's journeys
@@ -64,13 +66,13 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 		return journeysWithPlaceQuery.Bind(x => x switch
 		{
 			> 0 =>
-				F.Some(DeleteOperation.Disable),
+				R.Wrap(DeleteOperation.Disable),
 
 			0 =>
-				F.Some(DeleteOperation.Delete),
+				R.Wrap(DeleteOperation.Delete),
 
 			_ =>
-				F.Some(DeleteOperation.None)
+				R.Wrap(DeleteOperation.None)
 		});
 	}
 
@@ -79,21 +81,21 @@ internal sealed class CheckPlaceCanBeDeletedHandler : QueryHandler<CheckPlaceCan
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
-	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, PlaceId placeId) =>
-		Settings.StartFluentQuery()
+	internal Task<Result<bool>> CheckIsDefaultAsync(AuthUserId userId, PlaceId placeId) =>
+		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultFromPlaceId)
-			.BindAsync(x => F.Some(x == placeId));
+			.BindAsync(x => R.Wrap(x == placeId));
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="placeId"/>
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
-	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, PlaceId placeId)
+	internal Task<Result<long>> CountJourneysWithAsync(AuthUserId userId, PlaceId placeId)
 	{
 		var j = new JourneyTable();
-		return Journey.StartFluentQuery()
+		return Journey.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.Where($"({j.FromPlaceId} = @{nameof(placeId)} OR {j.ToPlaceIds} ? @{nameof(placeId)}::text)", new { placeId })
 			.CountAsync();

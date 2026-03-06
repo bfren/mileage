@@ -2,12 +2,13 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
+using Mileage.Domain.CheckPlaceCanBeDeleted;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckCarCanBeDeleted;
@@ -36,10 +37,10 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 	/// Check whether or not the car defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckCarCanBeDeletedQuery query) =>
+	public override Task<Result<DeleteOperation>> HandleAsync(CheckCarCanBeDeletedQuery query) =>
 		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
 
-	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+	internal async Task<Result<DeleteOperation>> HandleAsync(
 		CheckCarCanBeDeletedQuery query,
 		CheckIsDefault<CarId> checkIsDefault,
 		CountJourneysWith<CarId> countJourneysWith
@@ -49,13 +50,15 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 
 		// Check whether or not it is the default car for the user
 		var defaultCarQuery = await checkIsDefault(query.UserId, query.Id);
-		if (defaultCarQuery.IsSome(out var isDefaultCar) && isDefaultCar)
+		if (defaultCarQuery.Unsafe().TryOk(out var isDefaultCar) && isDefaultCar)
 		{
-			return F.None<DeleteOperation, Messages.CarIsDefaultCarMsg>();
+			return R.Fail("Car {CarId} cannot be deleted as it is the default for user {UserId}.", query.Id.Value, query.UserId.Value)
+				.Ctx(nameof(CheckCarCanBeDeletedHandler), nameof(HandleAsync));
 		}
-		else if (defaultCarQuery.IsNone(out var reason))
+		else if (defaultCarQuery.Unsafe().TryFailure(out var reason))
 		{
-			return F.None<DeleteOperation>(reason);
+			return R.Fail(reason)
+				.Ctx(nameof(CheckPlaceCanBeDeletedHandler), nameof(HandleAsync));
 		}
 
 		// Check whether or not the car is used in one of the user's journeys
@@ -63,13 +66,13 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 		return journeysWithCarQuery.Bind(x => x switch
 		{
 			> 0 =>
-				F.Some(DeleteOperation.Disable),
+				R.Wrap(DeleteOperation.Disable),
 
 			0 =>
-				F.Some(DeleteOperation.Delete),
+				R.Wrap(DeleteOperation.Delete),
 
 			_ =>
-				F.Some(DeleteOperation.None)
+				R.Wrap(DeleteOperation.None)
 		});
 	}
 
@@ -78,19 +81,19 @@ internal sealed class CheckCarCanBeDeletedHandler : QueryHandler<CheckCarCanBeDe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>
-	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, CarId carId) =>
-		Settings.StartFluentQuery()
+	internal Task<Result<bool>> CheckIsDefaultAsync(AuthUserId userId, CarId carId) =>
+		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultCarId)
-			.BindAsync(x => F.Some(x == carId));
+			.BindAsync(x => R.Wrap(x == carId));
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="carId"/>
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>
-	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, CarId carId) =>
-		Journey.StartFluentQuery()
+	internal Task<Result<long>> CountJourneysWithAsync(AuthUserId userId, CarId carId) =>
+		Journey.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.Where(x => x.CarId, Compare.Equal, carId)
 			.CountAsync();

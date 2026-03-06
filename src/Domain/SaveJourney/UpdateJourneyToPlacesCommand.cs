@@ -2,10 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Collections.Generic;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.SaveJourney;
 
@@ -19,4 +19,4 @@ public sealed record class UpdateJourneyToPlacesCommand(
 	JourneyId Id,
 	long Version,
 	List<PlaceId> ToPlaceIds
-) : Command, IWithId<JourneyId>, IWithUserId;
+) : Command, IWithId<JourneyId, long>, IWithUserId;

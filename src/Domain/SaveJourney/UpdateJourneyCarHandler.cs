@@ -29,7 +29,7 @@ internal sealed class UpdateJourneyCarHandler : CommandHandler<UpdateJourneyCarC
 	/// Update journey Car belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyCarCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyCarCommand command)
 	{
 		Log.Vrb("Updating Car for {Journey}.", command);
 		return Journey.UpdateAsync(command);

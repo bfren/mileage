@@ -32,30 +32,31 @@ internal sealed class CheckPlacesBelongToUserHandler : QueryHandler<CheckPlacesB
 	/// Returns true if the place belongs to the user defined by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<bool>> HandleAsync(CheckPlacesBelongToUserQuery query)
+	public override async Task<Result<bool>> HandleAsync(CheckPlacesBelongToUserQuery query)
 	{
 		if (query.PlaceIds.Length == 0)
 		{
-			return F.None<bool, Messages.PlaceIdsIsNullMsg>().AsTask();
+			return R.Fail("Place IDs cannot be an empty list.")
+				.Ctx(nameof(CheckPlacesBelongToUserHandler), nameof(HandleAsync));
 		}
 
 		Log.Vrb("Checking places {PlaceIds} belong to user {UserId}.", query.PlaceIds.Select(p => p.Value), query.UserId.Value);
-		return Place
-			.StartFluentQuery()
+		return await Place
+			.Fluent()
 			.WhereIn(c => c.Id, query.PlaceIds)
 			.Where(c => c.UserId, Compare.Equal, query.UserId)
 			.QueryAsync<PlaceEntity>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => x.Count() switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => x.Count() switch
 				{
 					int y when y == query.PlaceIds.Length =>
-						F.True,
+						R.True,
 
 					_ =>
-						F.False
+						R.False
 				},
-				none: _ => F.False
+				fFail: _ => R.False
 			);
 	}
 }

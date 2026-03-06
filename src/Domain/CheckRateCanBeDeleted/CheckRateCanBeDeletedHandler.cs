@@ -2,12 +2,12 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckRateCanBeDeleted;
@@ -36,10 +36,10 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	/// Check whether or not the rate defined in <paramref name="query"/> can be deleted or disabled
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<DeleteOperation>> HandleAsync(CheckRateCanBeDeletedQuery query) =>
+	public override Task<Result<DeleteOperation>> HandleAsync(CheckRateCanBeDeletedQuery query) =>
 		HandleAsync(query, CheckIsDefaultAsync, CountJourneysWithAsync);
 
-	internal async Task<Maybe<DeleteOperation>> HandleAsync(
+	internal async Task<Result<DeleteOperation>> HandleAsync(
 		CheckRateCanBeDeletedQuery query,
 		CheckIsDefault<RateId> checkIsDefault,
 		CountJourneysWith<RateId> countJourneysWith
@@ -49,13 +49,15 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 
 		// Check whether or not it is the default rate for the user
 		var defaultRateQuery = await checkIsDefault(query.UserId, query.Id);
-		if (defaultRateQuery.IsSome(out var isDefaultRate) && isDefaultRate)
+		if (defaultRateQuery.Unsafe().TryOk(out var isDefaultRate) && isDefaultRate)
 		{
-			return F.None<DeleteOperation, Messages.RateIsDefaultRateMsg>();
+			return R.Fail("Rate {RateId} cannot be deleted as it is the default for user {UserId}.", query.Id.Value, query.UserId.Value)
+				.Ctx(nameof(CheckRateCanBeDeletedHandler), nameof(HandleAsync));
 		}
-		else if (defaultRateQuery.IsNone(out var reason))
+		else if (defaultRateQuery.Unsafe().TryFailure(out var failure))
 		{
-			return F.None<DeleteOperation>(reason);
+			return R.Fail(failure)
+				.Ctx(nameof(CheckRateCanBeDeletedHandler), nameof(HandleAsync));
 		}
 
 		// Check whether or not the rate is used in one of the user's journeys
@@ -63,13 +65,13 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 		return journeysWithRateQuery.Bind(x => x switch
 		{
 			> 0 =>
-				F.Some(DeleteOperation.Disable),
+				R.Wrap(DeleteOperation.Disable),
 
 			0 =>
-				F.Some(DeleteOperation.Delete),
+				R.Wrap(DeleteOperation.Delete),
 
 			_ =>
-				F.Some(DeleteOperation.None)
+				R.Wrap(DeleteOperation.None)
 		});
 	}
 
@@ -78,19 +80,19 @@ internal sealed class CheckRateCanBeDeletedHandler : QueryHandler<CheckRateCanBe
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
-	internal Task<Maybe<bool>> CheckIsDefaultAsync(AuthUserId userId, RateId rateId) =>
-		Settings.StartFluentQuery()
+	internal Task<Result<bool>> CheckIsDefaultAsync(AuthUserId userId, RateId rateId) =>
+		Settings.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.ExecuteAsync(x => x.DefaultRateId)
-			.BindAsync(x => F.Some(x == rateId));
+			.BindAsync(x => R.Wrap(x == rateId));
 
 	/// <summary>
 	/// Count the number of journeys using <paramref name="rateId"/>
 	/// </summary>
 	/// <param name="userId"></param>
 	/// <param name="rateId"></param>
-	internal Task<Maybe<long>> CountJourneysWithAsync(AuthUserId userId, RateId rateId) =>
-		Journey.StartFluentQuery()
+	internal Task<Result<long>> CountJourneysWithAsync(AuthUserId userId, RateId rateId) =>
+		Journey.Fluent()
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.Where(x => x.RateId, Compare.Equal, rateId)
 			.CountAsync();

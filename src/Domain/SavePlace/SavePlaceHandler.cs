@@ -6,8 +6,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckPlacesBelongToUser;
-using Mileage.Domain.SavePlace.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -37,7 +36,7 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 	/// Save the place belonging to user specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<PlaceId>> HandleAsync(SavePlaceQuery query)
+	public override async Task<Result<PlaceId>> HandleAsync(SavePlaceQuery query)
 	{
 		Log.Vrb("Saving Place {Query}.", query);
 
@@ -45,27 +44,28 @@ internal sealed class SavePlaceHandler : QueryHandler<SavePlaceQuery, PlaceId>
 		if (query.Id is not null)
 		{
 			var placeBelongsToUser = await Dispatcher
-				.DispatchAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.Id))
+				.SendAsync(new CheckPlacesBelongToUserQuery(query.UserId, query.Id))
 				.IsTrueAsync();
 
 			if (!placeBelongsToUser)
 			{
-				return F.None<PlaceId>(new PlaceDoesNotBelongToUserMsg(query.UserId, query.Id));
+				return R.Fail("Place {PlaceId} does not belong to user {UserId}.", query.Id.Value, query.UserId.Value)
+					.Ctx(nameof(SavePlaceHandler), nameof(HandleAsync));
 			}
 		}
 
 		// Create or update place
 		return await Place
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, query.Id)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<PlaceEntity>()
-			.SwitchAsync(
-				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdatePlaceCommand(x.Id, query))
-					.BindAsync(_ => F.Some(x.Id)),
-				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreatePlaceQuery(query))
+			.MatchAsync(
+				fOk: x => Dispatcher
+					.SendAsync(new Internals.UpdatePlaceCommand(x.Id, query))
+					.BindAsync(_ => R.Wrap(x.Id)),
+				fFail: f => Dispatcher
+					.SendAsync(new Internals.CreatePlaceQuery(query))
 			);
 	}
 }

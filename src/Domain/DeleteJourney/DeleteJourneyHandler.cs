@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using Mileage.Domain.DeleteJourney.Messages;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.DeleteJourney;
@@ -31,18 +30,19 @@ internal sealed class DeleteJourneyHandler : CommandHandler<DeleteJourneyCommand
 	/// Delete the journey specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(DeleteJourneyCommand command)
+	public override Task<Result<bool>> HandleAsync(DeleteJourneyCommand command)
 	{
 		Log.Vrb("Delete Journey: {Command}", command);
 		return Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, command.Id)
 			.Where(x => x.UserId, Compare.Equal, command.UserId)
 			.QuerySingleAsync<JourneyToDeleteModel>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Journey.DeleteAsync(x),
-				none: _ => F.None<bool>(new JourneyDoesNotExistMsg(command.UserId, command.Id))
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Journey.DeleteAsync(x),
+				fFail: _ => R.Fail("Journey {JourneyId} does not exist for user {UserId}.", command.Id.Value, command.UserId.Value)
+					.Ctx(nameof(DeleteJourneyHandler), nameof(HandleAsync))
 			);
 	}
 }

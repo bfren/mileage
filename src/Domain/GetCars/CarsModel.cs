@@ -1,8 +1,8 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetCars;
 
@@ -18,4 +18,4 @@ public sealed record class CarsModel(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : IWithId<CarId>;
+) : IWithId<CarId, long>;

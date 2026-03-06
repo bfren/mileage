@@ -2,10 +2,10 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Collections;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetJourney;
 
@@ -33,7 +33,7 @@ public sealed record class JourneyModel(
 	PlaceId FromPlaceId,
 	ImmutableList<PlaceId> ToPlaceIds,
 	RateId? RateId
-) : IWithUserId, IWithId<JourneyId>
+) : IWithUserId, IWithId<JourneyId, long>
 {
 	/// <summary>
 	/// Create empty model
