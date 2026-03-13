@@ -2,16 +2,16 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.CheckCanBeDeleted;
 
@@ -30,7 +30,7 @@ public abstract class CheckIsDefaultAsync_Tests
 	internal abstract class Setup<TQuery, THandler, TId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
 		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
-		where TId : LongId, new()
+		where TId : LongId<TId>, new()
 	{
 		public delegate CheckIsDefault<TId> CheckIsDefaultAsyncMethod(THandler handler);
 
@@ -40,11 +40,13 @@ public abstract class CheckIsDefaultAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
+			var userId = IdGen.LongId<AuthUserId>();
 			var check = checkIsDefault(handler);
+			v.Fluent.ExecuteAsync<TId>(aliasSelector: default!)
+				.ReturnsForAnyArgs(IdGen.LongId<TId>());
 
 			// Act
-			_ = await check(userId, LongId<TId>());
+			_ = await check(userId, IdGen.LongId<TId>());
 
 			// Assert
 			v.Fluent.AssertCalls(
@@ -58,14 +60,16 @@ public abstract class CheckIsDefaultAsync_Tests
 			// Arrange
 			var (handler, v) = GetVars();
 			var check = checkIsDefault(handler);
+			v.Fluent.ExecuteAsync<TId>(aliasSelector: default!)
+				.ReturnsForAnyArgs(IdGen.LongId<TId>());
 
 			// Act
-			_ = await check(LongId<AuthUserId>(), LongId<TId>());
+			_ = await check(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
 			v.Fluent.AssertCalls(
 				_ => { },
-				c => FluentQueryHelper.AssertExecute(c, property, false)
+				c => FluentQueryHelper.AssertExecute(c, property)
 			);
 		}
 
@@ -73,16 +77,16 @@ public abstract class CheckIsDefaultAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var entityId = LongId<TId>();
+			var entityId = IdGen.LongId<TId>();
 			v.Fluent.ExecuteAsync<TId?>(aliasSelector: default!)
 				.ReturnsForAnyArgs(entityId);
 			var check = checkIsDefault(handler);
 
 			// Act
-			var result = await check(LongId<AuthUserId>(), entityId);
+			var result = await check(IdGen.LongId<AuthUserId>(), entityId);
 
 			// Assert
-			var some = result.AssertSome();
+			var some = result.AssertOk();
 			Assert.True(some);
 		}
 
@@ -90,16 +94,16 @@ public abstract class CheckIsDefaultAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var entityId = LongId<TId>();
+			var entityId = IdGen.LongId<TId>();
 			v.Fluent.ExecuteAsync<TId?>(aliasSelector: default!)
 				.ReturnsForAnyArgs(entityId);
 			var check = checkIsDefault(handler);
 
 			// Act
-			var result = await check(LongId<AuthUserId>(), LongId<TId>());
+			var result = await check(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
-			var some = result.AssertSome();
+			var some = result.AssertOk();
 			Assert.False(some);
 		}
 
@@ -107,16 +111,16 @@ public abstract class CheckIsDefaultAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var none = Create.None<TId?>();
+			var failure = FailGen.Create<TId?>();
 			v.Fluent.ExecuteAsync<TId?>(aliasSelector: default!)
-				.ReturnsForAnyArgs(none);
+				.ReturnsForAnyArgs(failure);
 			var check = checkIsDefault(handler);
 
 			// Act
-			var result = await check(LongId<AuthUserId>(), LongId<TId>());
+			var result = await check(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
-			result.AssertNone();
+			result.AssertFailure();
 		}
 	}
 }

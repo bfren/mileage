@@ -1,20 +1,18 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Data;
-using Jeebs.Data.Query;
+using Jeebs.Data.Common;
 using Jeebs.Data.Testing.Query;
 using Jeebs.Logging;
-using StrongId;
 
 namespace Mileage.Domain;
 
 internal static class Helpers
 {
-	public static (TRepo repo, IFluentQuery<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
+	public static (TRepo repo, Jeebs.Data.Repository.IFluentQuery<TEntity, TId> fluent, ILog<THandler> log) Setup<TRepo, TEntity, TId, THandler>()
 		where TRepo : class, IRepository<TEntity, TId>
-		where TEntity : IWithId<TId>
-		where TId : class, IStrongId, new()
+		where TEntity : IWithId<TId, long>
+		where TId : class, IId<TId, long>, new()
 	{
 		// Create substitutes
 		var repo = Substitute.For<TRepo>();
@@ -22,7 +20,7 @@ internal static class Helpers
 		var log = Substitute.For<ILog<THandler>>();
 
 		// Setup substitutes
-		repo.StartFluentQuery().Returns(query);
+		repo.Fluent().Returns(query);
 
 		// Return
 		return (repo, query, log);

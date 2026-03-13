@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Domain.GetCar;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.GetPlace;
 
@@ -16,7 +17,7 @@ namespace Mileage.Domain.GetPlace;
 /// </summary>
 internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, PlaceModel>
 {
-	private IMaybeCache<PlaceId> Cache { get; init; }
+	private IWrapCache<PlaceId> Cache { get; init; }
 
 	private IPlaceRepository Place { get; init; }
 
@@ -28,36 +29,42 @@ internal sealed class GetPlaceHandler : QueryHandler<GetPlaceQuery, PlaceModel>
 	/// <param name="cache"></param>
 	/// <param name="place"></param>
 	/// <param name="log"></param>
-	public GetPlaceHandler(IMaybeCache<PlaceId> cache, IPlaceRepository place, ILog<GetPlaceHandler> log) =>
+	public GetPlaceHandler(IWrapCache<PlaceId> cache, IPlaceRepository place, ILog<GetPlaceHandler> log) =>
 		(Cache, Place, Log) = (cache, place, log);
 
 	/// <summary>
 	/// Get the specified place if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<PlaceModel>> HandleAsync(GetPlaceQuery query)
+	public override async Task<Result<PlaceModel>> HandleAsync(GetPlaceQuery query)
 	{
 		if (query.PlaceId is null || query.PlaceId.Value == 0)
 		{
-			return F.None<PlaceModel, Messages.PlaceIdIsNullMsg>().AsTask();
+			return R.Fail("Place ID cannot be null.")
+				.Ctx(nameof(GetPlaceHandler), nameof(HandleAsync));
 		}
 
-		return Cache
+		return await Cache
 			.GetOrCreateAsync(
 				key: query.PlaceId,
 				valueFactory: () =>
 				{
 					Log.Vrb("Get Place: {Query}.", query);
 					return Place
-						.StartFluentQuery()
+						.Fluent()
 						.Where(x => x.Id, Compare.Equal, query.PlaceId)
 						.Where(x => x.UserId, Compare.Equal, query.UserId)
-						.QuerySingleAsync<PlaceModel>();
+						.QuerySingleAsync<PlaceModel>()
+						.ToMaybeAsync(Log.Failure);
 				}
 			)
-			.SwitchIfAsync(
-				check: x => x.UserId == query.UserId,
-				ifFalse: _ => F.None<PlaceModel, Messages.PlaceDoesNotBelongToUserMsg>()
+			.ToResultAsync(
+				nameof(GetCarHandler), nameof(HandleAsync)
+			)
+			.IfNotAsync(
+				fTest: x => x.UserId == query.UserId,
+				fThen: _ => R.Fail("Place {PlaceId} does not belong to user {UserId}.", query.PlaceId.Value, query.UserId.Value)
+					.Ctx(nameof(GetPlaceHandler), nameof(HandleAsync))
 			);
 	}
 }

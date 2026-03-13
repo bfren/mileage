@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Settings.General.EditRateModel
 @{
 	Layout = "Modals/UpdateModal";
@@ -13,7 +14,7 @@
 		selected="@Model?.Settings.DefaultRateId"
 	/>
 
-	@Html.HiddenForId(x => x.Settings.Id)
+	@Html.HiddenForMonad(x => x.Settings.Id)
 	@Html.HiddenFor(x => x.Settings.Version)
 	@Html.AntiForgeryToken()
 

@@ -6,7 +6,7 @@ using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetCar;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Components.Car;
 
@@ -35,11 +35,12 @@ public sealed class CarViewComponent : ViewComponent
 		Log.Dbg("Get car: {CarId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetCarQuery(x, value)))
-			.AuditAsync(none: r => Log.Err("Unable to get car: {Reason}", r))
-			.SwitchAsync(
-				some: x => View(new CarModel(label, updateUrl, x.Id, x.Description, journeyId)),
-				none: _ => (IViewComponentResult)View(CarModel.Blank(label, updateUrl))
+			.ToResult(nameof(CarViewComponent), nameof(InvokeAsync))
+			.BindAsync(x => Dispatcher.SendAsync(new GetCarQuery(x, value)))
+			.AuditAsync(fFail: r => Log.Err("Unable to get car: {Reason}", r))
+			.MatchAsync(
+				fOk: x => View(new CarModel(label, updateUrl, x.Id, x.Description, journeyId)),
+				fFail: _ => (IViewComponentResult)View(CarModel.Blank(label, updateUrl))
 			);
 	}
 }

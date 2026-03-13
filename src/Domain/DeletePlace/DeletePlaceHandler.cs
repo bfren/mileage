@@ -2,16 +2,16 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
 using Mileage.Domain.CheckPlaceCanBeDeleted;
-using Mileage.Domain.DeletePlace.Messages;
+using Mileage.Domain.DeleteJourney;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.DeletePlace;
 
@@ -20,7 +20,7 @@ namespace Mileage.Domain.DeletePlace;
 /// </summary>
 internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 {
-	private IMaybeCache<PlaceId> Cache { get; init; }
+	private IWrapCache<PlaceId> Cache { get; init; }
 
 	private IDispatcher Dispatcher { get; init; }
 
@@ -35,23 +35,23 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 	/// <param name="dispatcher"></param>
 	/// <param name="place"></param>
 	/// <param name="log"></param>
-	public DeletePlaceHandler(IMaybeCache<PlaceId> cache, IDispatcher dispatcher, IPlaceRepository place, ILog<DeletePlaceHandler> log) =>
+	public DeletePlaceHandler(IWrapCache<PlaceId> cache, IDispatcher dispatcher, IPlaceRepository place, ILog<DeletePlaceHandler> log) =>
 		(Cache, Dispatcher, Place, Log) = (cache, dispatcher, place, log);
 
 	/// <summary>
 	/// Delete the place specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(DeletePlaceCommand command) =>
+	public override Task<Result<bool>> HandleAsync(DeletePlaceCommand command) =>
 		HandleAsync(command, DeleteOrDisableAsync);
 
-	internal Task<Maybe<bool>> HandleAsync(DeletePlaceCommand command, DeleteOrDisable<PlaceId> dOrD)
+	internal Task<Result<bool>> HandleAsync(DeletePlaceCommand command, DeleteOrDisable<PlaceId> dOrD)
 	{
 		Log.Vrb("Delete or Disable Place: {Command}", command);
 		return Dispatcher
-			.DispatchAsync(new CheckPlaceCanBeDeletedQuery(command.UserId, command.Id))
+			.SendAsync(new CheckPlaceCanBeDeletedQuery(command.UserId, command.Id))
 			.BindAsync(x => dOrD(command.UserId, command.Id, x))
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 
 	/// <summary>
@@ -60,24 +60,26 @@ internal sealed class DeletePlaceHandler : CommandHandler<DeletePlaceCommand>
 	/// <param name="userId"></param>
 	/// <param name="placeId"></param>
 	/// <param name="operation"></param>
-	internal Task<Maybe<bool>> DeleteOrDisableAsync(AuthUserId userId, PlaceId placeId, DeleteOperation operation) =>
-		Place.StartFluentQuery()
+	internal Task<Result<bool>> DeleteOrDisableAsync(AuthUserId userId, PlaceId placeId, DeleteOperation operation) =>
+		Place.Fluent()
 			.Where(x => x.Id, Compare.Equal, placeId)
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.QuerySingleAsync<PlaceToDeleteModel>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => operation switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: async x => operation switch
 				{
 					DeleteOperation.Delete =>
-						Place.DeleteAsync(x),
+						await Place.DeleteAsync(x),
 
 					DeleteOperation.Disable =>
-						Place.UpdateAsync(x with { IsDisabled = true }),
+						await Place.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, PlaceCannotBeDeletedMsg>().AsTask()
+						R.Fail("Place {PlaceId} does not exist for user {UserId}.", placeId.Value, userId.Value)
+							.Ctx(nameof(DeleteJourneyHandler), nameof(HandleAsync))
 				},
-				none: _ => F.None<bool>(new PlaceDoesNotExistMsg(userId, placeId))
+				fFail: _ => R.Fail("Place {PlaceId} does not exist for user {UserId}.", placeId.Value, userId.Value)
+					.Ctx(nameof(DeleteJourneyHandler), nameof(HandleAsync))
 			);
 }

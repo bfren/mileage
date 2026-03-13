@@ -18,8 +18,8 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditFromPlaceAsync() =>
 		GetFieldAsync("FromPlace",
-			x => Dispatcher.DispatchAsync(new GetPlacesQuery(x, false)),
-			(s, v) => new EditFromPlaceModel { Settings = s, Places = v.ToList() }
+			x => Dispatcher.SendAsync(new GetPlacesQuery(x, false)),
+			(s, v) => new EditFromPlaceModel { Settings = s, Places = [.. v] }
 		);
 
 	public Task<IActionResult> OnPostEditFromPlaceAsync(UpdateDefaultFromPlaceCommand settings) =>

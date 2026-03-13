@@ -3,13 +3,13 @@
 
 using System;
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 
 namespace Mileage.Domain.GetJourneys;
 
 /// <inheritdoc cref="GetJourneysQuery"/>
-public record class JourneyModel : IWithVersion<JourneyId>
+public record class JourneyModel : IWithVersion<JourneyId, long>
 {
 	/// <inheritdoc cref="JourneyEntity.Id"/>
 	public JourneyId Id { get; init; } = new();
@@ -27,7 +27,7 @@ public record class JourneyModel : IWithVersion<JourneyId>
 	public PlaceId FromPlaceId { get; init; } = new();
 
 	/// <inheritdoc cref="JourneyEntity.ToPlaceIds"/>
-	public PlaceId[] ToPlaceIds { get; init; } = Array.Empty<PlaceId>();
+	public PlaceId[] ToPlaceIds { get; init; } = [];
 
 	/// <inheritdoc cref="JourneyEntity.StartMiles"/>
 	public int StartMiles { get; init; }

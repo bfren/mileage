@@ -29,11 +29,11 @@ public sealed class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var expensesQuery = from u in User.GetUserId()
-							from m in Dispatcher.DispatchAsync(new GetExpensesReportMonthsQuery(u))
+							from m in Dispatcher.SendAsync(new GetExpensesReportMonthsQuery(u))
 							select m;
 
 		var taxYearsQuery = from u in User.GetUserId()
-							from t in Dispatcher.DispatchAsync(new GetAnnualMileageReportYearsQuery(u))
+							from t in Dispatcher.SendAsync(new GetAnnualMileageReportYearsQuery(u))
 							select t;
 
 		var query = from expenses in expensesQuery
@@ -41,12 +41,12 @@ public sealed class IndexModel : PageModel
 					select new { expenses, taxYears };
 
 		_ = await query
-			.AuditAsync(none: Log.Msg)
-			.IfSomeAsync(
+			.AuditAsync(fFail: Log.Failure)
+			.IfOkAsync(
 				x =>
 				{
-					ExpensesMonths = x.expenses.Select(y => new DateTime(y.Year, y.Month, 1)).ToList();
-					TaxYears = x.taxYears.Select(z => z.StartYear).ToList();
+					ExpensesMonths = [.. x.expenses.Select(y => new DateTime(y.Year, y.Month, 1))];
+					TaxYears = [.. x.taxYears.Select(z => z.StartYear)];
 				}
 			);
 

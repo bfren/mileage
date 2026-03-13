@@ -2,6 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Auth.Data.Models;
 using Jeebs.Logging;
 
@@ -15,7 +16,7 @@ public sealed class HandleAsync_Tests
 		// Arrange
 		var auth = Substitute.For<IAuthDataProvider>();
 		var log = Substitute.For<ILog<SaveUserPasswordHandler>>();
-		var command = new SaveUserPasswordCommand(LongId<AuthUserId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Str);
+		var command = new SaveUserPasswordCommand(IdGen.LongId<AuthUserId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Str);
 		var handler = new SaveUserPasswordHandler(auth, log);
 
 		// Act
@@ -31,7 +32,7 @@ public sealed class HandleAsync_Tests
 		// Arrange
 		var auth = Substitute.For<IAuthDataProvider>();
 		var log = Substitute.For<ILog<SaveUserPasswordHandler>>();
-		var command = new SaveUserPasswordCommand(LongId<AuthUserId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Str);
+		var command = new SaveUserPasswordCommand(IdGen.LongId<AuthUserId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Str);
 		var handler = new SaveUserPasswordHandler(auth, log);
 
 		// Act

@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Microsoft.AspNetCore.Mvc;
-using StrongId;
+using Wrap.Ids;
 
 namespace Mileage.WebApp.Pages.Components.List;
 
@@ -15,8 +15,8 @@ public sealed record class ListMultipleModel(
 );
 
 public abstract class ListMultipleViewComponent<TModel, TId> : ViewComponent
-	where TModel : IWithId<TId>
-	where TId : LongId, new()
+	where TModel : IWithId<TId, long>
+	where TId : LongId<TId>, new()
 {
 	public delegate string GetString(TModel model);
 
@@ -41,7 +41,7 @@ public abstract class ListMultipleViewComponent<TModel, TId> : ViewComponent
 
 		return View(
 			"~/Pages/Components/List/ListMultiple.cshtml",
-			new ListMultipleModel(listName, Singular, models.ToList())
+			new ListMultipleModel(listName, Singular, [.. models])
 		);
 	}
 }

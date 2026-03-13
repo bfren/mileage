@@ -31,24 +31,24 @@ internal sealed class GetLatestEndMilesHandler : QueryHandler<GetLatestEndMilesQ
 	/// or 0 if not found / the most recent journey doesn't have end miles set
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<uint>> HandleAsync(GetLatestEndMilesQuery query)
+	public override async Task<Result<uint>> HandleAsync(GetLatestEndMilesQuery query)
 	{
 		if (query.CarId is null)
 		{
-			return F.Some(0u);
+			return R.Wrap(0u);
 		}
 
 		Log.Vrb("Getting latest end miles for User {UserId} and Car {CarId}.", query.UserId.Value, query.CarId.Value);
 		return await Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Where(x => x.CarId, Compare.Equal, query.CarId)
 			.Sort(x => x.StartMiles, SortOrder.Descending)
 			.ExecuteAsync(x => x.EndMiles)
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => (uint?)x ?? 0u,
-				none: 0u
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => (uint?)x ?? 0u,
+				fFail: _ => 0u
 			);
 	}
 }

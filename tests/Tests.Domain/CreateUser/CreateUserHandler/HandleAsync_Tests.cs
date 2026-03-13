@@ -3,6 +3,7 @@
 
 using Jeebs.Auth.Data;
 using Jeebs.Auth.Data.Entities;
+using Jeebs.Auth.Data.Ids;
 
 namespace Mileage.Domain.CreateUser.CreateUserHandler_Tests;
 
@@ -53,7 +54,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = LongId<AuthUserId>();
+		var expected = IdGen.LongId<AuthUserId>();
 		v.Repo.CreateAsync(email: default!, plainTextPassword: default!, friendlyName: default)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateUserQuery(Rnd.Str, Rnd.Str, Rnd.Str);
@@ -62,7 +63,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

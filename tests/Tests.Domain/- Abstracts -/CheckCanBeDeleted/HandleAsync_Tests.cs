@@ -1,12 +1,11 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Jeebs.Messages;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.CheckCanBeDeleted;
 
@@ -25,11 +24,11 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test05_Counts_Journeys_With__Receives_Negative__Returns_None();
 
 	internal abstract class Setup<TId, TQuery, THandler> : TestHandler.Setup<THandler>
-		where TId : LongId, new()
+		where TId : LongId<TId>, new()
 		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
 	{
-		public delegate Func<TQuery, CheckIsDefault<TId>, CountJourneysWith<TId>, Task<Maybe<DeleteOperation>>> HandleAsyncMethod(THandler handler);
+		public delegate Func<TQuery, CheckIsDefault<TId>, CountJourneysWith<TId>, Task<Result<DeleteOperation>>> HandleAsyncMethod(THandler handler);
 
 		internal string Name { get; }
 
@@ -39,14 +38,14 @@ public abstract class HandleAsync_Tests
 
 		internal abstract TQuery GetQuery(AuthUserId? userId = null, TId? entityId = null);
 
-		private TQuery NewQuery => GetQuery(LongId<AuthUserId>(), LongId<TId>());
+		private TQuery NewQuery => GetQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
-		internal (THandler handler, CheckIsDefault<TId> check, CountJourneysWith<TId> count, Vars v) GetVars(Maybe<bool>? checkResult = null, long countResult = 0)
+		internal (THandler handler, CheckIsDefault<TId> check, CountJourneysWith<TId> count, Vars v) GetVars(Result<bool>? checkResult = null, long countResult = 0)
 		{
 			var (handler, v) = base.GetVars();
 			var check = Substitute.For<CheckIsDefault<TId>>();
 			check.Invoke(default!, default!)
-				.ReturnsForAnyArgs(checkResult ?? Create.None<bool>());
+				.ReturnsForAnyArgs(checkResult ?? FailGen.Create<bool>());
 			var count = Substitute.For<CountJourneysWith<TId>>();
 			count.Invoke(default!, default!)
 				.ReturnsForAnyArgs(countResult);
@@ -61,8 +60,8 @@ public abstract class HandleAsync_Tests
 		{
 			// Arrange
 			var (handler, check, count, v) = GetVars();
-			var entityId = LongId<TId>();
-			var query = GetQuery(LongId<AuthUserId>(), entityId);
+			var entityId = IdGen.LongId<TId>();
+			var query = GetQuery(IdGen.LongId<AuthUserId>(), entityId);
 			var handle = handleAsyncMethod(handler);
 
 			// Act
@@ -72,11 +71,10 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Checking whether or not {Name} {{{Name}Id}} can be deleted.", entityId.Value);
 		}
 
-		public async Task Test01<TIsDefaultMsg>(HandleAsyncMethod handleAsyncMethod)
-			where TIsDefaultMsg : Msg
+		public async Task Test01(HandleAsyncMethod handleAsyncMethod)
 		{
 			// Arrange
-			var (handler, check, count, v) = GetVars(checkResult: F.True);
+			var (handler, check, count, v) = GetVars(checkResult: R.True);
 			var query = NewQuery;
 			var handle = handleAsyncMethod(handler);
 
@@ -84,7 +82,7 @@ public abstract class HandleAsync_Tests
 			var result = await handle(query, check, count);
 
 			// Assert
-			result.AssertNone().AssertType<TIsDefaultMsg>();
+			result.AssertFailure();
 		}
 
 		public async Task Test02(HandleAsyncMethod handleAsyncMethod)
@@ -98,13 +96,13 @@ public abstract class HandleAsync_Tests
 			var result = await handle(query, check, count);
 
 			// Assert
-			result.AssertNone();
+			result.AssertFailure();
 		}
 
 		public async Task Test03(HandleAsyncMethod handleAsyncMethod)
 		{
 			// Arrange
-			var (handler, check, count, v) = GetVars(checkResult: F.False, countResult: Rnd.Lng);
+			var (handler, check, count, v) = GetVars(checkResult: R.False, countResult: Rnd.Lng);
 			var query = NewQuery;
 			var handle = handleAsyncMethod(handler);
 
@@ -112,14 +110,13 @@ public abstract class HandleAsync_Tests
 			var result = await handle(query, check, count);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(DeleteOperation.Disable, some);
+			result.AssertOk(DeleteOperation.Disable);
 		}
 
 		public async Task Test04(HandleAsyncMethod handleAsyncMethod)
 		{
 			// Arrange
-			var (handler, check, count, v) = GetVars(checkResult: F.False, countResult: 0);
+			var (handler, check, count, v) = GetVars(checkResult: R.False, countResult: 0);
 			var query = NewQuery;
 			var handle = handleAsyncMethod(handler);
 
@@ -127,14 +124,13 @@ public abstract class HandleAsync_Tests
 			var result = await handle(query, check, count);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(DeleteOperation.Delete, some);
+			result.AssertOk(DeleteOperation.Delete);
 		}
 
 		public async Task Test05(HandleAsyncMethod handleAsyncMethod)
 		{
 			// Arrange
-			var (handler, check, count, v) = GetVars(checkResult: F.False, countResult: Rnd.Lng * -1);
+			var (handler, check, count, v) = GetVars(checkResult: R.False, countResult: Rnd.Lng * -1);
 			var query = NewQuery;
 			var handle = handleAsyncMethod(handler);
 
@@ -142,8 +138,7 @@ public abstract class HandleAsync_Tests
 			var result = await handle(query, check, count);
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(DeleteOperation.None, some);
+			result.AssertOk(DeleteOperation.None);
 		}
 	}
 }

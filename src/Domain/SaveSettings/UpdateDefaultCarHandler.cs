@@ -33,7 +33,7 @@ internal sealed class UpdateDefaultCarHandler : CommandHandler<UpdateDefaultCarC
 	/// Update default car for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultCarCommand command)
+	public override async Task<Result<bool>> HandleAsync(UpdateDefaultCarCommand command)
 	{
 		if (command.DefaultCarId?.Value == 0)
 		{
@@ -42,10 +42,11 @@ internal sealed class UpdateDefaultCarHandler : CommandHandler<UpdateDefaultCarC
 
 		if (command.DefaultCarId is not null)
 		{
-			var check = await Dispatcher.DispatchAsync(new CheckCarBelongsToUserQuery(command.UserId, command.DefaultCarId));
-			if (check.IsNone(out var _) || (check.IsSome(out var value) && !value))
+			var check = await Dispatcher.SendAsync(new CheckCarBelongsToUserQuery(command.UserId, command.DefaultCarId));
+			if (check.Unsafe().TryFailure(out var _) || (check.Unsafe().TryOk(out var value) && !value))
 			{
-				return F.None<bool, Messages.SaveSettingsCheckFailedMsg>();
+				return R.Fail("Save settings check failed.")
+					.Ctx(nameof(UpdateDefaultCarHandler), nameof(HandleAsync));
 			}
 		}
 

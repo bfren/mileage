@@ -1,3 +1,4 @@
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Journeys.EditToPlacesModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -14,7 +15,7 @@
 		selected="@Model.Selected"
 	/>
 
-	@Html.HiddenForId(x => x.Journey.Id)
+	@Html.HiddenForMonad(x => x.Journey.Id)
 	@Html.HiddenFor(x => x.Journey.Version)
 	@Html.AntiForgeryToken()
 </form>

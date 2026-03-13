@@ -1,11 +1,10 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Jeebs.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -45,8 +44,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity());
-		var carId = LongId<RateId>();
-		var userId = LongId<AuthUserId>();
+		var carId = IdGen.LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new CheckRateBelongsToUserQuery(userId, carId);
 
 		// Act
@@ -65,16 +64,16 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var msg = new TestMsg();
+		var failure = FailGen.Create();
 		v.Fluent.QuerySingleAsync<RateEntity>()
-			.Returns(F.None<RateEntity>(msg));
+			.Returns(failure);
 		var query = new CheckRateBelongsToUserQuery(new(), new());
 
 		// Act
 		await handler.HandleAsync(query);
 
 		// Assert
-		v.Log.Received().Msg(msg);
+		v.Log.Received().Failure(failure.Value);
 	}
 
 	[Fact]
@@ -83,7 +82,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<RateEntity>()
-			.Returns(Create.None<RateEntity>());
+			.Returns(FailGen.Create<RateEntity>());
 		var query = new CheckRateBelongsToUserQuery(new(), new());
 
 		// Act
@@ -109,6 +108,4 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Assert
 		result.AssertTrue();
 	}
-
-	public sealed record class TestMsg : Msg;
 }

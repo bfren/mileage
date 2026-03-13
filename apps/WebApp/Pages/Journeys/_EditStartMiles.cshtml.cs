@@ -3,7 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.SaveJourney;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Journeys;
 

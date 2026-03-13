@@ -1,9 +1,9 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Mileage.Domain.CheckPlaceCanBeDeleted;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -25,10 +25,10 @@ public sealed class HandleAsync_Tests : Abstracts.DeleteOrDisable.HandleAsync_Te
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<PlaceId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<PlaceId>());
 		}
 
-		internal override PlaceToDeleteModel EmptyModel { get; } = new(LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
+		internal override PlaceToDeleteModel EmptyModel { get; } = new(IdGen.LongId<PlaceId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]

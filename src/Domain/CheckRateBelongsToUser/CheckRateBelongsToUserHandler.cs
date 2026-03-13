@@ -31,18 +31,18 @@ internal sealed class CheckRateBelongsToUserHandler : QueryHandler<CheckRateBelo
 	/// Returns true if the rate belongs to the user defined by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<bool>> HandleAsync(CheckRateBelongsToUserQuery query)
+	public override Task<Result<bool>> HandleAsync(CheckRateBelongsToUserQuery query)
 	{
 		Log.Vrb("Checking Rate {RateId} belongs to User {UserId}.", query.RateId.Value, query.UserId.Value);
 		return Rate
-			.StartFluentQuery()
+			.Fluent()
 			.Where(c => c.Id, Compare.Equal, query.RateId)
 			.Where(c => c.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<RateEntity>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: _ => F.True,
-				none: _ => F.False
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: _ => R.True,
+				fFail: _ => R.False
 			);
 	}
 }

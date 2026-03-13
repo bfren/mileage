@@ -2,9 +2,9 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Mileage.Persistence.Common;
-using StrongId;
+using Wrap.Ids;
 
 namespace Mileage.Domain;
 
@@ -15,8 +15,8 @@ namespace Mileage.Domain;
 /// <param name="userId">User ID</param>
 /// <param name="entityId">Entity ID</param>
 /// <param name="operation">Delete Operation to perform</param>
-public delegate Task<Maybe<bool>> DeleteOrDisable<TId>(AuthUserId userId, TId entityId, DeleteOperation operation)
-	where TId : LongId;
+public delegate Task<Result<bool>> DeleteOrDisable<TId>(AuthUserId userId, TId entityId, DeleteOperation operation)
+	where TId : LongId<TId>, new();
 
 /// <summary>
 /// Delegate to abstract determining whether or not the item is selected as default in settings
@@ -24,8 +24,8 @@ public delegate Task<Maybe<bool>> DeleteOrDisable<TId>(AuthUserId userId, TId en
 /// <typeparam name="TId"></typeparam>
 /// <param name="userId"></param>
 /// <param name="entityId"></param>
-public delegate Task<Maybe<bool>> CheckIsDefault<TId>(AuthUserId userId, TId entityId)
-	where TId : LongId;
+public delegate Task<Result<bool>> CheckIsDefault<TId>(AuthUserId userId, TId entityId)
+	where TId : LongId<TId>, new();
 
 /// <summary>
 /// Delegate to abstract counting the number of journeys with an item
@@ -33,5 +33,5 @@ public delegate Task<Maybe<bool>> CheckIsDefault<TId>(AuthUserId userId, TId ent
 /// <typeparam name="TId"></typeparam>
 /// <param name="userId"></param>
 /// <param name="entityId"></param>
-public delegate Task<Maybe<long>> CountJourneysWith<TId>(AuthUserId userId, TId entityId)
-	where TId : LongId;
+public delegate Task<Result<long>> CountJourneysWith<TId>(AuthUserId userId, TId entityId)
+	where TId : LongId<TId>, new();

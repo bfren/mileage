@@ -1,6 +1,6 @@
-@model MaybeF.IMsg
+@model FailureValue
 @{
-	var text = Model?.ToString() ?? "Unknown error";
+	var text = F.Format(Model.Message, Model.Args);
 }
 
 <h2 class="modal-title text-danger">Error</h2>

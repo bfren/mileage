@@ -1,9 +1,9 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.GetRate;
 
@@ -21,7 +21,7 @@ public sealed record class RateModel(
 	long Version,
 	float AmountPerMileGBP,
 	bool IsDisabled
-) : IWithUserId, IWithId<RateId>
+) : IWithUserId, IWithId<RateId, long>
 {
 	/// <summary>
 	/// Create blank for model binding

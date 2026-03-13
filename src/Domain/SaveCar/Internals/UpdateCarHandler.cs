@@ -4,9 +4,9 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.SaveCar.Internals;
 
@@ -15,7 +15,7 @@ namespace Mileage.Domain.SaveCar.Internals;
 /// </summary>
 internal sealed class UpdateCarHandler : CommandHandler<UpdateCarCommand>
 {
-	private IMaybeCache<CarId> Cache { get; init; }
+	private IWrapCache<CarId> Cache { get; init; }
 
 	private ICarRepository Car { get; init; }
 
@@ -27,18 +27,18 @@ internal sealed class UpdateCarHandler : CommandHandler<UpdateCarCommand>
 	/// <param name="cache"></param>
 	/// <param name="car"></param>
 	/// <param name="log"></param>
-	public UpdateCarHandler(IMaybeCache<CarId> cache, ICarRepository car, ILog<UpdateCarHandler> log) =>
+	public UpdateCarHandler(IWrapCache<CarId> cache, ICarRepository car, ILog<UpdateCarHandler> log) =>
 		(Cache, Car, Log) = (cache, car, log);
 
 	/// <summary>
 	/// Update a car from <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateCarCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateCarCommand command)
 	{
 		Log.Vrb("Update Car: {Command}", command);
 		return Car
 			.UpdateAsync(command)
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 }

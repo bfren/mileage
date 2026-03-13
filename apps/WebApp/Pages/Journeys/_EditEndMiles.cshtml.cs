@@ -5,7 +5,7 @@ using Jeebs.Mvc;
 using Jeebs.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.SaveJourney;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
@@ -22,10 +22,10 @@ public sealed partial class IndexModel
 	public async Task<IActionResult> OnPostEditEndMilesAsync(UpdateJourneyEndMilesCommand journey) =>
 		await PostFieldAsync("Miles", "End", journey, x => x.EndMiles, "EndMiles") switch
 		{
-			Result r when !r.Success =>
-				r,
+			Op x when !x.Success =>
+				x,
 
 			_ =>
-				Result.Create("refresh", Alert.Success("Done."))
+				Op.Create("refresh", Alert.Success("Done."))
 		};
 }

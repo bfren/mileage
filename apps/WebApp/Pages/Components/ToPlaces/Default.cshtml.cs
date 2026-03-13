@@ -3,11 +3,10 @@
 
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Jeebs.Messages;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetPlaces;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Components.ToPlaces;
 
@@ -31,20 +30,15 @@ public sealed class ToPlacesViewComponent : ViewComponent
 		Log.Dbg("Get places {PlaceIds}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlacesQuery(x, true)))
+			.ToResult(nameof(ToPlacesViewComponent), nameof(InvokeAsync))
+			.BindAsync(x => Dispatcher.SendAsync(new GetPlacesQuery(x, true)))
 			.MapAsync(
-				x => x.Where(p => value?.Contains(p.Id) == true).ToList(),
-				e => new M.UnableToGetToPlacesMsg(e)
+				x => x.Where(p => value?.Contains(p.Id) == true).ToList()
 			)
-			.AuditAsync(none: r => Log.Err("Unable to get places: {Reason}", r))
-			.SwitchAsync(
-				some: x => View(new ToPlacesModel(label, updateUrl, x, journeyId)),
-				none: _ => (IViewComponentResult)View(ToPlacesModel.Blank(label, updateUrl, journeyId))
+			.AuditAsync(fFail: r => Log.Err("Unable to get places: {Reason}.", r))
+			.MatchAsync(
+				fOk: x => View(new ToPlacesModel(label, updateUrl, x, journeyId)),
+				fFail: _ => (IViewComponentResult)View(ToPlacesModel.Blank(label, updateUrl, journeyId))
 			);
-	}
-
-	public static class M
-	{
-		public sealed record class UnableToGetToPlacesMsg(Exception Value) : ExceptionMsg;
 	}
 }

@@ -30,16 +30,17 @@ internal sealed class GetJourneyHandler : QueryHandler<GetJourneyQuery, JourneyM
 	/// Get the specified journey if it belongs to the user
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<JourneyModel>> HandleAsync(GetJourneyQuery query)
+	public override async Task<Result<JourneyModel>> HandleAsync(GetJourneyQuery query)
 	{
 		if (query.JourneyId is null || query.JourneyId.Value == 0)
 		{
-			return F.None<JourneyModel, Messages.JourneyIdIsNullMsg>().AsTask();
+			return R.Fail("Journey ID cannot be null.")
+				.Ctx(nameof(GetJourneyHandler), nameof(HandleAsync));
 		}
 
 		Log.Vrb("Get Journey: {Query}.", query);
-		return Journey
-			.StartFluentQuery()
+		return await Journey
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, query.JourneyId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<JourneyModel>();

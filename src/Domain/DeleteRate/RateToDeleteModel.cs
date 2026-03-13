@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.DeleteRate;
 
@@ -12,7 +12,7 @@ namespace Mileage.Domain.DeleteRate;
 /// <param name="Id">Rate ID</param>
 /// <param name="Version">Concurrency version</param>
 /// <param name="IsDisabled"></param>
-internal sealed record class RateToDeleteModel(RateId Id, long Version, bool IsDisabled) : IWithVersion<RateId>
+internal sealed record class RateToDeleteModel(RateId Id, long Version, bool IsDisabled) : IWithVersion<RateId, long>
 {
 	public RateToDeleteModel() : this(new(), 0L, false) { }
 }

@@ -1,12 +1,11 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
 
 namespace Abstracts.UpdateJourney;
 
@@ -19,7 +18,7 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test02_Calls_Repo_Update_Async__Returns_Result();
 
 	internal abstract class Setup<TCommand, THandler> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
-		where TCommand : Command, IWithId<JourneyId>
+		where TCommand : Command, IWithId<JourneyId, long>
 		where THandler : CommandHandler<TCommand>
 	{
 		internal string Name { get; }
@@ -29,7 +28,7 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -42,7 +41,7 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating {Name} for {{Journey}}.", command);
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
@@ -55,7 +54,7 @@ public abstract class HandleAsync_Tests
 			await v.Repo.Received().UpdateAsync(command);
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();

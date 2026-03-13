@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Jeebs.Data;
+using Jeebs.Auth.Data.Ids;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Mileage.Persistence.Common.Reports;
 
@@ -15,7 +15,7 @@ public sealed class HandleAsync_Tests
 		var db = Substitute.For<IDb>();
 		var log = Substitute.For<ILog<GetExpensesReportDataHandler>>();
 		var handler = new GetExpensesReportDataHandler(db, log);
-		var query = new GetExpensesReportDataQuery(LongId<AuthUserId>(), Rnd.DateTime, Rnd.DateTime);
+		var query = new GetExpensesReportDataQuery(IdGen.LongId<AuthUserId>(), Rnd.DateTime, Rnd.DateTime);
 		return new(db, log, handler, query);
 	}
 
@@ -50,7 +50,7 @@ public sealed class HandleAsync_Tests
 		_ = await v.Handler.HandleAsync(v.Query);
 
 		// Assert
-		await v.Db.Received().QueryAsync<ExpensesReportJourney>(sql, v.Query, System.Data.CommandType.Text);
+		await v.Db.Received().QueryAsync<ExpensesReportJourney>(sql, v.Query);
 	}
 
 	[Fact]
@@ -59,14 +59,14 @@ public sealed class HandleAsync_Tests
 		// Arrange
 		var v = Setup();
 		var list = Array.Empty<ExpensesReportJourney>();
-		v.Db.QueryAsync<ExpensesReportJourney>(default!, default, default)
+		v.Db.QueryAsync<ExpensesReportJourney>(query: default!, default)
 			.ReturnsForAnyArgs(list);
 
 		// Act
 		var result = await v.Handler.HandleAsync(v.Query);
 
 		// Assert
-		var some = result.AssertSome();
+		var some = result.AssertOk();
 		Assert.Same(list, some);
 	}
 }

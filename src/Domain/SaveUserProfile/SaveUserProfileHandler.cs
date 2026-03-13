@@ -29,7 +29,7 @@ internal sealed class SaveUserProfileHandler : CommandHandler<SaveUserProfileCom
 	/// Save profile for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(SaveUserProfileCommand command)
+	public override Task<Result<bool>> HandleAsync(SaveUserProfileCommand command)
 	{
 		Log.Vrb("Saving profile for User {User}.", command.Id.Value);
 		return Auth.User.UpdateAsync(command);

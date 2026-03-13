@@ -4,14 +4,14 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.CheckRateBelongsToUser;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -42,7 +42,7 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 	/// </summary>
 	/// <param name="query"></param>
 	/// <exception cref="NotImplementedException"></exception>
-	public override async Task<Maybe<JourneyId>> HandleAsync(SaveJourneyQuery query)
+	public override async Task<Result<JourneyId>> HandleAsync(SaveJourneyQuery query)
 	{
 		// Ensure the car, from place, to places, and rate belong to the user (or that the rate is null)
 		var carBelongsToUser = await CheckCarBelongsToUser(query.UserId, query.CarId);
@@ -53,21 +53,22 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 		// If checks have failed, return with failure message
 		if (!carBelongsToUser || !fromBelongsToUser || !toBelongToUser || !rateBelongsToUser)
 		{
-			return F.None<JourneyId, Messages.SaveJourneyCheckFailedMsg>();
+			return R.Fail("Save Journey check failed.")
+				.Ctx(nameof(SaveJourneyHandler), nameof(HandleAsync));
 		}
 
 		// Add or update Journey
 		return await Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, query.JourneyId)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<JourneyEntity>()
-			.SwitchAsync(
-				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateJourneyCommand(x.Id, query))
-					.BindAsync(_ => F.Some(x.Id)),
-				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateJourneyQuery(query))
+			.MatchAsync(
+				fOk: x => Dispatcher
+					.SendAsync(new Internals.UpdateJourneyCommand(x.Id, query))
+					.BindAsync(_ => R.Wrap(x.Id)),
+				fFail: f => Dispatcher
+					.SendAsync(new Internals.CreateJourneyQuery(query))
 			);
 	}
 
@@ -78,8 +79,8 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 	/// <param name="carId"></param>
 	internal Task<bool> CheckCarBelongsToUser(AuthUserId userId, CarId carId) =>
 		Dispatcher
-			.DispatchAsync(new CheckCarBelongsToUserQuery(userId, carId))
-			.IfSomeAsync(
+			.SendAsync(new CheckCarBelongsToUserQuery(userId, carId))
+			.IfOkAsync(
 				x => { if (!x) { Log.Dbg("Car {CarId} does not belong to user {UserId}.", carId.Value, userId.Value); } }
 			)
 			.IsTrueAsync();
@@ -94,8 +95,8 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 		{
 			PlaceId[] p =>
 				Dispatcher
-					.DispatchAsync(new CheckPlacesBelongToUserQuery(userId, p))
-					.IfSomeAsync(
+					.SendAsync(new CheckPlacesBelongToUserQuery(userId, p))
+					.IfOkAsync(
 						x => { if (!x) { Log.Dbg("Places {PlaceIds} do not all belong to user {UserId}.", p.Select(p => p.Value), userId.Value); } }
 					)
 					.IsTrueAsync(),
@@ -114,8 +115,8 @@ internal sealed class SaveJourneyHandler : QueryHandler<SaveJourneyQuery, Journe
 		{
 			RateId r =>
 				Dispatcher
-					.DispatchAsync(new CheckRateBelongsToUserQuery(userId, rateId))
-					.IfSomeAsync(
+					.SendAsync(new CheckRateBelongsToUserQuery(userId, rateId))
+					.IfOkAsync(
 						x => { if (!x) { Log.Dbg("Rate {RateId} does not belong to user {UserId}.", rateId.Value, userId.Value); } }
 					)
 					.IsTrueAsync(),

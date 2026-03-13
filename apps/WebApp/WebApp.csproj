@@ -42,8 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" />
-    <PackageReference Include="Jeebs.Mvc.Razor" />
-    <PackageReference Include="MaybeF.Caching" />
+    <PackageReference Include="Jeebs.Mvc.Auth" />
+    <PackageReference Include="Wrap.Caching" />
+    <PackageReference Include="Wrap.Mvc" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc" />
   </ItemGroup>

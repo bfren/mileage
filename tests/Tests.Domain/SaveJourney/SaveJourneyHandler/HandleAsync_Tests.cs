@@ -1,15 +1,14 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveJourney.Internals;
-using Mileage.Domain.SaveJourney.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -31,11 +30,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var query = new SaveJourneyQuery { UserId = userId, CarId = carId };
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity());
@@ -44,7 +45,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckCarBelongsToUserQuery>(x => x.UserId == userId && x.CarId == carId)
 		);
 	}
@@ -54,11 +55,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var fromPlaceId = LongId<PlaceId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var fromPlaceId = IdGen.LongId<PlaceId>();
 		var query = new SaveJourneyQuery { UserId = userId, FromPlaceId = fromPlaceId };
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity());
@@ -67,7 +70,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckPlacesBelongToUserQuery>(x => x.UserId == userId && x.PlaceIds[0] == fromPlaceId)
 		);
 	}
@@ -77,11 +80,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var userId = IdGen.LongId<AuthUserId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
 		var query = new SaveJourneyQuery { UserId = userId, ToPlaceIds = toPlaceIds };
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity());
@@ -90,7 +95,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckPlacesBelongToUserQuery>(x => x.UserId == userId && x.PlaceIds == toPlaceIds)
 		);
 	}
@@ -100,11 +105,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var rateId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var rateId = IdGen.LongId<RateId>();
 		var query = new SaveJourneyQuery { UserId = userId, RateId = rateId };
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity());
@@ -113,7 +120,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckRateBelongsToUserQuery>(x => x.UserId == userId && x.RateId == rateId)
 		);
 	}
@@ -125,15 +132,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new SaveJourneyQuery();
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveJourneyCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -143,15 +149,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new SaveJourneyQuery();
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckPlacesBelongToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveJourneyCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -161,15 +166,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		var query = new SaveJourneyQuery();
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckRateBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckRateBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var msg = result.AssertNone();
-		Assert.IsType<SaveJourneyCheckFailedMsg>(msg);
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -177,11 +181,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var journeyId = LongId<JourneyId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var journeyId = IdGen.LongId<JourneyId>();
 		var query = new SaveJourneyQuery() { UserId = userId, JourneyId = journeyId };
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity());
@@ -202,19 +208,21 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var journeyId = LongId<JourneyId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var journeyId = IdGen.LongId<JourneyId>();
 		var version = Rnd.Lng;
 		var day = Rnd.DateTime;
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var endMiles = startMiles + Rnd.UInt;
-		var fromPlaceId = LongId<PlaceId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var rateId = LongId<RateId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var endMiles = startMiles + Rnd.UInt32;
+		var fromPlaceId = IdGen.LongId<PlaceId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var rateId = IdGen.LongId<RateId>();
 		var query = new SaveJourneyQuery(userId, journeyId, version, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity { Id = journeyId });
@@ -223,7 +231,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<UpdateJourneyCommand>(x =>
 				x.JourneyId == journeyId
 				&& x.Version == version
@@ -243,13 +251,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = LongId<JourneyId>();
+		var journeyId = IdGen.LongId<JourneyId>();
 		var query = new SaveJourneyQuery();
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<UpdateJourneyCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<UpdateJourneyCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
 			.Returns(new JourneyEntity { Id = journeyId });
@@ -258,9 +266,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<UpdateJourneyCommand>());
-		var some = result.AssertSome();
-		Assert.Equal(journeyId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdateJourneyCommand>());
+		result.AssertOk(journeyId);
 	}
 
 	[Fact]
@@ -268,26 +275,26 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var day = Rnd.DateTime;
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var endMiles = startMiles + Rnd.UInt;
-		var fromPlaceId = LongId<PlaceId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var rateId = LongId<RateId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var endMiles = startMiles + Rnd.UInt32;
+		var fromPlaceId = IdGen.LongId<PlaceId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var rateId = IdGen.LongId<RateId>();
 		var query = new SaveJourneyQuery(userId, null, null, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
-			.Returns(Create.None<JourneyEntity>());
+			.Returns(FailGen.Create<JourneyEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CreateJourneyQuery>(x =>
 				x.UserId == userId
 				&& x.Day == day
@@ -306,22 +313,21 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var journeyId = LongId<JourneyId>();
+		var journeyId = IdGen.LongId<JourneyId>();
 		var query = new SaveJourneyQuery();
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<CreateJourneyQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CreateJourneyQuery>())
 			.Returns(journeyId);
 		v.Fluent.QuerySingleAsync<JourneyEntity>()
-			.Returns(Create.None<JourneyEntity>());
+			.Returns(FailGen.Create<JourneyEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<CreateJourneyQuery>());
-		var some = result.AssertSome();
-		Assert.Equal(journeyId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<CreateJourneyQuery>());
+		result.AssertOk(journeyId);
 	}
 }

@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SavePlace.Internals;
@@ -30,7 +30,7 @@ internal sealed class CreatePlaceHandler : QueryHandler<CreatePlaceQuery, PlaceI
 	/// Create a new rate from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<PlaceId>> HandleAsync(CreatePlaceQuery query)
+	public override Task<Result<PlaceId>> HandleAsync(CreatePlaceQuery query)
 	{
 		Log.Vrb("Create Place: {Query}", query);
 		return Place

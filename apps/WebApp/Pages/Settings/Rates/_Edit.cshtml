@@ -1,4 +1,5 @@
-@using Jeebs.Extensions
+@using Jeebs
+@using Wrap.Mvc
 @model Mileage.WebApp.Pages.Settings.Rates.EditModel
 @{
 	ArgumentNullException.ThrowIfNull(Model);
@@ -51,7 +52,7 @@
 
 	<!-- Hidden Values -->
 	@Html.AntiForgeryToken()
-	@Html.HiddenForId(m => m.Rate.Id)
+	@Html.HiddenForMonad(m => m.Rate.Id)
 	@Html.HiddenFor(m => m.Rate.Version)
 
 </form>

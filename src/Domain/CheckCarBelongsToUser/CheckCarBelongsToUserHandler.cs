@@ -31,18 +31,18 @@ internal sealed class CheckCarBelongsToUserHandler : QueryHandler<CheckCarBelong
 	/// Returns true if the car belongs to the user defined by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<bool>> HandleAsync(CheckCarBelongsToUserQuery query)
+	public override Task<Result<bool>> HandleAsync(CheckCarBelongsToUserQuery query)
 	{
 		Log.Vrb("Checking car {CarId} belongs to user {UserId}.", query.CarId.Value, query.UserId.Value);
 		return Car
-			.StartFluentQuery()
+			.Fluent()
 			.Where(c => c.Id, Compare.Equal, query.CarId)
 			.Where(c => c.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<CarEntity>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: _ => F.True,
-				none: _ => F.False
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: _ => R.True,
+				fFail: _ => R.False
 			);
 	}
 }

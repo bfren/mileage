@@ -29,12 +29,12 @@ public sealed partial class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from p in Dispatcher.DispatchAsync(new GetPlacesQuery(u, true))
+					from p in Dispatcher.SendAsync(new GetPlacesQuery(u, true))
 					select p;
 
-		await foreach (var places in query)
+		foreach (var places in await query.Unsafe())
 		{
-			Places = places.ToList();
+			Places = [.. places];
 		}
 
 		return Page();
@@ -43,14 +43,14 @@ public sealed partial class IndexModel : PageModel
 	public Task<IActionResult> OnPostAsync(SavePlaceQuery place)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(place with { UserId = u })
+					from r in Dispatcher.SendAsync(place with { UserId = u })
 					select r;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: _ => OnGetAsync(),
-				none: r => Result.Error(r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: _ => OnGetAsync(),
+				fFail: Op.Error
 			);
 	}
 }

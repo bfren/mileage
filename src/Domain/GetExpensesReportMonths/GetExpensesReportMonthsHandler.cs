@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
 
@@ -26,13 +26,13 @@ internal sealed class GetExpensesReportMonthsHandler : QueryHandler<GetExpensesR
 	/// Get list of recent months for the expenses report
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<MonthModel>>> HandleAsync(GetExpensesReportMonthsQuery query)
+	public override Task<Result<IEnumerable<MonthModel>>> HandleAsync(GetExpensesReportMonthsQuery query)
 	{
 		Log.Vrb("Getting expenses report months for {User}.", query.UserId);
 
 		var userId = query.UserId.Value;
 		var months = Constants.ExpensesReportMonths;
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportRecentMonths}(@{nameof(userId)}, @{nameof(months)});";
-		return Db.QueryAsync<MonthModel>(sql, new { userId, months }, System.Data.CommandType.Text);
+		return Db.QueryAsync<MonthModel>(sql, new { userId, months });
 	}
 }

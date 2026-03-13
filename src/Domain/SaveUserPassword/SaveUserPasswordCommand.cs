@@ -1,7 +1,7 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data;
 
@@ -19,4 +19,4 @@ public sealed record class SaveUserPasswordCommand(
 	string CurrentPassword,
 	string NewPassword,
 	string CheckPassword
-) : Command, IWithVersion<AuthUserId>;
+) : Command, IWithVersion<AuthUserId, long>;

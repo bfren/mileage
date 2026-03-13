@@ -29,12 +29,12 @@ public sealed partial class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(new GetRatesQuery(u, true))
+					from r in Dispatcher.SendAsync(new GetRatesQuery(u, true))
 					select r;
 
-		await foreach (var rates in query)
+		foreach (var rates in await query.AuditAsync(fFail: Log.Failure).Unsafe())
 		{
-			Rates = rates.ToList();
+			Rates = [.. rates];
 		}
 
 		return Page();
@@ -43,14 +43,14 @@ public sealed partial class IndexModel : PageModel
 	public Task<IActionResult> OnPostAsync(SaveRateQuery rate)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(rate with { UserId = u })
+					from r in Dispatcher.SendAsync(rate with { UserId = u })
 					select r;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: _ => OnGetAsync(),
-				none: r => Result.Error(r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: _ => OnGetAsync(),
+				fFail: Op.Error
 			);
 	}
 }

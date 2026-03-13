@@ -17,14 +17,14 @@ public sealed partial class IndexModel
 	public Task<PartialViewResult> OnGetIncompleteAsync()
 	{
 		var query = from u in User.GetUserId()
-					from j in Dispatcher.DispatchAsync(new GetIncompleteJourneysQuery(u))
+					from j in Dispatcher.SendAsync(new GetIncompleteJourneysQuery(u))
 					select j;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Incomplete", new IncompleteModel { Journeys = x.ToList() }),
-				none: _ => Partial("_Incomplete", new IncompleteModel())
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Incomplete", new IncompleteModel { Journeys = [.. x] }),
+				fFail: _ => Partial("_Incomplete", new IncompleteModel())
 			);
 	}
 }

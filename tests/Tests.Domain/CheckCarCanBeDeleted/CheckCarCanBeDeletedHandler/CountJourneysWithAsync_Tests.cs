@@ -3,7 +3,7 @@
 
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 

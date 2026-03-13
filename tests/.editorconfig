@@ -16,6 +16,9 @@ dotnet_diagnostic.IDE0022.severity = none
 # IDE0058: Expression value is never used
 dotnet_diagnostic.IDE0058.severity = none
 
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
+
 # RCS1102: Make class static.
 dotnet_diagnostic.RCS1102.severity = none
 

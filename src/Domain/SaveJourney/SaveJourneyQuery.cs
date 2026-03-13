@@ -2,9 +2,9 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using RndF;
 
 namespace Mileage.Domain.SaveJourney;
@@ -58,5 +58,5 @@ public sealed record class SaveJourneyQuery(
 	/// <summary>
 	/// Create empty for testing and model binding
 	/// </summary>
-	public SaveJourneyQuery() : this(new(), new(), Rnd.UInt, new()) { }
+	public SaveJourneyQuery() : this(new(), new(), Rnd.UInt32, new()) { }
 }

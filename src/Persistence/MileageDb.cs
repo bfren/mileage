@@ -2,11 +2,12 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Config.Db;
-using Jeebs.Data;
+using Jeebs.Data.Common;
+using Jeebs.Data.Map;
 using Jeebs.Logging;
 using Microsoft.Extensions.Options;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Common.Reports;
-using Mileage.Persistence.Common.StrongIds;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Tables;
 
@@ -49,7 +50,7 @@ public sealed class MileageDb : Db
 	/// <param name="config"></param>
 	/// <param name="log"></param>
 	public MileageDb(IDbClient client, IOptions<DbConfig> config, ILog<MileageDb> log) :
-		base(client, config.Value.GetConnection(), log)
+		base(client, config.Value.GetConnection().Unwrap(), log)
 	{
 		// Map entities
 		_ = Map<CarEntity>.To(Car);
@@ -59,9 +60,12 @@ public sealed class MileageDb : Db
 		_ = Map<RateEntity>.To(Rate);
 
 		// Add type handlers
-		client.Types.AddStrongIdTypeHandlers();
-		client.Types.AddJsonTypeHandler<ExpensesReportPlace>();
-		client.Types.AddListTypeHandlers<PlaceId>();
-		client.Types.AddListTypeHandlers<ExpensesReportPlace>();
+		client.TypeMap(m =>
+		{
+			m.AddIdTypeHandlers();
+			m.AddJsonTypeHandler<ExpensesReportPlace>();
+			m.AddListTypeHandlers<PlaceId>();
+			m.AddListTypeHandlers<ExpensesReportPlace>();
+		});
 	}
 }

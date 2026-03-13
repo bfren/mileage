@@ -6,8 +6,7 @@ using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
 using Mileage.Domain.CheckRateBelongsToUser;
-using Mileage.Domain.SaveRate.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -37,7 +36,7 @@ internal sealed class SaveRateHandler : QueryHandler<SaveRateQuery, RateId>
 	/// Save the rate belonging to user specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<RateId>> HandleAsync(SaveRateQuery query)
+	public override async Task<Result<RateId>> HandleAsync(SaveRateQuery query)
 	{
 		Log.Vrb("Saving Rate {Query}.", query);
 
@@ -45,27 +44,28 @@ internal sealed class SaveRateHandler : QueryHandler<SaveRateQuery, RateId>
 		if (query.Id is not null)
 		{
 			var rateBelongsToUser = await Dispatcher
-					.DispatchAsync(new CheckRateBelongsToUserQuery(query.UserId, query.Id))
+					.SendAsync(new CheckRateBelongsToUserQuery(query.UserId, query.Id))
 					.IsTrueAsync();
 
 			if (!rateBelongsToUser)
 			{
-				return F.None<RateId>(new RateDoesNotBelongToUserMsg(query.UserId, query.Id));
+				return R.Fail("Rate {RateId} does not belong to user {UserId}.", query.Id.Value, query.UserId.Value)
+					.Ctx(nameof(SaveRateHandler), nameof(HandleAsync));
 			}
 		}
 
 		// Create or update rate
 		return await Rate
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.Id, Compare.Equal, query.Id)
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.QuerySingleAsync<RateEntity>()
-			.SwitchAsync(
-				some: x => Dispatcher
-					.DispatchAsync(new Internals.UpdateRateCommand(x.Id, query))
-					.BindAsync(_ => F.Some(x.Id)),
-				none: () => Dispatcher
-					.DispatchAsync(new Internals.CreateRateQuery(query))
+			.MatchAsync(
+				fOk: x => Dispatcher
+					.SendAsync(new Internals.UpdateRateCommand(x.Id, query))
+					.BindAsync(_ => R.Wrap(x.Id)),
+				fFail: f => Dispatcher
+					.SendAsync(new Internals.CreateRateQuery(query))
 			);
 	}
 }

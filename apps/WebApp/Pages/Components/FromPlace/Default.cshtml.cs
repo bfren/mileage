@@ -6,7 +6,7 @@ using Jeebs.Logging;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.GetPlace;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.WebApp.Pages.Components.FromPlace;
 
@@ -35,11 +35,12 @@ public sealed class FromPlaceViewComponent : ViewComponent
 		Log.Dbg("Get place {PlaceId}.", value);
 		return await UserClaimsPrincipal
 			.GetUserId()
-			.BindAsync(x => Dispatcher.DispatchAsync(new GetPlaceQuery(x, value)))
-			.AuditAsync(none: r => Log.Err("Unable to get place: {Reason}", r))
-			.SwitchAsync(
-				some: x => View(new FromPlaceModel(label, updateUrl, x.Id, x.Description, journeyId)),
-				none: _ => (IViewComponentResult)View(FromPlaceModel.Blank(label, updateUrl))
+			.ToResult(nameof(FromPlaceViewComponent), nameof(InvokeAsync))
+			.BindAsync(x => Dispatcher.SendAsync(new GetPlaceQuery(x, value)))
+			.AuditAsync(fFail: r => Log.Err("Unable to get place: {Reason}", r))
+			.MatchAsync(
+				fOk: x => View(new FromPlaceModel(label, updateUrl, x.Id, x.Description, journeyId)),
+				fFail: _ => (IViewComponentResult)View(FromPlaceModel.Blank(label, updateUrl))
 			);
 	}
 }

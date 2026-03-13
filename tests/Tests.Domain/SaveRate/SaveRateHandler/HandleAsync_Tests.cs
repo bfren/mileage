@@ -1,13 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckRateBelongsToUser;
 using Mileage.Domain.SaveRate.Internals;
-using Mileage.Domain.SaveRate.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -30,7 +29,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var query = new SaveRateQuery();
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity());
@@ -47,11 +46,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var rateId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var rateId = IdGen.LongId<RateId>();
 		var query = new SaveRateQuery(userId, rateId, Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity());
@@ -60,7 +61,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckRateBelongsToUserQuery>(x => x.UserId == userId && x.RateId == rateId)
 		);
 	}
@@ -70,16 +71,16 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new SaveRateQuery(LongId<AuthUserId>(), LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var query = new SaveRateQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckRateBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckRateBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		result.AssertNone().AssertType<RateDoesNotBelongToUserMsg>();
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -87,11 +88,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<RateId>();
 		var query = new SaveRateQuery(userId, carId, Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity());
@@ -112,14 +115,16 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var rateId = LongId<RateId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var rateId = IdGen.LongId<RateId>();
 		var version = Rnd.Lng;
 		var amountPerMileInGBP = Rnd.Flt;
 		var disabled = Rnd.Flip;
 		var query = new SaveRateQuery(userId, rateId, version, amountPerMileInGBP, disabled);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity { Id = rateId });
@@ -128,7 +133,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<UpdateRateCommand>(c =>
 				c.Id == rateId
 				&& c.Version == version
@@ -143,13 +148,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var rateId = LongId<RateId>();
-		var query = new SaveRateQuery(LongId<AuthUserId>(), LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var rateId = IdGen.LongId<RateId>();
+		var query = new SaveRateQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<UpdateRateCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<UpdateRateCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<RateEntity>()
 			.Returns(new RateEntity { Id = rateId });
@@ -158,9 +163,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<UpdateRateCommand>());
-		var some = result.AssertSome();
-		Assert.Equal(rateId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdateRateCommand>());
+		result.AssertOk(rateId);
 	}
 
 	[Fact]
@@ -168,20 +172,20 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var amountPerMileInGBP = Rnd.Flt;
 		var query = new SaveRateQuery(userId, null, 0L, amountPerMileInGBP, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<RateEntity>()
-			.Returns(Create.None<RateEntity>());
+			.Returns(FailGen.Create<RateEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CreateRateQuery>(c =>
 				c.UserId == userId
 				&& c.AmountPerMileGBP == amountPerMileInGBP
@@ -194,22 +198,21 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var carId = LongId<RateId>();
-		var query = new SaveRateQuery(LongId<AuthUserId>(), LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var rateId = IdGen.LongId<RateId>();
+		var query = new SaveRateQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<CreateRateQuery>())
-			.Returns(carId);
+		v.Dispatcher.SendAsync(Arg.Any<CreateRateQuery>())
+			.Returns(rateId);
 		v.Fluent.QuerySingleAsync<RateEntity>()
-			.Returns(Create.None<RateEntity>());
+			.Returns(FailGen.Create<RateEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<CreateRateQuery>());
-		var some = result.AssertSome();
-		Assert.Equal(carId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<CreateRateQuery>());
+		result.AssertOk(rateId);
 	}
 }

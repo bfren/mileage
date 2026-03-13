@@ -3,13 +3,24 @@
 
 using Jeebs.Logging;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public sealed class IndexModel : Jeebs.Mvc.Razor.Pages.Auth.IndexModel
+public sealed class IndexModel : PageModel
 {
-	public IndexModel(ILog<IndexModel> log) : base(log) { }
+	/// <summary>
+	/// Log.
+	/// </summary>
+	private ILog Log { get; init; }
 
-	public override IActionResult OnGet() =>
+	/// <summary>
+	/// Inject dependencies.
+	/// </summary>
+	/// <param name="log">ILog.</param>
+	public IndexModel(ILog<IndexModel> log) =>
+		Log = log;
+
+	public IActionResult OnGet() =>
 		RedirectToPage("Profile");
 }

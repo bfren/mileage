@@ -29,7 +29,7 @@ internal sealed class GetUserProfileHandler : QueryHandler<GetUserProfileQuery, 
 	/// Retrieve profile for user specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<UserProfileModel>> HandleAsync(GetUserProfileQuery query)
+	public override Task<Result<UserProfileModel>> HandleAsync(GetUserProfileQuery query)
 	{
 		Log.Vrb("Getting profile for User {User}.", query.Id.Value);
 		return Auth.User.RetrieveAsync<UserProfileModel>(query.Id);

@@ -31,13 +31,13 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 	/// Get tax years for which journeys exist
 	/// </summary>
 	/// <param name="query"></param>
-	public override async Task<Maybe<IOrderedEnumerable<TaxYearModel>>> HandleAsync(GetAnnualMileageReportYearsQuery query)
+	public override async Task<Result<IOrderedEnumerable<TaxYearModel>>> HandleAsync(GetAnnualMileageReportYearsQuery query)
 	{
 		Log.Vrb("Getting annual mileage report tax years for {User}.", query.UserId);
 
 		// Select days from journey repo
 		var days = await Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(j => j.UserId, Jeebs.Data.Enums.Compare.Equal, query.UserId)
 			.QueryAsync<DayModel>();
 
@@ -48,8 +48,7 @@ internal sealed class GetAnnualMileageReportYearsHandler : QueryHandler<GetAnnua
 				 group taxYear by taxYear.StartYear into grp
 				 select grp.First() into unique
 				 orderby unique.StartYear descending
-				 select unique,
-			F.DefaultHandler
+				 select unique
 		);
 	}
 

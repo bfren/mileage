@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.Reports;
@@ -32,12 +32,12 @@ internal sealed class GetExpensesReportDataHandler : QueryHandler<GetExpensesRep
 	/// Get the data for the expenses report requested by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<ExpensesReportJourney>>> HandleAsync(GetExpensesReportDataQuery query)
+	public override Task<Result<IEnumerable<ExpensesReportJourney>>> HandleAsync(GetExpensesReportDataQuery query)
 	{
 		Log.Vrb("Getting expenses report data for {Query}.", query);
 
 		var sql = $"SELECT * FROM {Constants.Functions.GetExpensesReportData}" +
 			$"(@{nameof(query.UserId)}, @{nameof(query.From)}, @{nameof(query.To)});";
-		return Db.QueryAsync<ExpensesReportJourney>(sql, query, System.Data.CommandType.Text);
+		return Db.QueryAsync<ExpensesReportJourney>(sql, query);
 	}
 }

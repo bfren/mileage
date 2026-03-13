@@ -4,9 +4,9 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.SavePlace.Internals;
 
@@ -15,7 +15,7 @@ namespace Mileage.Domain.SavePlace.Internals;
 /// </summary>
 internal sealed class UpdatePlaceHandler : CommandHandler<UpdatePlaceCommand>
 {
-	private IMaybeCache<PlaceId> Cache { get; init; }
+	private IWrapCache<PlaceId> Cache { get; init; }
 
 	private IPlaceRepository Place { get; init; }
 
@@ -27,18 +27,18 @@ internal sealed class UpdatePlaceHandler : CommandHandler<UpdatePlaceCommand>
 	/// <param name="cache"></param>
 	/// <param name="place"></param>
 	/// <param name="log"></param>
-	public UpdatePlaceHandler(IMaybeCache<PlaceId> cache, IPlaceRepository place, ILog<UpdatePlaceHandler> log) =>
+	public UpdatePlaceHandler(IWrapCache<PlaceId> cache, IPlaceRepository place, ILog<UpdatePlaceHandler> log) =>
 		(Cache, Place, Log) = (cache, place, log);
 
 	/// <summary>
 	/// Update a place from <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdatePlaceCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdatePlaceCommand command)
 	{
 		Log.Vrb("Update Place: {Command}", command);
 		return Place
 			.UpdateAsync(command)
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 }

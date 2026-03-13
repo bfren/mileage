@@ -1,16 +1,16 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Persistence.Entities;
 
 /// <summary>
 /// Rate entity
 /// </summary>
-public sealed record class RateEntity : IWithVersion<RateId>
+public sealed record class RateEntity : IWithVersion<RateId, long>
 {
 	/// <summary>
 	/// Rate ID

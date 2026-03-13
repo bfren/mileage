@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 
 namespace Mileage.Domain.GetJourneys;

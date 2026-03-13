@@ -1,11 +1,10 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.CheckRateCanBeDeleted;
 
@@ -15,4 +14,4 @@ namespace Mileage.Domain.CheckRateCanBeDeleted;
 public sealed record class CheckRateCanBeDeletedQuery(
 	AuthUserId UserId,
 	RateId Id
-) : Query<DeleteOperation>, IWithId<RateId>, IWithUserId;
+) : Query<DeleteOperation>, IWithId<RateId, long>, IWithUserId;

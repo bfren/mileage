@@ -1,7 +1,7 @@
 // Mileage Tracker Apps
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc;
@@ -38,10 +38,10 @@ public sealed partial class IndexModel : PageModel
 	public async Task<IActionResult> OnGetAsync()
 	{
 		var query = from u in User.GetUserId()
-					from s in Dispatcher.DispatchAsync(new LoadSettingsQuery(u))
+					from s in Dispatcher.SendAsync(new LoadSettingsQuery(u))
 					select s;
 
-		await foreach (var settings in query)
+		foreach (var settings in await query.AuditAsync(fFail: Log.Failure).Unsafe())
 		{
 			Settings = settings;
 		}
@@ -51,22 +51,22 @@ public sealed partial class IndexModel : PageModel
 
 	private Task<PartialViewResult> GetFieldAsync<TValue, TModel>(
 		string partial,
-		Func<AuthUserId, Task<Maybe<TValue>>> getValue,
+		Func<AuthUserId, Task<Result<TValue>>> getValue,
 		Func<Persistence.Common.Settings, TValue, TModel> getModel
 	) where TModel : EditSettingsModel
 	{
 		// Build query
 		var query = from u in User.GetUserId()
-					from settings in Dispatcher.DispatchAsync(new LoadSettingsQuery(u))
+					from settings in Dispatcher.SendAsync(new LoadSettingsQuery(u))
 					from value in getValue(u)
 					select new { settings, value };
 
 		// Execute query and return partial
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Edit" + partial, getModel(x.settings, x.value)),
-				none: r => Partial("Modals/ErrorModal", r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Edit" + partial, getModel(x.settings, x.value)),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
@@ -87,21 +87,21 @@ public sealed partial class IndexModel : PageModel
 
 		// Build query
 		var query = from userId in User.GetUserId()
-					from result in Dispatcher.DispatchAsync(command with { UserId = userId })
+					from result in Dispatcher.SendAsync(command with { UserId = userId })
 					select result;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync<bool, IActionResult>(
-				some: x => x switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync<bool, IActionResult>(
+				fOk: x => x switch
 				{
 					true =>
 						ViewComponent(component, new { label, updateUrl, value }),
 
 					false =>
-						Result.Error($"Unable to save {label}.")
+						Op.Error($"Unable to save {label}.")
 				},
-				none: r => Result.Error(r)
+				fFail: Op.Error
 			);
 	}
 }

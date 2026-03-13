@@ -5,11 +5,9 @@ using Jeebs.Mvc;
 using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.CheckCarCanBeDeleted;
-using Mileage.Domain.CheckCarCanBeDeleted.Messages;
 using Mileage.Domain.DeleteCar;
 using Mileage.Domain.GetCar;
-using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Settings.Cars;
@@ -27,47 +25,36 @@ public sealed partial class IndexModel
 	{
 		// Create query
 		var query = from userId in User.GetUserId()
-					from op in Dispatcher.DispatchAsync(new CheckCarCanBeDeletedQuery(userId, carId))
-					from car in Dispatcher.DispatchAsync(new GetCarQuery(userId, carId))
+					from op in Dispatcher.SendAsync(new CheckCarCanBeDeletedQuery(userId, carId))
+					from car in Dispatcher.SendAsync(new GetCarQuery(userId, carId))
 					select new { op, car };
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Delete", new DeleteModel { Car = x.car, Operation = x.op }),
-				none: r => r switch
-				{
-					CarIsDefaultCarMsg =>
-						Partial("_Delete", new DeleteModel
-						{
-							Operation = DeleteOperation.None,
-							Reason = "it is the default car for new journeys"
-						}),
-
-					_ =>
-						Partial("Modals/ErrorModal", r)
-				}
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Delete", new DeleteModel { Car = x.car, Operation = x.op }),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
 	public Task<IActionResult> OnPostDeleteAsync(DeleteCarCommand car)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(car with { UserId = u })
+					from r in Dispatcher.SendAsync(car with { UserId = u })
 					select r;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: async x => x switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: async x => x switch
 				{
 					true =>
 						await OnGetAsync(),
 
 					false =>
-						Result.Error("Unable to delete car.")
+						Op.Error("Unable to delete car.")
 				},
-				none: r => Result.Error(r)
+				fFail: Op.Error
 			);
 	}
 }

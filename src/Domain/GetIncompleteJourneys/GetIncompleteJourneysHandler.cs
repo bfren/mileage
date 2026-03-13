@@ -31,11 +31,11 @@ internal sealed class GetIncompleteJourneysHandler : QueryHandler<GetIncompleteJ
 	/// Get journeys for user in <paramref name="query"/> where end miles is null
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<IncompleteJourneyModel>>> HandleAsync(GetIncompleteJourneysQuery query)
+	public override Task<Result<IEnumerable<IncompleteJourneyModel>>> HandleAsync(GetIncompleteJourneysQuery query)
 	{
 		Log.Vrb("Getting incomplete journeys for user {UserId}.", query.UserId.Value);
 		return Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Where(x => x.EndMiles, Compare.Is, null)
 			.Sort(x => x.StartMiles, SortOrder.Descending)

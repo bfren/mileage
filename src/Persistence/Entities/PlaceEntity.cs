@@ -1,16 +1,16 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Persistence.Entities;
 
 /// <summary>
 /// Place entity
 /// </summary>
-public sealed record class PlaceEntity : IWithVersion<PlaceId>
+public sealed record class PlaceEntity : IWithVersion<PlaceId, long>
 {
 	/// <summary>
 	/// Place ID

@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Jeebs.Auth.Data" />
     <PackageReference Include="Jeebs.Data" />
+    <PackageReference Include="Jeebs.Data.Common" />
     <PackageReference Include="Simple.Migrations" />
   </ItemGroup>
   <ItemGroup>

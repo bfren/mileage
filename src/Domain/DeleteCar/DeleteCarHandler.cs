@@ -2,16 +2,15 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Logging;
-using MaybeF.Caching;
 using Mileage.Domain.CheckCarCanBeDeleted;
-using Mileage.Domain.DeleteCar.Messages;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.DeleteCar;
 
@@ -20,7 +19,7 @@ namespace Mileage.Domain.DeleteCar;
 /// </summary>
 internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 {
-	private IMaybeCache<CarId> Cache { get; init; }
+	private IWrapCache<CarId> Cache { get; init; }
 
 	private ICarRepository Car { get; init; }
 
@@ -35,23 +34,23 @@ internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 	/// <param name="car"></param>
 	/// <param name="dispatcher"></param>
 	/// <param name="log"></param>
-	public DeleteCarHandler(IMaybeCache<CarId> cache, ICarRepository car, IDispatcher dispatcher, ILog<DeleteCarHandler> log) =>
+	public DeleteCarHandler(IWrapCache<CarId> cache, ICarRepository car, IDispatcher dispatcher, ILog<DeleteCarHandler> log) =>
 		(Cache, Car, Dispatcher, Log) = (cache, car, dispatcher, log);
 
 	/// <summary>
 	/// Delete or disable the car specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(DeleteCarCommand command) =>
+	public override Task<Result<bool>> HandleAsync(DeleteCarCommand command) =>
 		HandleAsync(command, DeleteOrDisableAsync);
 
-	internal Task<Maybe<bool>> HandleAsync(DeleteCarCommand command, DeleteOrDisable<CarId> dOrD)
+	internal Task<Result<bool>> HandleAsync(DeleteCarCommand command, DeleteOrDisable<CarId> dOrD)
 	{
 		Log.Vrb("Delete or Disable Car: {Command}", command);
 		return Dispatcher
-			.DispatchAsync(new CheckCarCanBeDeletedQuery(command.UserId, command.Id))
+			.SendAsync(new CheckCarCanBeDeletedQuery(command.UserId, command.Id))
 			.BindAsync(x => dOrD(command.UserId, command.Id, x))
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 
 	/// <summary>
@@ -60,24 +59,26 @@ internal sealed class DeleteCarHandler : CommandHandler<DeleteCarCommand>
 	/// <param name="userId"></param>
 	/// <param name="carId"></param>
 	/// <param name="operation"></param>
-	internal Task<Maybe<bool>> DeleteOrDisableAsync(AuthUserId userId, CarId carId, DeleteOperation operation) =>
-		Car.StartFluentQuery()
+	internal Task<Result<bool>> DeleteOrDisableAsync(AuthUserId userId, CarId carId, DeleteOperation operation) =>
+		Car.Fluent()
 			.Where(x => x.Id, Compare.Equal, carId)
 			.Where(x => x.UserId, Compare.Equal, userId)
 			.QuerySingleAsync<CarToDeleteModel>()
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => operation switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: async x => operation switch
 				{
 					DeleteOperation.Delete =>
-						Car.DeleteAsync(x),
+						await Car.DeleteAsync(x),
 
 					DeleteOperation.Disable =>
-						Car.UpdateAsync(x with { IsDisabled = true }),
+						await Car.UpdateAsync(x with { IsDisabled = true }),
 
 					_ =>
-						F.None<bool, CarCannotBeDeletedMsg>().AsTask()
+						R.Fail("Car {CarId} cannot be deleted.", carId.Value)
+							.Ctx(nameof(DeleteCarHandler), nameof(DeleteOrDisableAsync))
 				},
-				none: _ => F.None<bool>(new CarDoesNotExistMsg(userId, carId))
+				fFail: _ => R.Fail("Car {CarId} does not exist for user {UserId}.", carId.Value, userId.Value)
+					.Ctx(nameof(DeleteCarHandler), nameof(DeleteOrDisableAsync))
 			);
 }

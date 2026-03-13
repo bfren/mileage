@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Mileage.Domain.CreateUser;
@@ -13,8 +13,9 @@ using Mileage.Domain.SaveJourney.Internals;
 using Mileage.Domain.SavePlace.Internals;
 using Mileage.Domain.SaveRate.Internals;
 using Mileage.Domain.SaveSettings;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using RndF;
+using Wrap.Logging;
 
 namespace Mileage.Domain.InsertTestData;
 
@@ -39,27 +40,27 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 	/// Insert various pieces of test data
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(InsertTestDataCommand command)
+	public override async Task<Result<bool>> HandleAsync(InsertTestDataCommand command)
 	{
 		Log.Inf("Inserting test data.");
-		var q = from u0 in Dispatcher.DispatchAsync(new CreateUserQuery("bf", "info@bfren.dev", "fred"))
-				from c0 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
-				from c1 in Dispatcher.DispatchAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
-				from p0 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
-				from p1 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
-				from p2 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
-				from p3 in Dispatcher.DispatchAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
-				from r0 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
-				from r1 in Dispatcher.DispatchAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
+		var q = from u0 in Dispatcher.SendAsync(new CreateUserQuery("bf", "info@bfren.dev", "fred"))
+				from c0 in Dispatcher.SendAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
+				from c1 in Dispatcher.SendAsync(new CreateCarQuery(u0, Rnd.Str, Rnd.Str))
+				from p0 in Dispatcher.SendAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p1 in Dispatcher.SendAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p2 in Dispatcher.SendAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from p3 in Dispatcher.SendAsync(new CreatePlaceQuery(u0, Rnd.Str, null))
+				from r0 in Dispatcher.SendAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
+				from r1 in Dispatcher.SendAsync(new CreateRateQuery(u0, Rnd.NumberF.GetSingle(min: 0.1f, max: 0.9f)))
 				from _ in insertJourneys(u0, c0, c1, p0, p1, [p2, p3], r0, r1)
-				from s0 in Dispatcher.DispatchAsync(new SaveSettingsCommand(u0, new(new(), 0L, c0, null, null)))
+				from s0 in Dispatcher.SendAsync(new SaveSettingsCommand(u0, new(new(), 0L, c0, null, null)))
 				select true;
 
 		return await q.AuditAsync(
-			none: r => Log.Msg(r, LogLevel.Error)
+			fFail: r => Log.Failure(r, LogLevel.Error)
 		);
 
-		async Task<Maybe<IEnumerable<JourneyId>>> insertJourneys(
+		async Task<Result<IEnumerable<JourneyId>>> insertJourneys(
 			AuthUserId userId,
 			CarId carId0, CarId carId1,
 			PlaceId fromPlaceId0, PlaceId fromPlaceId1,
@@ -95,8 +96,8 @@ internal sealed class InsertTestDataHandler : CommandHandler<InsertTestDataComma
 				var (start, end) = mileage[i];
 
 				_ = await Dispatcher
-					.DispatchAsync(new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId))
-					.IfSomeAsync(journeyIds.Add);
+					.SendAsync(new CreateJourneyQuery(userId, date, carId, start, end, fromPlaceId, toPlaceIds, rateId))
+					.IfOkAsync(journeyIds.Add);
 
 				date = date.AddDays(Rnd.NumberF.GetInt32(0, 3) * -1);
 			}

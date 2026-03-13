@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -32,7 +32,7 @@ internal sealed class UpdateJourneyHandler : CommandHandler<UpdateJourneyCommand
 	/// Update an existing journey from <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyCommand command)
 	{
 		Log.Vrb("Update Journey: {Command}", command);
 		return Journey
@@ -45,7 +45,7 @@ internal sealed class UpdateJourneyHandler : CommandHandler<UpdateJourneyCommand
 				StartMiles = (int)command.StartMiles,
 				EndMiles = (int?)command.EndMiles,
 				FromPlaceId = command.FromPlaceId,
-				ToPlaceIds = command.ToPlaceIds ?? Array.Empty<PlaceId>(),
+				ToPlaceIds = command.ToPlaceIds ?? [],
 				RateId = command.RateId
 			});
 	}

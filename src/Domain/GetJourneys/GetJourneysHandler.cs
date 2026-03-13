@@ -32,14 +32,14 @@ internal sealed class GetJourneysHandler : QueryHandler<GetJourneysQuery, IEnume
 	/// Get journeys between dates specified in <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<JourneyModel>>> HandleAsync(GetJourneysQuery query)
+	public override Task<Result<IEnumerable<JourneyModel>>> HandleAsync(GetJourneysQuery query)
 	{
 		var start = DateTime.SpecifyKind(query.Start, DateTimeKind.Unspecified);
 		var end = DateTime.SpecifyKind(query.End, DateTimeKind.Unspecified);
 
 		Log.Vrb("Getting Journeys for {User} between {Start} and {End}.", query.UserId.Value, start, end);
 		return Journey
-			.StartFluentQuery()
+			.Fluent()
 			.Where(x => x.UserId, Compare.Equal, query.UserId)
 			.Where(x => x.Day, Compare.MoreThanOrEqual, start)
 			.Where(x => x.Day, Compare.LessThanOrEqual, end)

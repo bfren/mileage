@@ -1,12 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.SaveSettings;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -29,8 +29,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>()));
-		var query = new LoadSettingsQuery(LongId<AuthUserId>());
+			.Returns(new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, IdGen.LongId<CarId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<RateId>()));
+		var query = new LoadSettingsQuery(IdGen.LongId<AuthUserId>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -45,8 +45,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>()));
-		var userId = LongId<AuthUserId>();
+			.Returns(new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, IdGen.LongId<CarId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<RateId>()));
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new LoadSettingsQuery(userId);
 
 		// Act
@@ -64,35 +64,33 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>());
+		var model = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, IdGen.LongId<CarId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<RateId>());
 		v.Fluent.QuerySingleAsync<Settings>()
 			.Returns(model);
-		var query = new LoadSettingsQuery(LongId<AuthUserId>());
+		var query = new LoadSettingsQuery(IdGen.LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Same(model, some);
+		result.AssertOk(model);
 	}
 	[Fact]
 	public async Task Calls_FluentQuery_QuerySingleAsync__Receives_None__Returns_Default_Settings()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var model = new Settings(LongId<SettingsId>(), Rnd.Lng, LongId<CarId>(), LongId<PlaceId>(), LongId<RateId>());
+		var model = new Settings(IdGen.LongId<SettingsId>(), Rnd.Lng, IdGen.LongId<CarId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<RateId>());
 		v.Fluent.QuerySingleAsync<Settings>()
-			.Returns(Create.None<Settings>(), F.Some(model));
-		v.Dispatcher.DispatchAsync(Arg.Any<SaveSettingsCommand>())
-			.Returns(F.True);
-		var query = new LoadSettingsQuery(LongId<AuthUserId>());
+			.Returns(FailGen.Create<Settings>(), R.Wrap(model));
+		v.Dispatcher.SendAsync(Arg.Any<SaveSettingsCommand>())
+			.Returns(R.True);
+		var query = new LoadSettingsQuery(IdGen.LongId<AuthUserId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(model, some);
+		result.AssertOk(model);
 	}
 }

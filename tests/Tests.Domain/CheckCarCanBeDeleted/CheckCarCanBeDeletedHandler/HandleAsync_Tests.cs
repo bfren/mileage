@@ -1,9 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Domain.CheckCarCanBeDeleted.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.CheckCarCanBeDeleted.CheckCarCanBeDeletedHandler_Tests;
@@ -24,7 +23,7 @@ public sealed class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_
 				return new(userId, entityId);
 			}
 
-			return new(LongId<AuthUserId>(), LongId<CarId>());
+			return new(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 		}
 	}
 
@@ -37,7 +36,7 @@ public sealed class HandleAsync_Tests : Abstracts.CheckCanBeDeleted.HandleAsync_
 	[Fact]
 	public override async Task Test01_Checks_Is_Default__Receives_Some_True__Returns_None_With_IsDefaultMsg()
 	{
-		await new Setup().Test01<CarIsDefaultCarMsg>(h => h.HandleAsync);
+		await new Setup().Test01(h => h.HandleAsync);
 	}
 
 	[Fact]

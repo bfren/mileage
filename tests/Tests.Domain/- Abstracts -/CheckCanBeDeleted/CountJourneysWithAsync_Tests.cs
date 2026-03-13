@@ -1,17 +1,17 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain;
 using Mileage.Persistence.Common;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 using NSubstitute.Core;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.CheckCanBeDeleted;
 
@@ -26,7 +26,7 @@ public abstract class CountJourneysWithAsync_Tests
 	internal abstract class Setup<TQuery, THandler, TId> : TestHandler.Setup<IJourneyRepository, JourneyEntity, JourneyId, THandler>
 		where TQuery : Query<DeleteOperation>
 		where THandler : QueryHandler<TQuery, DeleteOperation>
-		where TId : LongId, new()
+		where TId : LongId<TId>, new()
 	{
 		public delegate CountJourneysWith<TId> CountJourneysWithAsyncMethod(THandler handler);
 
@@ -36,8 +36,8 @@ public abstract class CountJourneysWithAsync_Tests
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var entityId = LongId<TId>();
+			var userId = IdGen.LongId<AuthUserId>();
+			var entityId = IdGen.LongId<TId>();
 			var count = countJourneysWith(handler);
 
 			// Act
@@ -58,7 +58,7 @@ public abstract class CountJourneysWithAsync_Tests
 			var count = countJourneysWith(handler);
 
 			// Act
-			_ = await count(LongId<AuthUserId>(), LongId<TId>());
+			_ = await count(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
 			await v.Fluent.Received().CountAsync();
@@ -74,11 +74,10 @@ public abstract class CountJourneysWithAsync_Tests
 			var count = countJourneysWith(handler);
 
 			// Act
-			var result = await count(LongId<AuthUserId>(), LongId<TId>());
+			var result = await count(IdGen.LongId<AuthUserId>(), IdGen.LongId<TId>());
 
 			// Assert
-			var some = result.AssertSome();
-			Assert.Equal(value, some);
+			result.AssertOk(value);
 		}
 	}
 }

@@ -18,8 +18,8 @@ public sealed partial class IndexModel
 {
 	public Task<PartialViewResult> OnGetEditRateAsync() =>
 		GetFieldAsync("Rate",
-			x => Dispatcher.DispatchAsync(new GetRatesQuery(x, false)),
-			(s, v) => new EditRateModel { Settings = s, Rates = v.ToList() }
+			x => Dispatcher.SendAsync(new GetRatesQuery(x, false)),
+			(s, v) => new EditRateModel { Settings = s, Rates = [.. v] }
 		);
 
 	public Task<IActionResult> OnPostEditRateAsync(UpdateDefaultRateCommand settings) =>

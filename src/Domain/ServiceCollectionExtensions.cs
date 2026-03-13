@@ -4,7 +4,7 @@
 using Jeebs.Auth.Data;
 using Jeebs.Auth.Data.Clients.PostgreSql;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Mileage.Persistence;
 using Mileage.Persistence.Clients.PostgreSql;

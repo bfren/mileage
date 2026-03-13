@@ -25,35 +25,35 @@ public sealed partial class ProfileModel
 	public Task<PartialViewResult> OnGetChangePasswordAsync()
 	{
 		var query = from u in User.GetUserId()
-					from p in Dispatcher.DispatchAsync(new GetUserProfileQuery(u))
+					from p in Dispatcher.SendAsync(new GetUserProfileQuery(u))
 					select p;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_ChangePassword", new ChangePasswordModel(x)),
-				none: r => Partial("Modals/ErrorModal", r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_ChangePassword", new ChangePasswordModel(x)),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
 	public async Task<IActionResult> OnPostChangePasswordAsync(SaveUserPasswordCommand password)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(password with { Id = u })
+					from r in Dispatcher.SendAsync(password with { Id = u })
 					select r;
 
 		return await query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => x switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => x switch
 				{
 					true =>
-						Result.Create(true, Alert.Success("Password changed successfully.")),
+						Op.Create(true, Alert.Success("Password changed successfully.")),
 
 					false =>
-						Result.Error("Unable to change password.")
+						Op.Error("Unable to change password.")
 				},
-				none: r => Result.Error(r)
+				fFail: Op.Error
 			);
 	}
 }

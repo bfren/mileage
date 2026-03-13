@@ -1,14 +1,13 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Mileage.Domain;
-using Mileage.Domain.SaveSettings.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using StrongId;
+using Wrap.Ids;
 
 namespace Abstracts.UpdateSettings;
 
@@ -27,9 +26,9 @@ public abstract class HandleAsync_Tests
 	public abstract Task Test05_ItemId_Is_Null__Calls_Settings_UpdateAsync__With_Correct_Values();
 
 	internal abstract class Setup<TCommand, THandler, TItemId> : TestHandler.Setup<ISettingsRepository, SettingsEntity, SettingsId, THandler>
-		where TCommand : Command, IWithId<SettingsId>, IWithUserId
+		where TCommand : Command, IWithId<SettingsId, long>, IWithUserId
 		where THandler : CommandHandler<TCommand>
-		where TItemId : LongId, new()
+		where TItemId : LongId<TItemId>, new()
 	{
 		internal string Name { get; }
 
@@ -38,44 +37,44 @@ public abstract class HandleAsync_Tests
 		protected Setup(string name) =>
 			Name = name;
 
-		internal async Task Test00(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test00(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(Create.None<bool>());
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
+			v.Dispatcher.SendAsync<bool>(query: default!)
+				.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 			// Act
 			var result = await handle(handler, command);
 
 			// Assert
-			result.AssertNone().AssertType<SaveSettingsCheckFailedMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test01(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test01(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.False);
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
+			v.Dispatcher.SendAsync<bool>(query: default!)
+				.ReturnsForAnyArgs(R.False);
 
 			// Act
 			var result = await handle(handler, command);
 
 			// Assert
-			result.AssertNone().AssertType<SaveSettingsCheckFailedMsg>();
+			result.AssertFailure();
 		}
 
-		internal async Task Test02(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test02(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
-			var command = GetCommand(userId, LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.True);
+			var userId = IdGen.LongId<AuthUserId>();
+			var command = GetCommand(userId, IdGen.LongId<TItemId>());
+			v.Dispatcher.SendAsync<bool>(query: default!)
+				.ReturnsForAnyArgs(R.True);
 
 			// Act
 			_ = await handle(handler, command);
@@ -84,13 +83,13 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating Default {Name} for {{User}}.", userId.Value);
 		}
 
-		internal async Task Test03(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test03(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var command = GetCommand(itemId: LongId<TItemId>());
-			v.Dispatcher.DispatchAsync<bool>(query: default!)
-				.ReturnsForAnyArgs(F.True);
+			var command = GetCommand(itemId: IdGen.LongId<TItemId>());
+			v.Dispatcher.SendAsync<bool>(query: default!)
+				.ReturnsForAnyArgs(R.True);
 
 			// Act
 			_ = await handle(handler, command);
@@ -99,11 +98,11 @@ public abstract class HandleAsync_Tests
 			await v.Repo.Received().UpdateAsync(command);
 		}
 
-		internal async Task Test04(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test04(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();
-			var userId = LongId<AuthUserId>();
+			var userId = IdGen.LongId<AuthUserId>();
 			var command = GetCommand(userId);
 
 			// Act
@@ -113,7 +112,7 @@ public abstract class HandleAsync_Tests
 			v.Log.Received().Vrb($"Updating Default {Name} for {{User}}.", userId.Value);
 		}
 
-		internal async Task Test05(Func<THandler, TCommand, Task<Maybe<bool>>> handle)
+		internal async Task Test05(Func<THandler, TCommand, Task<Result<bool>>> handle)
 		{
 			// Arrange
 			var (handler, v) = GetVars();

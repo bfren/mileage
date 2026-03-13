@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -26,38 +26,38 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), null);
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), null);
 
 		// Assert
 		Assert.True(result);
-		await v.Dispatcher.DidNotReceiveWithAnyArgs().DispatchAsync(default!);
+		await v.Dispatcher.DidNotReceiveWithAnyArgs().SendAsync(default!);
 	}
 
 	[Fact]
-	public async Task Calls_Dispatcher_DispatchAsync__Receives_Some__Returns_Value()
+	public async Task Calls_Dispatcher_SendAsync__Receives_Some__Returns_Value()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
 		var value = Rnd.Flip;
-		v.Dispatcher.DispatchAsync<bool>(default!)
-			.ReturnsForAnyArgs(F.Some(value).AsTask());
+		v.Dispatcher.SendAsync<bool>(default!)
+			.ReturnsForAnyArgs(R.Wrap(value).AsTask());
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), LongId<PlaceId>(), LongId<PlaceId>());
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>());
 
 		// Assert
 		Assert.Equal(value, result);
 	}
 
 	[Fact]
-	public async Task Calls_Dispatcher_DispatchAsync__Receives_Some_False__Logs_To_Dbg()
+	public async Task Calls_Dispatcher_SendAsync__Receives_Some_False__Logs_To_Dbg()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(false);
-		var userId = LongId<AuthUserId>();
-		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var userId = IdGen.LongId<AuthUserId>();
+		var placeIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
 		var placeIdValues = placeIds.Select(x => x.Value).ToArray();
 
 		// Act
@@ -72,15 +72,15 @@ public class CheckPlacesBelongToUser_Tests : Abstracts.TestHandler
 	}
 
 	[Fact]
-	public async Task Calls_Dispatcher_DispatchAsync__Receives_None__Returns_False()
+	public async Task Calls_Dispatcher_SendAsync__Receives_None__Returns_False()
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		v.Dispatcher.DispatchAsync<bool>(default!)
-			.ReturnsForAnyArgs(Create.None<bool>());
+		v.Dispatcher.SendAsync<bool>(default!)
+			.ReturnsForAnyArgs(FailGen.Create<bool>());
 
 		// Act
-		var result = await handler.CheckPlacesBelongToUser(LongId<AuthUserId>(), LongId<PlaceId>(), LongId<PlaceId>());
+		var result = await handler.CheckPlacesBelongToUser(IdGen.LongId<AuthUserId>(), IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>());
 
 		// Assert
 		Assert.False(result);

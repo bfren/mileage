@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveRate.Internals;
@@ -30,7 +30,7 @@ internal sealed class CreateRateHandler : QueryHandler<CreateRateQuery, RateId>
 	/// Create a new rate from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<RateId>> HandleAsync(CreateRateQuery query)
+	public override Task<Result<RateId>> HandleAsync(CreateRateQuery query)
 	{
 		Log.Vrb("Create Rate: {Query}", query);
 		return Rate

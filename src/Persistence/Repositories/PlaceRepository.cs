@@ -1,9 +1,9 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 
 namespace Mileage.Persistence.Repositories;

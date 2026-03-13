@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.SaveSettings.UpdateDefaultCarHandler_Tests;
 
@@ -11,7 +11,7 @@ public sealed class HandleAsync_Tests : Abstracts.UpdateSettings.HandleAsync_Tes
 	private sealed class Setup : Setup<UpdateDefaultCarCommand, UpdateDefaultCarHandler, CarId>
 	{
 		internal override UpdateDefaultCarCommand GetCommand(AuthUserId? userId = null, CarId? itemId = null) =>
-			new(userId ?? LongId<AuthUserId>(), LongId<SettingsId>(), Rnd.Lng, itemId);
+			new(userId ?? IdGen.LongId<AuthUserId>(), IdGen.LongId<SettingsId>(), Rnd.Lng, itemId);
 
 		internal override UpdateDefaultCarHandler GetHandler(Vars v) =>
 			new(v.Dispatcher, v.Repo, v.Log);

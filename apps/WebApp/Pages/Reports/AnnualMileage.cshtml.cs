@@ -32,12 +32,12 @@ public sealed class AnnualMileageModel : PageModel
 		TaxYear = new(start);
 		Log.Vrb("Generating annual mileage report for {Start}-{End}.", TaxYear.StartDate, TaxYear.EndDate);
 		var query = from u in User.GetUserId()
-					from d in Dispatcher.DispatchAsync(new GetAnnualMileageReportDataQuery(u, TaxYear.StartDate, TaxYear.EndDate))
+					from d in Dispatcher.SendAsync(new GetAnnualMileageReportDataQuery(u, TaxYear.StartDate, TaxYear.EndDate))
 					select d;
 
-		await foreach (var item in query.AuditAsync(none: Log.Msg))
+		foreach (var item in await query.AuditAsync(fFail: Log.Failure).Unsafe())
 		{
-			Journeys = item.ToList();
+			Journeys = [.. item];
 		}
 
 		return Page();

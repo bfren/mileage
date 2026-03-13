@@ -2,13 +2,12 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using System.Linq.Expressions;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
-using static MaybeF.F.M;
 
 namespace Mileage.Domain.GetLatestEndMiles.GetLatestEndMilesHandler_Tests;
 
@@ -28,15 +27,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, _) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new GetLatestEndMilesQuery(userId, null);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(0u, some);
+		result.AssertOk(0u);
 	}
 
 	[Fact]
@@ -44,11 +42,11 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var query = new GetLatestEndMilesQuery(userId, carId);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -62,14 +60,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var query = new GetLatestEndMilesQuery(userId, carId);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -88,12 +86,12 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
+		var query = new GetLatestEndMilesQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -112,12 +110,12 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
+		var query = new GetLatestEndMilesQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(Create.None<int?>());
+			.Returns(FailGen.Create<int?>());
 
 		// Act
 		await handler.HandleAsync(query);
@@ -127,7 +125,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 			_ => { },
 			_ => { },
 			_ => { },
-			c => FluentQueryHelper.AssertExecute<JourneyEntity, int?>(c, x => x.EndMiles, false)
+			c => FluentQueryHelper.AssertExecute<JourneyEntity, int?>(c, x => x.EndMiles)
 		);
 	}
 
@@ -136,21 +134,19 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
-		var msg = Substitute.For<IMsg>();
-		var maybe = F.None<int?>(msg);
+		var query = new GetLatestEndMilesQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
+		var failure = FailGen.Create<int?>();
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
-			.Returns(maybe);
+			.Returns(failure);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(0u, some);
+		result.AssertOk(0u);
 	}
 
 	[Theory]
@@ -160,26 +156,25 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
+		var query = new GetLatestEndMilesQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns(asNone switch
 			{
 				true =>
-					F.None<int?, NullValueMsg>(),
+					FailGen.Create<int?>(),
 
 				false =>
-					F.Some<int?>(null, true)
+					R.Wrap<int?>(null)
 			});
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(0u, some);
+		result.AssertOk(0u);
 	}
 
 	[Fact]
@@ -187,10 +182,10 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new GetLatestEndMilesQuery(LongId<AuthUserId>(), LongId<CarId>());
-		var value = Rnd.UInt;
+		var query = new GetLatestEndMilesQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>());
+		var value = Rnd.UInt32;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.ExecuteAsync(Arg.Any<Expression<Func<JourneyEntity, int?>>>())
 			.Returns((int)value);
@@ -199,7 +194,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(value, some);
+		result.AssertOk(value);
 	}
 }

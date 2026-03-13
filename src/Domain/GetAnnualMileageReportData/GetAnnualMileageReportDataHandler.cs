@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
-using Jeebs.Data;
+using Jeebs.Data.Common;
 using Jeebs.Logging;
 using Mileage.Persistence.Common;
 using Mileage.Persistence.Common.Reports;
@@ -32,12 +32,12 @@ internal sealed class GetAnnualMileageReportDataHandler : QueryHandler<GetAnnual
 	/// Get the data for the expenses report requested by <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<IEnumerable<AnnualMileageReportJourney>>> HandleAsync(GetAnnualMileageReportDataQuery query)
+	public override Task<Result<IEnumerable<AnnualMileageReportJourney>>> HandleAsync(GetAnnualMileageReportDataQuery query)
 	{
 		Log.Vrb("Getting annual mileage report data for {Query}.", query);
 
 		var sql = $"SELECT * FROM {Constants.Functions.GetAnnualMileageReportData}" +
 			$"(@{nameof(query.UserId)}, @{nameof(query.From)}, @{nameof(query.To)});";
-		return Db.QueryAsync<AnnualMileageReportJourney>(sql, query, System.Data.CommandType.Text);
+		return Db.QueryAsync<AnnualMileageReportJourney>(sql, query);
 	}
 }

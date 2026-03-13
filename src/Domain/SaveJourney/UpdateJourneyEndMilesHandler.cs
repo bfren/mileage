@@ -29,7 +29,7 @@ internal sealed class UpdateJourneyEndMilesHandler : CommandHandler<UpdateJourne
 	/// Update journey End Miles belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyEndMilesCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyEndMilesCommand command)
 	{
 		Log.Vrb("Updating End Miles for {Journey}.", command);
 		return Journey.UpdateAsync(command);

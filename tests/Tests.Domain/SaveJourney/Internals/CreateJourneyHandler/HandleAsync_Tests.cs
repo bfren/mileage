@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -38,14 +38,14 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var day = Rnd.DateTime;
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var endMiles = startMiles + Rnd.UInt;
-		var fromPlaceId = LongId<PlaceId>();
-		var toPlaceIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var rateId = LongId<RateId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var endMiles = startMiles + Rnd.UInt32;
+		var fromPlaceId = IdGen.LongId<PlaceId>();
+		var toPlaceIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var rateId = IdGen.LongId<RateId>();
 		var query = new CreateJourneyQuery(userId, day, carId, startMiles, endMiles, fromPlaceId, toPlaceIds, rateId);
 
 		// Act
@@ -69,7 +69,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var expected = LongId<JourneyId>();
+		var expected = IdGen.LongId<JourneyId>();
 		v.Repo.CreateAsync(default!)
 			.ReturnsForAnyArgs(expected);
 		var query = new CreateJourneyQuery();
@@ -78,7 +78,6 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

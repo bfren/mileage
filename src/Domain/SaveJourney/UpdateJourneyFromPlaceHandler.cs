@@ -30,7 +30,7 @@ internal sealed class UpdateJourneyFromPlaceHandler : CommandHandler<UpdateJourn
 	/// Update journey From Place belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyFromPlaceCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyFromPlaceCommand command)
 	{
 		Log.Vrb("Updating From Place for {Journey}.", command);
 		return Journey.UpdateAsync(command);

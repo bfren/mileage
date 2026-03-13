@@ -29,7 +29,7 @@ internal sealed class UpdateJourneyRateHandler : CommandHandler<UpdateJourneyRat
 	/// Update journey Rate belonging to user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateJourneyRateCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateJourneyRateCommand command)
 	{
 		Log.Vrb("Updating Rate for {Journey}.", command);
 		return Journey.UpdateAsync(command);

@@ -1,13 +1,12 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.SaveCar.Internals;
-using Mileage.Domain.SaveCar.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -30,7 +29,10 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		var query = new SaveCarQuery();
-		v.Dispatcher.DispatchAsync<bool>(default!)
+
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity());
@@ -47,11 +49,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity());
@@ -60,7 +64,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CheckCarBelongsToUserQuery>(x => x.UserId == userId && x.CarId == carId)
 		);
 	}
@@ -70,16 +74,16 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var query = new SaveCarQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync(Arg.Any<CheckCarBelongsToUserQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CheckCarBelongsToUserQuery>())
 			.ReturnsForAnyArgs(false);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		result.AssertNone().AssertType<CarDoesNotBelongToUserMsg>();
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -87,11 +91,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var query = new SaveCarQuery(userId, carId, Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity());
@@ -112,15 +118,17 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
 		var version = Rnd.Lng;
 		var description = Rnd.Str;
 		var plate = Rnd.Str;
 		var disabled = Rnd.Flip;
 		var query = new SaveCarQuery(userId, carId, version, description, plate, disabled);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync(default!)
+			.ReturnsForAnyArgs(true);
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity { Id = carId });
@@ -129,7 +137,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<UpdateCarCommand>(c =>
 				c.Id == carId
 				&& c.Version == version
@@ -145,13 +153,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var carId = IdGen.LongId<CarId>();
+		var query = new SaveCarQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 		var updated = Rnd.Flip;
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<UpdateCarCommand>())
+		v.Dispatcher.SendAsync(Arg.Any<UpdateCarCommand>())
 			.Returns(updated);
 		v.Fluent.QuerySingleAsync<CarEntity>()
 			.Returns(new CarEntity { Id = carId });
@@ -160,9 +168,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<UpdateCarCommand>());
-		var some = result.AssertSome();
-		Assert.Equal(carId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<UpdateCarCommand>());
+		result.AssertOk(carId);
 	}
 
 	[Fact]
@@ -170,21 +177,21 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var userId = LongId<AuthUserId>();
+		var userId = IdGen.LongId<AuthUserId>();
 		var description = Rnd.Str;
 		var plate = Rnd.Str;
 		var query = new SaveCarQuery(userId, null, 0L, description, plate, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
 		v.Fluent.QuerySingleAsync<CarEntity>()
-			.Returns(Create.None<CarEntity>());
+			.Returns(FailGen.Create<CarEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(
+		await v.Dispatcher.Received().SendAsync(
 			Arg.Is<CreateCarQuery>(c =>
 				c.UserId == userId
 				&& c.Description == description
@@ -198,22 +205,21 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var carId = LongId<CarId>();
-		var query = new SaveCarQuery(LongId<AuthUserId>(), LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
+		var carId = IdGen.LongId<CarId>();
+		var query = new SaveCarQuery(IdGen.LongId<AuthUserId>(), IdGen.LongId<CarId>(), Rnd.Lng, Rnd.Str, Rnd.Str, Rnd.Flip);
 
-		v.Dispatcher.DispatchAsync<bool>(default!)
+		v.Dispatcher.SendAsync<bool>(default!)
 			.ReturnsForAnyArgs(true);
-		v.Dispatcher.DispatchAsync(Arg.Any<CreateCarQuery>())
+		v.Dispatcher.SendAsync(Arg.Any<CreateCarQuery>())
 			.Returns(carId);
 		v.Fluent.QuerySingleAsync<CarEntity>()
-			.Returns(Create.None<CarEntity>());
+			.Returns(FailGen.Create<CarEntity>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		await v.Dispatcher.Received().DispatchAsync(Arg.Any<CreateCarQuery>());
-		var some = result.AssertSome();
-		Assert.Equal(carId, some);
+		await v.Dispatcher.Received().SendAsync(Arg.Any<CreateCarQuery>());
+		result.AssertOk(carId);
 	}
 }

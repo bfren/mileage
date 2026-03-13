@@ -2,8 +2,8 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Cqrs;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Mileage.Persistence.Common.Ids;
+using Wrap.Ids;
 
 namespace Mileage.Domain.SavePlace.Internals;
 
@@ -19,7 +19,7 @@ internal sealed record class UpdatePlaceCommand(
 	string Description,
 	string? Postcode,
 	bool IsDisabled
-) : Command, IWithId<PlaceId>
+) : Command, IWithId<PlaceId, long>
 {
 	/// <summary>
 	/// Create from <see cref="SavePlaceQuery"/>

@@ -1,9 +1,8 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
-using StrongId;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.GetCar;
 
@@ -23,7 +22,7 @@ public sealed record class CarModel(
 	string Description,
 	string? NumberPlate,
 	bool IsDisabled
-) : IWithUserId, IWithId<CarId>
+) : IWithUserId, IWithId<CarId, long>
 {
 	/// <summary>
 	/// Create empty - for model binding

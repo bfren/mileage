@@ -29,7 +29,7 @@ internal sealed class SaveUserPasswordHandler : CommandHandler<SaveUserPasswordC
 	/// Save password for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(SaveUserPasswordCommand command)
+	public override Task<Result<bool>> HandleAsync(SaveUserPasswordCommand command)
 	{
 		Log.Vrb("Saving password for User {User}.", command.Id.Value);
 		return Auth.ChangeUserPasswordAsync(new(

@@ -6,7 +6,7 @@ using Jeebs.Mvc.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Mileage.Domain.DeleteJourney;
 using Mileage.Domain.GetJourney;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Journeys;
@@ -42,28 +42,28 @@ public sealed partial class IndexModel
 	{
 		// Create query
 		var query = from u in User.GetUserId()
-					from c in Dispatcher.DispatchAsync(new GetJourneyQuery(u, journeyId))
+					from c in Dispatcher.SendAsync(new GetJourneyQuery(u, journeyId))
 					select c;
 
 		// Execute and return partial
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync(
-				some: x => Partial("_Delete", new DeleteModel { Journey = x, Type = type }),
-				none: r => Partial("Modals/ErrorModal", r)
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync(
+				fOk: x => Partial("_Delete", new DeleteModel { Journey = x, Type = type }),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
 	public Task<IActionResult> OnPostDeleteAsync(DeleteJourneyCommand journey, JourneyList type)
 	{
 		var query = from u in User.GetUserId()
-					from r in Dispatcher.DispatchAsync(journey with { UserId = u })
+					from r in Dispatcher.SendAsync(journey with { UserId = u })
 					select r;
 
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync<bool, IActionResult>(
-				some: async x => x switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync<bool, IActionResult>(
+				fOk: async x => x switch
 				{
 					true when type == JourneyList.Incomplete =>
 						await OnGetIncompleteAsync(),
@@ -72,12 +72,12 @@ public sealed partial class IndexModel
 						await OnGetRecentAsync(),
 
 					true when type == JourneyList.Between =>
-						Result.Create("refresh"),
+						Op.Create("refresh"),
 
 					_ =>
-						Result.Error("Unable to delete Journey.")
+						Op.Error("Unable to delete Journey.")
 				},
-				none: r => Result.Error(r)
+				fFail: Op.Error
 			);
 	}
 }

@@ -4,9 +4,9 @@
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using MaybeF.Caching;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
+using Wrap.Caching;
 
 namespace Mileage.Domain.SaveRate.Internals;
 
@@ -15,7 +15,7 @@ namespace Mileage.Domain.SaveRate.Internals;
 /// </summary>
 internal sealed class UpdateRateHandler : CommandHandler<UpdateRateCommand>
 {
-	private IMaybeCache<RateId> Cache { get; init; }
+	private IWrapCache<RateId> Cache { get; init; }
 
 	private IRateRepository Rate { get; init; }
 
@@ -27,18 +27,18 @@ internal sealed class UpdateRateHandler : CommandHandler<UpdateRateCommand>
 	/// <param name="cache"></param>
 	/// <param name="rate"></param>
 	/// <param name="log"></param>
-	public UpdateRateHandler(IMaybeCache<RateId> cache, IRateRepository rate, ILog<UpdateRateHandler> log) =>
+	public UpdateRateHandler(IWrapCache<RateId> cache, IRateRepository rate, ILog<UpdateRateHandler> log) =>
 		(Cache, Rate, Log) = (cache, rate, log);
 
 	/// <summary>
 	/// Update a rate from <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override Task<Maybe<bool>> HandleAsync(UpdateRateCommand command)
+	public override Task<Result<bool>> HandleAsync(UpdateRateCommand command)
 	{
 		Log.Vrb("Update Rate: {Command}", command);
 		return Rate
 			.UpdateAsync(command)
-			.IfSomeAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
+			.IfOkAsync(x => { if (x) { Cache.RemoveValue(command.Id); } });
 	}
 }

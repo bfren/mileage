@@ -1,7 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -23,7 +23,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var command = new UpdateRateCommand(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -37,7 +37,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var command = new UpdateRateCommand(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -51,9 +51,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var command = new UpdateRateCommand(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 		v.Repo.UpdateAsync(command)
-			.Returns(F.True);
+			.Returns(R.True);
 
 		// Act
 		await handler.HandleAsync(command);
@@ -70,13 +70,12 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var expected = Rnd.Flip;
 		v.Repo.UpdateAsync<UpdateRateCommand>(default!)
 			.ReturnsForAnyArgs(expected);
-		var command = new UpdateRateCommand(LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
+		var command = new UpdateRateCommand(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flt, Rnd.Flip);
 
 		// Act
 		var result = await handler.HandleAsync(command);
 
 		// Assert
-		var some = result.AssertSome();
-		Assert.Equal(expected, some);
+		result.AssertOk(expected);
 	}
 }

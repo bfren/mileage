@@ -1,11 +1,10 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
 using Jeebs.Data.Testing.Query;
-using Jeebs.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -27,13 +26,13 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, _) = GetVars();
-		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), Array.Empty<PlaceId>());
+		var query = new CheckPlacesBelongToUserQuery(IdGen.LongId<AuthUserId>(), []);
 
 		// Act
 		var result = await handler.HandleAsync(query);
 
 		// Assert
-		result.AssertNone().AssertType<Messages.PlaceIdsIsNullMsg>();
+		result.AssertFailure();
 	}
 
 	[Fact]
@@ -43,9 +42,9 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
 			.Returns(Array.Empty<PlaceEntity>());
-		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
+		var placeIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
 		var placeIdsValues = placeIds.Select(p => p.Value);
-		var query = new CheckPlacesBelongToUserQuery(LongId<AuthUserId>(), placeIds);
+		var query = new CheckPlacesBelongToUserQuery(IdGen.LongId<AuthUserId>(), placeIds);
 
 		// Act
 		await handler.HandleAsync(query);
@@ -65,8 +64,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
 			.Returns(Array.Empty<PlaceEntity>());
-		var placeIds = new[] { LongId<PlaceId>(), LongId<PlaceId>() };
-		var userId = LongId<AuthUserId>();
+		var placeIds = new[] { IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>() };
+		var userId = IdGen.LongId<AuthUserId>();
 		var query = new CheckPlacesBelongToUserQuery(userId, placeIds);
 
 		// Act
@@ -85,16 +84,16 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	{
 		// Arrange
 		var (handler, v) = GetVars();
-		var msg = new TestMsg();
+		var failure = FailGen.Create();
 		v.Fluent.QueryAsync<PlaceEntity>()
-			.Returns(F.None<IEnumerable<PlaceEntity>>(msg));
-		var query = new CheckPlacesBelongToUserQuery(new(), [LongId<PlaceId>(), LongId<PlaceId>()]);
+			.Returns(failure);
+		var query = new CheckPlacesBelongToUserQuery(new(), [IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>()]);
 
 		// Act
 		await handler.HandleAsync(query);
 
 		// Assert
-		v.Log.Received().Msg(msg);
+		v.Log.Received().Failure(failure.Value);
 	}
 
 	[Fact]
@@ -103,8 +102,8 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Arrange
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
-				.Returns(Create.None<IEnumerable<PlaceEntity>>());
-		var query = new CheckPlacesBelongToUserQuery(new(), [LongId<PlaceId>(), LongId<PlaceId>()]);
+				.Returns(FailGen.Create<IEnumerable<PlaceEntity>>());
+		var query = new CheckPlacesBelongToUserQuery(new(), [IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>()]);
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -120,7 +119,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		var (handler, v) = GetVars();
 		v.Fluent.QueryAsync<PlaceEntity>()
 			.Returns(new PlaceEntity[] { new(), new() });
-		var query = new CheckPlacesBelongToUserQuery(new(), LongId<PlaceId>(), LongId<PlaceId>());
+		var query = new CheckPlacesBelongToUserQuery(new(), IdGen.LongId<PlaceId>(), IdGen.LongId<PlaceId>());
 
 		// Act
 		var result = await handler.HandleAsync(query);
@@ -128,6 +127,4 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 		// Assert
 		result.AssertTrue();
 	}
-
-	public sealed record class TestMsg : Msg;
 }

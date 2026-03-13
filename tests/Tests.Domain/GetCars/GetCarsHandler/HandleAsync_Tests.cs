@@ -1,9 +1,9 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Data.Enums;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -22,19 +22,19 @@ public sealed class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Test
 		{
 			if (userId is null)
 			{
-				userId = LongId<AuthUserId>();
+				userId = IdGen.LongId<AuthUserId>();
 			}
 
 			return (new(userId, true), userId);
 		}
 
-		internal override CarsModel NewModel { get; } = new(LongId<CarId>(), Rnd.Str, Rnd.Str, Rnd.Flip);
+		internal override CarsModel NewModel { get; } = new(IdGen.LongId<CarId>(), Rnd.Str, Rnd.Str, Rnd.Flip);
 	}
 
 	[Fact]
 	public override async Task Test00_Id_Is_Null__Returns_None_With_NullMsg()
 	{
-		await new Setup().Test00<Messages.UserIdIsNullMsg>((h, q) => h.HandleAsync(q));
+		await new Setup().Test00((h, q) => h.HandleAsync(q));
 	}
 
 	[Fact]

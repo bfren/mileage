@@ -2,7 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs;
-using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
 using Jeebs.Mvc;
@@ -12,9 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mileage.Domain;
 using Mileage.Domain.GetJourney;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.WebApp.Pages.Modals;
-using StrongId;
 
 namespace Mileage.WebApp.Pages.Journeys;
 
@@ -54,9 +53,9 @@ public sealed partial class IndexModel : PageModel
 		var now = DateTime.Now;
 		var from = start ?? now.FirstDayOfMonth();
 		var to = end ?? now.LastDayOfMonth();
-		await foreach (var item in GetJourneysBetweenAsync(from, to))
+		foreach (var item in await GetJourneysBetweenAsync(from, to).AuditAsync(fFail: Log.Failure).Unsafe())
 		{
-			Between = new() { Start = from, End = to, Journeys = item.ToList() };
+			Between = new() { Start = from, End = to, Journeys = [.. item] };
 		}
 
 		return Page();
@@ -69,12 +68,12 @@ public sealed partial class IndexModel : PageModel
 		JourneyId journeyId,
 		Func<JourneyModel, TModel> getModel
 	) where TModel : EditJourneyModalModel =>
-		GetFieldAsync(partial, journeyId, _ => F.True.AsTask(), (j, _) => getModel(j));
+		GetFieldAsync(partial, journeyId, _ => R.True.AsTask(), (j, _) => getModel(j));
 
 	private Task<PartialViewResult> GetFieldAsync<TValue, TModel>(
 		string partial,
 		JourneyId journeyId,
-		Func<AuthUserId, Task<Maybe<TValue>>> getValue,
+		Func<AuthUserId, Task<Result<TValue>>> getValue,
 		Func<JourneyModel, TValue, TModel> getModel
 	) where TModel : EditJourneyModalModel
 	{
@@ -82,15 +81,15 @@ public sealed partial class IndexModel : PageModel
 
 		// Build the query
 		var query = from userId in User.GetUserId()
-					from journey in Dispatcher.DispatchAsync(new GetJourneyQuery(userId, journeyId))
+					from journey in Dispatcher.SendAsync(new GetJourneyQuery(userId, journeyId))
 					from value in getValue(userId)
 					select new { journey, value };
 
 		// Execute query and return partial
 		return query
-			.SwitchAsync(
-				some: x => Partial("_Edit" + partial, getModel(x.journey, x.value)),
-				none: r => Partial("Modals/ErrorModal", r)
+			.MatchAsync(
+				fOk: x => Partial("_Edit" + partial, getModel(x.journey, x.value)),
+				fFail: r => Partial("Modals/ErrorModal", r)
 			);
 	}
 
@@ -101,7 +100,7 @@ public sealed partial class IndexModel : PageModel
 		Func<TCommand, TValue> getValue,
 		string? handler = null
 	)
-		where TCommand : Command, IWithId<JourneyId>, IWithUserId
+		where TCommand : Command, IWithId<JourneyId, long>, IWithUserId
 	{
 		// Get values
 		var journeyId = command.Id;
@@ -114,27 +113,27 @@ public sealed partial class IndexModel : PageModel
 
 		// Build the query
 		var query = from userId in User.GetUserId()
-					from result in Dispatcher.DispatchAsync(command with { UserId = userId })
+					from result in Dispatcher.SendAsync(command with { UserId = userId })
 					select result;
 
 		// Execute query and return result
 		return query
-			.AuditAsync(none: Log.Msg)
-			.SwitchAsync<bool, IActionResult>(
-				some: x => x switch
+			.AuditAsync(fFail: Log.Failure)
+			.MatchAsync<bool, IActionResult>(
+				fOk: x => x switch
 				{
 					true =>
 						ViewComponent(component, new { label, updateUrl, value, journeyId }),
 
 					false =>
-						Result.Error($"Unable to save {label}.")
+						Op.Error($"Unable to save {label}.")
 				},
-				none: r => Result.Error(r)
+				fFail: Op.Error
 			);
 	}
 
 	private Task<IActionResult> PostCreateItemAsync<TId>(
-		Func<AuthUserId, Task<Maybe<TId>>> saveItem,
+		Func<AuthUserId, Task<Result<TId>>> saveItem,
 		Func<AuthUserId, TId, Task<IActionResult>> addItemToJourney
 	)
 	{
@@ -142,9 +141,9 @@ public sealed partial class IndexModel : PageModel
 					from itemId in saveItem(userId)
 					select new { userId, itemId };
 
-		return query.SwitchAsync(
-			some: x => addItemToJourney(x.userId, x.itemId),
-			none: r => Result.Error(r)
+		return query.MatchAsync(
+			fOk: x => addItemToJourney(x.userId, x.itemId),
+			fFail: Op.Error
 		);
 	}
 

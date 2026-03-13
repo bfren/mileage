@@ -33,7 +33,7 @@ internal sealed class UpdateDefaultFromPlaceHandler : CommandHandler<UpdateDefau
 	/// Update default from place for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultFromPlaceCommand command)
+	public override async Task<Result<bool>> HandleAsync(UpdateDefaultFromPlaceCommand command)
 	{
 		if (command.DefaultFromPlaceId?.Value == 0)
 		{
@@ -42,10 +42,11 @@ internal sealed class UpdateDefaultFromPlaceHandler : CommandHandler<UpdateDefau
 
 		if (command.DefaultFromPlaceId is not null)
 		{
-			var check = await Dispatcher.DispatchAsync(new CheckPlacesBelongToUserQuery(command.UserId, command.DefaultFromPlaceId));
-			if (!check.IsSome(out var value) || !value)
+			var check = await Dispatcher.SendAsync(new CheckPlacesBelongToUserQuery(command.UserId, command.DefaultFromPlaceId));
+			if (!check.Unsafe().TryOk(out var value) || !value)
 			{
-				return F.None<bool, Messages.SaveSettingsCheckFailedMsg>();
+				return R.Fail("Save Settings check failed.")
+					.Ctx(nameof(UpdateDefaultFromPlaceHandler), nameof(HandleAsync));
 			}
 		}
 

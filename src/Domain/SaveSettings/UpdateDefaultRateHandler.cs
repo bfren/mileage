@@ -33,7 +33,7 @@ internal sealed class UpdateDefaultRateHandler : CommandHandler<UpdateDefaultRat
 	/// Update default rate for user specified in <paramref name="command"/>
 	/// </summary>
 	/// <param name="command"></param>
-	public override async Task<Maybe<bool>> HandleAsync(UpdateDefaultRateCommand command)
+	public override async Task<Result<bool>> HandleAsync(UpdateDefaultRateCommand command)
 	{
 		if (command.DefaultRateId?.Value == 0)
 		{
@@ -42,10 +42,11 @@ internal sealed class UpdateDefaultRateHandler : CommandHandler<UpdateDefaultRat
 
 		if (command.DefaultRateId is not null)
 		{
-			var check = await Dispatcher.DispatchAsync(new CheckRateBelongsToUserQuery(command.UserId, command.DefaultRateId));
-			if (!check.IsSome(out var value) || !value)
+			var check = await Dispatcher.SendAsync(new CheckRateBelongsToUserQuery(command.UserId, command.DefaultRateId));
+			if (!check.Unsafe().TryOk(out var value) || !value)
 			{
-				return F.None<bool, Messages.SaveSettingsCheckFailedMsg>();
+				return R.Fail("Save Settings check failed.")
+					.Ctx(nameof(UpdateDefaultRateHandler), nameof(HandleAsync));
 			}
 		}
 

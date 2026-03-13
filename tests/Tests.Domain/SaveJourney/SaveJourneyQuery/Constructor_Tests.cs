@@ -1,8 +1,8 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Jeebs.Auth.Data;
-using Mileage.Persistence.Common.StrongIds;
+using Jeebs.Auth.Data.Ids;
+using Mileage.Persistence.Common.Ids;
 
 namespace Mileage.Domain.SaveJourney.SaveJourneyQuery_Tests;
 
@@ -12,10 +12,10 @@ public class Constructor_Tests
 	public void Sets_Correct_Values()
 	{
 		// Arrange
-		var userId = LongId<AuthUserId>();
-		var carId = LongId<CarId>();
-		var startMiles = Rnd.UInt;
-		var placeId = LongId<PlaceId>();
+		var userId = IdGen.LongId<AuthUserId>();
+		var carId = IdGen.LongId<CarId>();
+		var startMiles = Rnd.UInt32;
+		var placeId = IdGen.LongId<PlaceId>();
 
 		// Act
 		var result = new SaveJourneyQuery(userId, carId, startMiles, placeId);

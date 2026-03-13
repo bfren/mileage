@@ -1,8 +1,7 @@
 // Mileage Tracker: Unit Tests
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using Mileage.Domain.DeleteRate.Messages;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Entities;
 using Mileage.Persistence.Repositories;
 
@@ -15,7 +14,7 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 		internal override DeleteRateHandler GetHandler(Vars v) =>
 			new(v.Cache, v.Dispatcher, v.Repo, v.Log);
 
-		internal override RateToDeleteModel EmptyModel { get; } = new(LongId<RateId>(), Rnd.Lng, Rnd.Flip);
+		internal override RateToDeleteModel EmptyModel { get; } = new(IdGen.LongId<RateId>(), Rnd.Lng, Rnd.Flip);
 	}
 
 	[Fact]
@@ -33,7 +32,7 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 	[Fact]
 	public override async Task Test02_Calls_FluentQuery_WhereSingleAsync__Receives_None__Returns_None_With_DoesNotExistMsg()
 	{
-		await new Setup().Test02<RateDoesNotExistMsg>(h => h.DeleteOrDisableAsync);
+		await new Setup().Test02(h => h.DeleteOrDisableAsync);
 	}
 
 	[Fact]
@@ -51,6 +50,6 @@ public class DeleteOrDisableAsync_Tests : Abstracts.DeleteOrDisable.DeleteOrDisa
 	[Fact]
 	public override async Task Test05_Is_None__Returns_None_With_CannotBeDeletedMsg()
 	{
-		await new Setup().Test05<RateCannotBeDeletedMsg>(h => h.DeleteOrDisableAsync);
+		await new Setup().Test05(h => h.DeleteOrDisableAsync);
 	}
 }

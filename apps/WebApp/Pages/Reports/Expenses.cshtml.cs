@@ -35,12 +35,12 @@ public sealed class ExpensesModel : PageModel
 		Log.Vrb("Generating expenses report for {Month}.", Month);
 
 		var query = from u in User.GetUserId()
-					from d in Dispatcher.DispatchAsync(new GetExpensesReportDataQuery(u, date.FirstDayOfMonth(), date.LastDayOfMonth()))
+					from d in Dispatcher.SendAsync(new GetExpensesReportDataQuery(u, date.FirstDayOfMonth(), date.LastDayOfMonth()))
 					select d;
 
-		await foreach (var item in query.AuditAsync(none: Log.Msg))
+		foreach (var item in await query.AuditAsync(fFail: Log.Failure).Unsafe())
 		{
-			Journeys = item.ToList();
+			Journeys = [.. item];
 		}
 
 		return Page();

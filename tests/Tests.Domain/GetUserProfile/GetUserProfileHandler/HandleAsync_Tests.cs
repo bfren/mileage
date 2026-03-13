@@ -2,6 +2,7 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Jeebs.Auth.Data;
+using Jeebs.Auth.Data.Ids;
 using Jeebs.Logging;
 
 namespace Mileage.Domain.GetUserProfile.GetUserProfileHandler_Tests;
@@ -14,7 +15,7 @@ public sealed class HandleAsync_Tests
 		// Arrange
 		var auth = Substitute.For<IAuthDataProvider>();
 		var log = Substitute.For<ILog<GetUserProfileHandler>>();
-		var command = new GetUserProfileQuery(LongId<AuthUserId>());
+		var command = new GetUserProfileQuery(IdGen.LongId<AuthUserId>());
 		var handler = new GetUserProfileHandler(auth, log);
 
 		// Act
@@ -33,7 +34,7 @@ public sealed class HandleAsync_Tests
 		auth.User
 			.Returns(user);
 		var log = Substitute.For<ILog<GetUserProfileHandler>>();
-		var query = new GetUserProfileQuery(LongId<AuthUserId>());
+		var query = new GetUserProfileQuery(IdGen.LongId<AuthUserId>());
 		var handler = new GetUserProfileHandler(auth, log);
 
 		// Act

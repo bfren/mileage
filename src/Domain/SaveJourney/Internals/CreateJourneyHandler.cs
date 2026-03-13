@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;
-using Mileage.Persistence.Common.StrongIds;
+using Mileage.Persistence.Common.Ids;
 using Mileage.Persistence.Repositories;
 
 namespace Mileage.Domain.SaveJourney.Internals;
@@ -31,7 +31,7 @@ internal sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jo
 	/// Create a new journey from <paramref name="query"/>
 	/// </summary>
 	/// <param name="query"></param>
-	public override Task<Maybe<JourneyId>> HandleAsync(CreateJourneyQuery query)
+	public override Task<Result<JourneyId>> HandleAsync(CreateJourneyQuery query)
 	{
 		Log.Vrb("Create Journey: {Query}", query);
 		return Journey
@@ -43,7 +43,7 @@ internal sealed class CreateJourneyHandler : QueryHandler<CreateJourneyQuery, Jo
 				StartMiles = (int)query.StartMiles,
 				EndMiles = (int?)query.EndMiles,
 				FromPlaceId = query.FromPlaceId,
-				ToPlaceIds = query.ToPlaceIds ?? Array.Empty<PlaceId>(),
+				ToPlaceIds = query.ToPlaceIds ?? [],
 				RateId = query.RateId
 			});
 	}
