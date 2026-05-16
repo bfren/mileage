@@ -6,28 +6,28 @@
   <ItemGroup>
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="coverlet.collector" Version="10.0.0" />
-    <PackageVersion Include="Jeebs" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Apps" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Auth.Data" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Cqrs" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Data" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Data.Common" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Data.Testing" Version="9.3.1" />
-    <PackageVersion Include="Jeebs.Mvc.Auth" Version="9.3.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+    <PackageVersion Include="Jeebs" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Apps" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Auth.Data" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Auth.Data.Clients.PostgreSql" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Cqrs" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Data" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Data.Clients.PostgreSql" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Data.Common" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Data.Testing" Version="9.3.2" />
+    <PackageVersion Include="Jeebs.Mvc.Auth" Version="9.3.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     <PackageVersion Include="NWebsec.AspNetCore.Mvc" Version="3.0.0" />
-    <PackageVersion Include="Rnd" Version="10.2.3" />
+    <PackageVersion Include="Rnd" Version="10.2.4" />
     <PackageVersion Include="Simple.Migrations" Version="0.9.21" />
-    <PackageVersion Include="Wrap" Version="1.2.4" />
-    <PackageVersion Include="Wrap.Caching" Version="1.2.4" />
-    <PackageVersion Include="Wrap.Id" Version="1.2.4" />
-    <PackageVersion Include="Wrap.Mvc" Version="1.2.4" />
-    <PackageVersion Include="Wrap.Testing" Version="1.2.4" />
+    <PackageVersion Include="Wrap" Version="1.2.5" />
+    <PackageVersion Include="Wrap.Caching" Version="1.2.5" />
+    <PackageVersion Include="Wrap.Id" Version="1.2.5" />
+    <PackageVersion Include="Wrap.Mvc" Version="1.2.5" />
+    <PackageVersion Include="Wrap.Testing" Version="1.2.5" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
