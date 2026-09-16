@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Mileage: PostgreSQL client.</Description>
+    <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Jeebs.Data.Clients.PostgreSql" />

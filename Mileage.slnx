@@ -1,9 +1,18 @@
 <Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Test" />
+  </Configurations>
   <Folder Name="/apps/">
     <File Path="apps/.editorconfig" />
     <File Path="apps/Directory.Build.props" />
-    <Project Path="apps/ConsoleApp/ConsoleApp.csproj" />
-    <Project Path="apps/WebApp/WebApp.csproj" />
+    <Project Path="apps/ConsoleApp/ConsoleApp.csproj">
+      <Build Solution="Test|*" Project="false" />
+    </Project>
+    <Project Path="apps/WebApp/WebApp.csproj">
+      <Build Solution="Test|*" Project="false" />
+    </Project>
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
@@ -13,7 +22,6 @@
     <File Path="Directory.Packages.props" />
     <File Path="LICENSE" />
     <File Path="README.md" />
-    <File Path="Test.csproj" />
     <File Path="Version" />
   </Folder>
   <Folder Name="/src/">
