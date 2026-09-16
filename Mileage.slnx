@@ -8,9 +8,11 @@
     <File Path="apps/.editorconfig" />
     <File Path="apps/Directory.Build.props" />
     <Project Path="apps/ConsoleApp/ConsoleApp.csproj">
+      <Build Solution="Release|*" Project="false" />
       <Build Solution="Test|*" Project="false" />
     </Project>
     <Project Path="apps/WebApp/WebApp.csproj">
+      <Build Solution="Release|*" Project="false" />
       <Build Solution="Test|*" Project="false" />
     </Project>
   </Folder>
@@ -36,6 +38,8 @@
   <Folder Name="/tests/">
     <File Path="tests/.editorconfig" />
     <File Path="tests/Directory.Build.props" />
-    <Project Path="tests/Tests.Domain/Tests.Domain.csproj" />
+    <Project Path="tests/Tests.Domain/Tests.Domain.csproj">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
   </Folder>
 </Solution>
