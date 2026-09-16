@@ -28,20 +28,21 @@ jobs:
     -
       name: A - Restore
       run: |
-        dotnet restore Test.csproj
+        dotnet restore Mileage.slnx
     -
       name: B - Build
       run: |
-        dotnet build Test.csproj \
+        dotnet build Mileage.slnx \
           --no-restore \
-          --configuration Release
+          --configuration Test
     -
       name: C - Test
       run: |
-        dotnet test Test.csproj \
+        dotnet test \
+          --solution Mileage.slnx \
           --no-restore \
           --no-build \
-          --configuration Release
+          --configuration Test
     -
       if: success()
       name: Finish - Success
