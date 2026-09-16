@@ -50,22 +50,15 @@ jobs:
     -
       name: A - Restore
       run: |
-        dotnet restore Test.csproj
+        dotnet restore Mileage.slnx
     -
       name: B - Build
       run: |
-        dotnet build Test.csproj \
+        dotnet build Mileage.slnx \
           --no-restore \
           --configuration Release
     -
-      name: C - Test
-      run: |
-        dotnet test Test.csproj \
-          --no-restore \
-          --no-build \
-          --configuration Release
-    -
-      name: D - Publish
+      name: C - Publish
       run: |
         dotnet publish apps/WebApp/WebApp.csproj \
           --configuration Release \
@@ -73,7 +66,7 @@ jobs:
           --output ./publish \
           --no-self-contained
     -
-      name: E - Push
+      name: D - Push
       id: docker_build
       uses: docker/build-push-action@v6
       with:

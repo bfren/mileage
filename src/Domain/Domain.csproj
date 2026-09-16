@@ -3,6 +3,7 @@
     <Description>Mileage: domain actions.</Description>
     <AssemblyName>Mileage.Domain</AssemblyName>
     <RootNamespace>Mileage.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Jeebs.Auth.Data.Clients.PostgreSql" />
