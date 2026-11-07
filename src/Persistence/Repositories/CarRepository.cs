@@ -11,12 +11,11 @@ namespace Mileage.Persistence.Repositories;
 /// <summary>
 /// Car repository
 /// </summary>
-public sealed class CarRepository : Repository<CarEntity, CarId>, ICarRepository
+/// <remarks>
+/// Inject dependencies
+/// </remarks>
+/// <param name="db">IDb</param>
+/// <param name="log">ILog</param>
+public sealed class CarRepository(IDb db, ILog<CarRepository> log) : Repository<CarEntity, CarId>(db, log), ICarRepository
 {
-	/// <summary>
-	/// Inject dependencies
-	/// </summary>
-	/// <param name="db">IDb</param>
-	/// <param name="log">ILog</param>
-	public CarRepository(IDb db, ILog<CarRepository> log) : base(db, log) { }
 }

@@ -1,7 +1,6 @@
 // Mileage Tracker
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
-using System;
 using System.Threading.Tasks;
 using Jeebs.Cqrs;
 using Jeebs.Logging;

@@ -11,12 +11,11 @@ namespace Mileage.Persistence.Repositories;
 /// <summary>
 /// Config repository
 /// </summary>
-public sealed class JourneyRepository : Repository<JourneyEntity, JourneyId>, IJourneyRepository
+/// <remarks>
+/// Inject dependencies
+/// </remarks>
+/// <param name="db">IDb</param>
+/// <param name="log">ILog</param>
+public sealed class JourneyRepository(IDb db, ILog<JourneyRepository> log) : Repository<JourneyEntity, JourneyId>(db, log), IJourneyRepository
 {
-	/// <summary>
-	/// Inject dependencies
-	/// </summary>
-	/// <param name="db">IDb</param>
-	/// <param name="log">ILog</param>
-	public JourneyRepository(IDb db, ILog<JourneyRepository> log) : base(db, log) { }
 }

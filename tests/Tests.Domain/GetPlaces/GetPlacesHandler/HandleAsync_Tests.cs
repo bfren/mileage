@@ -20,10 +20,7 @@ public sealed class HandleAsync_Tests : Abstracts.GetEnumerable.HandleAsync_Test
 
 		internal override (GetPlacesQuery, AuthUserId) GetQuery(AuthUserId? userId = null)
 		{
-			if (userId is null)
-			{
-				userId = IdGen.LongId<AuthUserId>();
-			}
+			userId ??= IdGen.LongId<AuthUserId>();
 
 			return (new(userId, true), userId);
 		}

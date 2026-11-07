@@ -12,12 +12,9 @@ using Mileage.WebApp.Pages.Modals;
 
 namespace Mileage.WebApp.Pages.Auth;
 
-public sealed class ChangePasswordModel : UpdateModalModel
+public sealed class ChangePasswordModel(UserProfileModel model) : UpdateModalModel("Password")
 {
-	public AuthChangePasswordModel Password { get; set; }
-
-	public ChangePasswordModel(UserProfileModel model) : base("Password") =>
-		Password = new(model.Id, model.Version, string.Empty, string.Empty, string.Empty);
+	public AuthChangePasswordModel Password { get; set; } = new(model.Id, model.Version, string.Empty, string.Empty, string.Empty);
 }
 
 public sealed partial class ProfileModel

@@ -11,12 +11,11 @@ namespace Mileage.Persistence.Repositories;
 /// <summary>
 /// Settings repository
 /// </summary>
-public sealed class SettingsRepository : Repository<SettingsEntity, SettingsId>, ISettingsRepository
+/// <remarks>
+/// Inject dependencies
+/// </remarks>
+/// <param name="db">IDb</param>
+/// <param name="log">ILog</param>
+public sealed class SettingsRepository(IDb db, ILog<SettingsRepository> log) : Repository<SettingsEntity, SettingsId>(db, log), ISettingsRepository
 {
-	/// <summary>
-	/// Inject dependencies
-	/// </summary>
-	/// <param name="db">IDb</param>
-	/// <param name="log">ILog</param>
-	public SettingsRepository(IDb db, ILog<SettingsRepository> log) : base(db, log) { }
 }
