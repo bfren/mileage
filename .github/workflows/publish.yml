@@ -65,7 +65,8 @@ jobs:
       name: Style
       run: |
         dotnet format style -v d Mileage.slnx \
-          --no-restore
+          --no-restore \
+          --verify-no-changes
     -
       name: Build
       run: |
@@ -95,27 +96,12 @@ jobs:
           ghcr.io/bfren/mileage:latest
           ghcr.io/bfren/mileage:${{ steps.version.outputs.contents }}
   notify:
-    runs-on: ubuntu-latest
     needs: restore-build-publish-push
     if: always() && !inputs.dry_run # always(): otherwise this job is skipped when an earlier job fails, and the failure message is never sent
-    steps:
-    -
-      if: success()
-      name: Success
-      uses: bfren/action-slack-notify@master
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_USERNAME: Mileage (GitHub)
-        SLACK_MESSAGE: Docker Image Published
-        SLACK_COLOR: good
-        SLACK_ICON: https://bfren.dev/img/logo-square-500x500.jpg
-    -
-      if: failure()
-      name: Failure
-      uses: bfren/action-slack-notify@master
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_USERNAME: Mileage (GitHub)
-        SLACK_MESSAGE: Failed to Publish Docker Image
-        SLACK_COLOR: danger
-        SLACK_ICON: https://bfren.dev/img/logo-square-500x500.jpg
+    uses: bfren/dotnet/.github/workflows/notify.yml@main
+    with:
+      name: Mileage
+      results: ${{ toJSON(needs.*.result) }}
+      success-message: Docker Image Published
+      failure-message: Failed to Publish Docker Image
+    secrets: inherit
