@@ -46,9 +46,9 @@ public sealed class UpdateModalTagHelper : ModalActionTagHelper
 /// <summary>
 /// Modal TagHelper
 /// </summary>
-public abstract class ModalActionTagHelper : TagHelper
+public abstract class ModalActionTagHelper(ModalAction action) : TagHelper
 {
-	private ModalAction Action { get; }
+	private ModalAction Action { get; } = action;
 
 	public string? Class { get; set; }
 
@@ -57,9 +57,6 @@ public abstract class ModalActionTagHelper : TagHelper
 	public string Replace { get; set; } = string.Empty;
 
 	public bool ReplaceContents { get; set; } = true;
-
-	protected ModalActionTagHelper(ModalAction action) =>
-		Action = action;
 
 	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{

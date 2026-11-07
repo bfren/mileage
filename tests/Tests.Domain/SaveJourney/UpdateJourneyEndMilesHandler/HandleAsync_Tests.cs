@@ -14,10 +14,7 @@ public sealed class HandleAsync_Tests : Abstracts.UpdateJourney.HandleAsync_Test
 
 		internal override UpdateJourneyEndMilesCommand GetCommand(AuthUserId? userId = null)
 		{
-			if (userId is null)
-			{
-				userId = IdGen.LongId<AuthUserId>();
-			}
+			userId ??= IdGen.LongId<AuthUserId>();
 
 			return new(userId, IdGen.LongId<JourneyId>(), Rnd.Lng, Rnd.Int);
 		}

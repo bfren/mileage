@@ -2,7 +2,6 @@
 // Copyright (c) bfren - licensed under https://mit.bfren.dev/2022
 
 using Mileage.Persistence.Common.Ids;
-using Wrap.Ids;
 
 namespace Mileage.Domain.GetCars;
 

@@ -11,12 +11,11 @@ namespace Mileage.Persistence.Repositories;
 /// <summary>
 /// Rate repository
 /// </summary>
-public sealed class RateRepository : Repository<RateEntity, RateId>, IRateRepository
+/// <remarks>
+/// Inject dependencies
+/// </remarks>
+/// <param name="db">IDb</param>
+/// <param name="log">ILog</param>
+public sealed class RateRepository(IDb db, ILog<RateRepository> log) : Repository<RateEntity, RateId>(db, log), IRateRepository
 {
-	/// <summary>
-	/// Inject dependencies
-	/// </summary>
-	/// <param name="db">IDb</param>
-	/// <param name="log">ILog</param>
-	public RateRepository(IDb db, ILog<RateRepository> log) : base(db, log) { }
 }

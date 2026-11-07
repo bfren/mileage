@@ -20,7 +20,7 @@ public sealed class HandleAsync_Tests : Abstracts.TestHandler
 	private sealed class Setup : Setup<ISettingsRepository, SettingsEntity, SettingsId, SaveSettingsHandler>
 	{
 		internal override SaveSettingsHandler GetHandler(Vars v) =>
-			new(v.Dispatcher, v.Repo, v.Log);
+			new(v.Dispatcher, v.Repo);
 	}
 
 	private (SaveSettingsHandler, Setup.Vars) GetVars() =>

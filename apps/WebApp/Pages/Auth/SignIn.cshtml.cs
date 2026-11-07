@@ -64,8 +64,8 @@ public sealed class SignInModel : PageModel
 	/// <summary>
 	/// Get standard sign in form
 	/// </summary>
-	public async Task<IActionResult> OnGetAsync() =>
-		Page();
+	public Task<IActionResult> OnGetAsync() =>
+				Task.FromResult<IActionResult>(Page());
 
 	/// <summary>
 	/// Attempt sign in and return result
@@ -84,7 +84,8 @@ public sealed class SignInModel : PageModel
 					user => AuthF.CreateTokenAsync(Jwt, user, Log),
 
 				_ =>
-					async _ => new AuthOp.Denied()
+					_ => Task.FromResult<AuthOp>(new AuthOp.Denied())
+
 			}
 		));
 

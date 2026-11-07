@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Jeebs.Auth.Data.Ids;
 using Jeebs.Cqrs;
 using Jeebs.Data.Enums;
-using Jeebs.Logging;
 using Mileage.Domain.CheckCarBelongsToUser;
 using Mileage.Domain.CheckPlacesBelongToUser;
 using Mileage.Domain.CheckRateBelongsToUser;
@@ -22,8 +21,6 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 {
 	private IDispatcher Dispatcher { get; init; }
 
-	private ILog<SaveSettingsHandler> Log { get; init; }
-
 	private ISettingsRepository Settings { get; init; }
 
 	/// <summary>
@@ -31,9 +28,8 @@ internal sealed class SaveSettingsHandler : CommandHandler<SaveSettingsCommand>
 	/// </summary>
 	/// <param name="dispatcher"></param>
 	/// <param name="settings"></param>
-	/// <param name="log"></param>
-	public SaveSettingsHandler(IDispatcher dispatcher, ISettingsRepository settings, ILog<SaveSettingsHandler> log) =>
-		(Dispatcher, Settings, Log) = (dispatcher, settings, log);
+	public SaveSettingsHandler(IDispatcher dispatcher, ISettingsRepository settings) =>
+		(Dispatcher, Settings) = (dispatcher, settings);
 
 	/// <summary>
 	/// Save the settings for user specified in <paramref name="command"/>
