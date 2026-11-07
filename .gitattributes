@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Check out C# files with CRLF on every OS, so IDE0055 (formatting) matches the files on Linux runners
+*.cs text eol=crlf
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
